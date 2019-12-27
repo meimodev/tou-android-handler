@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CustomEditText">
+        <attr name="customEditTextFont" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="CustomButtonAdd">
+        <attr name="customButtonFont" format="string"/>
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!--Category Text-->
+    <TextView
+        android:id="@+id/textView_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="0dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="0dp"
+        android:paddingBottom="2dp"
+        android:text="category:"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:visibility="gone" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardElevation="3dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--Unregistered Layout-->
+            <LinearLayout
+                android:id="@+id/linearLayout_unregistered"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:translationZ="2dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textView_unregisteredName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Jhon Manembo"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textColor="@color/ButtonText_LightGrey"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Tidak Terdaftar Sistem"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/ButtonText_LightGrey" />
+
+                <TextView
+                    android:id="@+id/textView_unregisteredChurch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="GMIM Alfa Omega, Rinegetan"
+                    android:textAlignment="center" />
+
+
+                <Button
+                    android:id="@+id/button_unregisteredName"
+                    style="@style/Button_SubmitButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TETAP GUNAKAN" />
+
+            </LinearLayout>
+
+            <!--Delete Button-->
+            <Button
+                android:id="@+id/button_del"
+                style="@style/Button_DelButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:translationZ="2dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageView_pic"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.3" />
+
+            <TextView
+                android:id="@+id/textView_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:maxLines="1"
+                android:text="Jhon Manembo nembo "
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageView_pic"
+                app:layout_constraintTop_toTopOf="@id/imageView_pic" />
+
+            <TextView
+                android:id="@+id/textView_birthDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="32 July 2047"
+                android:textColor="@color/TextView_Label_Light"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/textView_name"
+                app:layout_constraintTop_toBottomOf="@id/textView_name" />
+
+            <TextView
+                android:id="@+id/textView_kolom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Kolom 280"
+                android:textColor="@color/TextView_Label_Light"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/textView_name"
+                app:layout_constraintTop_toBottomOf="@id/textView_birthDate" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_baptis"
+                style="@style/CardView_recyclerItemBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/imageView_pic"
+                app:layout_constraintStart_toEndOf="@id/imageView_pic"
+                app:layout_constraintTop_toBottomOf="@id/textView_kolom">
+
+                <TextView
+                    style="@style/TextView_recyclerItemBadgeText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="BAPTIS" />
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_sidi"
+                style="@style/CardView_recyclerItemBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/imageView_pic"
+                app:layout_constraintStart_toEndOf="@id/cardView_baptis"
+                app:layout_constraintTop_toBottomOf="@id/textView_kolom">
+
+                <TextView
+                    style="@style/TextView_recyclerItemBadgeText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="SIDI" />
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_nikah"
+                style="@style/CardView_recyclerItemBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/imageView_pic"
+                app:layout_constraintStart_toEndOf="@id/cardView_sidi"
+                app:layout_constraintTop_toBottomOf="@id/textView_kolom">
+
+                <TextView
+                    style="@style/TextView_recyclerItemBadgeText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="NIKAH" />
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

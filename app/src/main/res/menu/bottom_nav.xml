@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottomNavBar_news"
+        android:icon="@drawable/ic_menu_manage"
+        android:title="Kabar" />
+    <item
+        android:id="@+id/bottomNavBar_warta"
+        android:icon="@drawable/ic_menu_manage"
+        android:title="Warta Minggu Ini" />
+    <item
+        android:id="@+id/bottomNavBar_tatacara"
+        android:icon="@drawable/ic_menu_manage"
+        android:title="Tatacara Ibadah" />
+    <item
+        android:id="@+id/bottomNavBar_kidung"
+        android:icon="@drawable/ic_menu_manage"
+        android:title="Kidung" />
+
+</menu>

@@ -1,0 +1,120 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--Custom Style-->
+    <style name="TextView_InfoAboutThatName">
+        <item name="android:background">#FF8F00</item>
+        <item name="android:textColor">@color/ButtonText_LightGrey</item>
+        <item name="android:textAlignment">gravity</item>
+        <item name="android:text">Info About That Name / Names !</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TextView_IssueTitle">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:text">Title</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
+    </style>
+
+    <style name="Button_TambahNamaButton">
+        <item name="android:text">Tambah Nama :</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:backgroundTint">@color/colorAccent</item>
+        <item name="android:textColor">@color/ButtonText_LightGrey</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:layout_marginBottom">5dp</item>
+    </style>
+
+    <style name="Button_AddButton">
+        <item name="android:layout_weight">0.3</item>
+        <item name="android:backgroundTint">@color/colorAccent</item>
+        <item name="android:textColor">@color/ButtonText_LightGrey</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:text">+</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment">gravity</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:layout_marginEnd">5dp</item>
+
+    </style>
+
+    <style name="Button_DelButton">
+        <item name="android:layout_weight">0.3</item>
+        <item name="android:backgroundTint">@color/colorAccent</item>
+        <item name="android:textColor">@color/ButtonText_LightGrey</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:text">x</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment">gravity</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:layout_marginEnd">5dp</item>
+
+    </style>
+
+    <style name="Button_SubmitButton">
+        <item name="android:backgroundTint">@color/colorAccent</item>
+        <item name="android:textColor">@color/ButtonText_LightGrey</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:text">AJUKAN</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:layout_marginEnd">5dp</item>
+
+    </style>
+
+    <style name="CardView_recyclerItemBadge" parent="CardView">
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="cardCornerRadius">5dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardElevation">2dp</item>
+    </style>
+
+    <style name="TextView_recyclerItemBadgeText">
+        <item name="android:padding">10dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/ButtonText_LightGrey</item>
+    </style>
+
+    <style name="TextView_label">
+        <item name="android:textColor">@color/TextView_Label_Light</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="TextView_label_main">
+        <item name="android:textColor">@color/TextView_Label_Dark</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+</resources>

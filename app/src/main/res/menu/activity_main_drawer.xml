@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Menu">
+        <menu>
+            <group
+                android:id="@+id/nav_group_member"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_home"
+                    android:icon="@drawable/ic_menu_camera"
+                    android:title="Beranda" />
+                <item
+                    android:id="@+id/nav_setting"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="Pengaturan" />
+
+            </group>
+        </menu>
+    </item>
+
+
+    <item android:title="Chief">
+        <menu>
+            <group
+                android:id="@+id/nav_group_chief"
+                android:checkableBehavior="single"
+                android:visible="false">
+                <item
+                    android:id="@+id/nav_chief_home"
+                    android:icon="@drawable/ic_menu_camera"
+                    android:title="Persetujuan" />
+                <item
+                    android:id="@+id/nav_chief_issue"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="Pengajuan" />
+                <item
+                    android:id="@+id/nav_chief_manageServiceArea"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="Atur Wilayah Pelayanan" />
+
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Secretary">
+        <menu>
+            <group
+                android:id="@+id/nav_group_secretary"
+                android:checkableBehavior="single"
+                android:visible="false">
+                <item
+                    android:id="@+id/nav_secretary_home"
+                    android:icon="@drawable/ic_menu_camera"
+                    android:title="Persetujuan" />
+                <item
+                    android:id="@+id/nav_secretary_issue"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="Pengajuan" />
+                <item
+                    android:id="@+id/nav_secretary_papers"
+                    android:icon="@drawable/ic_menu_slideshow"
+                    android:title="Riwayat Berkas" />
+<!--                <item-->
+<!--                    android:id="@+id/nav_secretary_sunday_schedules"-->
+<!--                    android:icon="@drawable/ic_menu_slideshow"-->
+<!--                    android:title="Jadwal Ibadah Minggu" />-->
+
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Treasurer">
+        <menu>
+            <group
+                android:id="@+id/nav_group_treasurer"
+                android:checkableBehavior="single"
+                android:visible="false">
+                <item
+                    android:id="@+id/nav_treasurer_home"
+                    android:icon="@drawable/ic_menu_camera"
+                    android:title="Persetujuan" />
+                <item
+                    android:id="@+id/nav_treasurer_issue"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="Pengajuan" />
+                <!--<item-->
+                    <!--android:id="@+id/nav_treasurer_auth_history"-->
+                    <!--android:icon="@drawable/ic_menu_gallery"-->
+                    <!--android:title="Riwayat Authentifikasi" />-->
+                <!--<item-->
+                    <!--android:id="@+id/nav_treasurer_alter_budget"-->
+                    <!--android:checkable="false"-->
+                    <!--android:icon="@drawable/ic_menu_gallery"-->
+                    <!--android:title="Anggaran Jemaat" />-->
+                <item
+                    android:id="@+id/nav_treasurer_financial"
+                    android:icon="@drawable/ic_menu_slideshow"
+                    android:title="Laporan Keuangan" />
+
+            </group>
+        </menu>
+    </item>
+    <item android:title="Priest">
+        <menu>
+            <group
+                android:id="@+id/nav_group_priest"
+                android:checkableBehavior="single"
+                android:visible="false">
+                <item
+                    android:id="@+id/nav_priest_home"
+                    android:icon="@drawable/ic_menu_camera"
+                    android:title="Persetujuan" />
+                <item
+                    android:id="@+id/nav_priest_issue"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="Pengajuan" />
+                <item
+                    android:id="@+id/nav_priest_serviceArea"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="Lihat Wilayah Pelayanan" />
+
+            </group>
+        </menu>
+    </item>
+    <item android:title="Penatua">
+        <menu>
+            <group
+                android:id="@+id/nav_group_penatua"
+                android:checkableBehavior="single"
+                android:visible="false">
+                <item
+                    android:id="@+id/nav_penatua_home"
+                    android:icon="@drawable/ic_menu_camera"
+                    android:title="Persetujuan" />
+                <item
+                    android:id="@+id/nav_penatua_issue"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="Pengajuan" />
+                <item
+                    android:id="@+id/nav_penatua_manageMemberData"
+                    android:icon="@drawable/ic_menu_camera"
+                    android:title="Data Anggota" />
+
+            </group>
+        </menu>
+    </item>
+    <item android:title="Syamas">
+        <menu>
+            <group
+                android:id="@+id/nav_group_syamas"
+                android:checkableBehavior="single"
+                android:visible="false">
+                <item
+                    android:id="@+id/nav_syamas_home"
+                    android:icon="@drawable/ic_menu_camera"
+                    android:title="Persetujuan" />
+                <item
+                    android:id="@+id/nav_syamas_issue"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="Pengajuan" />
+                <item
+                    android:id="@+id/nav_syamas_manageMemberData"
+                    android:icon="@drawable/ic_menu_camera"
+                    android:title="Data Anggota" />
+
+            </group>
+        </menu>
+    </item>
+
+
+    <item
+        android:id="@+id/nav_signOut"
+        android:icon="@drawable/ic_menu_send"
+        android:title="Sign Out" />
+
+
+</menu>

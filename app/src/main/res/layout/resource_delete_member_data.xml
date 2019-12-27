@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/layout_spinnerHolder"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:clickable="true"-->
+        <!--android:focusable="true"-->
+        <!--android:foreground="?android:attr/selectableItemBackground"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center"-->
+            <!--android:paddingStart="8dp"-->
+            <!--android:paddingEnd="0dp"-->
+            <!--android:text="Pilih Kolom : " />-->
+
+        <!--<com.jaredrummler.materialspinner.MaterialSpinner-->
+            <!--android:id="@+id/spinner_column"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
+
+    <!--</LinearLayout>-->
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editText_nameHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+            android:id="@+id/editText_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nama: " />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_infoService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:visibility="gone"
+        app:cardElevation="2dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:id="@+id/textView_serviceType"
+                style="@style/TextView_IssueTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:padding="5dp"
+                android:text="Service Type "
+                android:textAlignment="center"
+                android:textColor="@color/TextView_Label_Dark"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="ID 24452"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView_serviceType">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextView_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Atas Nama :" />
+
+                    <TextView
+                        style="@style/TextView_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Pada Tanggal :" />
+
+                    <TextView
+                        style="@style/TextView_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Khadim :" />
+
+                    <TextView
+                        style="@style/TextView_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tempat :" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextView_label_main"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="JHON MANEMBO" />
+
+                    <TextView
+                        style="@style/TextView_label_main"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="26 Agustus 2050" />
+
+                    <TextView
+                        style="@style/TextView_label_main"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Pdt. Jhon jhon" />
+
+                    <TextView
+                        style="@style/TextView_label_main"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Kel. Jhonny Mambz" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <!--Loading-->
+            <TextView
+                android:id="@+id/textView_loading"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#fff"
+                android:gravity="center"
+                android:text="Mencari Anggota ..."
+                android:textAlignment="gravity"
+                android:translationZ="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--Id Not Found-->
+            <TextView
+                android:id="@+id/textView_idNotFound"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/TextView_Default"
+                android:gravity="center"
+                android:text="ID TIDAK DI TEMUKAN -_-'"
+                android:textAlignment="gravity"
+                android:textColor="@color/ButtonText_LightGrey"
+                android:textStyle="bold"
+                android:translationZ="5dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

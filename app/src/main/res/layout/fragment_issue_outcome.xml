@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/layout_main"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardElevation="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.95">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_height="match_parent"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_Title"
+                    style="@style/TextView_IssueTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_Main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_Title">
+
+                    <!--EditText Amount-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:animateLayoutChanges="true"
+                        android:layout_height="wrap_content">
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                            android:id="@+id/editText_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Jumlah :"
+                            android:inputType="number" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!--Sentralisasi Radio Group-->
+                    <RadioGroup
+                        android:id="@+id/radioGroup_sentralisasi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:animateLayoutChanges="true"
+                        android:visibility="gone">
+
+                        <RadioButton
+                            android:id="@+id/radio_synod"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Sentralisasi Sinode" />
+
+                        <RadioButton
+                            android:id="@+id/radio_jemaat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Sentralisasi Wilayah" />
+                    </RadioGroup>
+                    <!--Pembayaran Gaji / Tunjangan-->
+                    <LinearLayout
+                        android:id="@+id/linearLayout_paycheck"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"
+                        android:animateLayoutChanges="true"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Jenis Gaji / Tunjangan:" />
+
+                            <com.jaredrummler.materialspinner.MaterialSpinner
+                                android:id="@+id/spinner_paycheckType"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/layout_spinnerStaff"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Kepada:" />
+
+                            <com.jaredrummler.materialspinner.MaterialSpinner
+                                android:id="@+id/spinner_staff"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <!--Pengadaan-->
+                    <LinearLayout
+                        android:id="@+id/linearLayout_pengadaan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:text="Jenis Pengadaan"
+                                android:gravity="center"
+                                android:textAlignment="gravity"
+                                android:layout_height="fill_parent" />
+
+                            <com.jaredrummler.materialspinner.MaterialSpinner
+                                android:layout_width="match_parent"
+                                android:gravity="center_vertical"
+                                android:id="@+id/spinner_pengadaanType"
+                                android:layout_height="fill_parent" />
+
+                        </LinearLayout>
+
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd
+                            android:id="@+id/button_addPengadaan"
+                            style="@style/Button_TambahNamaButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Tambah Pengadaan :" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout_pengadaanPlaceHolder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:animateLayoutChanges="true"
+                            android:orientation="vertical">
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+                    <!--Penunjang Fasilitas -->
+                    <LinearLayout
+                        android:id="@+id/linearLayout_penunjangFasilitas"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:animateLayoutChanges="true"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Nama Biaya" />
+
+                            <com.jaredrummler.materialspinner.MaterialSpinner
+                                android:id="@+id/spinner_fasilitas"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent" />
+
+                        </LinearLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                android:id="@+id/editText_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Detil penggunaan"
+                                android:inputType="text"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+                    <!--Rapat / Sidang / Konven-->
+                    <LinearLayout
+                        android:id="@+id/linearLayout_rapatSidangKonven"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:animateLayoutChanges="true"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Jenis Biaya:" />
+
+                            <com.jaredrummler.materialspinner.MaterialSpinner
+                                android:id="@+id/spinner_rapatSidangKonven"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent" />
+
+                        </LinearLayout>
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                android:id="@+id/editText_rapat_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Detil Penggunaan: "
+                                android:inputType="text" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <RadioGroup
+                            android:id="@+id/radioGroup_rapatSidangKonven"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                        </RadioGroup>
+
+                    </LinearLayout>
+                    <!--Diakonia-->
+                    <LinearLayout
+                        android:animateLayoutChanges="true"
+                        android:id="@+id/linearLayout_diakonia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                android:id="@+id/editText_diakonia_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Detil Penggunaan:"
+                                android:inputType="text" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout_tambahNama"
+                            android:layout_width="match_parent"
+                            android:animateLayoutChanges="true"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd
+                                android:id="@+id/button_addName"
+                                style="@style/Button_TambahNamaButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/button_tambahNama_height"
+                                android:text="+ Tambah Atas Nama" />
+
+                            <LinearLayout
+                                android:id="@+id/linearLayout_namePlaceHolder"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:animateLayoutChanges="true"
+                                android:orientation="vertical" />
+
+                        </LinearLayout>
+
+                        <RadioGroup
+                            android:id="@+id/radioGroup_diakoniaBeasiswa"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                        </RadioGroup>
+
+
+                    </LinearLayout>
+                    <!--Pelatihan / Pembekalan-->
+                    <LinearLayout
+                        android:id="@+id/linearLayout_pelatihan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                android:id="@+id/editText_pembekalan_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Detail :"
+                                android:inputType="text" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <RadioGroup
+                            android:id="@+id/radioGroup_pembekalan"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                        </RadioGroup>
+
+
+                    </LinearLayout>
+                    <!--Subsidi BIPRA / Ibadah Kegiatan-->
+                    <LinearLayout
+                        android:id="@+id/linearLayout_subsidi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:animateLayoutChanges="true"
+                        android:visibility="gone">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                android:id="@+id/editText_subsidi_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Detil Penggunaan:"
+                                android:inputType="text" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Jenis Subsidi: " />
+
+                            <com.jaredrummler.materialspinner.MaterialSpinner
+                                android:id="@+id/spinner_subsidi"
+                                android:gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent" />
+
+                        </LinearLayout>
+
+                        <com.jaredrummler.materialspinner.MaterialSpinner
+                            android:id="@+id/spinner_subsidiIbadah"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            android:gravity="center" />
+
+                    </LinearLayout>
+                    <!--Lainnya-->
+                    <LinearLayout
+                        android:id="@+id/linearLayout_other"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                android:id="@+id/editText_lainnya_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Detil Penggunan :"
+                                android:inputType="text" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="Jenis Biaya: " />
+
+                            <com.jaredrummler.materialspinner.MaterialSpinner
+                                android:id="@+id/spinner_other"
+                                android:gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent" />
+
+                        </LinearLayout>
+
+                        <RadioGroup
+                            android:id="@+id/radioGroup_other"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                        </RadioGroup>
+
+                    </LinearLayout>
+                    <!--Lainnya (No Account)-->
+                    <LinearLayout
+                        android:id="@+id/linearLayout_otherNoAccount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                android:id="@+id/editText_note"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Detil Penggunaan :"
+                                android:inputType="text" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd
+                    android:id="@+id/button_submit"
+                    style="@style/Button_SubmitButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="@id/tv_Title"
+                    app:layout_constraintStart_toStartOf="@id/tv_Title"
+                    app:layout_constraintTop_toBottomOf="@id/linearLayout_Main"
+                    app:layout_constraintWidth_percent="0.5" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:id="@+id/layout_progressHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

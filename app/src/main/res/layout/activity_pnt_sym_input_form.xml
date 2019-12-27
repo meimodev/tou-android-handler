@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:fadeScrollbars="false"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:scrollbarThumbVertical="@color/colorAccent"
+    android:scrollbars="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+        <LinearLayout
+            android:id="@+id/layout_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textView_title"
+                style="@style/TextView_IssueTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="0dp"
+                android:text="Tambah Anggota Baru" />
+
+            <TextView
+                android:id="@+id/textView_churchName"
+                style="@style/TextView_IssueTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="Alfa Omega, Wawalintouan"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textView_column"
+                style="@style/TextView_IssueTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:text="Kolom 552" />
+
+
+            <!--Edit Exist Member-->
+            <LinearLayout
+                android:id="@+id/layout_editMember"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:animateLayoutChanges="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_main">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                        android:id="@+id/editText_findName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_menu_manage"
+                        android:drawablePadding="8dp"
+                        android:hint="Cari Nama"
+                        android:textSize="16sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <!--Names Layout-->
+            <LinearLayout
+                android:id="@+id/layout_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_editMember">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                        android:id="@+id/editText_firstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nama Depan"
+                        android:inputType="textPersonName"
+                        android:maxLines="1"
+                        android:textSize="15sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                        android:id="@+id/editText_middleName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nama Tengah"
+                        android:inputType="textPersonName"
+                        android:maxLines="1"
+                        android:textSize="15sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                        android:id="@+id/editText_lastName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nama Belakang"
+                        android:inputType="textPersonName"
+                        android:maxLines="1"
+                        android:textSize="15sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_degreeCardHolder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:orientation="vertical" />
+
+                <Button
+                    android:id="@+id/button_addDegree"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="2dp"
+                    android:paddingStart="3dp"
+                    android:paddingEnd="16dp"
+                    android:text="Tambah Gelar Akademik"
+                    android:textAlignment="textStart" />
+
+            </LinearLayout>
+
+            <!--Membership Layout-->
+            <LinearLayout
+                android:id="@+id/layout_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical"
+                android:paddingBottom="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_name">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                        android:id="@+id/editText_DOB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Tanggal Lahir"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textSize="15sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/spinner_sex"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:elevation="1dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="Pilih Jenis Kelamin :" />
+
+                <Switch
+                    android:id="@+id/switch_baptize"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="26dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="0dp"
+                    android:paddingBottom="16dp"
+                    android:text="Baptis" />
+
+                <LinearLayout
+                    android:id="@+id/layout_baptize"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
+                        android:text="Nomor Surat :" />
+
+                    <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                        android:id="@+id/editText_baptizeLetter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="xxx/xxx.xxx/xx/xxxx"
+                        android:inputType="text"
+                        android:maxLines="1" />
+
+                </LinearLayout>
+
+                <Switch
+                    android:id="@+id/switch_sidi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="26dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="0dp"
+                    android:paddingBottom="16dp"
+                    android:text="Sidi" />
+
+                <LinearLayout
+                    android:id="@+id/layout_sidi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
+                        android:text="Nomor Surat :" />
+
+                    <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                        android:id="@+id/editText_sidiLetter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="xxx/xxx.xxx/xx/xxxx"
+                        android:inputType="text"
+                        android:maxLines="1" />
+
+                </LinearLayout>
+
+                <Switch
+                    android:id="@+id/switch_married"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="26dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="0dp"
+                    android:paddingBottom="16dp"
+                    android:text="Nikah" />
+
+                <LinearLayout
+                    android:id="@+id/layout_married"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
+                        android:text="Nomor Surat :" />
+
+                    <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                        android:id="@+id/editText_marriedLetter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="xxx/xxx.xxx/xx/xxxx"
+                        android:inputType="text"
+                        android:maxLines="1" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--End & Cancel Buttons-->
+            <LinearLayout
+                android:id="@+id/layout_buttons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:orientation="horizontal"
+                android:paddingBottom="16dp">
+
+                <Button
+                    android:id="@+id/button_cancel"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="Batal"
+                    android:textColor="@color/colorAccent" />
+
+                <Button
+                    android:id="@+id/button_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorAccent"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:text="End"
+                    android:textColor="@color/ButtonText_LightGrey" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <!--Loading-->
+        <RelativeLayout
+            android:id="@+id/layout_progressHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

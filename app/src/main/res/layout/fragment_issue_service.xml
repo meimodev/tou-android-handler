@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="10dp"
+    android:descendantFocusability="beforeDescendants"
+    android:animateLayoutChanges="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:animateLayoutChanges="true"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_main"
+            app:cardElevation="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:animateLayoutChanges="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.95">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_Main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:animateLayoutChanges="true"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_Title">
+
+                    <!--Spinner Level-->
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        android:id="@+id/spinner_level"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:elevation="2dp"
+                        android:paddingBottom="10dp"
+                        android:visibility="gone" />
+
+                    <!--Spinner BIPRA-->
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        android:id="@+id/spinner_BIPRA"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:paddingTop="4dp"
+                        android:elevation="2dp"
+                        android:paddingBottom="10dp"
+                        android:visibility="gone" />
+
+                    <!--Spinner Family Service Type-->
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        android:id="@+id/spinner_familyServiceType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:elevation="2dp"
+                        android:paddingBottom="10dp"
+                        android:visibility="gone" />
+
+                    <!--Spinner Hari Raya Type-->
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        android:id="@+id/spinner_hariRayaType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:elevation="2dp"
+                        android:paddingBottom="10dp"
+                        android:visibility="gone" />
+
+                    <!--Spinner Special Type-->
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        android:id="@+id/spinner_specialType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:elevation="2dp"
+                        android:paddingBottom="10dp"
+                        android:visibility="gone" />
+                    <!--Spinner Other Type-->
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        android:id="@+id/spinner_otherType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:elevation="2dp"
+                        android:paddingBottom="10dp"
+                        android:visibility="gone" />
+
+                    <!--Spinner Sunday Service Time-->
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        android:id="@+id/spinner_sundayServiceTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:elevation="2dp"
+                        android:paddingBottom="10dp"
+                        android:visibility="gone" />
+
+                    <!--Radio Group HUT-->
+                    <RadioGroup
+                        android:id="@+id/radio_group_HUT"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="20dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <RadioButton
+                            android:id="@+id/radio_hut_pribadi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="HUT Pribadi" />
+
+                        <RadioButton
+                            android:id="@+id/radio_hut_nikah"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="HUT Pernikahan" />
+
+                    </RadioGroup>
+                    <!-- Priest-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        android:orientation="vertical">
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd
+                            android:id="@+id/button_addPriest"
+                            style="@style/Button_TambahNamaButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Khadim :"
+                            android:textAlignment="textStart" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout_priestPlaceHolder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:animateLayoutChanges="true"
+                            android:orientation="vertical"/>
+
+                    </LinearLayout>
+                    <!-- Name-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        android:orientation="vertical">
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd
+                            android:id="@+id/button_addName"
+                            style="@style/Button_TambahNamaButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Atas Nama :"
+                            android:textAlignment="textStart" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout_namePlaceHolder"
+                            android:layout_width="match_parent"
+                            android:animateLayoutChanges="true"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <!--Date & Time-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <!--EditText Date-->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1">
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                android:id="@+id/editText_date"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Tanggal"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <!--EditText Time-->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_weight="1">
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                android:id="@+id/editText_time"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Waktu"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+                    <!--EditText Location-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp">
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                            android:id="@+id/editText_place"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Tempat"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <!--EditText Note-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp">
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                            android:id="@+id/editText_note"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Catatan"
+                            android:maxLines="5"
+                            android:visibility="gone" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <!--Special Sunday Service-->
+                    <LinearLayout
+                        android:id="@+id/layout_sundayService"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd
+                                android:id="@+id/button_coordinator"
+                                style="@style/Button_TambahNamaButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Koordinator Ibadah :" />
+
+                            <LinearLayout
+                                android:id="@+id/layout_coordinatorPlaceHolder"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:animateLayoutChanges="true"
+                                android:orientation="vertical" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/layout_penerimaHolder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:text="Penerima Tamu "
+                                android:gravity="center"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent" />
+
+                            <com.jaredrummler.materialspinner.MaterialSpinner
+                                android:id="@+id/spinner_guess"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/layout_petugasHolder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:text="Petugas Ibadah"
+                                android:gravity="center"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent" />
+
+                            <com.jaredrummler.materialspinner.MaterialSpinner
+                                android:id="@+id/spinner_onDuty"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_Title"
+                    style="@style/TextView_IssueTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btn_submit"
+                    style="@style/Button_SubmitButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="@id/linearLayout_Main"
+                    app:layout_constraintStart_toStartOf="@id/linearLayout_Main"
+                    app:layout_constraintTop_toBottomOf="@id/linearLayout_Main"
+                    app:layout_constraintWidth_percent="0.5" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:id="@+id/layout_progressHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

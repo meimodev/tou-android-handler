@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:layout_marginTop="10dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:animateLayoutChanges="true"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/layout_main"
+            android:layout_width="0dp"
+            android:animateLayoutChanges="true"
+            android:layout_height="wrap_content"
+            app:cardElevation="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.95">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:animateLayoutChanges="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_Title"
+                    style="@style/TextView_IssueTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_Main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true"
+                    app:layout_constraintStart_toStartOf="@id/tv_Title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_Title">
+
+                    <!--Switch Receive in Church-->
+                    <Switch
+                        android:id="@+id/switch_church"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:switchPadding="15dp"
+                        android:text="Penerimaan di Gereja "
+                        android:textColor="@color/TextView_Default" />
+
+                    <Switch
+                        android:id="@+id/switch_withDetail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone"
+                        android:switchPadding="15dp"
+                        android:text="Sertakan Perincian "
+                        android:textColor="@color/TextView_Default" />
+
+                    <!-- Amount Detail in "Received on Church"-->
+                    <LinearLayout
+                        android:id="@+id/layout_incomeDetailPlaceHolder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <!--Pel-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingTop="10dp">
+
+                            <TextView
+                                style="@style/TextView_IssueTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:paddingTop="0dp"
+                                android:paddingBottom="0dp"
+                                android:text="Pelayanan :" />
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                android:id="@+id/editText_pelTotal"
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:inputType="number" />
+
+                            <Switch
+                                android:id="@+id/switch_pelDetail"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="Sertakan\nRincian"
+                                android:textColor="@color/TextView_Label_Light" />
+
+                        </LinearLayout>
+                        <!--Pel PlaceHolder-->
+                        <LinearLayout
+                            android:id="@+id/layout_PelPlaceHolder"
+                            android:layout_width="match_parent"
+                            android:animateLayoutChanges="true"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                        </LinearLayout>
+                        <!--Pem-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingTop="10dp">
+
+                            <TextView
+                                style="@style/TextView_IssueTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:paddingTop="0dp"
+                                android:paddingBottom="0dp"
+                                android:text="Pembangunan :" />
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                android:id="@+id/editText_pemTotal"
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:inputType="number" />
+
+                            <Switch
+                                android:id="@+id/switch_pemDetail"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="Sertakan\nRincian"
+                                android:textColor="@color/TextView_Label_Light" />
+
+                        </LinearLayout>
+                        <!--Pem PlaceHolder-->
+                        <LinearLayout
+                            android:id="@+id/layout_PemPlaceHolder"
+                            android:layout_width="match_parent"
+                            android:animateLayoutChanges="true"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                        </LinearLayout>
+                        <!--Extra-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingTop="10dp">
+
+                            <TextView
+                                style="@style/TextView_IssueTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:paddingTop="0dp"
+                                android:paddingBottom="0dp"
+                                android:text="Pundi Extra :" />
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                android:id="@+id/editText_extraTotal"
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:inputType="number" />
+
+                            <Switch
+                                android:id="@+id/switch_extraDetail"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="Sertakan\nRincian"
+                                android:textColor="@color/TextView_Label_Light" />
+
+                        </LinearLayout>
+                        <!--Extra PlaceHolder-->
+                        <LinearLayout
+                            android:id="@+id/layout_extraPlaceHolder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:animateLayoutChanges="true"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <!--EditText Amount-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                            android:id="@+id/editText_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Jumlah :"
+                            android:inputType="number"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <!--Details in SS-->
+                    <LinearLayout
+                        android:id="@+id/linearLayout_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:animateLayoutChanges="true"
+                        android:visibility="gone">
+
+                        <com.jaredrummler.materialspinner.MaterialSpinner
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/spinner_sampulSyukurType"
+                            >
+
+                        </com.jaredrummler.materialspinner.MaterialSpinner>
+
+                        <!--Atas Nama Button-->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:animateLayoutChanges="true"
+                            android:visibility="visible">
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd
+                                android:id="@+id/button_addName"
+                                style="@style/Button_TambahNamaButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Atas Nama :" />
+
+                            <!--Names PlaceHolder-->
+                            <LinearLayout
+                                android:id="@+id/linearLayout_namePlaceHolder"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:animateLayoutChanges="true"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd
+                            android:id="@+id/button_details"
+                            style="@style/Button_TambahNamaButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Tambah Perincian :" />
+
+                        <!--Details PlaceHolder-->
+                        <LinearLayout
+                            android:id="@+id/linearLayout_detailsPlaceHolder"
+                            android:layout_width="match_parent"
+                            android:animateLayoutChanges="true"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <!--Persembahan Ibadah-->
+                    <LinearLayout
+                        android:id="@+id/linearLayout_infoService"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:animateLayoutChanges="true"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginEnd="5dp"
+                                android:layout_weight="1.5">
+
+                                <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                    android:id="@+id/editText_findId"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:hint="ID Ibadah :"
+                                    android:inputType="text"
+                                    android:textAllCaps="true"
+                                    android:maxLines="1" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+
+                        </LinearLayout>
+
+                        <!--Info Card About Related Service ID-->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardView_infoService"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:animateLayoutChanges="true"
+                            android:layout_margin="10dp"
+                            android:visibility="gone"
+                            app:cardElevation="3dp">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:animateLayoutChanges="true"
+                                android:paddingStart="5dp"
+                                android:paddingEnd="5dp"
+                                android:paddingBottom="10dp">
+
+                                <!--service id found-->
+                                <LinearLayout
+                                    android:id="@+id/linearLayout_serviceInfoFound"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:visibility="gone"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/textView_infoServiceType"
+                                            style="@style/TextView_IssueTitle"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentStart="true"
+                                            android:textAlignment="center"
+                                            android:layout_centerVertical="true"
+                                            android:paddingBottom="4dp"
+                                            android:paddingTop="4dp"
+                                            android:layout_marginStart="8dp"
+                                            android:text="Service Type "
+                                            android:textColor="@color/TextView_Label_Dark"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/textView_infoServiceId"
+                                            android:layout_width="wrap_content"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_centerVertical="true"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="8dp"
+                                            android:text="ID 24452" />
+
+                                    </RelativeLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:paddingStart="5dp"
+                                        android:animateLayoutChanges="true"
+                                        android:paddingEnd="5dp">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:orientation="vertical">
+
+                                            <TextView
+                                                style="@style/TextView_label"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:text="Atas Nama :" />
+
+                                            <TextView
+                                                style="@style/TextView_label"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:text="Tanggal :" />
+
+                                            <TextView
+                                                style="@style/TextView_label"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:text="Khadim :" />
+
+                                            <TextView
+                                                style="@style/TextView_label"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:text="Tempat :" />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginStart="10dp"
+                                            android:orientation="vertical">
+
+                                            <TextView
+                                                android:id="@+id/textView_infoName"
+                                                style="@style/TextView_label_main"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:text="JHON MANEMBO" />
+
+                                            <TextView
+                                                android:id="@+id/textView_infoDate"
+                                                style="@style/TextView_label_main"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:text="26 Agustus 2050" />
+
+                                            <TextView
+                                                android:id="@+id/textView_infoKhadim"
+                                                style="@style/TextView_label_main"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:text="Pdt. Jhon jhon" />
+
+                                            <TextView
+                                                android:id="@+id/textView_infoPlace"
+                                                style="@style/TextView_label_main"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:text="Kel. Jhonny Mambz" />
+
+                                        </LinearLayout>
+
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <!--Loading-->
+                                <LinearLayout
+                                    android:id="@+id/linearLayout_progressHolder"
+                                    android:layout_width="0dp"
+                                    android:layout_height="0dp"
+                                    android:background="#fff"
+                                    android:orientation="vertical"
+                                    android:gravity="center"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                    <TextView
+                                        android:id="@+id/textView_loading"
+                                        android:layout_width="0dp"
+                                        android:layout_height="0dp"
+                                        android:gravity="center"
+                                        android:text="Mencari ID ..."
+                                        android:textAlignment="gravity" />
+
+
+                                </LinearLayout>
+
+                                <!--Id Not Found-->
+                                <TextView
+                                    android:id="@+id/textView_idNotFound"
+                                    android:layout_width="0dp"
+                                    android:layout_height="0dp"
+                                    android:background="@color/TextView_Default"
+                                    android:gravity="center"
+                                    android:text="ID TIDAK DI TEMUKAN -_-'"
+                                    android:textAlignment="gravity"
+                                    android:textColor="@color/ButtonText_LightGrey"
+                                    android:textStyle="bold"
+                                    android:visibility="gone"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <!--Connection Problem-->
+                                <LinearLayout
+                                    android:id="@+id/layout_connectionProblem"
+                                    android:layout_width="0dp"
+                                    android:layout_height="0dp"
+                                    android:visibility="gone"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:textAlignment="center"
+                                        android:text="Koneksi internet anda sedang bermasakah, cobalah sesaat lagi"
+                                        android:textColor="@color/TextView_Label_Dark"/>
+
+                                </LinearLayout>
+
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+                    <!--Other-->
+                    <LinearLayout
+                        android:id="@+id/linearLayout_other"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1.5">
+
+                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                android:id="@+id/editText_other_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:hint="Catatan : "
+                                android:inputType="text"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <RadioGroup
+                            android:id="@+id/radio_other"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="15dp"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="vertical">
+
+<!--                            <RadioButton-->
+<!--                                android:id="@+id/radio_bunga"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="Bunga Simpanan (No Akun: 1.32.1)" />-->
+
+<!--                            <RadioButton-->
+<!--                                android:id="@+id/radio_jasaBank"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="Jasa Bank Lainnya (No Akun: 1.32.2)" />-->
+
+<!--                            <RadioButton-->
+<!--                                android:id="@+id/radio_saldoPelayananSebelum"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="Saldo Kas Pelayanan Tahun Sebelumnya (No Akun: 3.2)" />-->
+
+<!--                            <RadioButton-->
+<!--                                android:id="@+id/radio_saldoPembangunanSebelum"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="Saldo Kas Pembangunan Tahun Sebelumnya (No Akun: 3.3)" />-->
+
+<!--                            <RadioButton-->
+<!--                                android:id="@+id/radio_usahaKolom"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="Usaha Kolom (No. Akun: 1.35)" />-->
+
+<!--                            <RadioButton-->
+<!--                                android:id="@+id/radio_usahaBIPRA"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="Usaha BIPRA (No. Akun: 1.36)" />-->
+
+<!--                            <RadioButton-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="Rapat Badan Pekerja Sinode Lengkap (RBPSL) (No. Akun: 2.1.1)" />-->
+
+<!--                            <RadioButton-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="Sidang Sinode Istimewa (SSI) (No. Akun: 2.1.2)" />-->
+
+<!--                            <RadioButton-->
+<!--                                android:id="@+id/radio_sumbangan_partisipasi"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="Partisipasi / Sumbangan (No. Akun: 2.2)" />-->
+
+<!--                            <RadioButton-->
+<!--                                android:id="@+id/radio_sumbangan_pemerintah"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="Sumbangan Pemerintah / Lainnya (No. Akun: 3.4)" />-->
+
+<!--                            <RadioButton-->
+<!--                                android:id="@+id/radio_unexpected"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="Tak Terduga (No. Akun: 3.5)" />-->
+
+                        </RadioGroup>
+
+                    </LinearLayout>
+                    <!--Other NO ACCOUNT-->
+                    <LinearLayout
+                        android:id="@+id/linearLayout_otherNoAccount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                    </LinearLayout>
+                    <!--EditText Note-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                            android:id="@+id/et_other_note"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Detil Penggunaan: "
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:visibility="gone" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd
+                    android:id="@+id/button_submit"
+                    style="@style/Button_SubmitButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="@id/tv_Title"
+                    app:layout_constraintStart_toStartOf="@id/tv_Title"
+                    app:layout_constraintTop_toBottomOf="@id/linearLayout_Main"
+                    app:layout_constraintWidth_percent="0.5" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:id="@+id/layout_progressHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
