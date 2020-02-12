@@ -166,7 +166,7 @@ public class Adding_RecyclerAdapter extends RecyclerView.Adapter<Adding_Recycler
 
             if (model.getImageUrl() != null) {
                 if (model.getImageUrl().contains("/"))
-                    Picasso.with(ctx).load(model.getImageUrl()).resize(50, 50).centerCrop().into(ivMain);
+                    Picasso.get().load(model.getImageUrl()).resize(50, 50).centerCrop().into(ivMain);
             }
 
             if (model.getName() != null)

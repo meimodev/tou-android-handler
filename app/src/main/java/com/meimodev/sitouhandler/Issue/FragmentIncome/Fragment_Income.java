@@ -187,7 +187,9 @@ public class Fragment_Income extends Fragment {
     private String POST_issuedMemberData = "";
     private String POST_note = "";
     private String POST_description = "";
+    private int POST_serviceId = 0;
     private ArrayList<String> radioOtherArray;
+
 
     @Nullable
     @Override
@@ -1132,6 +1134,7 @@ public class Fragment_Income extends Fragment {
             Log.e(TAG, "issuedMemberDataRaw: " + POST_issuedMemberData);
             Log.e(TAG, "note: " + POST_note);
             Log.e(TAG, "description: " + POST_description);
+            Log.e(TAG, "related_service_id: " + POST_serviceId);
 
             IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
 
@@ -1142,7 +1145,8 @@ public class Fragment_Income extends Fragment {
                     POST_accountNumberKey,
                     POST_issuedMemberData,
                     POST_note,
-                    POST_description
+                    POST_description,
+                    POST_serviceId
             ));
             requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
                 @Override
@@ -1176,14 +1180,14 @@ public class Fragment_Income extends Fragment {
                             POST_accountNumberKey,
                             POST_issuedMemberData,
                             POST_note,
-                            POST_description
+                            POST_description,
+                            POST_serviceId
                     ));
                 }
             });
 
         }
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -1347,6 +1351,7 @@ public class Fragment_Income extends Fragment {
                                 tvInfoKhadim.setText(obj.getString("khadim_name"));
                                 tvInfoPlace.setText(obj.getString("place"));
                                 POST_accountNumberKey = obj.getString("financial_account_number");
+                                POST_serviceId = obj.getInt("service_id");
 
                                 isServiceDataFound = true;
 

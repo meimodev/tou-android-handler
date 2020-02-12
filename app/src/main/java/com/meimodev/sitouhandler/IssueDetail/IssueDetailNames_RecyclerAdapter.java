@@ -46,7 +46,7 @@ public class IssueDetailNames_RecyclerAdapter extends RecyclerView.Adapter<Issue
             holder.btnUnregistered.setVisibility(View.GONE);
         } else {
             if (model.getImageURL() != null)
-                Picasso.with(context).load(model.getImageURL()).resize(50, 50).centerCrop().into(holder.ivImage);
+                Picasso.get().load(model.getImageURL()).resize(50, 50).centerCrop().into(holder.ivImage);
 
             if (model.getFullName() != null)
                 holder.tvName.setText(model.getFullName());

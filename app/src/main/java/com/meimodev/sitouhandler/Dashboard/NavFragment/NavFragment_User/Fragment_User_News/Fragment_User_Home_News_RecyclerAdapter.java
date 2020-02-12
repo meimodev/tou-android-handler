@@ -43,7 +43,7 @@ public class Fragment_User_Home_News_RecyclerAdapter extends RecyclerView.Adapte
         Fragment_User_Home_News_RecyclerModel model = items.get(position);
 
         if (!model.getImageUrl().isEmpty())
-            Picasso.with(context).load(model.getImageUrl()).fit().into(ivImage);
+            Picasso.get().load(model.getImageUrl()).fit().into(ivImage);
 
         if (!model.getTitle().isEmpty()) {
             tvTitle.setText(model.getTitle());

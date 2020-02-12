@@ -150,7 +150,7 @@ public class CustomButtonAdd extends AppCompatButton {
                 if (addingModel.getImageUrl() != null) {
                     ImageView ivMain = v.findViewById(R.id.imageView_pic);
                     if (addingModel.getImageUrl().contains("/"))
-                        Picasso.with(getContext()).load(addingModel.getImageUrl()).resize(50, 50).centerCrop().into(ivMain);
+                        Picasso.get().load(addingModel.getImageUrl()).resize(50, 50).centerCrop().into(ivMain);
                 }
 
                 if (addingModel.getName() != null) {

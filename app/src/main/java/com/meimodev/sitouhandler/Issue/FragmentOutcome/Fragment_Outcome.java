@@ -1188,7 +1188,8 @@ public class Fragment_Outcome extends Fragment {
                 POST_accountNumberKey,
                 POST_issuedMemberData,
                 POST_note,
-                POST_description
+                POST_description,
+                0
         ));
         requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
@@ -1222,7 +1223,8 @@ public class Fragment_Outcome extends Fragment {
                         POST_accountNumberKey,
                         POST_issuedMemberData,
                         POST_note,
-                        POST_description
+                        POST_description,
+                        0
                 ));
             }
         });
