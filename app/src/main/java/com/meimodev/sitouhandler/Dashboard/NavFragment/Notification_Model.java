@@ -17,7 +17,8 @@ public class Notification_Model implements Comparable<Notification_Model> {
     public Notification_Model(int issueId, int authId,
                               String authStatus, String keyIssue,
                               String relatedDate, String issuedByMemberName,
-                              String issuedByMemberColumn) {
+                              String issuedByMemberColumn
+    ) {
         this.issueId = issueId;
         this.authId = authId;
         this.keyIssue = keyIssue;

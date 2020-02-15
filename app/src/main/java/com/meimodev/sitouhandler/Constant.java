@@ -25,8 +25,9 @@ public class Constant {
     private static final String TAG = "Constant: ";
 
     public static final String ROOT_TRANSFER_PROTOCOL = "http://";
-    public static final String ROOT_IP = ROOT_TRANSFER_PROTOCOL + "192.168.1.137:8000";
-    public static final String ROOT_URL = ROOT_IP + "/api/";
+    public static final String ROOT_DOMAIN = "192.168.1.137:8000";
+    public static final String ROOT_URL_API = ROOT_TRANSFER_PROTOCOL + ROOT_DOMAIN + "/api/";
+    public static final String ROOT_URL_PRINTABLE = ROOT_TRANSFER_PROTOCOL + ROOT_DOMAIN + "/print/";
 
     public static final String ACCOUNT_TYPE_CHIEF = "Ketua Jemaat";
     public static final String ACCOUNT_TYPE_SECRETARY = "Sekretaris Jemaat";

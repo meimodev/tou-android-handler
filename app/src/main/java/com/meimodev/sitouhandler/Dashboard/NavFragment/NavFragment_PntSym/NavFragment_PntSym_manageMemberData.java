@@ -1,8 +1,6 @@
 package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_PntSym;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,16 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.CustomWidget.MemberOperationDialog;
-import com.meimodev.sitouhandler.CustomWidget.OnMemberOperationDialogOperationListener;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
@@ -29,9 +24,6 @@ import com.meimodev.sitouhandler.WebViewActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -96,7 +88,7 @@ public class NavFragment_PntSym_manageMemberData extends Fragment {
 
     private void fetchData() {
         IssueRequestHandler req = new IssueRequestHandler(rootView);
-        req.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().getColumnOverview(
+        req.enqueue(RetrofitClient.getInstance(null).getApiServices().getColumnOverview(
                 ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
         ));
         req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {

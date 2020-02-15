@@ -94,13 +94,12 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageView_pic"
-                android:layout_width="0dp"
+                android:layout_width="3dp"
                 android:layout_height="0dp"
                 android:src="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.3" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView_name"

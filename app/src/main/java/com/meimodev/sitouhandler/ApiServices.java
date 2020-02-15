@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Cheif.ReadJSONNavFragmentChiefManageServiceArea;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member.ReadJSONNavFragmentMemberHome;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.DELETE;
@@ -26,18 +27,18 @@ public interface ApiServices {
     );
 
     @GET("member-home")
-    Call<ReadJSONNavFragmentMemberHome> getMemberHome(
+    Call<ResponseBody> getMemberHome(
             @Query("member_id") int memberId
     );
 
     @GET("member-issue")
-    Call<ReadJSONNavFragmentMemberHome> getMemberIssue(
+    Call<ResponseBody> getMemberIssue(
             @Query("member_id") int memberId
     );
 
 
     @GET("service-area")
-    Call<ReadJSONNavFragmentChiefManageServiceArea> getServiceArea(
+    Call<ResponseBody> getServiceArea(
             @Query("member_id") int memberId
     );
 

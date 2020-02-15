@@ -10,6 +10,9 @@
     <color name="TextView_Label_Light">#999898</color>
     <color name="TextView_Default">#747474</color>
 
+    <color name="accept">#66BB6A</color>
+    <color name="reject">#EF5350</color>
+
     <color name="backGround_fragment">#ECECEC</color>
     <color name="transparent">#00000000</color>
 </resources>

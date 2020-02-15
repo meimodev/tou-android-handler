@@ -40,8 +40,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 public class Fragment_Papers extends Fragment {
 
@@ -412,7 +410,7 @@ public class Fragment_Papers extends Fragment {
         Log.e(TAG, "------------------------------------------------------------------------");
 
         IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
-        requestHandler.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().setIssuePaper(
+        requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssuePaper(
                 ((int) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
                 keyIssue,
                 POST_destination,
@@ -449,7 +447,7 @@ public class Fragment_Papers extends Fragment {
 
             @Override
             public void onRetry() {
-                requestHandler.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().setIssuePaper(
+                requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssuePaper(
                         ((int) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
                         keyIssue,
                         POST_destination,

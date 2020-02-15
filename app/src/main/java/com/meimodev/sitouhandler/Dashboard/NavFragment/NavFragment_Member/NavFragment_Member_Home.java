@@ -1,15 +1,12 @@
 package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,18 +20,17 @@ import com.google.android.material.snackbar.Snackbar;
 import com.meimodev.sitouhandler.ApiServices;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.Notification_Model;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.Notification_RecyclerAdapter;
-import com.meimodev.sitouhandler.Helper.APIError;
 import com.meimodev.sitouhandler.Helper.APIUtils;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
+import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SharedPrefManager;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -65,7 +61,8 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
     @BindView(R.id.layout_sort)
     CardView llSort;
 
-    @BindView(R.id.textView_dataNotFound)TextView tvDataNotFound;
+    @BindView(R.id.textView_dataNotFound)
+    TextView tvDataNotFound;
 
     private ArrayList<Notification_Model> recyclerItems;
     private ArrayList<Notification_Model> recyclerItemsDefault;
@@ -98,7 +95,6 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
 
         return rootView;
     }
-
 
     private void setupRecyclerView() {
 
@@ -176,163 +172,113 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
     }
 
     private void fetchData() {
-        if (progress.getVisibility() != View.VISIBLE) {
+
+        if (progress.getVisibility() != View.VISIBLE)
             progress.setVisibility(View.VISIBLE);
-        }
+
         if (rvNotifications.getVisibility() == View.VISIBLE)
             rvNotifications.setVisibility(View.INVISIBLE);
 
-        ApiServices api = RetrofitClient.getInstance(SharedPrefManager.load(context, SharedPrefManager.KEY_ACCESS_TOKEN).toString()).getApiServices();
-        Call<ReadJSONNavFragmentMemberHome> call = api.getMemberHome(((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID)));
-        Callback<ReadJSONNavFragmentMemberHome> callback;
-        callback = new Callback<ReadJSONNavFragmentMemberHome>() {
+        IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
+        Call call = RetrofitClient.getInstance(null).getApiServices().getMemberHome(
+                ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
+        );
+        requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
+            @Override
+            public void onTry() {
+            }
 
             @Override
-            public void onResponse(Call<ReadJSONNavFragmentMemberHome> call, Response<ReadJSONNavFragmentMemberHome> response) {
-                if (response.isSuccessful()) {
+            public void onSuccess(APIWrapper res, String message) throws JSONException {
+                recyclerItems = new ArrayList<>();
+                recyclerItemsDefault = new ArrayList<>();
 
-                    ReadJSONNavFragmentMemberHome res = response.body();
-
-                    if (!res.isError()) {
-
-                        // proceed
-
-                        recyclerItems = new ArrayList<>();
-                        recyclerItemsDefault = new ArrayList<>();
-                        if (res.getData().size() <= 0){tvDataNotFound.setVisibility(View.VISIBLE);}
-                        for (ReadJSONNavFragmentMemberHome.Data data : res.getData()) {
-                            recyclerItems.add(new Notification_Model(
-                                    data.getIssueId(),
-                                    data.getAuthId(),
-                                    data.getAuthStatus(),
-                                    data.getIssueKey(),
-                                    data.getAuthOn(),
-                                    data.getIssuedByMemberName(),
-                                    data.getIssuedByMemberColumn()
-                            ));
-                        }
-
-                        setupRecyclerView();
-
-                        if (progress.getVisibility() == View.VISIBLE)
-                            progress.setVisibility(View.INVISIBLE);
-
-
-                        Log.e(TAG, "onResponse: response return success proceeding");
-                    } else {
-
-                        Constant.displayDialog(
-                                context,
-                                null,
-                                res.getMessage(),
-                                true,
-                                (dialogInterface, i) -> {
-                                },
-                                null
-                        );
-                        Log.e(TAG, "onResponse: response return success but error");
-                    }
-
-                } else {
-                    APIUtils.parseError(context, response);
+                if (res.getDataArray().length() <= 0) {
+                    tvDataNotFound.setVisibility(View.VISIBLE);
                 }
+
+                for (int i = 0; i < res.getDataArray().length(); i++) {
+                    JSONObject data = res.getDataArray().getJSONObject(i);
+                    recyclerItems.add(new Notification_Model(
+                            data.getInt("issue_id"),
+                            data.getInt("auth_id"),
+                            data.getString("auth_status"),
+                            data.getString("issue_key"),
+                            data.getString("auth_on"),
+                            data.getString("issued_by_member_name"),
+                            data.getString("issued_by_member_column")
+                    ));
+                }
+
+                setupRecyclerView();
+
             }
 
             @Override
-            public void onFailure(Call<ReadJSONNavFragmentMemberHome> call, Throwable t) {
-                Log.e(TAG, "onRetry: ", t);
-                progress.setVisibility(View.GONE);
-                llSort.setVisibility(View.GONE);
-                Constant.makeFailFetch(rootView, view -> {
-                    progress = Constant.makeProgressCircle(rootView);
-                    fetchData();
+            public void onRetry() {
+//                if (progress.getVisibility() == View.VISIBLE) {
+//                    progress.setVisibility(View.INVISIBLE);
+//                }
+//                if (llSort.getVisibility() == View.VISIBLE) {
+//                    llSort.setVisibility(View.INVISIBLE);
+//                }
+//                if (rvNotifications.getVisibility() == View.VISIBLE)
+//                    rvNotifications.setVisibility(View.INVISIBLE);
 
-                });
+                requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().getMemberHome(
+                        ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
+                ));
             }
-        };
-        call.enqueue(callback);
+        });
+
+        requestHandler.enqueue(call);
 
 
     }
 
     private void sendData(int authorizeId, int authorizeKey) {
-
-        if (progress.getVisibility() != View.VISIBLE) {
+        if (progress.getVisibility() != View.VISIBLE)
             progress.setVisibility(View.VISIBLE);
-        }
+
         if (rvNotifications.getVisibility() == View.VISIBLE)
             rvNotifications.setVisibility(View.INVISIBLE);
 
-        ApiServices api = RetrofitClient.getInstance(SharedPrefManager.load(context, SharedPrefManager.KEY_ACCESS_TOKEN).toString()).getApiServices();
-        Call<ResponseBody> call = null;
-        switch (authorizeKey) {
-            case Constant.AUTHORIZATION_STATUS_CODE_ACCEPTED:
-                call = api.authorizeIssue(authorizeId, Constant.AUTHORIZATION_STATUS_ACCEPTED);
-                break;
-            case Constant.AUTHORIZATION_STATUS_CODE_REJECTED:
-                call = api.authorizeIssue(authorizeId, Constant.AUTHORIZATION_STATUS_REJECTED);
-                break;
-        }
+        IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
 
-        Callback<ResponseBody> callback = new Callback<ResponseBody>() {
-
+        Call call = RetrofitClient.getInstance(null).getApiServices().authorizeIssue(
+                authorizeId,
+                authorizeKey == Constant.AUTHORIZATION_STATUS_CODE_ACCEPTED
+                        ? Constant.AUTHORIZATION_STATUS_ACCEPTED
+                        : Constant.AUTHORIZATION_STATUS_REJECTED
+        );
+        requestHandler.enqueue(call);
+        requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-
-                    APIWrapper res = APIUtils.parseWrapper(response.body());
-
-                    if (!res.isError()) {
-
-                        // proceed
-                        fetchData();
-
-                        Constant.displayDialog(
-                                context,
-                                null,
-                                res.getMessage(),
-                                true,
-                                (dialogInterface, i) -> {
-                                },
-                                null
-                        );
-
-                        Log.e(TAG, "onResponse: response return success proceeding");
-                        Log.e(TAG, "onResponse: response return message: " + res.getMessage());
-
-                    } else {
-
-                        Constant.displayDialog(
-                                context,
-                                null,
-                                res.getMessage(),
-                                true,
-                                (dialogInterface, i) -> {
-                                },
-                                null
-                        );
-                        Log.e(TAG, "onResponse: response return success but error");
-                        Log.e(TAG, "onResponse: response return message: " + res.getMessage());
-                    }
-
-                } else {
-                    APIUtils.parseError(context, response);
-                }
+            public void onTry() {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e(TAG, "onRetry: ", t);
-                progress.setVisibility(View.GONE);
-                llSort.setVisibility(View.GONE);
-                Constant.makeFailFetch(rootView, view -> {
-                    progress = Constant.makeProgressCircle(rootView);
-                    sendData(authorizeId, authorizeKey);
-                });
-            }
-        };
-        call.enqueue(callback);
+            public void onSuccess(APIWrapper res, String message) {
 
+                fetchData();
+
+                Constant.displayDialog(
+                        context,
+                        null,
+                        res.getMessage(),
+                        true,
+                        (dialogInterface, i) -> {
+                        },
+                        null
+                );
+
+            }
+
+            @Override
+            public void onRetry() {
+                requestHandler.enqueue(call);
+            }
+        });
 
     }
 
@@ -363,7 +309,6 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
         rvNotifications.setVisibility(View.VISIBLE);
         rvNotifications.setAdapter(recyclerAdapter);
     }
-
 
     @Override
     public void onResume() {

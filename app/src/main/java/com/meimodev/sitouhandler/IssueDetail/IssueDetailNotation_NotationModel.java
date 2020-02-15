@@ -2,18 +2,21 @@ package com.meimodev.sitouhandler.IssueDetail;
 
 import com.meimodev.sitouhandler.Constant;
 
+import org.json.JSONArray;
+
 public class IssueDetailNotation_NotationModel {
-    private String position, confirmedDate;
+    private JSONArray positions;
+    private String confirmedDate;
     private String authStatus;
 
-    public IssueDetailNotation_NotationModel(String position, String confirmedDate, String authStatus) {
-        this.position = position;
+    public IssueDetailNotation_NotationModel(JSONArray positions, String confirmedDate, String authStatus) {
+        this.positions = positions;
         this.authStatus = authStatus;
         this.confirmedDate = confirmedDate;
     }
 
-    public String getPosition() {
-        return position;
+    public JSONArray getPositions() {
+        return positions;
     }
 
     public String getConfirmedDate() {

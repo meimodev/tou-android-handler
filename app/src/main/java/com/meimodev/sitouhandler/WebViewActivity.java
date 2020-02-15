@@ -40,7 +40,7 @@ public class WebViewActivity extends AppCompatActivity {
 
         tvTitle.setText(title);
 
-        String urlPrefix = "https://";
+        String urlPrefix = destinationUrl.contains("http") ? "": "https://";
         String url = urlPrefix + destinationUrl;
         webView.loadUrl(url);
         webView.setWebChromeClient(new WebChromeClient());

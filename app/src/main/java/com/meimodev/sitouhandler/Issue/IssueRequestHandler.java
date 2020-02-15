@@ -45,7 +45,7 @@ public class IssueRequestHandler {
     public interface OnRequestHandler {
         void onTry();
 
-        void onSuccess(APIWrapper res, String message);
+        void onSuccess(APIWrapper res, String message) throws JSONException;
 
         void onRetry();
     }
@@ -55,18 +55,19 @@ public class IssueRequestHandler {
         this.onRequestHandler = onRequestHandler;
     }
 
-    public void issueRequestResponse(Call call) {
+    public void enqueue(Call call) {
 
         View mainView;
         try {
             mainView = rootView.findViewById(R.id.layout_main);
         } catch (NullPointerException e) {
-            Log.e(TAG, "issueRequestResponse: class initialize with null rootView " + e.getMessage());
+            Log.e(TAG, "enqueue: class initialize with null rootView " + e.getMessage());
             return;
         }
 
         if (progress != null && progress.getVisibility() != View.VISIBLE)
             progress.setVisibility(View.VISIBLE);
+
         if (mainView != null && mainView.getVisibility() == View.VISIBLE)
             mainView.setVisibility(View.INVISIBLE);
 
@@ -94,8 +95,16 @@ public class IssueRequestHandler {
                                 + ": response SUCCESS -> proceeding -> "
                                 + " response message: " + res.getMessage());
 
-                        if (onRequestHandler != null)
-                            onRequestHandler.onSuccess(res, res.getMessage());
+                        if (onRequestHandler != null) {
+
+                            try {
+                                onRequestHandler.onSuccess(res, res.getMessage());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.e(TAG, context.getClass().getSimpleName() + ": onResponse: JSON ERROR " + e.getMessage());
+                            }
+
+                        }
 
                     } else {
 
@@ -156,8 +165,14 @@ public class IssueRequestHandler {
                                 + ": response SUCCESS -> proceeding -> "
                                 + " response message: " + res.getMessage());
 
-                        if (onRequestHandler != null)
-                            onRequestHandler.onSuccess(res, res.getMessage());
+                        if (onRequestHandler != null) {
+                            try {
+                                onRequestHandler.onSuccess(res, res.getMessage());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.e(TAG, context.getClass().getSimpleName() + ": onResponse: JSON ERROR " + e.getMessage());
+                            }
+                        }
 
                     } else {
 

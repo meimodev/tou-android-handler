@@ -2,7 +2,6 @@ package com.meimodev.sitouhandler.Issue.FragmentOutcome;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,8 +41,6 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 public class Fragment_Outcome extends Fragment {
     private final String TAG = "Fragment_Outcome : ";
@@ -1181,7 +1177,7 @@ public class Fragment_Outcome extends Fragment {
 
         IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
 
-        requestHandler.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
+        requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
                 ((Integer) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
                 keyIssue,
                 "-" + etAmount.getText().toString().trim().replace(",", ""),
@@ -1216,7 +1212,7 @@ public class Fragment_Outcome extends Fragment {
 
             @Override
             public void onRetry() {
-                requestHandler.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
+                requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
                         ((Integer) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
                         keyIssue,
                         "-" + etAmount.getText().toString().trim().replace(",", ""),

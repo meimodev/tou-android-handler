@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -65,21 +66,34 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
         holder.tvColumn.setText(model.getIssuedByMemberColumn());
         holder.tvIssuedDate.setText(model.getRelatedDate());
 
+        int color;
+
         switch (model.getAuthStatusCode()) {
-            case Constant.AUTHORIZATION_STATUS_CODE_UNCONFIRMED:
-                break;
+
             case Constant.AUTHORIZATION_STATUS_CODE_ACCEPTED:
-                holder.tvConfirmationStatus.setText("Diterima");
+                holder.tvConfirmationStatus.setText("DITERIMA");
+                 color = context.getResources().getColor(R.color.accept);
+                holder.tvConfirmationStatus.setTextColor(color);
+                holder.tvConfirmationStatus.setCompoundDrawablesWithIntrinsicBounds(context.getDrawable(R.drawable.ic_check_24px), null, null, null);
+                holder.ivStrip.setBackgroundColor(color);
                 Constant.toggleViewVisibility(holder.btnAccept);
                 Constant.toggleViewVisibility(holder.btnDeny);
                 break;
             case Constant.AUTHORIZATION_STATUS_CODE_REJECTED:
-                holder.tvConfirmationStatus.setText("Ditolak");
+                holder.tvConfirmationStatus.setText("DITOLAK");
+                 color = context.getResources().getColor(R.color.reject);
+                holder.tvConfirmationStatus.setTextColor(color);
+                holder.tvConfirmationStatus.setCompoundDrawablesWithIntrinsicBounds(context.getDrawable(R.drawable.ic_close_24px), null, null, null);
+                holder.ivStrip.setBackgroundColor(color);
                 Constant.toggleViewVisibility(holder.btnAccept);
                 Constant.toggleViewVisibility(holder.btnDeny);
                 break;
-            case Constant.AUTHORIZATION_STATUS_CODE_UNAUTHORIZED:
-                holder.tvConfirmationStatus.setText("Diajukan");
+            case Constant.AUTHORIZATION_STATUS_CODE_UNCONFIRMED:
+                holder.tvConfirmationStatus.setText("DIAJUKAN");
+                color = context.getResources().getColor(R.color.colorAccent);
+                holder.tvConfirmationStatus.setTextColor(color);
+                holder.tvConfirmationStatus.setCompoundDrawablesWithIntrinsicBounds(context.getDrawable(R.drawable.ic_priority_high_24px), null, null, null);
+                holder.ivStrip.setBackgroundColor(color);
                 Constant.toggleViewVisibility(holder.btnAccept);
                 Constant.toggleViewVisibility(holder.btnDeny);
         }
@@ -134,6 +148,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
         TextView tvIssue, tvName, tvColumn, tvIssuedDate, tvConfirmationStatus;
         CardView btnAccept, btnDeny;
         CardView cvItem;
+        ImageView ivStrip;
 
         MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -145,7 +160,7 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
             btnAccept = itemView.findViewById(R.id.recyclerItem_accept);
             btnDeny = itemView.findViewById(R.id.recyclerItem_reject);
             cvItem = itemView.findViewById(R.id.recyclerItem_itemHolder);
-
+            ivStrip = itemView.findViewById(R.id.reacyclerItem_strip);
         }
     }
 }

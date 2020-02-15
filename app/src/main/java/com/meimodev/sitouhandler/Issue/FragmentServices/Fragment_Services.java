@@ -32,7 +32,6 @@ import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SharedPrefManager;
 import com.meimodev.sitouhandler.Validator;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
@@ -41,8 +40,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 public class Fragment_Services extends Fragment {
 
@@ -891,7 +888,7 @@ public class Fragment_Services extends Fragment {
 
         IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
 
-        requestHandler.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().setIssueService(
+        requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssueService(
                 ((int) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
                 keyIssue,
                 POST_issuedMemberData,
@@ -926,7 +923,7 @@ public class Fragment_Services extends Fragment {
 
             @Override
             public void onRetry() {
-                requestHandler.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().setIssueService(
+                requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssueService(
                         ((int) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
                         keyIssue,
                         POST_issuedMemberData,

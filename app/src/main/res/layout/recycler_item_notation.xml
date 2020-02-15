@@ -2,25 +2,34 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="55dp">
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView_position"
+        style="@style/CardView_recyclerItemBadge"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/CardView_recyclerItemBadge"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView_position"
-            android:layout_width="wrap_content"
-            style="@style/TextView_recyclerItemBadgeText"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Pnt. 20"
-            android:textAlignment="center" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView_position"
+                style="@style/TextView_recyclerItemBadgeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Pnt. 20"
+                android:textAlignment="center" />
+
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

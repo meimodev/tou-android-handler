@@ -46,13 +46,9 @@ import com.meimodev.sitouhandler.Validator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -1138,7 +1134,7 @@ public class Fragment_Income extends Fragment {
 
             IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
 
-            requestHandler.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
+            requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
                     ((Integer) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
                     keyIssue,
                     etAmount.getText().toString().trim().replace(",", ""),
@@ -1173,7 +1169,7 @@ public class Fragment_Income extends Fragment {
 
                 @Override
                 public void onRetry() {
-                    requestHandler.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
+                    requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
                             ((Integer) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
                             keyIssue,
                             etAmount.getText().toString().trim().replace(",", ""),

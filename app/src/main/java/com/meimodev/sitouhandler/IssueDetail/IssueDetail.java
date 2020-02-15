@@ -1,12 +1,18 @@
 package com.meimodev.sitouhandler.IssueDetail;
 
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +21,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.snackbar.Snackbar;
+import com.hmomeni.progresscircula.ProgressCircula;
 import com.meimodev.sitouhandler.ApiServices;
 import com.meimodev.sitouhandler.Helper.APIUtils;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
@@ -23,6 +32,7 @@ import com.meimodev.sitouhandler.Issue.Adding_RecyclerModel;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.WebViewActivity;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,6 +53,8 @@ import retrofit2.Response;
 public class IssueDetail extends AppCompatActivity {
 
     public String TAG = "IssueDetail : ";
+
+    private long downloadID;
 
     @BindView(R.id.layout_namesHolder)
     LinearLayout llNames;
@@ -80,6 +92,8 @@ public class IssueDetail extends AppCompatActivity {
 
     @BindView(R.id.cardView_printable)
     CardView cvPrintable;
+    @BindView(R.id.button_download)
+    CardView cvButtonDownload;
 
     @BindView(R.id.layout_body)
     View llBody;
@@ -88,6 +102,7 @@ public class IssueDetail extends AppCompatActivity {
     TextView tvDescription;
     @BindView(R.id.cardView_description)
     CardView cvDescription;
+
 
     private boolean isAccepted;
     private boolean isRejected;
@@ -100,6 +115,15 @@ public class IssueDetail extends AppCompatActivity {
     private ArrayList<IssueDetailNotation_NotationModel> notations;
     private Map<String, String> issuedByMember;
 
+    private CardView cvLoading;
+
+    @BindView(R.id.imageView_download)
+    ImageView ivDownload;
+    @BindView(R.id.textView_link)
+    TextView tvLink;
+    @BindView(R.id.text_download)
+    TextView tvTextDownload;
+
     private View progress;
 
     @Override
@@ -108,10 +132,18 @@ public class IssueDetail extends AppCompatActivity {
         setContentView(R.layout.activity_issue_detail);
         ButterKnife.bind(this);
 
+        registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
         progress = Constant.makeProgressCircle(findViewById(R.id.layout_main));
 
         fetchData();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(onDownloadComplete);
+        super.onDestroy();
     }
 
     private void fetchData() {
@@ -183,11 +215,11 @@ public class IssueDetail extends AppCompatActivity {
         for (int i = 0; i < issueAuth.length(); i++) {
             JSONObject auth = issueAuth.getJSONObject(i);
             String authStatus = auth.getString("auth_status");
-            String authChurchPosition = auth.getString("auth_church_position");
+            JSONArray authChurchPositions = auth.getJSONArray("auth_church_position");
             String authOn = auth.getString("auth_on");
 
             notations.add(new IssueDetailNotation_NotationModel(
-                    authChurchPosition, authOn, authStatus)
+                    authChurchPositions, authOn, authStatus)
             );
         }
         for (int i = 0; i < issueAuth.length(); i++) {
@@ -202,6 +234,7 @@ public class IssueDetail extends AppCompatActivity {
                 break;
             }
         }
+
         for (int i = 0; i < issueAuth.length(); i++) {
             JSONObject auth = issueAuth.getJSONObject(i);
             String authStatus = auth.getString("auth_status");
@@ -285,16 +318,7 @@ public class IssueDetail extends AppCompatActivity {
             if (isAccepted) {
                 tvLetterNumberEntry.setVisibility(View.VISIBLE);
                 tvLetterNumberEntry.setText(((String) keyIssueValue.get("letter_entry_number")));
-                String printable = ((String) keyIssueValue.get("letter_link_printable"));
-                if (printable != null && !printable.isEmpty()) {
-                    cvPrintable.setVisibility(View.VISIBLE);
-                    cvPrintable.setOnClickListener(view -> {
-                        Intent i = new Intent(IssueDetail.this, WebViewActivity.class);
-                        i.putExtra(WebViewActivity.KEY_INTENT_TITLE, "link to printable");
-                        i.putExtra(WebViewActivity.KEY_INTENT_DESTINATION_URL, "trello.com");
-                        startActivity(i);
-                    });
-                }
+
             }
 
         } else if ( /////////////////////////////////////////////////////// SERVICE ///////////////////////////////////////////////////////
@@ -329,9 +353,15 @@ public class IssueDetail extends AppCompatActivity {
         JSONObject issuedByMemberObj = obj.getJSONObject("issued_by_member");
         issuedByMember = new HashMap<>();
         issuedByMember.put("name", issuedByMemberObj.getString("name"));
-        issuedByMember.put("church_position", issuedByMemberObj.getString("church_position"));
-        issuedByMember.put("column", issuedByMemberObj.getString("column"));
 
+        StringBuilder churchPositionString = new StringBuilder();
+        JSONArray churchpositionArray = issuedByMemberObj.getJSONArray("church_position");
+        for (int j = 0; j < churchpositionArray.length(); j++) {
+            String p = ((String) churchpositionArray.get(j));
+            churchPositionString = j == churchpositionArray.length() - 1 ? churchPositionString.append(p) : churchPositionString.append(p).append("\n");
+        }
+        issuedByMember.put("church_position", churchPositionString.toString());
+        issuedByMember.put("column", issuedByMemberObj.getString("column"));
 
         JSONArray issuedMembers = obj.getJSONArray("issued_members");
         names = new ArrayList<>();
@@ -351,6 +381,14 @@ public class IssueDetail extends AppCompatActivity {
         }
         insertCategory(keyIssue);
 
+        String printableKey = obj.getString("printable_key");
+        if (printableKey != null && !printableKey.isEmpty()) {
+            cvPrintable.setVisibility(View.VISIBLE);
+            cvButtonDownload.setOnClickListener(view -> downloadFile(printableKey));
+            TextView tvLink = cvPrintable.findViewById(R.id.textView_link);
+            String s = Constant.ROOT_URL_PRINTABLE + printableKey;
+            tvLink.setText(s);
+        }
 
         setupHeaderCardView();
         setupIssuedMembers();
@@ -362,11 +400,10 @@ public class IssueDetail extends AppCompatActivity {
             llBody.setVisibility(View.VISIBLE);
 //        if (llButtons.getVisibility() != View.VISIBLE)
 //            llButtons.setVisibility(View.VISIBLE);
-        if (progress.getVisibility() == View.VISIBLE)
-            progress.setVisibility(View.INVISIBLE);
+//        if (progress.getVisibility() == View.VISIBLE)
+//            progress.setVisibility(View.INVISIBLE);
 
     }
-
 
     private void setupHeaderCardView() {
 
@@ -411,17 +448,26 @@ public class IssueDetail extends AppCompatActivity {
         tvPosition.setText(issuedByMember.get("church_position"));
     }
 
-    private void setupNotations() {
+    private void setupNotations() throws JSONException {
 
         ViewGroup parent = llNotationPlaceHolder;
         for (int i = 0; i < notations.size(); i++) {
             View v = getLayoutInflater().inflate(R.layout.recycler_item_notation, parent, false);
             TextView tvPos = v.findViewById(R.id.textView_position);
             TextView tvDate = v.findViewById(R.id.textView_date);
-            tvPos.setText(notations.get(i).getPosition());
-            String date = notations.get(i).getConfirmedDate();
+
+            IssueDetailNotation_NotationModel model = notations.get(i);
+
+            StringBuilder positions = new StringBuilder();
+            for (int j = 0; j < model.getPositions().length(); j++) {
+                String p = ((String) model.getPositions().get(j));
+                positions = j == model.getPositions().length() - 1 ? positions.append(p) : positions.append(p).append("\n");
+            }
+
+            tvPos.setText(positions.toString());
+            String date = model.getConfirmedDate();
             date = date.contains("yang") ? date.replace("yang ", "") : date;
-            String str = notations.get(i).getAuthStatus() + " " + date;
+            String str = model.getAuthStatus() + " " + date;
             tvDate.setText(str);
             llNotationPlaceHolder.addView(v);
         }
@@ -499,6 +545,47 @@ public class IssueDetail extends AppCompatActivity {
                     names.get(0).setCategory("Atas Nama :");
             }
         }
+    }
+
+    private BroadcastReceiver onDownloadComplete = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                cvButtonDownload.setEnabled(true);
+                cvButtonDownload.setCardBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                tvTextDownload.setText("Lihat Dokumen");
+
+                ivDownload.setImageDrawable(getDrawable(R.drawable.ic_description_24px));
+
+                View.OnClickListener onClick = v -> startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
+
+                cvButtonDownload.setOnClickListener(onClick);
+
+                Snackbar.make(findViewById(android.R.id.content), keyIssue.toUpperCase().replace(" ", "_") + ".pdf", Snackbar.LENGTH_INDEFINITE).setAction(
+                        "Lihat File",
+                        onClick
+                ).show();
+            }
+        }
+    };
+
+    private void downloadFile(String printableKey) {
+        cvButtonDownload.setEnabled(false);
+        cvButtonDownload.setCardBackgroundColor(getResources().getColor(R.color.TextView_Label_Light));
+
+        Snackbar.make(findViewById(android.R.id.content), "Downloading / Mengunduh ...", Snackbar.LENGTH_INDEFINITE).show();
+
+        DownloadManager.Request req = new DownloadManager.Request(Uri.parse(Constant.ROOT_URL_PRINTABLE + printableKey));
+
+        req.setTitle(keyIssue.toUpperCase().replace(" ", "_") + ".pdf")// Title of the Download Notification
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)// Visibility of the download Notification
+                .setAllowedOverMetered(true)// Set if download is allowed on Mobile network
+                .setAllowedOverRoaming(true);// Set if download is allowed on roaming network
+
+        DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        downloadID = dm.enqueue(req);
     }
 
     private class IssueDetailModelHelper {

@@ -1,7 +1,6 @@
 package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Cheif;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,28 +8,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.meimodev.sitouhandler.ApiServices;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.CustomWidget.CustomEditText;
-import com.meimodev.sitouhandler.Dashboard.NavFragment.Notification_Model;
-import com.meimodev.sitouhandler.Helper.APIError;
 import com.meimodev.sitouhandler.Helper.APIUtils;
+import com.meimodev.sitouhandler.Helper.APIWrapper;
+import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SharedPrefManager;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,75 +64,57 @@ public class NavFragment_Chief_ManageServiceArea extends Fragment {
 
         progress = Constant.makeProgressCircle(rootView);
 
-
         fetchData();
 
         return rootView;
     }
 
     private void fetchData() {
-        progress.setVisibility(View.VISIBLE);
+        IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
 
-        ApiServices api = RetrofitClient.getInstance(SharedPrefManager.load(context, SharedPrefManager.KEY_ACCESS_TOKEN).toString()).getApiServices();
-        Call<ReadJSONNavFragmentChiefManageServiceArea> call = api.getServiceArea(((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID)));
-        Callback<ReadJSONNavFragmentChiefManageServiceArea> callback;
-        callback = new Callback<ReadJSONNavFragmentChiefManageServiceArea>() {
+        requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().getServiceArea(
+                ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
+        ));
+
+        requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
+            @Override
+            public void onTry() {
+            }
 
             @Override
-            public void onResponse(Call<ReadJSONNavFragmentChiefManageServiceArea> call, Response<ReadJSONNavFragmentChiefManageServiceArea> response) {
-                if (response.isSuccessful()) {
-                    ReadJSONNavFragmentChiefManageServiceArea res = response.body();
+            public void onSuccess(APIWrapper res, String message) {
 
-                    if (!res.isError()) {
-
-                        // proceed
-                        priests = new ArrayList<>();
-
-                        for (ReadJSONNavFragmentChiefManageServiceArea.Priest priest : res.getData().getPriests()) {
-                            priests.add(new ManageServiceAreaModel(
-                                    priest.getServiceAreaId(),
-                                    priest.getMemberId(),
-                                    priest.getName(),
-                                    priest.getDomicileColumn(),
-                                    Integer.valueOf(priest.getFromColumn()),
-                                    Integer.valueOf(priest.getToColumn())
-                            ));
-                        }
-
-                        setupCardViews();
-
-                        Log.e(TAG, "onResponse: response return success proceeding");
-                    } else {
-
-                        Constant.displayDialog(
-                                context,
-                                null,
-                                res.getMessage(),
-                                true,
-                                (dialogInterface, i) -> {
-                                },
-                                null
+                priests = new ArrayList<>();
+                JSONArray data = res.getDataArray();
+                JSONObject obj;
+                try {
+                    for (int i = 0; i < data.length(); i++) {
+                        obj = data.getJSONObject(i);
+                        priests.add(
+                                new ManageServiceAreaModel(
+                                        obj.getInt("service_area_id"),
+                                        obj.getInt("member_id"),
+                                        obj.getString("name"),
+                                        obj.getString("domicile_column"),
+                                        Integer.valueOf(obj.getString("from_column")),
+                                        Integer.valueOf(obj.getString("from_column"))
+                                )
                         );
-                        Log.e(TAG, "onResponse: response return success but error");
                     }
-
-                } else {
-                    APIUtils.parseError(context, response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "JSON ERROR: " + e.getMessage());
                 }
+                setupCardViews();
             }
 
             @Override
-            public void onFailure(Call<ReadJSONNavFragmentChiefManageServiceArea> call, Throwable t) {
-                Log.e(TAG, "onRetry: ", t);
-                progress.setVisibility(View.INVISIBLE);
-                Constant.makeFailFetch(rootView, view -> {
-                    progress = Constant.makeProgressCircle(rootView);
-                    fetchData();
-                });
+            public void onRetry() {
+                requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().getServiceArea(
+                        ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
+                ));
             }
-        };
-        call.enqueue(callback);
-
+        });
 
     }
 

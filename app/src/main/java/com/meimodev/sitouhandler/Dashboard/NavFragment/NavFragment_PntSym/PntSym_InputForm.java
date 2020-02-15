@@ -215,7 +215,7 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
     private void fetchDegrees() {
 
         IssueRequestHandler req = new IssueRequestHandler(findViewById(android.R.id.content));
-        req.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().getAcademicDegrees());
+        req.enqueue(RetrofitClient.getInstance(null).getApiServices().getAcademicDegrees());
         req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
             public void onTry() {
@@ -250,7 +250,7 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onRetry() {
-                req.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().getAcademicDegrees());
+                req.enqueue(RetrofitClient.getInstance(null).getApiServices().getAcademicDegrees());
             }
         });
     }
@@ -457,7 +457,7 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
             switch (OPERATION_TYPE) {
                 case ADD_MEMBER:
                     // setup end button to ADD BUTTON
-                    req.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().setMemberUserData(
+                    req.enqueue(RetrofitClient.getInstance(null).getApiServices().setMemberUserData(
                             ((int) SharedPrefManager.load(this, SharedPrefManager.KEY_MEMBER_ID)),
                             firstName,
                             middleName,
@@ -493,7 +493,7 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
 
                         @Override
                         public void onRetry() {
-                            req.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().setMemberUserData(
+                            req.enqueue(RetrofitClient.getInstance(null).getApiServices().setMemberUserData(
                                     ((int) SharedPrefManager.load(PntSym_InputForm.this, SharedPrefManager.KEY_MEMBER_ID)),
                                     firstName,
                                     middleName,
@@ -531,7 +531,7 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
                                 letterMarried
                         );
 
-                        req.issueRequestResponse(call);
+                        req.enqueue(call);
                         req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
                             @Override
                             public void onTry() {
@@ -567,7 +567,7 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
                                 MEMBER_ID
                         );
 
-                        req.issueRequestResponse(call);
+                        req.enqueue(call);
                         req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
                             @Override
                             public void onTry() {
@@ -606,7 +606,7 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
         if (resultCode == Activity.RESULT_OK && data != null) {
             int memberId = data.getIntExtra("model.id", 0);
             IssueRequestHandler req = new IssueRequestHandler(findViewById(android.R.id.content));
-            req.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().getMemberUserData(memberId));
+            req.enqueue(RetrofitClient.getInstance(null).getApiServices().getMemberUserData(memberId));
             req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
                 @Override
                 public void onTry() {
@@ -665,7 +665,7 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
 
                 @Override
                 public void onRetry() {
-                    req.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().getMemberUserData(memberId));
+                    req.enqueue(RetrofitClient.getInstance(null).getApiServices().getMemberUserData(memberId));
                 }
             });
         }

@@ -23,9 +23,13 @@ import com.meimodev.sitouhandler.Dashboard.NavFragment.Notification_Model;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.Notification_RecyclerAdapter;
 import com.meimodev.sitouhandler.Helper.APIUtils;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
+import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SharedPrefManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -116,83 +120,61 @@ public class NavFragment_Member_Issue extends Fragment {
 
     }
 
-
     private void fetchData() {
-        if (progress.getVisibility() != View.VISIBLE) {
+        if (progress.getVisibility() != View.VISIBLE)
             progress.setVisibility(View.VISIBLE);
-        }
+
         if (rvNotifications.getVisibility() == View.VISIBLE)
             rvNotifications.setVisibility(View.INVISIBLE);
 
-        ApiServices api = RetrofitClient.getInstance(SharedPrefManager.load(context, SharedPrefManager.KEY_ACCESS_TOKEN).toString()).getApiServices();
-        Call<ReadJSONNavFragmentMemberHome> call = api.getMemberIssue(((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID)));
-        call.enqueue(new Callback<ReadJSONNavFragmentMemberHome>() {
+        IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
 
+        Call call = RetrofitClient.getInstance(null).getApiServices().getMemberHome(
+                ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
+        );
+        requestHandler.enqueue(call);
+
+        requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
-            public void onResponse(Call<ReadJSONNavFragmentMemberHome> call, Response<ReadJSONNavFragmentMemberHome> response) {
-                if (response.isSuccessful()) {
-
-                    ReadJSONNavFragmentMemberHome res = response.body();
-
-                    if (!res.isError()) {
-
-                        // proceed
-
-                        recyclerItems = new ArrayList<>();
-                        recyclerItemsDefault = new ArrayList<>();
-                        if (res.getData().size() <= 0){tvDataNotFound.setVisibility(View.VISIBLE);}
-                        for (ReadJSONNavFragmentMemberHome.Data data : res.getData()) {
-                            recyclerItems.add(new Notification_Model(
-                                    data.getIssueId(),
-                                    data.getAuthId(),
-                                    data.getAuthStatus(),
-                                    data.getIssueKey(),
-                                    data.getAuthOn(),
-                                    data.getIssuedByMemberName(),
-                                    data.getIssuedByMemberColumn()
-                            ));
-                        }
-
-                        setupRecyclerView();
-
-                        if (progress.getVisibility() == View.VISIBLE)
-                            progress.setVisibility(View.INVISIBLE);
-
-
-                        Log.e(TAG, "onResponse: response return success proceeding");
-                    } else {
-
-                        Constant.displayDialog(
-                                context,
-                                null,
-                                res.getMessage(),
-                                true,
-                                (dialogInterface, i) -> {
-                                },
-                                null
-                        );
-                        Log.e(TAG, "onResponse: response return success but error");
-                    }
-
-                } else {
-                    APIUtils.parseError(context, response);
-                }
+            public void onTry() {
             }
 
             @Override
-            public void onFailure(Call<ReadJSONNavFragmentMemberHome> call, Throwable t) {
-                Log.e(TAG, "onRetry: ", t);
-                progress.setVisibility(View.GONE);
-                llSort.setVisibility(View.GONE);
-                Constant.makeFailFetch(rootView, view -> {
-                    progress = Constant.makeProgressCircle(rootView);
-                    fetchData();
+            public void onSuccess(APIWrapper res, String message) throws JSONException {
 
-                });
+                recyclerItems = new ArrayList<>();
+                recyclerItemsDefault = new ArrayList<>();
+
+                if (res.getDataArray().length() <= 0) {
+                    tvDataNotFound.setVisibility(View.VISIBLE);
+                }
+
+                for (int i = 0; i < res.getDataArray().length(); i++) {
+                    JSONObject data = res.getDataArray().getJSONObject(i);
+                    recyclerItems.add(new Notification_Model(
+                            data.getInt("issue_id"),
+                            data.getInt("auth_id"),
+                            data.getString("auth_status"),
+                            data.getString("issue_key"),
+                            data.getString("auth_on"),
+                            data.getString("issued_by_member_name"),
+                            data.getString("issued_by_member_column")
+                    ));
+                }
+
+                setupRecyclerView();
+
+            }
+
+            @Override
+            public void onRetry() {
+                requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().getMemberHome(
+                        ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
+                ));
             }
         });
-    }
 
+    }
 
     @Override
     public void onResume() {

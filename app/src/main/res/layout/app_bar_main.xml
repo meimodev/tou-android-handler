@@ -87,14 +87,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_bold"
+
                     android:paddingTop="4dp"
                     android:text="Jhon Manembo"
-                    android:textColor="@color/TextView_Label_Dark"
+                    android:textColor="@color/ButtonText_LightGrey"
                     android:textSize="21sp" />
 
                 <TextView
                     android:id="@+id/textView_churchPosition"
                     android:layout_width="match_parent"
+                    android:textColor="@color/ButtonText_LightGrey"
                     android:layout_height="wrap_content"
                     android:paddingTop="2dp"
                     android:text="Bendahara Jemaat"
@@ -104,6 +106,7 @@
                     android:id="@+id/textView_column"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/ButtonText_LightGrey"
                     android:paddingBottom="4dp"
                     android:text="Kolom 234"
                     android:textSize="15sp" />
@@ -113,7 +116,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:drawableStart="@drawable/ic_menu_camera"
+                    android:textColor="@color/ButtonText_LightGrey"
+                    android:drawableStart="@drawable/ic_house_24px"
                     android:drawablePadding="8dp"
                     android:fontFamily="@font/visiby_round_cf_regular"
                     android:text="Bait-El, Wawalintouwaw" />

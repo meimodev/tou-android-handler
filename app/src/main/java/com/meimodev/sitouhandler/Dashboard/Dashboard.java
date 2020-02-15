@@ -51,6 +51,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -658,7 +661,18 @@ public class Dashboard extends AppCompatActivity {
 
         tvUserName.setText(((String) spm.loadUserData(KEY_USER_FULL_NAME)));
 
-        tvChurchPosition.setText(((String) spm.loadUserData(KEY_CHURCH_POSITION)));
+        StringBuilder position = new StringBuilder();
+        try {
+            JSONArray arrayPosition = new JSONArray ((String) spm.loadUserData(KEY_CHURCH_POSITION));
+            for (int i = 0; i < arrayPosition.length(); i++) {
+                int lastIndex = arrayPosition.length()-1;
+                String pos = (String) arrayPosition.get(i);
+                position= i==lastIndex? position.append(pos) : position.append(pos).append("\n");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        tvChurchPosition.setText(position);
 
         tvColumn.setText(((String) spm.loadUserData(KEY_MEMBER_COLUMN)));
 

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,20 +18,20 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.CustomWidget.CustomEditText;
-import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Cheif.ReadJSONNavFragmentChiefManageServiceArea;
-import com.meimodev.sitouhandler.Helper.APIUtils;
+import com.meimodev.sitouhandler.Helper.APIWrapper;
+import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SharedPrefManager;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Optional;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class NavFragment_Priest_SeeServiceArea extends Fragment implements View.OnClickListener {
 
@@ -64,6 +63,52 @@ public class NavFragment_Priest_SeeServiceArea extends Fragment implements View.
 
         rootView.setOnClickListener(this);
         return rootView;
+    }
+
+    private void fetchData() {
+        IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
+
+        requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().getServiceArea(
+                ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
+        ));
+        requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
+            @Override
+            public void onTry() {
+            }
+
+            @Override
+            public void onSuccess(APIWrapper res, String message) {
+                priests = new ArrayList<>();
+                JSONArray data = res.getDataArray();
+                JSONObject obj;
+                try {
+                    for (int i = 0; i < data.length(); i++) {
+                        obj = data.getJSONObject(i);
+                        priests.add(
+                                new ManageServiceAreaModel(
+                                        obj.getInt("service_area_id"),
+                                        obj.getInt("member_id"),
+                                        obj.getString("name"),
+                                        obj.getString("domicile_column"),
+                                        Integer.valueOf(obj.getString("from_column")),
+                                        Integer.valueOf(obj.getString("from_column"))
+                                )
+                        );
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "JSON ERROR: " + e.getMessage());
+                }
+                setupCardViews();
+            }
+
+            @Override
+            public void onRetry() {
+                requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().getServiceArea(
+                        ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
+                ));
+            }
+        });
     }
 
     private void setupCardViews() {
@@ -113,99 +158,6 @@ public class NavFragment_Priest_SeeServiceArea extends Fragment implements View.
         for (View view : cardViews) {
             llCardHolder.addView(view);
         }
-    }
-
-    private void fetchData() {
-
-        if (progress.getVisibility() != View.VISIBLE)
-            progress.setVisibility(View.VISIBLE);
-
-        RetrofitClient.getInstance(null).getApiServices().getServiceArea(
-                ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID)))
-                .enqueue(new Callback<ReadJSONNavFragmentChiefManageServiceArea>() {
-            @Override
-            public void onResponse(Call<ReadJSONNavFragmentChiefManageServiceArea> call, Response<ReadJSONNavFragmentChiefManageServiceArea> response) {
-                if (response.isSuccessful()) {
-                    ReadJSONNavFragmentChiefManageServiceArea res = response.body();
-
-                    if (progress.getVisibility() == View.VISIBLE)
-                        progress.setVisibility(View.INVISIBLE);
-
-                    if (!res.isError()) {
-
-                        // proceed
-                        priests = new ArrayList<>();
-
-                        for (ReadJSONNavFragmentChiefManageServiceArea.Priest priest : res.getData().getPriests()) {
-                            priests.add(new ManageServiceAreaModel(
-                                    priest.getServiceAreaId(),
-                                    priest.getMemberId(),
-                                    priest.getName(),
-                                    priest.getDomicileColumn(),
-                                    Integer.valueOf(priest.getFromColumn()),
-                                    Integer.valueOf(priest.getToColumn())
-                            ));
-                        }
-
-                        setupCardViews();
-
-                        Log.e(TAG, "onResponse: response return success proceeding");
-                    } else {
-
-                        Constant.displayDialog(
-                                context,
-                                null,
-                                res.getMessage(),
-                                true,
-                                (dialogInterface, i) -> {
-                                },
-                                null
-                        );
-                        Log.e(TAG, "onResponse: response return success but error");
-                    }
-
-
-                } else {
-                    APIUtils.parseError(context, response);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ReadJSONNavFragmentChiefManageServiceArea> call, Throwable t) {
-                Log.e(TAG, "onRetry: ", t);
-                Constant.toggleViewVisibility(progress);
-                Constant.makeFailFetch(rootView, view -> {
-                    progress = Constant.makeProgressCircle(rootView);
-                });
-            }
-        });
-
-//        priests.add(new ManageServiceAreaModel(
-//                0,
-//                0,
-//                "Pdt. Mama Jhon - Mambao, SH, M.Teol",
-//                "Kolom 15",
-//                1,
-//                4241
-//        ));
-//        priests.add(new ManageServiceAreaModel(
-//                0,
-//                0,
-//                "Pdt. Tole Batule - Batolo, SH",
-//                "Kolom 15",
-//                4,
-//                204
-//
-//        ));
-//        priests.add(new ManageServiceAreaModel(
-//                0,
-//                0,
-//                "Pdt. Richard Itam - Mambao, SH, M.Teol",
-//                "Kolom 560",
-//                2,
-//                92425
-//        ));
-
     }
 
     @Override

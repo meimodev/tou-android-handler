@@ -7,9 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +17,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.meimodev.sitouhandler.Helper.APIUtils;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.IssueDetail.IssueDetail;
@@ -33,13 +30,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 public class NavFragment_Secretary_Papers extends Fragment implements View.OnClickListener {
 
@@ -98,7 +92,7 @@ public class NavFragment_Secretary_Papers extends Fragment implements View.OnCli
     private void fetchData(boolean isOutbound) {
 
         IssueRequestHandler req = new IssueRequestHandler(rootView);
-        req.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().getIssuedLetters(
+        req.enqueue(RetrofitClient.getInstance(null).getApiServices().getIssuedLetters(
                 ((int) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID))
         ));
 
@@ -149,7 +143,7 @@ public class NavFragment_Secretary_Papers extends Fragment implements View.OnCli
 
             @Override
             public void onRetry() {
-                req.issueRequestResponse(RetrofitClient.getInstance(null).getApiServices().getIssuedLetters(
+                req.enqueue(RetrofitClient.getInstance(null).getApiServices().getIssuedLetters(
                         ((int) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID))
                 ));
             }
