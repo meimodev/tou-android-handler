@@ -207,7 +207,7 @@ public class NavFragment_Chief_ManageServiceArea extends Fragment {
         if (llCardHolder.getVisibility() == View.VISIBLE) llCardHolder.setVisibility(View.GONE);
 
         ApiServices api = RetrofitClient.getInstance(
-                SharedPrefManager.load(context, SharedPrefManager.KEY_ACCESS_TOKEN).toString()
+                SharedPrefManager.load(context, SharedPrefManager.KEY_USER_ACCESS_TOKEN).toString()
         ).getApiServices();
 
         Call<ResponseBody> call = api.setServiceArea(serviceAreaId, fromColumn, toColumn);

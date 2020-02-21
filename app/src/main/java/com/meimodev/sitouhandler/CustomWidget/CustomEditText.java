@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.R;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -22,7 +24,7 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
-public class CustomEditText extends AppCompatEditText {
+public class CustomEditText extends TextInputEditText {
 
     private static final String TAG = "CustomEdtText";
     private Context context;
@@ -72,6 +74,7 @@ public class CustomEditText extends AppCompatEditText {
 
     public void setAsDatePicker(FragmentManager fragmentManager) {
         this.setFocusable(false);
+        this.setShowSoftInputOnFocus(false);
         this.setOnFocusChangeListener((view, b) -> displayDatePickerDialog(fragmentManager, b));
         this.setOnClickListener(view -> displayDatePickerDialog(fragmentManager, true));
         this.clearFocus();
@@ -80,6 +83,7 @@ public class CustomEditText extends AppCompatEditText {
 
     public void setAsTimePicker(FragmentManager fragmentManager) {
         this.setFocusable(false);
+        this.setShowSoftInputOnFocus(false);
         this.setOnFocusChangeListener((view, b) -> displayTimePickerDialog(fragmentManager, b));
         this.setOnClickListener(view -> displayTimePickerDialog(fragmentManager, true));
         this.clearFocus();
@@ -111,7 +115,8 @@ public class CustomEditText extends AppCompatEditText {
     }
 
     public void setAsEmailInput() {
-        final EditText thisET = this;
+        final CustomEditText thisET = this;
+
         this.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

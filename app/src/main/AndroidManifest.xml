@@ -6,7 +6,7 @@
     <dist:module dist:instant="true" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 
     <application
@@ -66,6 +66,14 @@
 
         <activity
             android:name=".Dashboard.NavFragment.NavFragment_PntSym.PntSym_InputForm"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ForgetAccount.ForgetAccount"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SignUp.ConfirmAccount"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 

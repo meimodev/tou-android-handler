@@ -5,22 +5,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
-import com.meimodev.sitouhandler.ApiServices;
+import com.google.android.material.textfield.TextInputLayout;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.CustomWidget.CustomEditText;
 import com.meimodev.sitouhandler.Dashboard.Dashboard;
-import com.meimodev.sitouhandler.Helper.APIError;
+import com.meimodev.sitouhandler.ForgetAccount.ForgetAccount;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
-import com.meimodev.sitouhandler.Helper.APIUtils;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SharedPrefManager;
+import com.meimodev.sitouhandler.SignUp.ConfirmAccount;
+import com.meimodev.sitouhandler.SignUp.SignUp;
 import com.meimodev.sitouhandler.Validator;
 
 import org.json.JSONException;
@@ -29,25 +30,34 @@ import org.json.JSONObject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class SignIn extends AppCompatActivity {
 
     private static final String TAG = "SignIn";
 
-    @BindView(R.id.editText_Username)
-    CustomEditText etUsername;
+
+    @BindView(R.id.textInputLayout_phone)
+    TextInputLayout tilPhone;
+    @BindView(R.id.textInputLayout_password)
+    TextInputLayout tilPassword;
+    @BindView(R.id.editText_phone)
+    CustomEditText etPhone;
     @BindView(R.id.editText_Password)
     CustomEditText etPassword;
 
     @BindView(R.id.layout_header)
-    CardView cvHeader;
+    LinearLayout llHeader;
 
     @BindView(R.id.btn_signIn)
     Button btnSignIn;
+    @BindView(R.id.btn_confirm)
+    Button btnConfirm;
+    @BindView(R.id.btn_signUp)
+    Button btnSignUp;
+    @BindView(R.id.btn_forget)
+    Button btnForget;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,126 +77,145 @@ public class SignIn extends AppCompatActivity {
             }
         }
 
-        etUsername.clearFocus();
+        etPhone.clearFocus();
         etPassword.clearFocus();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (tilPhone.getError() != null)tilPhone.setError(null);
+        if (tilPassword.getError() != null)tilPassword.setError(null);
     }
 
     @OnClick(R.id.btn_signIn)
     void signIn() {
 
-        etUsername.clearFocus();
+        etPhone.clearFocus();
         etPassword.clearFocus();
 
+        tilPhone.setError(null);
+        tilPassword.setError(null);
+
         Validator validator = new Validator();
-        if (validator.validateEditText_isEmpty(etUsername) || validator.validateEditText_isEmpty(etPassword)) {
-            validator.displayErrorMessage(SignIn.this, "Email atau Password " + Validator.MESSAGE_ERROR_IS_EMPTY);
-            return;
-        }
 
-        if (etUsername.getError() != null) {
-            validator.displayErrorMessage(SignIn.this, "Email " + Validator.MESSAGE_ERROR_IS_INVALID);
-            return;
-        }
+        tilPhone.setError(validator.validatePhone(tilPhone));
 
-        fetchData();
+        tilPassword.setError(validator.validateEmpty(tilPassword));
+
+        if (tilPhone.getError() == null && tilPassword.getError() == null) {
+            fetchData();
+        }
 
     }
 
-    void fetchData() {
-        View progress = Constant.makeProgressCircle(findViewById(R.id.layout_main));
-        cvHeader.setVisibility(View.INVISIBLE);
-        btnSignIn.setVisibility(View.GONE);
 
-        ApiServices apiServices = RetrofitClient.getInstance(null).getApiServices();
-        Call<ResponseBody> call = apiServices.signIn(
-                etUsername.getText().toString().trim(),
+    @OnClick(R.id.btn_signUp)
+    void signUp() {
+        etPhone.setText("");
+        etPassword.setText("");
+        startActivity(new Intent(this, SignUp.class));
+    }
+
+    @OnClick(R.id.btn_forget)
+    void forget() {
+        etPhone.setText("");
+        etPassword.setText("");
+        startActivity(new Intent(this, ForgetAccount.class));
+    }
+
+    @OnClick(R.id.btn_confirm)
+    void confirm() {
+        Intent i = new Intent(this, ConfirmAccount.class);
+        i.putExtra("phone", tilPhone.getEditText().getText().toString());
+        startActivity(i);
+    }
+
+    void fetchData() {
+        IssueRequestHandler requestHandler = new IssueRequestHandler(findViewById(android.R.id.content));
+        Call call = RetrofitClient.getInstance(null).getApiServices().signIn(
+                etPhone.getText().toString().trim(),
                 etPassword.getText().toString().trim()
         );
-
-        call.enqueue(new Callback<ResponseBody>() {
+        requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onTry() {
 
-                if (response.isSuccessful()) {
-                    APIWrapper res = APIUtils.parseWrapper(response.body());
-                    try {
-                        if (!res.isError()) {
-                            proceed(res);
-                            Log.e(TAG, "onResponse: response return success proceeding");
-                        } else {
-                            progress.setVisibility(View.GONE);
-                            cvHeader.setVisibility(View.VISIBLE);
-                            btnSignIn.setVisibility(View.VISIBLE);
+            }
 
-                            Constant.displayDialog(
-                                    SignIn.this,
-                                    null,
-                                    res.getMessage(),
-                                    true,
-                                    (dialogInterface, i) -> {
-                                    },
-                                    null
-                            );
-                            Log.e(TAG, "onResponse: response return success but error");
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Log.e(TAG, "onResponse: JSON Exc" + e.getMessage(), e);
-                    }
-
+            @Override
+            public void onSuccess(APIWrapper res, String message) throws JSONException {
+                if (message.contains("konfirmasi")) {
+                    Constant.displayDialog(
+                            SignIn.this,
+                            "Perhatian",
+                            "Akun dengan nomor telepon " +
+                                    etPhone.getText().toString()
+                                    + " belum dikonfirmasi. silahkan lakukan konfirmasi akun dengan menekan tombol 'konfirmasi Akun' di bawah",
+                            true,
+                            (dialog, which) -> dialog.dismiss(),
+                            null
+                    );
+                    tilPhone.setError(message);
+                    btnConfirm.setVisibility(View.VISIBLE);
                 } else {
-                    progress.setVisibility(View.GONE);
-                    cvHeader.setVisibility(View.VISIBLE);
-                    btnSignIn.setVisibility(View.VISIBLE);
-
-                    APIUtils.parseError(SignIn.this, response);
-
+                    proceed(res);
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e(TAG, "onRetry: network fail: ", t);
-                progress.setVisibility(View.GONE);
-                cvHeader.setVisibility(View.INVISIBLE);
-                btnSignIn.setVisibility(View.GONE);
-                Constant.makeFailFetch(findViewById(R.id.layout_main), view -> {
-                    cvHeader.setVisibility(View.VISIBLE);
-                    btnSignIn.setVisibility(View.VISIBLE);
-                });
+            public void onRetry() {
+                fetchData();
             }
         });
-
+        requestHandler.enqueue(call);
 
     }
 
     private void proceed(@Nullable APIWrapper res) throws JSONException {
-
-
         if (res != null) {
 
             JSONObject data = res.getData();
 
-            Constant.ACCOUNT_TYPE = data.getString("church_position");
+            Constant.ACCOUNT_TYPE = Constant.ACCOUNT_TYPE_USER;
 
             //save data in shared preference for further usage
-            SharedPrefManager.getInstance(SignIn.this).saveUserData(
-                    data.getInt("user_id"),
-                    data.getInt("member_id"),
-                    data.getString("church_position"),
-                    data.getString("access_token"),
-                    data.getString("full_name"),
-                    data.getString("church_name"),
-                    data.getString("kelurahan"),
-                    data.getString("name_index"),
-                    data.getInt("age"),
-                    data.getString("sex"),
-                    data.getString("index"),
-                    data.getInt("church_id"),
-                    data.getString("BIPRA"),
-                    data.getInt("column_id")
+            JSONObject userObj = data.getJSONObject("user");
+            SharedPrefManager.getInstance(this).saveUserData(
+                    userObj.getInt("id"),
+                    userObj.getString("full_name"),
+                    userObj.getString("age"),
+                    userObj.getString("sex"),
+                    userObj.getString("access_token")
             );
+
+            if (!data.isNull("member")) {
+                JSONObject memberObj = data.getJSONObject("member");
+                SharedPrefManager.getInstance(this).saveMemberData(
+                        memberObj.getInt("id"),
+                        memberObj.getString("church_position_full"),
+                        memberObj.getString("BIPRA")
+                );
+
+                Constant.ACCOUNT_TYPE = memberObj.getString("church_position");
+
+
+                JSONObject columnObj = data.getJSONObject("column");
+                SharedPrefManager.getInstance(this).saveColumnData(
+                        columnObj.getInt("id"),
+                        columnObj.getString("name_index")
+                );
+
+                JSONObject churchObj = data.getJSONObject("church");
+                SharedPrefManager.getInstance(this).saveChurchData(
+                        churchObj.getInt("id"),
+                        churchObj.getString("church_name"),
+                        churchObj.getString("church_kelurahan")
+                );
+
+            }
+
 
         }
 

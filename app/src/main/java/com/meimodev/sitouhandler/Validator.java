@@ -6,23 +6,233 @@ import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd;
 import com.meimodev.sitouhandler.CustomWidget.CustomEditText;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Validator extends Constant {
     private static final String TAG = "Validator";
     public static final String MESSAGE_ERROR_IS_EMPTY = "tidak boleh kosong";
     public static final String MESSAGE_ERROR_IS_LEADING_ZERO = "tidak boleh dimulai dengan '0'";
     public static final String MESSAGE_ERROR_IS_INVALID = "tidak valid";
+
+    public String validateEmail(String email) {
+
+        String[] allowedChar = new String[]{"@", ".", "_", "-"};
+        String[] allowedCharReplacement = new String[]{"", "", "", ""};
+
+        if (!StringUtils.isEmpty(validateEmpty(email))) {
+            return validateEmpty(email);
+        }
+
+        if (!StringUtils.isAsciiPrintable(email)) {
+            return "silahkan gunakan karakter ASCII";
+        }
+
+        if (StringUtils.startsWithAny(email, allowedChar)) {
+            return "harus diawali dengan huruf";
+        }
+
+        if (email.length() < 5) {
+            return "silahkan gunakan minimal 5 karakter";
+        }
+
+        int countAtSymbol = StringUtils.countMatches(email, "@");
+        if (countAtSymbol != 1) {
+            return "silahkan gunakan 1 karakter @";
+        }
+
+        if (!StringUtils.isAlphanumeric(
+                StringUtils.replaceEach(
+                        email,
+                        allowedChar,
+                        allowedCharReplacement))) {
+            return "karakter yang di dukung @ . _ -";
+        }
+
+        return null;
+    }
+
+    public String validateEmail(EditText editText) {
+        return validateEmail(editText.getText().toString());
+    }
+
+    public String validateEmail(TextInputLayout textInputLayout) {
+        return validateEmail(Objects.requireNonNull(textInputLayout.getEditText()));
+    }
+
+    public String validatePhone(String phone) {
+
+        /*
+         * phone rules
+         * length > 6
+         * start with 0
+         * all numeric
+         *
+         * */
+
+        if (!StringUtils.isEmpty(validateEmpty(phone))) {
+            return validateEmpty(phone);
+        }
+
+        if (!StringUtils.isAsciiPrintable(phone)) {
+            return "silahkan gunakan karakter ASCII";
+        }
+
+        if (!StringUtils.startsWith(phone, "0")) {
+            return "harus diawali dengan 0";
+        }
+
+        if (phone.length() < 7) {
+            return "silahkan gunakan minimal 7 karakter";
+        }
+
+        if (!StringUtils.isNumeric(phone)) {
+            return "karakter yang di dukung 0 hingga 9";
+        }
+
+        return null;
+    }
+
+    public String validatePhone(EditText editText) {
+        return validatePhone(editText.getText().toString());
+    }
+
+    public String validatePhone(TextInputLayout textInputLayout) {
+        return validatePhone(Objects.requireNonNull(textInputLayout.getEditText()));
+    }
+
+
+    public String validatePassword(String pass) {
+
+        /*
+         * password rules
+         * not empty
+         * length > 8
+         *
+         * */
+
+        if (!StringUtils.isEmpty(validateEmpty(pass))) {
+            return validateEmpty(pass);
+        }
+
+        if (!StringUtils.isAsciiPrintable(pass)) {
+            return "silahkan gunakan karakter ASCII";
+        }
+
+        if (pass.length() < 7) {
+            return "harus melebihi 7 karakter";
+        }
+
+        return null;
+    }
+
+    public String validatePassword(EditText editText) {
+        return validatePassword(editText.getText().toString());
+    }
+
+    public String validatePassword(TextInputLayout textInputLayout) {
+        return validatePassword(Objects.requireNonNull(textInputLayout.getEditText()));
+    }
+
+
+
+    public String validateName(String name) {
+
+        /*
+         * Name rules
+         * not empty
+         * alpha only
+         * length > 1
+         * */
+
+        if (!StringUtils.isEmpty(validateEmpty(name))) {
+            return validateEmpty(name);
+        }
+
+        if (!StringUtils.isAsciiPrintable(name)) {
+            return "silahkan gunakan karakter ASCII";
+        }
+
+        if (name.length() < 2) {
+            return "harus melebihi 1 karakter";
+        }
+
+        if (!StringUtils.isAlpha(name)) {
+            return "karakter yang di dukung a-z A-Z";
+        }
+
+        return null;
+    }
+
+    public String validateName(EditText editText) {
+        return validateName(editText.getText().toString());
+    }
+
+    public String validateName(TextInputLayout textInputLayout) {
+        return validateName(Objects.requireNonNull(textInputLayout.getEditText()));
+    }
+
+
+
+
+    public String validateSex(String name) {
+
+        /*
+         * sex
+         * Laki-laki & Perempuan only
+         * not empty
+         * */
+
+        if (!StringUtils.isEmpty(validateEmpty(name))) {
+            return validateEmpty(name);
+        }
+
+        if (!StringUtils.isAsciiPrintable(name)) {
+            return "silahkan gunakan karakter ASCII";
+        }
+
+        if (!name.contentEquals("Laki-laki") && !name.contentEquals("Perempuan")) {
+            return "pilih 'Laki-laki' atau 'Perempuan'";
+        }
+
+        return null;
+    }
+
+    public String validateSex(EditText editText) {
+        return validateSex(editText.getText().toString());
+    }
+
+    public String validateSex(TextInputLayout textInputLayout) {
+        return validateSex(Objects.requireNonNull(textInputLayout.getEditText()));
+    }
+
+
+    public String validateEmpty(String text) {
+        return StringUtils.isEmpty(text) ? "tidak boleh kosong" : null;
+    }
+
+    public String validateEmpty(EditText editText) {
+        return validateEmpty(editText.getText().toString());
+    }
+
+    public String validateEmpty(TextInputLayout textInputLayout) {
+        return validateEmpty(Objects.requireNonNull(textInputLayout.getEditText()));
+    }
+
 
     public Map<String, String> validateInput(
             String keyIssue,
@@ -581,7 +791,6 @@ public class Validator extends Constant {
     public boolean validateButton_isNotContainAnyView(CustomButtonAdd customButtonAdd) {
         return customButtonAdd.getSelectedView() == null || customButtonAdd.getSelectedView().isEmpty();
     }
-
 
     public boolean validateSpinner_isItemNotSelected(MaterialSpinner materialSpinner) {
         return materialSpinner.getItems().get(materialSpinner.getSelectedIndex()).toString().contains("Pilih");

@@ -10,7 +10,6 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -20,9 +19,9 @@ import androidx.constraintlayout.widget.Guideline;
 import androidx.core.view.GravityCompat;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.meimodev.sitouhandler.BuildConfig;
+import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Cheif.NavFragment_Chief_ManageServiceArea;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member.NavFragment_Member_Home;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Home;
@@ -33,7 +32,6 @@ import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Priest.NavFra
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Secretary.NavFragment_Secretary_Papers;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Treasurer.NavFragment_Treasurer_Financial;
 import com.meimodev.sitouhandler.Issue.Issue;
-import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SharedPrefManager;
@@ -47,7 +45,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Menu;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -58,7 +55,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,14 +74,14 @@ public class Dashboard extends AppCompatActivity {
 
     private NavigationView navigationView;
 
-    BroadcastReceiver brContentInFragmentIsClicked = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (Objects.requireNonNull(intent.getAction()).contentEquals(ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED)) {
-                if (floatingActionMenu.isOpened()) floatingActionMenu.close(true);
-            }
-        }
-    };
+//    BroadcastReceiver brContentInFragmentIsClicked = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            if (Objects.requireNonNull(intent.getAction()).contentEquals(ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED)) {
+//                if (floatingActionMenu.isOpened()) floatingActionMenu.close(true);
+//            }
+//        }
+//    };
     private boolean isCollapse = false;
     public static final String ACTION_TOGGLE_COLLAPSE_HEADER = "toggle_header";
     BroadcastReceiver brToggleHeaderCollapse = new BroadcastReceiver() {
@@ -131,10 +127,10 @@ public class Dashboard extends AppCompatActivity {
 
 //        Binding Auth Token to Retrofit
         RetrofitClient.resetRetrofitClient();
-        RetrofitClient.getInstance(((String) load(Dashboard.this, KEY_ACCESS_TOKEN))).getApiServices();
+        RetrofitClient.getInstance(((String) load(Dashboard.this, KEY_USER_ACCESS_TOKEN))).getApiServices();
 
 //        Sending this account refreshed FCM Token to server
-        sendFCMTokenToServer();
+        sendFCMTokenToServer(Dashboard.this);
 
         handleAccountNotificationSubscription();
 
@@ -182,8 +178,8 @@ public class Dashboard extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        unregisterReceiver(brContentInFragmentIsClicked);
-        unregisterReceiver(brUnauthenticatedSignIn);
+//        unregisterReceiver(brContentInFragmentIsClicked);
+//        unregisterReceiver(brUnauthenticatedSignIn);
         unregisterReceiver(brToggleHeaderCollapse);
 //        unregisterReceiver(brFetchHome);
         super.onStop();
@@ -191,9 +187,9 @@ public class Dashboard extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        registerReceiver(brUnauthenticatedSignIn, new IntentFilter(ACTION_CONTENT_USER_UNATHENTICATED));
+//        registerReceiver(brUnauthenticatedSignIn, new IntentFilter(ACTION_CONTENT_USER_UNATHENTICATED));
         registerReceiver(brToggleHeaderCollapse, new IntentFilter(ACTION_TOGGLE_COLLAPSE_HEADER));
-        registerReceiver(brContentInFragmentIsClicked, new IntentFilter(ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED));
+//        registerReceiver(brContentInFragmentIsClicked, new IntentFilter(ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED));
 //        registerReceiver(brFetchHome, new IntentFilter(Constant.ACTION_REFETCH_MEMBER_HOME));
         super.onResume();
     }
@@ -202,23 +198,14 @@ public class Dashboard extends AppCompatActivity {
     // HELPER
     ///////////////////////////////////////////////////////////////////////////
 
-    BroadcastReceiver brUnauthenticatedSignIn = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (Objects.requireNonNull(intent.getAction()).contentEquals(ACTION_CONTENT_USER_UNATHENTICATED))
-
-                displayDialog(
-                        Dashboard.this,
-                        "Sesi kadaluarsa",
-                        "Silahkan masuk kembali dengan mengisi email dan password dari akun anda",
-                        false,
-                        (dialogInterface, i) -> {
-                            dialogInterface.dismiss();
-                            signOut();
-                        }, null
-                );
-        }
-    };
+//    BroadcastReceiver brUnauthenticatedSignIn = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            if (Objects.requireNonNull(intent.getAction()).contentEquals(ACTION_CONTENT_USER_UNATHENTICATED))
+//
+//
+//        }
+//    };
 
     private void handleAccountNotificationSubscription() {
         // subscribe & unsubscribe the related notification topics
@@ -337,27 +324,7 @@ public class Dashboard extends AppCompatActivity {
 
     }
 
-    private void sendFCMTokenToServer() {
 
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.w(TAG, "getInstanceId failed: ", task.getException());
-                        return;
-                    }
-
-                    // Get new Instance ID token
-                    String token = task.getResult().getToken();
-
-                    int userID = ((int) load(Dashboard.this, KEY_USER_ID));
-                    IssueRequestHandler req = new IssueRequestHandler(null);
-                    req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().setFCMToken(
-                            userID, token
-                    ));
-                });
-
-
-    }
 
     private void setupNavDrawerItemsBasedOnAccountType() {
         if (ACCOUNT_TYPE.contains(ACCOUNT_TYPE_CHIEF)) {
@@ -389,13 +356,7 @@ public class Dashboard extends AppCompatActivity {
         }
     }
 
-    private void signOut() {
-        SharedPrefManager.getInstance(this).logout();
-        ACCOUNT_TYPE = null;
-//        Dashboard.getInstance().clearApplicationData();
-        finishAffinity();
-        startActivity(new Intent(this, SignIn.class));
-    }
+
 
 //    public static Dashboard getInstance() {
 //        return instance;
@@ -532,7 +493,7 @@ public class Dashboard extends AppCompatActivity {
             Fragment fragment = null;
 
             if (item.getItemId() == R.id.nav_signOut) {
-                signOut();
+                Constant.signOut(Dashboard.this);
                 return true;
             }
 
@@ -674,7 +635,7 @@ public class Dashboard extends AppCompatActivity {
         }
         tvChurchPosition.setText(position);
 
-        tvColumn.setText(((String) spm.loadUserData(KEY_MEMBER_COLUMN)));
+        tvColumn.setText(((String) spm.loadUserData(KEY_COLUMN_NAME_INDEX)));
 
         String string = spm.loadUserData(KEY_CHURCH_NAME) + ", " + (spm.loadUserData(KEY_CHURCH_VILLAGE));
         tvChurchNameAndVillage.setText(string);

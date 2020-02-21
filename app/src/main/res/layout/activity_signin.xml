@@ -1,105 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/layout_main"
     android:animateLayoutChanges="true"
+    android:background="@color/background"
+    android:fillViewport="true"
+    android:keepScreenOn="true"
     tools:context=".SignIn.SignIn">
 
-    <View
-        android:id="@+id/layout_blank_header"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.20"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/layout_header"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:cardElevation="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_blank_header"
-        app:layout_constraintWidth_percent="0.9">
-
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="15dp">
+            android:animateLayoutChanges="true"
+            android:paddingBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
+
+            <LinearLayout
+                android:id="@+id/layout_header"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true">
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@id/btn_signIn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent="0.9">
 
-                <com.meimodev.sitouhandler.CustomWidget.CustomEditText
-                    android:id="@+id/editText_Username"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_phone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:hint="E-mail"
-                    android:maxLines="1" />
+                    android:layout_marginBottom="8dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:hint="Nomor Telepon"
+                    app:boxBackgroundColor="@null"
+                    app:endIconMode="clear_text"
+                    app:errorEnabled="true">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                        android:id="@+id/editText_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:maxLines="1" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp">
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.meimodev.sitouhandler.CustomWidget.CustomEditText
-                    android:id="@+id/editText_Password"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_password"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password"
-                    android:inputType="textPassword"
-                    android:maxLines="1" />
+                    android:layout_marginBottom="10dp"
+                    app:boxBackgroundColor="@null"
+                    app:endIconMode="password_toggle"
+                    app:errorEnabled="true">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                        android:id="@+id/editText_Password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:maxLines="1" />
 
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <Button
-        android:id="@+id/btn_signIn"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:elevation="5dp"
-        android:text="Masuk"
-        app:layout_constraintEnd_toEndOf="@id/layout_header"
-        app:layout_constraintStart_toStartOf="@id/layout_header"
-        app:layout_constraintTop_toBottomOf="@id/layout_header"
-        app:layout_constraintWidth_percent="0.5" />
-
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:text="Lupa akun ? sentuh ini"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/btn_signIn" />-->
-
-    <RelativeLayout
-        android:id="@+id/layout_progressHolder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/layout_header"
-        app:layout_constraintTop_toTopOf="@id/layout_header" />
+                </com.google.android.material.textfield.TextInputLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_signIn"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Masuk"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/btn_signUp"
+                app:layout_constraintEnd_toEndOf="@id/layout_header"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@id/layout_header" />
+
+            <Button
+                android:id="@+id/btn_signUp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:text="Daftar"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/layout_buttons"
+                app:layout_constraintEnd_toEndOf="@id/layout_header"
+                app:layout_constraintStart_toStartOf="@id/layout_header" />
+
+            <LinearLayout
+                android:id="@+id/layout_buttons"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20sp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@id/textView_dev"
+                app:layout_constraintEnd_toEndOf="@id/layout_header"
+                app:layout_constraintStart_toStartOf="@id/layout_header">
+
+                <Button
+                    android:id="@+id/btn_forget"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="0dp"
+                    android:text="Lupa Akun ?"
+                    android:textAllCaps="false"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/btn_confirm"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="0dp"
+                    android:text="Konfirmasi\nAkun"
+                    android:textAllCaps="false"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView_dev"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:fontFamily="@font/roboto_thin"
+                android:text="TOU-System | Awesomely Possible - Meimo 2020 | &#xa9; all rights reserved"
+                android:textAlignment="center"
+                android:textColor="@color/TextView_Label_Light"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="SmallSp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_progressHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
+

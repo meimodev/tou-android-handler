@@ -1,8 +1,18 @@
 package com.meimodev.sitouhandler;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +23,18 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.hmomeni.progresscircula.ProgressCircula;
 import com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd;
 import com.meimodev.sitouhandler.Issue.Adding_RecyclerModel;
+import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
+import com.meimodev.sitouhandler.SignIn.SignIn;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.meimodev.sitouhandler.SharedPrefManager.KEY_USER_ID;
 
 
 public class Constant {
@@ -28,6 +44,7 @@ public class Constant {
     public static final String ROOT_DOMAIN = "192.168.1.137:8000";
     public static final String ROOT_URL_API = ROOT_TRANSFER_PROTOCOL + ROOT_DOMAIN + "/api/";
     public static final String ROOT_URL_PRINTABLE = ROOT_TRANSFER_PROTOCOL + ROOT_DOMAIN + "/print/";
+    public static final String ROOT_URL_TERMS= ROOT_TRANSFER_PROTOCOL + ROOT_DOMAIN + "/terms-and-condition";
 
     public static final String ACCOUNT_TYPE_CHIEF = "Ketua Jemaat";
     public static final String ACCOUNT_TYPE_SECRETARY = "Sekretaris Jemaat";
@@ -104,8 +121,8 @@ public class Constant {
     public static final int AUTHORIZATION_STATUS_CODE_ACCEPTED = 1;
     public static final int AUTHORIZATION_STATUS_CODE_REJECTED = 2;
 
-    public static final String  LETTER_TYPE_INBOUND = "INBOUND";
-    public static final String  LETTER_TYPE_OUTBOUND = "OUTBOUND";
+    public static final String LETTER_TYPE_INBOUND = "INBOUND";
+    public static final String LETTER_TYPE_OUTBOUND = "OUTBOUND";
 
     public static final String NOTIFICATION_TOPIC_GMIM_MEMBER = "GMIM";
     public static final String NOTIFICATION_TOPIC_CHURCH = "CHURCH";
@@ -126,11 +143,13 @@ public class Constant {
     public static final String NOTIFICATION_TOPIC_COLUMN_TEENS = "COLUMN_TEENS";
     public static final String NOTIFICATION_TOPIC_COLUMN_KIDS = "COLUMN_KIDS";
 
-    public static final String  BIPRA_PKB = "Pria / Kaum Bapa";
-    public static final String  BIPRA_WKI = "Wanita / Kaum Ibu";
-    public static final String  BIPRA_PEMUDA = "Pemuda";
-    public static final String  BIPRA_REMAJA = "Remaja";
-    public static final String  BIPRA_ANAK = "Anak";
+    public static final String BIPRA_PKB = "Pria / Kaum Bapa";
+    public static final String BIPRA_WKI = "Wanita / Kaum Ibu";
+    public static final String BIPRA_PEMUDA = "Pemuda";
+    public static final String BIPRA_REMAJA = "Remaja";
+    public static final String BIPRA_ANAK = "Anak";
+
+    public static long coolDownMilliSecondsLeft = 0;
 
     ///////////////////////////////////////////////////////////////////////////
     // Minor Univ Methods
@@ -342,6 +361,98 @@ public class Constant {
         }
 
         return res.toString();
+    }
+
+    public static void WhatsAppSendMessage(Context context, String phoneNumberWithCountryCode, String message) {
+        Intent i = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(String.format("https://api.whatsapp.com/send?phone=%s&text=%s",
+                        phoneNumberWithCountryCode, message)));
+        context.startActivity(i);
+    }
+
+    public static void signOut(Context context) {
+        SharedPrefManager.getInstance(context).logout();
+        ACCOUNT_TYPE = null;
+//        Dashboard.getInstance().clearApplicationData();
+        ((Activity) context).finishAffinity();
+        context.startActivity(new Intent(context, SignIn.class));
+    }
+
+    public static void justify(final TextView textView) {
+
+        final AtomicBoolean isJustify = new AtomicBoolean(false);
+
+        final String textString = textView.getText().toString();
+
+        final TextPaint textPaint = textView.getPaint();
+
+        final SpannableStringBuilder builder = new SpannableStringBuilder();
+
+        textView.post(() -> {
+            if (!isJustify.get()) {
+
+                final int lineCount = textView.getLineCount();
+                final int textViewWidth = textView.getWidth();
+
+                for (int i = 0; i < lineCount; i++) {
+
+                    int lineStart = textView.getLayout().getLineStart(i);
+                    int lineEnd = textView.getLayout().getLineEnd(i);
+
+                    String lineString = textString.substring(lineStart, lineEnd);
+
+                    if (i == lineCount - 1) {
+                        builder.append(new SpannableString(lineString));
+                        break;
+                    }
+
+                    String trimSpaceText = lineString.trim();
+                    String removeSpaceText = lineString.replaceAll(" ", "");
+
+                    float removeSpaceWidth = textPaint.measureText(removeSpaceText);
+                    float spaceCount = trimSpaceText.length() - removeSpaceText.length();
+
+                    float eachSpaceWidth = (textViewWidth - removeSpaceWidth) / spaceCount;
+
+                    SpannableString spannableString = new SpannableString(lineString);
+                    for (int j = 0; j < trimSpaceText.length(); j++) {
+                        char c = trimSpaceText.charAt(j);
+                        if (c == ' ') {
+                            Drawable drawable = new ColorDrawable(0x00ffffff);
+                            drawable.setBounds(0, 0, (int) eachSpaceWidth, 0);
+                            ImageSpan span = new ImageSpan(drawable);
+                            spannableString.setSpan(span, j, j + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                    }
+
+                    builder.append(spannableString);
+                }
+
+                textView.setText(builder);
+                isJustify.set(true);
+            }
+        });
+    }
+
+    public static void sendFCMTokenToServer(Context context) {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.e(TAG, "getInstanceId/FCM_TOKEN failed: ", task.getException());
+                        return;
+                    }
+
+                    // Get new Instance ID token
+                    String token = task.getResult().getToken();
+
+                    int userID = ((int) SharedPrefManager.load(context, KEY_USER_ID));
+                    IssueRequestHandler req = new IssueRequestHandler(null);
+                    req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().setFCMToken(
+                            userID, token
+                    ));
+                });
+
+
     }
 
 

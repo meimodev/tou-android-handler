@@ -17,19 +17,17 @@ public class SharedPrefManager {
 
     public static final String KEY_USER_ID = "User_ID";
     public static final String KEY_USER_FULL_NAME = "User_Full_Name";
-    public static final String KEY_CHURCH_NAME = "Church_Name";
-    public static final String KEY_CHURCH_VILLAGE = "Church_Village";
-    public static final String KEY_MEMBER_ID = "Member_ID";
-    public static final String KEY_MEMBER_COLUMN = "Column_Name_Index";
-    public static final String KEY_CHURCH_POSITION = "Church_Position";
-    public static final String KEY_ACCESS_TOKEN = "ACCESS_TOKEN";
-
     public static final String KEY_USER_AGE = "User_Age";
     public static final String KEY_USER_SEX = "User_Sex";
-    public static final String KEY_MEMBER_COLUMN_NUMBER = "Column_Number";
-    public static final String KEY_CHURCH_ID = "Church_Id";
+    public static final String KEY_USER_ACCESS_TOKEN = "ACCESS_TOKEN";
+    public static final String KEY_MEMBER_ID = "Member_ID";
     public static final String KEY_MEMBER_BIPRA = "Member_BIPRA";
+    public static final String KEY_CHURCH_ID = "Church_Id";
+    public static final String KEY_CHURCH_NAME = "Church_Name";
+    public static final String KEY_CHURCH_VILLAGE = "Church_Village";
+    public static final String KEY_CHURCH_POSITION = "Church_Position";
     public static final String KEY_COLUMN_ID = "Column_Id";
+    public static final String KEY_COLUMN_NAME_INDEX = "Column_Name_Index";
 
     private SharedPrefManager(Context context) {
         mCtx = context;
@@ -42,35 +40,55 @@ public class SharedPrefManager {
         return mInstance;
     }
 
-    public boolean saveUserData(int userId,
-                                int memberId,
-                                String churchPosition,
-                                String accessToken,
-                                String fullName,
-                                String churchName,
-                                String churchVillage,
-                                String memberColumn,
-                                int age, String sex, String columnNumber, int churchId, String BIPRA, int columnId
-                                ) {
+    public boolean saveUserData(int userId, String fullName,
+                                String age, String sex, String accessToken
+    ) {
         SharedPreferences sharedpreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
 
-        editor.putInt(KEY_USER_AGE, age);
+        editor.putString(KEY_USER_AGE, age);
         editor.putString(KEY_USER_SEX, sex);
-        editor.putString(KEY_MEMBER_COLUMN_NUMBER, columnNumber);
-        editor.putInt(KEY_CHURCH_ID, churchId);
-        editor.putString(KEY_MEMBER_BIPRA, BIPRA);
-        editor.putInt(KEY_COLUMN_ID, columnId);
-
         editor.putInt(KEY_USER_ID, userId);
         editor.putString(KEY_USER_FULL_NAME, fullName);
-        editor.putString(KEY_CHURCH_NAME, churchName);
-        editor.putString(KEY_CHURCH_VILLAGE, churchVillage);
-        editor.putString(KEY_MEMBER_COLUMN, memberColumn);
+        editor.putString(KEY_USER_ACCESS_TOKEN, accessToken);
+
+        editor.apply();
+        return true;
+    }
+
+    public boolean saveMemberData(int memberId, String churchPosition, String BIPRA
+    ) {
+        SharedPreferences sharedpreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+
+        editor.putString(KEY_MEMBER_BIPRA, BIPRA);
         editor.putInt(KEY_MEMBER_ID, memberId);
         editor.putString(KEY_CHURCH_POSITION, churchPosition);
-        editor.putString(KEY_ACCESS_TOKEN, accessToken);
 
+        editor.apply();
+        return true;
+    }
+
+    public boolean saveColumnData(int columnId, String memberColumnNameIndex
+    ) {
+        SharedPreferences sharedpreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+
+        editor.putInt(KEY_COLUMN_ID, columnId);
+        editor.putString(KEY_COLUMN_NAME_INDEX, memberColumnNameIndex);
+
+        editor.apply();
+        return true;
+    }
+
+    public boolean saveChurchData(int churchId,String churchName, String churchKelurahan
+    ) {
+        SharedPreferences sharedpreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+
+        editor.putInt(KEY_CHURCH_ID, churchId);
+        editor.putString(KEY_CHURCH_NAME, churchName);
+        editor.putString(KEY_CHURCH_VILLAGE, churchKelurahan);
 
         editor.apply();
         return true;
@@ -87,7 +105,6 @@ public class SharedPrefManager {
     public boolean logout() {
         SharedPreferences sharedpreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
-
         editor.clear();
         editor.apply();
         return true;

@@ -152,7 +152,7 @@ public class NavFragment_PntSym_manageMemberData extends Fragment {
 
             @Override
             public void onRetry() {
-
+                fetchData();
             }
         });
     }

@@ -81,47 +81,43 @@ public class IssueRequestHandler {
                     APIWrapper res = APIUtils.parseWrapper(response.body());
 
                     if (!res.isError()) {
-
-
-                        if (progress != null && progress.getVisibility() == View.VISIBLE)
-                            progress.setVisibility(View.INVISIBLE);
-
-                        if (mainView != null && mainView.getVisibility() != View.VISIBLE)
-                            mainView.setVisibility(View.VISIBLE);
-
-
                         Log.e(TAG, "onResponse: "
                                 + context.getClass().getSimpleName()
                                 + ": response SUCCESS -> proceeding -> "
                                 + " response message: " + res.getMessage());
 
                         if (onRequestHandler != null) {
-
                             try {
                                 onRequestHandler.onSuccess(res, res.getMessage());
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Log.e(TAG, context.getClass().getSimpleName() + ": onResponse: JSON ERROR " + e.getMessage());
+                                Log.e(TAG, context.getClass().getSimpleName() + ": JSON ERROR " + e.getMessage());
                             }
 
                         }
 
                     } else {
+                        Log.e(TAG, "onResponse:"
+                                + context.getClass().getSimpleName()
+                                + ": response return SUCCESS but Error:true, with message = "
+                                + res.getMessage());
 
                         Constant.displayDialog(
                                 context,
-                                null,
+                                "Peringatan",
                                 res.getMessage(),
                                 true,
-                                (dialogInterface, i) -> ((Activity) context).finish(),
+                                (dialogInterface, i) -> dialogInterface.dismiss(),
                                 null
                         );
 
-                        Log.e(TAG, "onResponse:"
-                                + context.getClass().getSimpleName()
-                                + ": response return SUCCESS but Error = true, with message = "
-                                + res.getMessage());
+
                     }
+                    if (progress != null && progress.getVisibility() == View.VISIBLE)
+                        progress.setVisibility(View.INVISIBLE);
+
+                    if (mainView != null && mainView.getVisibility() != View.VISIBLE)
+                        mainView.setVisibility(View.VISIBLE);
 
                 } else {
                     APIUtils.parseError(context, response);

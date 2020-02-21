@@ -38,14 +38,29 @@ public class APIUtils {
         // handle the error according to response HTTP code
         if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
             Log.e(TAG, "parseError: packageName = " + ((Activity) context).getClass().getSimpleName());
-            if (((Activity) context).getClass().getSimpleName().contentEquals("Dashboard")) {
-                context.sendBroadcast(new Intent(Constant.ACTION_CONTENT_USER_UNATHENTICATED));
-            } else {
-                context.sendBroadcast(new Intent(Constant.ACTION_CONTENT_USER_UNATHENTICATED));
-                ((Activity) context).finish();
-            }
+//            if (((Activity) context).getClass().getSimpleName().contentEquals("Dashboard")) {
+//                context.sendBroadcast(new Intent(Constant.ACTION_CONTENT_USER_UNATHENTICATED));
+//            } else {
+//                context.sendBroadcast(new Intent(Constant.ACTION_CONTENT_USER_UNATHENTICATED));
+//            }
+
+            Constant.displayDialog(
+                    context,
+                    "Sesi kadaluarsa",
+                    "Silahkan masuk kembali dengan mengisi email dan password dari akun anda",
+                    false,
+                    (dialogInterface, i) -> {
+                        dialogInterface.dismiss();
+                        Constant.signOut(context);
+                    }, null
+            );
+
         } else {
-            Constant.displayDialog(context, null, error.getMessage(), true,
+            Constant.displayDialog(
+                    context,
+                    "Error: "+response.code(),
+                    error.getMessage(),
+                    true,
                     (dialogInterface, i) -> {
                         ((Activity) context).finish();
                     },

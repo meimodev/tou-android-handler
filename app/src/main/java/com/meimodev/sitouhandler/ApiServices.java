@@ -22,8 +22,28 @@ public interface ApiServices {
     @FormUrlEncoded
     @POST("sign-in")
     Call<ResponseBody> signIn(
-            @Field("email") String email,
+            @Field("phone") String phone,
             @Field("password") String password
+    );
+
+    @FormUrlEncoded
+    @POST("sign-up-account")
+    Call<ResponseBody> signUpAccount(
+            @Field("phone") String phone,
+            @Field("password") String password,
+            @Field("first_name") String firstName,
+            @Field("last_name") String lastName,
+            @Field("date_of_birth") String dob,
+            @Field("sex") String sex
+
+    );
+
+    @FormUrlEncoded
+    @POST("confirm-account")
+    Call<ResponseBody> confirmAccount(
+            @Field("type") String type,
+            @Field("phone") String phone,
+            @Field("code") String code
     );
 
     @GET("member-home")
@@ -114,6 +134,23 @@ public interface ApiServices {
             @Query("search_key") String searchKey
     );
 
+    @GET("find-member")
+    Call<ResponseBody> findMemberByEmail(
+      @Query("email") String email
+    );
+
+    @GET("find-user")
+    Call<ResponseBody> findUserById(
+            @Query("id") int id
+    );
+    @GET("find-user")
+    Call<ResponseBody> findUserByEmail(
+            @Query("email") String email
+    );
+    @GET("find-user")
+    Call<ResponseBody> findUserByPhone(
+            @Query("phone") String phone
+    );
 
     @GET("find-service")
     Call<ResponseBody> findService(
@@ -181,4 +218,6 @@ public interface ApiServices {
             @Field("user_id") int userId,
             @Field("FCM_token") String FCM_token
     );
+
+
 }

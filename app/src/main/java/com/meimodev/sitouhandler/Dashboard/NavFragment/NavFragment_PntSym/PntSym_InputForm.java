@@ -124,7 +124,7 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
         String churchName =
                 SharedPrefManager.load(this, SharedPrefManager.KEY_CHURCH_NAME) + ", "
                         + SharedPrefManager.load(this, SharedPrefManager.KEY_CHURCH_VILLAGE);
-        String column = SharedPrefManager.load(this, SharedPrefManager.KEY_MEMBER_COLUMN).toString();
+        String column = SharedPrefManager.load(this, SharedPrefManager.KEY_COLUMN_NAME_INDEX).toString();
         tvChurchName.setText(churchName);
         tvColumn.setText(column);
         etDOB.setAsDatePicker(getSupportFragmentManager());
@@ -397,7 +397,7 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
             Log.e(TAG, "Church Position: "
                     + SharedPrefManager.load(this, SharedPrefManager.KEY_CHURCH_POSITION).toString()
                     + ", "
-                    + SharedPrefManager.load(this, SharedPrefManager.KEY_MEMBER_COLUMN
+                    + SharedPrefManager.load(this, SharedPrefManager.KEY_COLUMN_NAME_INDEX
             ));
             Log.e(TAG, "----------------------------------------------------------------------------------------");
             Log.e(TAG, "Operation Type: " + OPERATION_TYPE);
