@@ -15,6 +15,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.squti.guru.Guru;
+import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.SharedPrefManager;
 import com.squareup.picasso.Picasso;
@@ -23,6 +25,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.meimodev.sitouhandler.Constant.*;
 
 public class Adding_RecyclerAdapter extends RecyclerView.Adapter<Adding_RecyclerAdapter.MyViewHolder> {
 
@@ -117,8 +121,8 @@ public class Adding_RecyclerAdapter extends RecyclerView.Adapter<Adding_Recycler
         ArrayList<Adding_RecyclerModel> staticReference = new ArrayList<>();
         if (model.isUnregistered()) {
             llUnregistered.setVisibility(View.VISIBLE);
-            String churchName = SharedPrefManager.load(ctx, SharedPrefManager.KEY_CHURCH_NAME).toString();
-            String churchVillage = SharedPrefManager.load(ctx, SharedPrefManager.KEY_CHURCH_VILLAGE).toString();
+            String churchName = Guru.getString(KEY_CHURCH_NAME, null);
+            String churchVillage = Guru.getString(KEY_CHURCH_KELURAHAN, null);
             tvUnregistered.setText(model.getName());
             tvUnregisteredChurch.setText(String.format("%s, %s", churchName, churchVillage));
             if (Adding.OPERATION_TYPE == Adding.OPERATION_ADD_NAME_REGISTERED_ONLY)

@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.github.squti.guru.Guru;
 import com.meimodev.sitouhandler.ApiServices;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.CustomWidget.CustomEditText;
@@ -40,6 +41,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.meimodev.sitouhandler.Constant.*;
+
 public class NavFragment_Chief_ManageServiceArea extends Fragment {
 
     private static final String TAG = "_Chief_Manage";
@@ -62,7 +65,7 @@ public class NavFragment_Chief_ManageServiceArea extends Fragment {
         context = rootView.getContext();
         ButterKnife.bind(this, rootView);
 
-        progress = Constant.makeProgressCircle(rootView);
+        progress = makeProgressCircle(rootView);
 
         fetchData();
 
@@ -70,52 +73,43 @@ public class NavFragment_Chief_ManageServiceArea extends Fragment {
     }
 
     private void fetchData() {
+
         IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
-
-        requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().getServiceArea(
-                ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
-        ));
-
         requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
             public void onTry() {
             }
 
             @Override
-            public void onSuccess(APIWrapper res, String message) {
+            public void onSuccess(APIWrapper res, String message) throws JSONException {
 
                 priests = new ArrayList<>();
                 JSONArray data = res.getDataArray();
                 JSONObject obj;
-                try {
-                    for (int i = 0; i < data.length(); i++) {
-                        obj = data.getJSONObject(i);
-                        priests.add(
-                                new ManageServiceAreaModel(
-                                        obj.getInt("service_area_id"),
-                                        obj.getInt("member_id"),
-                                        obj.getString("name"),
-                                        obj.getString("domicile_column"),
-                                        Integer.valueOf(obj.getString("from_column")),
-                                        Integer.valueOf(obj.getString("from_column"))
-                                )
-                        );
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "JSON ERROR: " + e.getMessage());
+                for (int i = 0; i < data.length(); i++) {
+                    obj = data.getJSONObject(i);
+                    priests.add(
+                            new ManageServiceAreaModel(
+                                    obj.getInt("service_area_id"),
+                                    obj.getInt("member_id"),
+                                    obj.getString("name"),
+                                    obj.getString("domicile_column"),
+                                    Integer.valueOf(obj.getString("from_column")),
+                                    Integer.valueOf(obj.getString("from_column"))
+                            )
+                    );
                 }
+
                 setupCardViews();
             }
-
             @Override
             public void onRetry() {
-                requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().getServiceArea(
-                        ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
-                ));
+               fetchData();
             }
         });
-
+        requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().getServiceArea(
+                Guru.getInt(KEY_MEMBER_ID, 0)
+        ));
     }
 
     private void setupCardViews() {
@@ -133,17 +127,17 @@ public class NavFragment_Chief_ManageServiceArea extends Fragment {
             etFrom.setText(model.getFromColumn());
             etFrom.setAsNoLeadingZero();
             etFrom.clearFocus();
-            etFrom.setOnFocusChangeListener((view12, b) -> context.sendBroadcast(new Intent(Constant.ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED)));
+            etFrom.setOnFocusChangeListener((view12, b) -> context.sendBroadcast(new Intent(ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED)));
 
             CustomEditText etTo = view.findViewById(R.id.editText_toColumn);
             etTo.setText(model.getToColumn());
             etTo.setAsNoLeadingZero();
             etTo.clearFocus();
-            etTo.setOnFocusChangeListener((view13, b) -> context.sendBroadcast(new Intent(Constant.ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED)));
+            etTo.setOnFocusChangeListener((view13, b) -> context.sendBroadcast(new Intent(ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED)));
 
 
             cvViewHolder.setOnClickListener(view1 -> {
-                context.sendBroadcast(new Intent(Constant.ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED));
+                context.sendBroadcast(new Intent(ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED));
                 if (etFrom.isFocused()) {
                     etTo.requestFocus();
                 } else if (etTo.isFocused()) {
@@ -165,7 +159,7 @@ public class NavFragment_Chief_ManageServiceArea extends Fragment {
                         || etTo.getText().toString().length() == 0
                         || etFrom.getText().toString().length() == 0
                 ) {
-                    Constant.displayDialog(context,
+                    displayDialog(context,
                             "Ups...",
                             "Silahkan pastikan 'Dari Kolom' / 'Hingga Kolom' tidak kosong atau berawalan 0 ",
                             true,
@@ -206,61 +200,74 @@ public class NavFragment_Chief_ManageServiceArea extends Fragment {
 
         if (llCardHolder.getVisibility() == View.VISIBLE) llCardHolder.setVisibility(View.GONE);
 
-        ApiServices api = RetrofitClient.getInstance(
-                SharedPrefManager.load(context, SharedPrefManager.KEY_USER_ACCESS_TOKEN).toString()
-        ).getApiServices();
-
-        Call<ResponseBody> call = api.setServiceArea(serviceAreaId, fromColumn, toColumn);
-        Callback<ResponseBody> callback = new Callback<ResponseBody>() {
-
+        IssueRequestHandler req = new IssueRequestHandler(rootView);
+        req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-
-                    try {
-                        JSONObject obj = new JSONObject(response.body().string());
-
-                        if (!obj.getBoolean("error")) {
-
-                            // proceed
-                            fetchData();
-
-                            Log.e(TAG, "onResponse: response return success proceeding");
-                        } else {
-
-                            Constant.displayDialog(
-                                    context,
-                                    null,
-                                    obj.getString("message"),
-                                    true,
-                                    (dialogInterface, i) -> {
-                                    },
-                                    null
-                            );
-                            Log.e(TAG, "onResponse: response return success but error");
-                        }
-
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
-                    }
-
-
-                } else {
-                    APIUtils.parseError(context, response);
-                }
+            public void onTry() {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e(TAG, "onRetry: ", t);
-                Constant.toggleViewVisibility(progress);
-                Constant.makeFailFetch(rootView, view -> {
-                    progress = Constant.makeProgressCircle(rootView);
-                    sendData(serviceAreaId, fromColumn, toColumn);
-                });
+            public void onSuccess(APIWrapper res, String message) throws JSONException {
+                fetchData();
             }
-        };
-        call.enqueue(callback);
+
+            @Override
+            public void onRetry() {
+                sendData(serviceAreaId, fromColumn, toColumn);
+            }
+        });
+        req.enqueue(RetrofitClient.getInstance(null).getApiServices().setServiceArea(serviceAreaId, fromColumn, toColumn));
+
+//        Callback<ResponseBody> callback = new Callback<ResponseBody>() {
+//
+//            @Override
+//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                if (response.isSuccessful()) {
+//
+//                    try {
+//                        JSONObject obj = new JSONObject(response.body().string());
+//
+//                        if (!obj.getBoolean("error")) {
+//
+//                            // proceed
+//                            fetchData();
+//
+//                            Log.e(TAG, "onResponse: response return success proceeding");
+//                        } else {
+//
+//                            displayDialog(
+//                                    context,
+//                                    null,
+//                                    obj.getString("message"),
+//                                    true,
+//                                    (dialogInterface, i) -> {
+//                                    },
+//                                    null
+//                            );
+//                            Log.e(TAG, "onResponse: response return success but error");
+//                        }
+//
+//                    } catch (JSONException | IOException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//
+//                } else {
+//                    APIUtils.parseError(context, response);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                Log.e(TAG, "onRetry: ", t);
+//                toggleViewVisibility(progress);
+//                makeFailFetch(rootView, view -> {
+//                    progress = makeProgressCircle(rootView);
+//                    sendData(serviceAreaId, fromColumn, toColumn);
+//                });
+//            }
+//        };
+//        call.enqueue(callback);
     }
 
 

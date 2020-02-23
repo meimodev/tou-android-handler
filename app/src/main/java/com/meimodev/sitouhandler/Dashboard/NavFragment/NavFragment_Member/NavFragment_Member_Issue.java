@@ -2,7 +2,6 @@ package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,32 +15,23 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.meimodev.sitouhandler.ApiServices;
+import com.github.squti.guru.Guru;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.Notification_Model;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.Notification_RecyclerAdapter;
-import com.meimodev.sitouhandler.Helper.APIUtils;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
-import com.meimodev.sitouhandler.SharedPrefManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static com.meimodev.sitouhandler.Constant.toggleSort;
 
 public class NavFragment_Member_Issue extends Fragment {
     private static final String TAG = "NavFragment_Member_Home";
@@ -130,10 +120,8 @@ public class NavFragment_Member_Issue extends Fragment {
         IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
 
         Call call = RetrofitClient.getInstance(null).getApiServices().getMemberHome(
-                ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
+                Guru.getInt(Constant.KEY_MEMBER_ID, 0)
         );
-        requestHandler.enqueue(call);
-
         requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
             public void onTry() {
@@ -168,11 +156,10 @@ public class NavFragment_Member_Issue extends Fragment {
 
             @Override
             public void onRetry() {
-                requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().getMemberHome(
-                        ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
-                ));
+              fetchData();
             }
         });
+        requestHandler.enqueue(call);
 
     }
 

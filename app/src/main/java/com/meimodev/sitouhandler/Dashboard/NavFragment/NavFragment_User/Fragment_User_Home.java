@@ -37,10 +37,10 @@ public class Fragment_User_Home extends Fragment {
 
     @BindView(R.id.layoutContentFragment)
     FrameLayout layoutFragmentContainer;
-    @BindView(R.id.bottomNavBar)
-    BottomNavigationView bottomNavigationView;
 
-    FloatingActionMenu FAM = null;
+    private BottomNavigationView bottomNavigationView;
+
+    private FloatingActionMenu FAM = null;
 
     @Nullable
     @Override
@@ -56,6 +56,8 @@ public class Fragment_User_Home extends Fragment {
             FAM.setVisibility(View.GONE);
         }
 //        Fetch Data From Server
+        bottomNavigationView = getActivity().findViewById(R.id.bottomNavBar);
+        bottomNavigationView.setVisibility(View.VISIBLE);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             Fragment fragment = null;
 
@@ -95,6 +97,8 @@ public class Fragment_User_Home extends Fragment {
     public void onDetach() {
         if (FAM != null && FAM.getVisibility() != View.VISIBLE)
             FAM.setVisibility(View.VISIBLE);
+        bottomNavigationView.setVisibility(View.GONE);
+
         super.onDetach();
     }
 }

@@ -17,12 +17,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
+import com.github.squti.guru.Guru;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.hmomeni.progresscircula.ProgressCircula;
 import com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd;
@@ -31,20 +36,31 @@ import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.SignIn.SignIn;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static com.meimodev.sitouhandler.SharedPrefManager.KEY_USER_ID;
 
 
 public class Constant {
     private static final String TAG = "Constant: ";
 
+    public static final String KEY_USER_ID = "User_ID";
+    public static final String KEY_USER_FULL_NAME = "User_Full_Name";
+    public static final String KEY_USER_AGE = "User_Age";
+    public static final String KEY_USER_SEX = "User_Sex";
+    public static final String KEY_USER_ACCESS_TOKEN = "ACCESS_TOKEN";
+    public static final String KEY_MEMBER_ID = "Member_ID";
+    public static final String KEY_MEMBER_BIPRA = "Member_BIPRA";
+    public static final String KEY_MEMBER_CHURCH_POSITION = "Member_Church_Position";
+    public static final String KEY_CHURCH_ID = "Church_Id";
+    public static final String KEY_CHURCH_NAME = "Church_Name";
+    public static final String KEY_CHURCH_KELURAHAN = "Church_Village";
+    public static final String KEY_COLUMN_ID = "Column_Id";
+    public static final String KEY_COLUMN_NAME_INDEX = "Column_Name_Index";
+
     public static final String ROOT_TRANSFER_PROTOCOL = "http://";
     public static final String ROOT_DOMAIN = "192.168.1.137:8000";
     public static final String ROOT_URL_API = ROOT_TRANSFER_PROTOCOL + ROOT_DOMAIN + "/api/";
     public static final String ROOT_URL_PRINTABLE = ROOT_TRANSFER_PROTOCOL + ROOT_DOMAIN + "/print/";
-    public static final String ROOT_URL_TERMS= ROOT_TRANSFER_PROTOCOL + ROOT_DOMAIN + "/terms-and-condition";
+    public static final String ROOT_URL_TERMS = ROOT_TRANSFER_PROTOCOL + ROOT_DOMAIN + "/terms-and-condition";
 
     public static final String ACCOUNT_TYPE_CHIEF = "Ketua Jemaat";
     public static final String ACCOUNT_TYPE_SECRETARY = "Sekretaris Jemaat";
@@ -61,7 +77,7 @@ public class Constant {
     public static final String ACCOUNT_TYPE_MEMBER = "Anggota Jemaat";
     public static final String ACCOUNT_TYPE_USER = "User";
 
-    public static String ACCOUNT_TYPE = ACCOUNT_TYPE_USER;
+//    public static String ACCOUNT_TYPE = ACCOUNT_TYPE_USER;
 
     public static final String ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED = "key_content_in_fragment_is_clicked";
     public static final String ACTION_CONTENT_USER_UNATHENTICATED = "user_unauthenticated";
@@ -124,6 +140,7 @@ public class Constant {
     public static final String LETTER_TYPE_INBOUND = "INBOUND";
     public static final String LETTER_TYPE_OUTBOUND = "OUTBOUND";
 
+    public static final String NOTIFICATION_TOPIC_USER = "TOU_USER";
     public static final String NOTIFICATION_TOPIC_GMIM_MEMBER = "GMIM";
     public static final String NOTIFICATION_TOPIC_CHURCH = "CHURCH";
     public static final String NOTIFICATION_TOPIC_CHURCH_PELSUS = "PELSUS";
@@ -372,8 +389,7 @@ public class Constant {
 
     public static void signOut(Context context) {
         SharedPrefManager.getInstance(context).logout();
-        ACCOUNT_TYPE = null;
-//        Dashboard.getInstance().clearApplicationData();
+        Guru.clear();
         ((Activity) context).finishAffinity();
         context.startActivity(new Intent(context, SignIn.class));
     }
@@ -445,15 +461,25 @@ public class Constant {
                     // Get new Instance ID token
                     String token = task.getResult().getToken();
 
-                    int userID = ((int) SharedPrefManager.load(context, KEY_USER_ID));
+                    int userId= Guru.getInt(KEY_USER_ID, 0);
+                    if (userId == 0) throw new NumberFormatException("USER ID cannot be 0");
                     IssueRequestHandler req = new IssueRequestHandler(null);
                     req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().setFCMToken(
-                            userID, token
+                            userId, token
                     ));
                 });
 
 
     }
 
+    public static void changeStatusColor(Context context, @ColorRes int colorId) {
+        Window window = ((Activity) context).getWindow();
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        // finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(context, colorId));
+    }
 
 }

@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.github.squti.guru.Guru;
+import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.CustomWidget.MemberOperationDialog;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
@@ -27,6 +29,8 @@ import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.meimodev.sitouhandler.Constant.*;
 
 public class NavFragment_PntSym_manageMemberData extends Fragment {
 
@@ -89,7 +93,7 @@ public class NavFragment_PntSym_manageMemberData extends Fragment {
     private void fetchData() {
         IssueRequestHandler req = new IssueRequestHandler(rootView);
         req.enqueue(RetrofitClient.getInstance(null).getApiServices().getColumnOverview(
-                ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
+                Guru.getInt(KEY_MEMBER_ID, 0)
         ));
         req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override

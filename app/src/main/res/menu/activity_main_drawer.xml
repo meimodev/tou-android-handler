@@ -8,12 +8,12 @@
                 android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_home"
-                    android:icon="@drawable/ic_menu_camera"
+                    android:icon="@drawable/ic_apps_24px"
                     android:title="Beranda" />
                 <item
                     android:id="@+id/nav_setting"
-                    android:icon="@drawable/ic_menu_gallery"
-                    android:title="Pengaturan" />
+                    android:icon="@drawable/ic_face_24px"
+                    android:title="Tentang Akun" />
 
             </group>
         </menu>
@@ -28,15 +28,15 @@
                 android:visible="false">
                 <item
                     android:id="@+id/nav_chief_home"
-                    android:icon="@drawable/ic_menu_camera"
+                    android:icon="@drawable/ic_call_received_24px"
                     android:title="Persetujuan" />
                 <item
                     android:id="@+id/nav_chief_issue"
-                    android:icon="@drawable/ic_menu_gallery"
+                    android:icon="@drawable/ic_call_made_24px"
                     android:title="Pengajuan" />
                 <item
                     android:id="@+id/nav_chief_manageServiceArea"
-                    android:icon="@drawable/ic_menu_gallery"
+                    android:icon="@drawable/ic_star_24px"
                     android:title="Atur Wilayah Pelayanan" />
 
             </group>
@@ -51,15 +51,15 @@
                 android:visible="false">
                 <item
                     android:id="@+id/nav_secretary_home"
-                    android:icon="@drawable/ic_menu_camera"
+                    android:icon="@drawable/ic_call_received_24px"
                     android:title="Persetujuan" />
                 <item
                     android:id="@+id/nav_secretary_issue"
-                    android:icon="@drawable/ic_menu_gallery"
+                    android:icon="@drawable/ic_call_made_24px"
                     android:title="Pengajuan" />
                 <item
                     android:id="@+id/nav_secretary_papers"
-                    android:icon="@drawable/ic_menu_slideshow"
+                    android:icon="@drawable/ic_star_24px"
                     android:title="Riwayat Berkas" />
 <!--                <item-->
 <!--                    android:id="@+id/nav_secretary_sunday_schedules"-->
@@ -78,11 +78,11 @@
                 android:visible="false">
                 <item
                     android:id="@+id/nav_treasurer_home"
-                    android:icon="@drawable/ic_menu_camera"
+                    android:icon="@drawable/ic_call_received_24px"
                     android:title="Persetujuan" />
                 <item
                     android:id="@+id/nav_treasurer_issue"
-                    android:icon="@drawable/ic_menu_gallery"
+                    android:icon="@drawable/ic_call_made_24px"
                     android:title="Pengajuan" />
                 <!--<item-->
                     <!--android:id="@+id/nav_treasurer_auth_history"-->
@@ -95,7 +95,7 @@
                     <!--android:title="Anggaran Jemaat" />-->
                 <item
                     android:id="@+id/nav_treasurer_financial"
-                    android:icon="@drawable/ic_menu_slideshow"
+                    android:icon="@drawable/ic_star_24px"
                     android:title="Laporan Keuangan" />
 
             </group>
@@ -109,15 +109,15 @@
                 android:visible="false">
                 <item
                     android:id="@+id/nav_priest_home"
-                    android:icon="@drawable/ic_menu_camera"
+                    android:icon="@drawable/ic_call_received_24px"
                     android:title="Persetujuan" />
                 <item
                     android:id="@+id/nav_priest_issue"
-                    android:icon="@drawable/ic_menu_gallery"
+                    android:icon="@drawable/ic_call_made_24px"
                     android:title="Pengajuan" />
                 <item
                     android:id="@+id/nav_priest_serviceArea"
-                    android:icon="@drawable/ic_menu_gallery"
+                    android:icon="@drawable/ic_star_24px"
                     android:title="Lihat Wilayah Pelayanan" />
 
             </group>
@@ -131,15 +131,15 @@
                 android:visible="false">
                 <item
                     android:id="@+id/nav_penatua_home"
-                    android:icon="@drawable/ic_menu_camera"
+                    android:icon="@drawable/ic_call_received_24px"
                     android:title="Persetujuan" />
                 <item
                     android:id="@+id/nav_penatua_issue"
-                    android:icon="@drawable/ic_menu_gallery"
+                    android:icon="@drawable/ic_call_made_24px"
                     android:title="Pengajuan" />
                 <item
                     android:id="@+id/nav_penatua_manageMemberData"
-                    android:icon="@drawable/ic_menu_camera"
+                    android:icon="@drawable/ic_star_24px"
                     android:title="Data Anggota" />
 
             </group>
@@ -153,15 +153,15 @@
                 android:visible="false">
                 <item
                     android:id="@+id/nav_syamas_home"
-                    android:icon="@drawable/ic_menu_camera"
+                    android:icon="@drawable/ic_call_received_24px"
                     android:title="Persetujuan" />
                 <item
                     android:id="@+id/nav_syamas_issue"
-                    android:icon="@drawable/ic_menu_gallery"
+                    android:icon="@drawable/ic_call_made_24px"
                     android:title="Pengajuan" />
                 <item
                     android:id="@+id/nav_syamas_manageMemberData"
-                    android:icon="@drawable/ic_menu_camera"
+                    android:icon="@drawable/ic_star_24px"
                     android:title="Data Anggota" />
 
             </group>
@@ -171,7 +171,7 @@
 
     <item
         android:id="@+id/nav_signOut"
-        android:icon="@drawable/ic_menu_send"
+        android:icon="@drawable/ic_power_settings_new_24px"
         android:title="Sign Out" />
 
 

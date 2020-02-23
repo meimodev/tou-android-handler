@@ -11,7 +11,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -24,12 +23,12 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.squti.guru.Guru;
 import com.google.android.material.snackbar.Snackbar;
 import com.hmomeni.progresscircula.ProgressCircula;
 import com.meimodev.sitouhandler.ApiServices;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Helper.APIUtils;
-import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SharedPrefManager;
@@ -47,6 +46,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.meimodev.sitouhandler.Constant.*;
 
 public class Adding extends AppCompatActivity {
 
@@ -191,7 +192,7 @@ public class Adding extends AppCompatActivity {
 
         ApiServices apiServices = RetrofitClient.getInstance(null).getApiServices();
         Call<ResponseBody> call = apiServices.findMember(
-                Integer.valueOf(SharedPrefManager.load(Adding.this, SharedPrefManager.KEY_MEMBER_ID).toString()),
+                Guru.getInt(KEY_MEMBER_ID, 0),
                 etSearch.getText().toString()
         );
         call.enqueue(new Callback<ResponseBody>() {
@@ -271,8 +272,8 @@ public class Adding extends AppCompatActivity {
                 Log.e(TAG, "onRetry: "
                         + getApplicationInfo().className
                         + ": ", t);
-                Constant.makeFailFetch(findViewById(android.R.id.content), view -> {
-                    Constant.makeProgressCircle(findViewById(android.R.id.content)).setVisibility(View.VISIBLE);
+                makeFailFetch(findViewById(android.R.id.content), view -> {
+                    makeProgressCircle(findViewById(android.R.id.content)).setVisibility(View.VISIBLE);
                     fetchData();
                 });
             }

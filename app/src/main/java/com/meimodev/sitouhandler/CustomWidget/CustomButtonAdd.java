@@ -1,6 +1,5 @@
 package com.meimodev.sitouhandler.CustomWidget;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 
+import com.github.squti.guru.Guru;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Issue.Adding_RecyclerModel;
 import com.meimodev.sitouhandler.Issue.OnRecyclerItemOperationListener;
@@ -25,6 +25,8 @@ import com.meimodev.sitouhandler.SharedPrefManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import static com.meimodev.sitouhandler.Constant.*;
 
 public class CustomButtonAdd extends AppCompatButton {
 
@@ -99,7 +101,7 @@ public class CustomButtonAdd extends AppCompatButton {
             }
             if (alreadyExist) {
 
-                Constant.displayDialog(
+                displayDialog(
                         getContext(),
                         "Perhatian !",
                         "Tidak bisa menambahkan nama.\nNama: " + addingModel.getName() + " sudah ada dalam daftar nama ini",
@@ -131,8 +133,8 @@ public class CustomButtonAdd extends AppCompatButton {
                 tvUnregisteredName.setText(addingModel.getName());
 
                 TextView tvUnregisteredChurch = v.findViewById(R.id.textView_unregisteredChurch);
-                String churchName = SharedPrefManager.load(getContext(), SharedPrefManager.KEY_CHURCH_NAME).toString();
-                String churchVillage = SharedPrefManager.load(getContext(), SharedPrefManager.KEY_CHURCH_VILLAGE).toString();
+                String churchName = Guru.getString(KEY_CHURCH_NAME, null);
+                String churchVillage = Guru.getString(KEY_CHURCH_KELURAHAN, null);
 
                 tvUnregisteredChurch.setText(String.format("%s, %s", churchName, churchVillage));
 

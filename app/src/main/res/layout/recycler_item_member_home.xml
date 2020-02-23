@@ -21,7 +21,7 @@
             android:id="@+id/recyclerItem_image"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:src="@color/colorPrimary"
+            android:src="@color/colorAccent4End"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

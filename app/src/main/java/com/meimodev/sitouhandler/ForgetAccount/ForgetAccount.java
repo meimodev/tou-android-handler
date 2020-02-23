@@ -52,6 +52,7 @@ public class ForgetAccount extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget);
         ButterKnife.bind(this);
+        Constant.changeStatusColor(this, R.color.background);
 
 
     }

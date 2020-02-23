@@ -12,6 +12,10 @@
         <item name="android:fontFamily">@font/montserrat_black</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:keepScreenOn">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+
+        <!--        <item name="android:animateLayoutChanges">true</item>-->
         <item name="fontFamily">@font/montserrat_regular</item> <!-- target android sdk versions < 26 and > 14 if theme other than AppCompat -->
     </style>
 

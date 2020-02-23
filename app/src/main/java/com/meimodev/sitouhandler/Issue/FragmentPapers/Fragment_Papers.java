@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.github.squti.guru.Guru;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -40,6 +41,9 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+
+import static com.meimodev.sitouhandler.Constant.*;
 
 public class Fragment_Papers extends Fragment {
 
@@ -118,7 +122,7 @@ public class Fragment_Papers extends Fragment {
         if (getArguments() != null) {
             rootView = inflater.inflate(R.layout.fragment_issue_papers, container, false);
             ButterKnife.bind(this, rootView);
-            keyIssue = getArguments().getString(Constant.KEY_PAPERS);
+            keyIssue = getArguments().getString(KEY_PAPERS);
             context = rootView.getContext();
 
             if (keyIssue != null) {
@@ -149,11 +153,11 @@ public class Fragment_Papers extends Fragment {
                 btnAddName.setAsAddingButton(container, inflater, llnamePlaceHolder, 1, deleteListener);
                 defaultLayoutTransition = llnamePlaceHolder.getLayoutTransition();
                 switch (keyIssue) {
-                    case Constant.KEY_PAPERS_VALIDATE_MEMBERS:
+                    case KEY_PAPERS_VALIDATE_MEMBERS:
                         btnAddName.setAsAddingButton(container, inflater, llnamePlaceHolder, 1, deleteListener);
                         break;
 
-                    case Constant.KEY_PAPERS_CREDENTIAL:
+                    case KEY_PAPERS_CREDENTIAL:
                         llKredensi.setVisibility(View.VISIBLE);
                         btnAddName.setAsAddingButton(container, inflater, llnamePlaceHolder, 1000, deleteListener);
 
@@ -162,7 +166,7 @@ public class Fragment_Papers extends Fragment {
 
                         break;
 
-                    case Constant.KEY_PAPERS_BAPTIZE:
+                    case KEY_PAPERS_BAPTIZE:
                         lldateExec_pendeta.setVisibility(View.VISIBLE);
                         llBaptis.setVisibility(View.VISIBLE);
                         deleteListener = () -> {
@@ -173,12 +177,12 @@ public class Fragment_Papers extends Fragment {
                         btnAddName.setAsAddingButton(container, inflater, llnamePlaceHolder, 15, deleteListener);
                         break;
 
-                    case Constant.KEY_PAPERS_SIDI:
+                    case KEY_PAPERS_SIDI:
                         lldateExec_pendeta.setVisibility(View.VISIBLE);
                         btnAddName.setAsAddingButton(container, inflater, llnamePlaceHolder, 1, deleteListener);
                         break;
 
-                    case Constant.KEY_PAPERS_MARRIED:
+                    case KEY_PAPERS_MARRIED:
                         lldateExec_pendeta.setVisibility(View.VISIBLE);
                         llNikah.setVisibility(View.VISIBLE);
                         deleteListener = () -> {
@@ -225,10 +229,10 @@ public class Fragment_Papers extends Fragment {
             switch (requestCode) {
                 case REQUEST_CODE_PERSONAL_NAME:
                     btnAddName.addSelected(selectedModel);
-                    if (keyIssue.contentEquals(Constant.KEY_PAPERS_BAPTIZE) || keyIssue.contentEquals(Constant.KEY_PAPERS_MARRIED)) {
+                    if (keyIssue.contentEquals(KEY_PAPERS_BAPTIZE) || keyIssue.contentEquals(KEY_PAPERS_MARRIED)) {
                         resetPlaceHolderView(llnamePlaceHolder, btnAddName);
                     }
-                    if (keyIssue.contentEquals(Constant.KEY_PAPERS_BAPTIZE)) {
+                    if (keyIssue.contentEquals(KEY_PAPERS_BAPTIZE)) {
                         warned = false;
                         warnWitness = true;
                     }
@@ -261,7 +265,7 @@ public class Fragment_Papers extends Fragment {
         Validator validator = new Validator();
 
 
-        if (keyIssue.contentEquals(Constant.KEY_PAPERS_BAPTIZE)) {
+        if (keyIssue.contentEquals(KEY_PAPERS_BAPTIZE)) {
             if (btnAddName.getSelectedList().size() > 3) {
                 if (!warned && (btnAddName.getSelectedList().size() - 3) != 12) {
                     warnWitness = true;
@@ -305,9 +309,9 @@ public class Fragment_Papers extends Fragment {
         ArrayList<Adding_RecyclerModel> selectedPriests = btnAddPriest.getSelectedList();
         ArrayList<Adding_RecyclerModel> selectedNames = btnAddName.getSelectedList();
         switch (keyIssue) {
-            case Constant.KEY_PAPERS_VALIDATE_MEMBERS:
+            case KEY_PAPERS_VALIDATE_MEMBERS:
                 break;
-            case Constant.KEY_PAPERS_CREDENTIAL:
+            case KEY_PAPERS_CREDENTIAL:
 
                 POST_destination = etCredentialName.getText().toString();
                 POST_date = etCredentialDate.getText().toString();
@@ -322,7 +326,7 @@ public class Fragment_Papers extends Fragment {
 
 
                 break;
-            case Constant.KEY_PAPERS_BAPTIZE:
+            case KEY_PAPERS_BAPTIZE:
                 POST_ceremonyDate = etDateExecuted.getText().toString().trim();
 
                 Log.e(TAG, "Date : " + POST_ceremonyDate);
@@ -340,7 +344,7 @@ public class Fragment_Papers extends Fragment {
                 }
                 Log.e(TAG, "==================================================");
                 break;
-            case Constant.KEY_PAPERS_SIDI:
+            case KEY_PAPERS_SIDI:
                 POST_ceremonyDate = etDateExecuted.getText().toString();
 
                 Log.e(TAG, "Priest Count : " + selectedPriests.size());
@@ -357,7 +361,7 @@ public class Fragment_Papers extends Fragment {
                 }
                 Log.e(TAG, "==================================================");
                 break;
-            case Constant.KEY_PAPERS_MARRIED:
+            case KEY_PAPERS_MARRIED:
                 POST_ceremonyDate = etDateExecuted.getText().toString();
 
                 Log.e(TAG, "Priest Count : " + selectedPriests.size());
@@ -393,12 +397,12 @@ public class Fragment_Papers extends Fragment {
             Log.e(TAG, "---------------------------------------------------");
             index++;
         }
-        POST_issuedMemberData = Constant.encodeMemberData(btnAddName);
+        POST_issuedMemberData = encodeMemberData(btnAddName);
 
         Log.e(TAG, "------------------------------------------------------------------------");
         Log.e(TAG, ":REQUEST TO SERVER:");
         Log.e(TAG, "------------------------------------------------------------------------");
-        Log.e(TAG, "issued_by_member_id: " + SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID));
+        Log.e(TAG, "issued_by_member_id: " + Guru.getInt(KEY_MEMBER_ID, 0));
         Log.e(TAG, "keyIssue: " + keyIssue);
         Log.e(TAG, "destination: " + POST_destination);
         Log.e(TAG, "date: " + POST_date);
@@ -410,8 +414,8 @@ public class Fragment_Papers extends Fragment {
         Log.e(TAG, "------------------------------------------------------------------------");
 
         IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
-        requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssuePaper(
-                ((int) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
+        Call call =RetrofitClient.getInstance(null).getApiServices().setIssuePaper(
+                Guru.getInt(KEY_MEMBER_ID, 0),
                 keyIssue,
                 POST_destination,
                 POST_date,
@@ -420,7 +424,7 @@ public class Fragment_Papers extends Fragment {
                 POST_ceremonyDate,
                 POST_priestId,
                 POST_issuedMemberData
-        ));
+        );
 
         requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
@@ -431,7 +435,7 @@ public class Fragment_Papers extends Fragment {
             @Override
             public void onSuccess(APIWrapper res, String message) {
 
-                Constant.displayDialog(
+                displayDialog(
                         context,
                         "Pengajuan Berhasil",
                         message,
@@ -440,37 +444,29 @@ public class Fragment_Papers extends Fragment {
                         },
                         null,
                         dialogInterface -> {
-                            context.sendBroadcast(new Intent(Constant.ACTION_ACTIVITY_FINISH));
+                            context.sendBroadcast(new Intent(ACTION_ACTIVITY_FINISH));
                         }
                 );
             }
 
             @Override
             public void onRetry() {
-                requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssuePaper(
-                        ((int) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
-                        keyIssue,
-                        POST_destination,
-                        POST_date,
-                        POST_time,
-                        POST_place,
-                        POST_ceremonyDate,
-                        POST_priestId,
-                        POST_issuedMemberData
-                ));
+                requestHandler.enqueue(call);
             }
         });
+        requestHandler.enqueue(call);
+
     }
 
 
     private void assignCategory(String keyBundle, ArrayList<Adding_RecyclerModel> selectedNames) {
 
         switch (keyBundle) {
-            case Constant.KEY_PAPERS_VALIDATE_MEMBERS:
+            case KEY_PAPERS_VALIDATE_MEMBERS:
                 break;
-            case Constant.KEY_PAPERS_CREDENTIAL:
+            case KEY_PAPERS_CREDENTIAL:
                 break;
-            case Constant.KEY_PAPERS_BAPTIZE:
+            case KEY_PAPERS_BAPTIZE:
                 if (!selectedNames.isEmpty()) {
 
                     switch (selectedNames.size()) {
@@ -495,9 +491,9 @@ public class Fragment_Papers extends Fragment {
                     }
                 }
                 break;
-            case Constant.KEY_PAPERS_SIDI:
+            case KEY_PAPERS_SIDI:
                 break;
-            case Constant.KEY_PAPERS_MARRIED:
+            case KEY_PAPERS_MARRIED:
                 if (!selectedNames.isEmpty()) {
 
                     switch (selectedNames.size()) {

@@ -2,6 +2,7 @@ package com.meimodev.sitouhandler.SignUp;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
@@ -45,6 +46,8 @@ public class ConfirmAccount extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_account);
         ButterKnife.bind(this);
+        Constant.changeStatusColor(this, R.color.background);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         String str = getIntent().getStringExtra("phone");
 

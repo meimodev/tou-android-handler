@@ -12,6 +12,8 @@ import android.text.TextPaint;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -76,6 +79,9 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
+        Constant.changeStatusColor(this, R.color.background);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 SignUp.this,
                 R.layout.resoruce_dropdown_popup,
@@ -90,18 +96,8 @@ public class SignUp extends AppCompatActivity {
 
         validator = new Validator();
 
-//        View.OnFocusChangeListener onFocusChangeListener = (v, hasFocus) -> {
-//            if (hasFocus) validateForm();
-//        };
-//
-//        tilEmail.getEditText().setOnFocusChangeListener(onFocusChangeListener);
-//        tilPhone.getEditText().setOnFocusChangeListener(onFocusChangeListener);
-//        tilPassword.getEditText().setOnFocusChangeListener(onFocusChangeListener);
-//        tilPasswordConfirm.getEditText().setOnFocusChangeListener(onFocusChangeListener);
-//        tilFirstName.getEditText().setOnFocusChangeListener(onFocusChangeListener);
-//        tilLastName.getEditText().setOnFocusChangeListener(onFocusChangeListener);
-//        tilDOB.getEditText().setOnFocusChangeListener(onFocusChangeListener);
-//        tilSex.getEditText().setOnFocusChangeListener(onFocusChangeListener);
+
+
         tilSex.getEditText().setShowSoftInputOnFocus(false);
         tilSex.getEditText().setFocusable(false);
 

@@ -18,7 +18,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;
 import androidx.core.view.GravityCompat;
 
+import com.github.squti.guru.Guru;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.meimodev.sitouhandler.BuildConfig;
 import com.meimodev.sitouhandler.Constant;
@@ -34,8 +36,6 @@ import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Treasurer.Nav
 import com.meimodev.sitouhandler.Issue.Issue;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
-import com.meimodev.sitouhandler.SharedPrefManager;
-import com.meimodev.sitouhandler.SignIn.SignIn;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -45,11 +45,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Menu;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -60,13 +58,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.meimodev.sitouhandler.Constant.*;
-import static com.meimodev.sitouhandler.SharedPrefManager.*;
 
 public class Dashboard extends AppCompatActivity {
 
     private static final String TAG = "Dashboard";
-
-    private static Dashboard instance;
 
     private DrawerLayout drawer;
 
@@ -74,15 +69,8 @@ public class Dashboard extends AppCompatActivity {
 
     private NavigationView navigationView;
 
-//    BroadcastReceiver brContentInFragmentIsClicked = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            if (Objects.requireNonNull(intent.getAction()).contentEquals(ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED)) {
-//                if (floatingActionMenu.isOpened()) floatingActionMenu.close(true);
-//            }
-//        }
-//    };
     private boolean isCollapse = false;
+
     public static final String ACTION_TOGGLE_COLLAPSE_HEADER = "toggle_header";
     BroadcastReceiver brToggleHeaderCollapse = new BroadcastReceiver() {
         @Override
@@ -98,11 +86,19 @@ public class Dashboard extends AppCompatActivity {
                 int visibility = isCollapse ? View.GONE : View.VISIBLE;
                 LinearLayout llGuide = findViewById(R.id.layout_guide);
                 llGuide.setVisibility(visibility);
-//                ViewGroup.LayoutParams params = llGuide.getLayoutParams();
-//                int collapseHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics());
-//                int expanseHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
-//                params.height = isCollapse ? collapseHeight : expanseHeight;
-//                llGuide.setLayoutParams(params);
+
+                TextView tvTitle = findViewById(R.id.textView_title);
+                tvTitle.setVisibility(isCollapse ? View.VISIBLE : View.GONE);
+
+                if (Guru.getInt(KEY_MEMBER_ID, 0) == 0){
+                    if (!isCollapse ){
+                        if (llApplyMembership.getVisibility() != View.VISIBLE)
+                            llApplyMembership.setVisibility(View.VISIBLE);
+                    } else {
+                        if (llApplyMembership.getVisibility() == View.VISIBLE)
+                            llApplyMembership.setVisibility(View.GONE);
+                    }
+                }
 
                 TextView tvUserName = findViewById(R.id.textView_userName);
                 tvUserName.setVisibility(visibility);
@@ -123,11 +119,12 @@ public class Dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        instance = this;
+        Constant.changeStatusColor(this, R.color.colorPrimary);
+
 
 //        Binding Auth Token to Retrofit
         RetrofitClient.resetRetrofitClient();
-        RetrofitClient.getInstance(((String) load(Dashboard.this, KEY_USER_ACCESS_TOKEN))).getApiServices();
+        RetrofitClient.getInstance(Guru.getString(KEY_USER_ACCESS_TOKEN, null)).getApiServices();
 
 //        Sending this account refreshed FCM Token to server
         sendFCMTokenToServer(Dashboard.this);
@@ -172,10 +169,6 @@ public class Dashboard extends AppCompatActivity {
         return true;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // On Stop & Resume
-    ///////////////////////////////////////////////////////////////////////////
-
     @Override
     protected void onStop() {
 //        unregisterReceiver(brContentInFragmentIsClicked);
@@ -194,37 +187,27 @@ public class Dashboard extends AppCompatActivity {
         super.onResume();
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // HELPER
-    ///////////////////////////////////////////////////////////////////////////
-
-//    BroadcastReceiver brUnauthenticatedSignIn = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            if (Objects.requireNonNull(intent.getAction()).contentEquals(ACTION_CONTENT_USER_UNATHENTICATED))
-//
-//
-//        }
-//    };
-
     private void handleAccountNotificationSubscription() {
         // subscribe & unsubscribe the related notification topics
 
-        Integer member_id = ((Integer) load(this, KEY_MEMBER_ID));
-        if (member_id != null && member_id != 0 && load(this, KEY_MEMBER_BIPRA) != null) {
+        FirebaseMessaging fcm = FirebaseMessaging.getInstance();
+        fcm.subscribeToTopic(NOTIFICATION_TOPIC_USER);
+        Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to USER");
 
-            FirebaseMessaging fcm = FirebaseMessaging.getInstance();
+        int member_id = Guru.getInt(KEY_MEMBER_ID, 0);
+        if ( member_id != 0 && Guru.getString(KEY_MEMBER_BIPRA,null) != null) {
+
             //if have church membership than subscribe to gmim member
             fcm.subscribeToTopic(NOTIFICATION_TOPIC_GMIM_MEMBER);
             Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to GMIM Member");
 
-            Integer churchId = ((Integer) load(this, KEY_CHURCH_ID));
+            int churchId = Guru.getInt(KEY_CHURCH_ID,0);
             String churchTopic = NOTIFICATION_TOPIC_CHURCH + "_" + churchId;
             // subscribe to church topic
             fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH);
             Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH);
 
-            String churchPosition = ((String) load(this, KEY_CHURCH_POSITION));
+            String churchPosition = Guru.getString(KEY_MEMBER_CHURCH_POSITION, null);
             // check if church_executives than subscribe to church executive topics
             if (churchPosition.contentEquals(ACCOUNT_TYPE_CHIEF)
                     || churchPosition.contentEquals(ACCOUNT_TYPE_SECRETARY)
@@ -267,8 +250,8 @@ public class Dashboard extends AppCompatActivity {
                 Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Pelsus: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_PELSUS);
             }
 
-            String bipra = ((String) load(this, KEY_MEMBER_BIPRA));
-            Integer columnId = ((Integer) load(this, KEY_COLUMN_ID));
+            String bipra = Guru.getString(KEY_MEMBER_BIPRA, null);
+            int columnId = Guru.getInt(KEY_COLUMN_ID, 0);
             String columnTopic = churchTopic + "_" + NOTIFICATION_TOPIC_COLUMN + "_" + columnId;
             // check column than subs to correspond column inside that church
             fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN);
@@ -315,79 +298,50 @@ public class Dashboard extends AppCompatActivity {
 
 
         } else {
-            Log.e(TAG, "handleAccountNotificationSubscription: User not a church member or invalid sign in data, do re-sign in");
-            SharedPrefManager.getInstance(this).logout();
-            startActivity(new Intent(this, SignIn.class));
-            finishAffinity();
+            Log.e(TAG, "handleAccountNotificationSubscription: User not a church member ");
+
+
         }
 
 
     }
 
-
-
     private void setupNavDrawerItemsBasedOnAccountType() {
-        if (ACCOUNT_TYPE.contains(ACCOUNT_TYPE_CHIEF)) {
+
+        String memberPosition = Guru.getString(KEY_MEMBER_CHURCH_POSITION, null);
+        Log.e(TAG, "setupNavDrawerItemsBasedOnAccountType: memberPositions "+ memberPosition );
+
+        if (memberPosition.contains(ACCOUNT_TYPE_CHIEF)) {
             navigationView.setCheckedItem(R.id.nav_home);
             navigationView.getMenu().getItem(1).getSubMenu().setGroupVisible(R.id.nav_group_chief, true);
-        } else if (ACCOUNT_TYPE.contains(ACCOUNT_TYPE_SECRETARY)) {
+        } else if (memberPosition.contains(ACCOUNT_TYPE_SECRETARY)) {
             navigationView.setCheckedItem(R.id.nav_home);
             navigationView.getMenu().getItem(2).getSubMenu().setGroupVisible(R.id.nav_group_secretary, true);
 
-        } else if (ACCOUNT_TYPE.contains(ACCOUNT_TYPE_TREASURER)) {
+        } else if (memberPosition.contains(ACCOUNT_TYPE_TREASURER)) {
             navigationView.setCheckedItem(R.id.nav_home);
             navigationView.getMenu().getItem(3).getSubMenu().setGroupVisible(R.id.nav_group_treasurer, true);
 
-        } else if (ACCOUNT_TYPE.contains(ACCOUNT_TYPE_PRIEST)) {
+        } else if (memberPosition.contains(ACCOUNT_TYPE_PRIEST)) {
             navigationView.setCheckedItem(R.id.nav_home);
             navigationView.getMenu().getItem(4).getSubMenu().setGroupVisible(R.id.nav_group_priest, true);
 
-        } else if (ACCOUNT_TYPE.contains(ACCOUNT_TYPE_PENATUA)) {
+        } else if (memberPosition.contains(ACCOUNT_TYPE_PENATUA)) {
             navigationView.setCheckedItem(R.id.nav_home);
             navigationView.getMenu().getItem(5).getSubMenu().setGroupVisible(R.id.nav_group_penatua, true);
 
-        } else if (ACCOUNT_TYPE.contains(ACCOUNT_TYPE_SYAMAS)) {
+        } else if (memberPosition.contains(ACCOUNT_TYPE_SYAMAS)) {
             navigationView.setCheckedItem(R.id.nav_home);
             navigationView.getMenu().getItem(6).getSubMenu().setGroupVisible(R.id.nav_group_syamas, true);
 
-        } else if (ACCOUNT_TYPE.contains(ACCOUNT_TYPE_MEMBER)) {
+        } else if (memberPosition.contains(ACCOUNT_TYPE_MEMBER)) {
+            navigationView.setCheckedItem(R.id.nav_home);
+
+        } else {
             navigationView.setCheckedItem(R.id.nav_home);
 
         }
     }
-
-
-
-//    public static Dashboard getInstance() {
-//        return instance;
-//    }
-//    public void clearApplicationData() {
-//        File cacheDirectory = getCacheDir();
-//        File applicationDirectory = new File(cacheDirectory.getParent());
-//        if (applicationDirectory.exists()) {
-//            String[] fileNames = applicationDirectory.list();
-//            for (String fileName : fileNames) {
-//                if (!fileName.equals("lib")) {
-//                    deleteFile(new File(applicationDirectory, fileName));
-//                }
-//            }
-//        }
-//    }
-//    public static boolean deleteFile(File file) {
-//        boolean deletedAll = true;
-//        if (file != null) {
-//            if (file.isDirectory()) {
-//                String[] children = file.list();
-//                for (int i = 0; i < children.length; i++) {
-//                    deletedAll = deleteFile(new File(file, children[i])) && deletedAll;
-//                }
-//            } else {
-//                deletedAll = file.delete();
-//            }
-//        }
-//
-//        return deletedAll;
-//    }
 
     private void setupFloatingActionMenuAndButtons() {
         //        setup Floating Action Menu & Buttons
@@ -607,9 +561,15 @@ public class Dashboard extends AppCompatActivity {
     TextView tvChurchNameAndVillage;
     @BindView(R.id.cardView_importantDates)
     CardView cvImportantDates;
+    @BindView(R.id.textView_title)TextView tvTitle;
+
+    @BindView(R.id.layout_infoHolder) LinearLayout llInfoHolder;
+    @BindView(R.id.layout_applyMembership)LinearLayout llApplyMembership;
+    @BindView(R.id.button_apply)
+    Button btnApply;
 
     void setupBackgroundHeader() {
-        SharedPrefManager spm = SharedPrefManager.getInstance(Dashboard.this);
+
         cvImportantDates.setVisibility(View.GONE);
         cvImportantDates.setOnClickListener(view -> {
             getSupportFragmentManager().beginTransaction()
@@ -620,25 +580,44 @@ public class Dashboard extends AppCompatActivity {
             if (floatingActionMenu.isOpened()) floatingActionMenu.close(true);
         });
 
-        tvUserName.setText(((String) spm.loadUserData(KEY_USER_FULL_NAME)));
+        tvTitle.setText("TOU-System");
+        if (Guru.getInt(KEY_MEMBER_ID, 0) == 0){
+            llInfoHolder.setVisibility(View.GONE);
+            llApplyMembership.setVisibility(View.VISIBLE);
 
-        StringBuilder position = new StringBuilder();
-        try {
-            JSONArray arrayPosition = new JSONArray ((String) spm.loadUserData(KEY_CHURCH_POSITION));
-            for (int i = 0; i < arrayPosition.length(); i++) {
-                int lastIndex = arrayPosition.length()-1;
-                String pos = (String) arrayPosition.get(i);
-                position= i==lastIndex? position.append(pos) : position.append(pos).append("\n");
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+            btnApply.setOnClickListener(v -> {
+                Snackbar.make(findViewById(android.R.id.content), "TESSTT", Snackbar.LENGTH_LONG).show();
+            });
+
+
+            return;
+        } else {
+            llInfoHolder.setVisibility(View.VISIBLE);
+            llApplyMembership.setVisibility(View.GONE);
         }
-        tvChurchPosition.setText(position);
 
-        tvColumn.setText(((String) spm.loadUserData(KEY_COLUMN_NAME_INDEX)));
+        tvUserName.setText(Guru.getString(KEY_USER_FULL_NAME, null));
 
-        String string = spm.loadUserData(KEY_CHURCH_NAME) + ", " + (spm.loadUserData(KEY_CHURCH_VILLAGE));
-        tvChurchNameAndVillage.setText(string);
+//        String position = ((String) spm.loadSharedData(KEY_MEMBER_CHURCH_POSITION, ACCOUNT_TYPE_USER));
+        tvChurchPosition.setText(Guru.getString(KEY_MEMBER_CHURCH_POSITION, null));
+
+        String column = Guru.getString(KEY_COLUMN_NAME_INDEX, null);
+        if (column != null) {
+            tvColumn.setVisibility(View.VISIBLE);
+            tvColumn.setText(column);
+        } else {
+            tvColumn.setVisibility(View.GONE);
+        }
+
+        String churchName = Guru.getString(KEY_CHURCH_NAME, null);
+        if (churchName != null) {
+            String churchVillage = Guru.getString(KEY_CHURCH_KELURAHAN, null);
+            String string = churchName + ", " + churchVillage;
+            tvChurchNameAndVillage.setText(string);
+        } else {
+            tvChurchNameAndVillage.setVisibility(View.GONE);
+        }
+
 
     }
 

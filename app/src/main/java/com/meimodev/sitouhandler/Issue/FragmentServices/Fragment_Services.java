@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.github.squti.guru.Guru;
 import com.google.android.material.snackbar.Snackbar;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.meimodev.sitouhandler.Constant;
@@ -40,6 +41,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Optional;
+import retrofit2.Call;
+
+import static com.meimodev.sitouhandler.Constant.*;
 
 public class Fragment_Services extends Fragment {
 
@@ -149,7 +153,7 @@ public class Fragment_Services extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if (getArguments() != null) {
-            keyIssue = getArguments().getString(Constant.KEY_SERVICE);
+            keyIssue = getArguments().getString(KEY_SERVICE);
             rootView = inflater.inflate(R.layout.fragment_issue_service, container, false);
             context = rootView.getContext();
 
@@ -184,9 +188,9 @@ public class Fragment_Services extends Fragment {
                 });
 
                 switch (keyIssue) {
-                    case Constant.KEY_SERVICE_KOLOM:
+                    case KEY_SERVICE_KOLOM:
                         break;
-                    case Constant.KEY_SERVICE_BIPRA:
+                    case KEY_SERVICE_BIPRA:
 
                         spinnerLevel.setVisibility(View.VISIBLE);
                         ArrayList<String> levelList = new ArrayList<>();
@@ -221,7 +225,7 @@ public class Fragment_Services extends Fragment {
                         });
 
                         break;
-                    case Constant.KEY_SERVICE_HUT:
+                    case KEY_SERVICE_HUT:
 
                         rgHUT.setVisibility(View.VISIBLE);
                         rgHUT.setOnCheckedChangeListener(((radioGroup, i) -> {
@@ -237,13 +241,13 @@ public class Fragment_Services extends Fragment {
                         }));
 
                         break;
-                    case Constant.KEY_SERVICE_PEMAKAMAN:
+                    case KEY_SERVICE_PEMAKAMAN:
 
                         break;
-                    case Constant.KEY_SERVICE_PERINGATAN:
+                    case KEY_SERVICE_PERINGATAN:
 
                         break;
-                    case Constant.KEY_SERVICE_KELUARGA:
+                    case KEY_SERVICE_KELUARGA:
                         spinnerFamilyServiceType.setVisibility(View.VISIBLE);
 
                         ArrayList<String> fServiceType = new ArrayList<>();
@@ -264,7 +268,7 @@ public class Fragment_Services extends Fragment {
                         });
 
                         break;
-                    case Constant.KEY_SERVICE_HARI_RAYA:
+                    case KEY_SERVICE_HARI_RAYA:
                         spinnerHariRayaType.setVisibility(View.VISIBLE);
                         ArrayList<String> hrType = new ArrayList<>();
                         hrType.add("Pilih Jenis Hari Raya : ");
@@ -298,7 +302,7 @@ public class Fragment_Services extends Fragment {
 
 
                         break;
-                    case Constant.KEY_SERVICE_SPECIAL:
+                    case KEY_SERVICE_SPECIAL:
 
                         spinnerSpecialType.setVisibility(View.VISIBLE);
                         ArrayList<String> spType = new ArrayList<>();
@@ -325,7 +329,7 @@ public class Fragment_Services extends Fragment {
 
 
                         break;
-                    case Constant.KEY_SERVICE_LAIN:
+                    case KEY_SERVICE_LAIN:
 
                         etNote.setVisibility(View.VISIBLE);
                         spinnerOtherType.setVisibility(View.VISIBLE);
@@ -365,7 +369,7 @@ public class Fragment_Services extends Fragment {
                         });
 
                         break;
-                    case Constant.KEY_SERVICE_SPECIAL_IBADAH_MINGGU:
+                    case KEY_SERVICE_SPECIAL_IBADAH_MINGGU:
                         llSundayService.setVisibility(View.VISIBLE);
                         btnAddName.setVisibility(View.GONE);
                         spinnerSundayServiceTime.setVisibility(View.VISIBLE);
@@ -522,7 +526,7 @@ public class Fragment_Services extends Fragment {
         Validator validator = new Validator();
         Map<String, String> validation = validator.validateInput(keyIssue, customButtonAdds, customEditTexts, materialSpinners, radioGroups);
 
-        if (keyIssue.contentEquals(Constant.KEY_SERVICE_SPECIAL_IBADAH_MINGGU)) {
+        if (keyIssue.contentEquals(KEY_SERVICE_SPECIAL_IBADAH_MINGGU)) {
             if (spinnerSundayServiceTime != null && validator.validateSpinner_isItemNotSelected(spinnerSundayServiceTime)) {
                 validator.displayErrorMessage(context, "Silahkan pilih jenis ibadah minggu");
                 return;
@@ -574,10 +578,10 @@ public class Fragment_Services extends Fragment {
         int index;
 
         switch (keyIssue) {
-            case Constant.KEY_SERVICE_KOLOM:
+            case KEY_SERVICE_KOLOM:
                 POST_financialAccountNumber = "1.6";
                 break;
-            case Constant.KEY_SERVICE_BIPRA:
+            case KEY_SERVICE_BIPRA:
                 String selectedBIPRA = spinnerBIPRA.getItems().get(spinnerBIPRA.getSelectedIndex()).toString();
                 String selectedArea = spinnerLevel.getItems().get(spinnerLevel.getSelectedIndex()).toString();
 
@@ -635,7 +639,7 @@ public class Fragment_Services extends Fragment {
                 }
 
                 break;
-            case Constant.KEY_SERVICE_HUT:
+            case KEY_SERVICE_HUT:
 
                 String selectedHUT = ((RadioButton) rgHUT.findViewById(rgHUT.getCheckedRadioButtonId())).getText().toString();
                 Log.e(TAG, "SELECTED HUT = " + selectedHUT);
@@ -647,12 +651,12 @@ public class Fragment_Services extends Fragment {
                 }
 
                 break;
-            case Constant.KEY_SERVICE_PEMAKAMAN:
+            case KEY_SERVICE_PEMAKAMAN:
                 POST_financialAccountNumber = "1.19.9";
                 break;
-            case Constant.KEY_SERVICE_PERINGATAN:
+            case KEY_SERVICE_PERINGATAN:
                 break;
-            case Constant.KEY_SERVICE_KELUARGA:
+            case KEY_SERVICE_KELUARGA:
                 String sFamilyService = spinnerFamilyServiceType.getItems().get(spinnerFamilyServiceType.getSelectedIndex()).toString();
                 Log.e(TAG, "SELECTED Family Service Type = " + sFamilyService);
 
@@ -671,7 +675,7 @@ public class Fragment_Services extends Fragment {
                 }
 
                 break;
-            case Constant.KEY_SERVICE_HARI_RAYA:
+            case KEY_SERVICE_HARI_RAYA:
 
                 String sHarRaya = spinnerHariRayaType.getItems().get(spinnerHariRayaType.getSelectedIndex()).toString();
                 Log.e(TAG, "SELECTED Hari Raya Type = " + sHarRaya);
@@ -717,7 +721,7 @@ public class Fragment_Services extends Fragment {
                 }
 
                 break;
-            case Constant.KEY_SERVICE_SPECIAL:
+            case KEY_SERVICE_SPECIAL:
                 String sSpecial = spinnerSpecialType.getItems().get(spinnerSpecialType.getSelectedIndex()).toString();
                 Log.e(TAG, "SELECTED Special Service Type = " + sSpecial);
 
@@ -745,7 +749,7 @@ public class Fragment_Services extends Fragment {
                 POST_note = sSpecial;
 
                 break;
-            case Constant.KEY_SERVICE_LAIN:
+            case KEY_SERVICE_LAIN:
                 Log.e(TAG, "NOTE = " + etNote.getText());
 
                 String sOtherType = spinnerOtherType.getItems().get(spinnerOtherType.getSelectedIndex()).toString();
@@ -795,7 +799,7 @@ public class Fragment_Services extends Fragment {
 
                 break;
 
-            case Constant.KEY_SERVICE_SPECIAL_IBADAH_MINGGU:
+            case KEY_SERVICE_SPECIAL_IBADAH_MINGGU:
                 String sTime = spinnerSundayServiceTime.getItems().get(spinnerSundayServiceTime.getSelectedIndex()).toString();
                 Log.e(TAG, "SUNDAY SERVICE TYPE = " + sTime);
 
@@ -830,7 +834,7 @@ public class Fragment_Services extends Fragment {
         POST_khadimId = s.isEmpty() ? "" : s;
         Log.e(TAG, "============================================");
 
-        if (keyIssue.contentEquals(Constant.KEY_SERVICE_SPECIAL_IBADAH_MINGGU)) {
+        if (keyIssue.contentEquals(KEY_SERVICE_SPECIAL_IBADAH_MINGGU)) {
             selectedNames = btnCoordinator.getSelectedList();
         }
         Log.e(TAG, "Names count : " + selectedNames.size());
@@ -859,7 +863,7 @@ public class Fragment_Services extends Fragment {
         Log.e(TAG, "Place : " + etPlace.getText());
         POST_place = etPlace.getText().toString();
 
-        if (keyIssue.contentEquals(Constant.KEY_SERVICE_SPECIAL_IBADAH_MINGGU)) {
+        if (keyIssue.contentEquals(KEY_SERVICE_SPECIAL_IBADAH_MINGGU)) {
             Adding_RecyclerModel selectedCoordinator = btnCoordinator.getSelectedList().get(0);
             Log.e(TAG, "---------------------SELECTED COORDINATOR------------------------------");
             Log.e(TAG, "Name : " + selectedCoordinator.getName());
@@ -876,7 +880,7 @@ public class Fragment_Services extends Fragment {
         Log.e(TAG, "------------------------------------");
         Log.e(TAG, ":REQUEST TO SERVER:");
         Log.e(TAG, "------------------------------------");
-        Log.e(TAG, "issue_by_member_id: " + SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID));
+        Log.e(TAG, "issue_by_member_id: " + Guru.getInt(KEY_MEMBER_ID, 0));
         Log.e(TAG, "key_issue: " + keyIssue);
         Log.e(TAG, "issued_member_data: " + POST_issuedMemberData);
         Log.e(TAG, "date: " + POST_date);
@@ -887,9 +891,8 @@ public class Fragment_Services extends Fragment {
         Log.e(TAG, "financial_account_number: " + POST_financialAccountNumber);
 
         IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
-
-        requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssueService(
-                ((int) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
+        Call call =RetrofitClient.getInstance(null).getApiServices().setIssueService(
+                Guru.getInt(KEY_MEMBER_ID, 0),
                 keyIssue,
                 POST_issuedMemberData,
                 POST_date,
@@ -898,7 +901,7 @@ public class Fragment_Services extends Fragment {
                 POST_note,
                 POST_khadimId,
                 POST_financialAccountNumber
-        ));
+        );
 
         requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
@@ -909,7 +912,7 @@ public class Fragment_Services extends Fragment {
             @Override
             public void onSuccess(APIWrapper res, String message) {
 
-                Constant.displayDialog(
+                displayDialog(
                         context,
                         "Pengajuan Berhasil",
                         message,
@@ -917,25 +920,17 @@ public class Fragment_Services extends Fragment {
                         (dialogInterface, i) -> {
                         },
                         null,
-                        dialogInterface -> context.sendBroadcast(new Intent(Constant.ACTION_ACTIVITY_FINISH))
+                        dialogInterface -> context.sendBroadcast(new Intent(ACTION_ACTIVITY_FINISH))
                 );
             }
 
             @Override
             public void onRetry() {
-                requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssueService(
-                        ((int) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
-                        keyIssue,
-                        POST_issuedMemberData,
-                        POST_date,
-                        POST_time,
-                        POST_place,
-                        POST_note,
-                        POST_khadimId,
-                        POST_financialAccountNumber
-                ));
+                requestHandler.enqueue(call);
             }
         });
+        requestHandler.enqueue(call);
+
     }
 
 

@@ -15,7 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.squti.guru.Guru;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.CustomWidget.CustomEditText;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Issue.Adding;
@@ -35,6 +37,8 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
+
+import static com.meimodev.sitouhandler.Constant.*;
 
 public class PntSym_InputForm extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "PntSym_InputForm";
@@ -122,9 +126,9 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
         ButterKnife.bind(this);
 
         String churchName =
-                SharedPrefManager.load(this, SharedPrefManager.KEY_CHURCH_NAME) + ", "
-                        + SharedPrefManager.load(this, SharedPrefManager.KEY_CHURCH_VILLAGE);
-        String column = SharedPrefManager.load(this, SharedPrefManager.KEY_COLUMN_NAME_INDEX).toString();
+                Guru.getString(KEY_CHURCH_NAME, null) + ", "
+                        + Guru.getString(KEY_CHURCH_KELURAHAN, null);
+        String column = Guru.getString(KEY_COLUMN_NAME_INDEX, null);
         tvChurchName.setText(churchName);
         tvColumn.setText(column);
         etDOB.setAsDatePicker(getSupportFragmentManager());
@@ -393,12 +397,12 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
             // == LOGGING inputs data ==
             Log.e(TAG, "====================================== INPUT DATA ======================================");
             Log.e(TAG, "--------------------------------------- ISSUED BY --------------------------------------");
-            Log.e(TAG, "Issued By: " + SharedPrefManager.load(this, SharedPrefManager.KEY_USER_FULL_NAME).toString());
+            Log.e(TAG, "Issued By: " + Guru.getString(KEY_USER_FULL_NAME, null));
             Log.e(TAG, "Church Position: "
-                    + SharedPrefManager.load(this, SharedPrefManager.KEY_CHURCH_POSITION).toString()
+                    + Guru.getString(KEY_MEMBER_CHURCH_POSITION, null)
                     + ", "
-                    + SharedPrefManager.load(this, SharedPrefManager.KEY_COLUMN_NAME_INDEX
-            ));
+                    + Guru.getString(KEY_COLUMN_NAME_INDEX, null)
+            );
             Log.e(TAG, "----------------------------------------------------------------------------------------");
             Log.e(TAG, "Operation Type: " + OPERATION_TYPE);
             Log.e(TAG, "Church Name: " + tvChurchName.getText());
@@ -458,7 +462,7 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
                 case ADD_MEMBER:
                     // setup end button to ADD BUTTON
                     req.enqueue(RetrofitClient.getInstance(null).getApiServices().setMemberUserData(
-                            ((int) SharedPrefManager.load(this, SharedPrefManager.KEY_MEMBER_ID)),
+                            Guru.getInt(KEY_MEMBER_ID, 0),
                             firstName,
                             middleName,
                             lastName,
@@ -494,7 +498,7 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
                         @Override
                         public void onRetry() {
                             req.enqueue(RetrofitClient.getInstance(null).getApiServices().setMemberUserData(
-                                    ((int) SharedPrefManager.load(PntSym_InputForm.this, SharedPrefManager.KEY_MEMBER_ID)),
+                                    Guru.getInt(KEY_MEMBER_ID, 0),
                                     firstName,
                                     middleName,
                                     lastName,
@@ -516,7 +520,7 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
 
                         Call call = RetrofitClient.getInstance(null).getApiServices().editMember(
                                 MEMBER_ID,
-                                ((int) SharedPrefManager.load(PntSym_InputForm.this, SharedPrefManager.KEY_MEMBER_ID)),
+                                Guru.getInt(KEY_MEMBER_ID, 0),
                                 firstName,
                                 middleName,
                                 lastName,

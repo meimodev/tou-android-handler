@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.squti.guru.Guru;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.IssueDetail.IssueDetail;
@@ -34,6 +35,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.meimodev.sitouhandler.Constant.*;
 
 public class NavFragment_Secretary_Papers extends Fragment implements View.OnClickListener {
 
@@ -93,7 +96,7 @@ public class NavFragment_Secretary_Papers extends Fragment implements View.OnCli
 
         IssueRequestHandler req = new IssueRequestHandler(rootView);
         req.enqueue(RetrofitClient.getInstance(null).getApiServices().getIssuedLetters(
-                ((int) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID))
+                Guru.getInt(KEY_MEMBER_ID, 0)
         ));
 
         req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
@@ -103,32 +106,28 @@ public class NavFragment_Secretary_Papers extends Fragment implements View.OnCli
             }
 
             @Override
-            public void onSuccess(APIWrapper res, String message) {
+            public void onSuccess(APIWrapper res, String message) throws JSONException {
                 inboundLetter = new ArrayList<>();
                 outboundLetter = new ArrayList<>();
 
-                try {
-                    JSONArray arr = res.getDataArray();
-                    for (int i = 0; i < arr.length(); i++) {
-                        JSONObject obj = arr.getJSONObject(i);
-                        if (obj.getString("letter_type").contentEquals(Constant.LETTER_TYPE_OUTBOUND)) {
-                            outboundLetter.add(new NavFragment_Secretary_Papers_RecyclerModel(
-                                    obj.getInt("issue_id"),
-                                    obj.getString("key_issue"),
-                                    obj.getString("letter_entry_number")
-                            ));
-                        } else if (obj.getString("letter_type").contentEquals(Constant.LETTER_TYPE_INBOUND)) {
-                            inboundLetter.add(new NavFragment_Secretary_Papers_RecyclerModel(
-                                    obj.getInt("issue_id"),
-                                    obj.getString("key_issue"),
-                                    obj.getString("letter_entry_number")
-                            ));
-                        }
+                JSONArray arr = res.getDataArray();
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject obj = arr.getJSONObject(i);
+                    if (obj.getString("letter_type").contentEquals(LETTER_TYPE_OUTBOUND)) {
+                        outboundLetter.add(new NavFragment_Secretary_Papers_RecyclerModel(
+                                obj.getInt("issue_id"),
+                                obj.getString("key_issue"),
+                                obj.getString("letter_entry_number")
+                        ));
+                    } else if (obj.getString("letter_type").contentEquals(LETTER_TYPE_INBOUND)) {
+                        inboundLetter.add(new NavFragment_Secretary_Papers_RecyclerModel(
+                                obj.getInt("issue_id"),
+                                obj.getString("key_issue"),
+                                obj.getString("letter_entry_number")
+                        ));
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "onSuccess: JSON ERROR " + e.getMessage());
                 }
+
 
                 if (isOutbound) {
                     rvLetters.setAdapter(new NavFragment_Secretary_Papers_RecyclerAdapter(context, outboundLetter, recyclerItemClickListener));
@@ -143,9 +142,7 @@ public class NavFragment_Secretary_Papers extends Fragment implements View.OnCli
 
             @Override
             public void onRetry() {
-                req.enqueue(RetrofitClient.getInstance(null).getApiServices().getIssuedLetters(
-                        ((int) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID))
-                ));
+               fetchData(isOutbound);
             }
         });
 
@@ -155,13 +152,13 @@ public class NavFragment_Secretary_Papers extends Fragment implements View.OnCli
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.textView_sortOut:
-                Constant.toggleSort(context, tvSortOut, true);
-                Constant.toggleSort(context, tvSortIn, false);
+                toggleSort(context, tvSortOut, true);
+                toggleSort(context, tvSortIn, false);
                 fetchData(true);
                 break;
             case R.id.textView_sortIn:
-                Constant.toggleSort(context, tvSortOut, false);
-                Constant.toggleSort(context, tvSortIn, true);
+                toggleSort(context, tvSortOut, false);
+                toggleSort(context, tvSortIn, true);
                 fetchData(false);
                 break;
         }

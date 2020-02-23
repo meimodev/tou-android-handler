@@ -76,7 +76,8 @@ dependencies {
 //   ImageView Badge
     implementation 'com.github.nikartm:image-support:1.0.5'
 
-//    Saripaar Validator
+//    Guru : Shared Preference manager
+    implementation'com.github.squti:Guru:1.0.1'
 
 }
 apply plugin: 'com.google.gms.google-services'

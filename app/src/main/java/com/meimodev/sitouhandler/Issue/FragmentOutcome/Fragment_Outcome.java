@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.github.squti.guru.Guru;
 import com.google.android.material.snackbar.Snackbar;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.meimodev.sitouhandler.Constant;
@@ -41,6 +42,9 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+
+import static com.meimodev.sitouhandler.Constant.*;
 
 public class Fragment_Outcome extends Fragment {
     private final String TAG = "Fragment_Outcome : ";
@@ -195,7 +199,7 @@ public class Fragment_Outcome extends Fragment {
 
 
         if (getArguments() != null) {
-            keyIssue = getArguments().getString(Constant.KEY_OUTCOME);
+            keyIssue = getArguments().getString(KEY_OUTCOME);
 
             if (keyIssue != null) {
 
@@ -211,11 +215,11 @@ public class Fragment_Outcome extends Fragment {
                         LinearLayout.LayoutParams.WRAP_CONTENT);
 
                 switch (keyIssue) {
-                    case Constant.KEY_OUTCOME_CENTRALIZE:
+                    case KEY_OUTCOME_CENTRALIZE:
                         rgSentralisasi.setVisibility(View.VISIBLE);
 
                         break;
-                    case Constant.KEY_OUTCOME_PAYCHECK:
+                    case KEY_OUTCOME_PAYCHECK:
                         llPaycheck.setVisibility(View.VISIBLE);
                         llSpinnerStaff.setVisibility(View.GONE);
 
@@ -332,7 +336,7 @@ public class Fragment_Outcome extends Fragment {
 
 
                         break;
-                    case Constant.KEY_OUTCOME_PENGADAAN:
+                    case KEY_OUTCOME_PENGADAAN:
                         llPengadaan.setVisibility(View.VISIBLE);
                         etAmount.setVisibility(View.GONE);
                         etAmount.setEnabled(false);
@@ -414,7 +418,7 @@ public class Fragment_Outcome extends Fragment {
                         });
 
                         break;
-                    case Constant.KEY_OUTCOME_FASILITAS_PENUNJANG_PELAYAN:
+                    case KEY_OUTCOME_FASILITAS_PENUNJANG_PELAYAN:
                         llPenunjang.setVisibility(View.VISIBLE);
 //                        etAmount.setEnabled(false);
 
@@ -441,7 +445,7 @@ public class Fragment_Outcome extends Fragment {
                         });
 
                         break;
-                    case Constant.KEY_OUTCOME_RAPAT_SIDANG_KONVEN:
+                    case KEY_OUTCOME_RAPAT_SIDANG_KONVEN:
                         llRapat.setVisibility(View.VISIBLE);
 
                         costs = new ArrayList<>();
@@ -482,7 +486,7 @@ public class Fragment_Outcome extends Fragment {
 
 
                         break;
-                    case Constant.KEY_OUTCOME_DIAKONIA_BESASISWA:
+                    case KEY_OUTCOME_DIAKONIA_BESASISWA:
                         llDiakonia.setVisibility(View.VISIBLE);
 
                         btnAddName.setVisibility(View.GONE);
@@ -521,7 +525,7 @@ public class Fragment_Outcome extends Fragment {
 
 
                         break;
-                    case Constant.KEY_OUTCOME_PEMBEKALAN_PELATIHAN:
+                    case KEY_OUTCOME_PEMBEKALAN_PELATIHAN:
                         llPembekalan.setVisibility(View.VISIBLE);
 
                         costs = new ArrayList<>();
@@ -541,7 +545,7 @@ public class Fragment_Outcome extends Fragment {
 
 
                         break;
-                    case Constant.KEY_OUTCOME_SUBSIDI_BIPRA_IBADAH_KEGIATAN:
+                    case KEY_OUTCOME_SUBSIDI_BIPRA_IBADAH_KEGIATAN:
                         llSubsidi.setVisibility(View.VISIBLE);
 
                         costs = new ArrayList<>();
@@ -580,7 +584,7 @@ public class Fragment_Outcome extends Fragment {
 
 
                         break;
-                    case Constant.KEY_OUTCOME_OTHER:
+                    case KEY_OUTCOME_OTHER:
                         llOther.setVisibility(View.VISIBLE);
 
                         costs = new ArrayList<>();
@@ -612,7 +616,7 @@ public class Fragment_Outcome extends Fragment {
 //                        }
 
                         break;
-                    case Constant.KEY_OUTCOME_OTHER_NO_ACCOUNT:
+                    case KEY_OUTCOME_OTHER_NO_ACCOUNT:
                         llotherNoAccount.setVisibility(View.VISIBLE);
 
 
@@ -729,7 +733,7 @@ public class Fragment_Outcome extends Fragment {
         int index;
 
         switch (keyIssue) {
-            case Constant.KEY_OUTCOME_CENTRALIZE:
+            case KEY_OUTCOME_CENTRALIZE:
 
                 RadioButton checked = rgSentralisasi.findViewById(rgSentralisasi.getCheckedRadioButtonId());
                 if (checked.getText().toString().contains("Sinode"))
@@ -744,7 +748,7 @@ public class Fragment_Outcome extends Fragment {
                 Log.e(TAG, "SELECTED OPTION = " + checked);
 
                 break;
-            case Constant.KEY_OUTCOME_PAYCHECK:
+            case KEY_OUTCOME_PAYCHECK:
 
                 String selectedType = spinnerPaycheckType.getItems().get(spinnerPaycheckType.getSelectedIndex()).toString();
                 String selectedStaff = spinnerStaff.getItems().get(spinnerStaff.getSelectedIndex()).toString();
@@ -761,7 +765,7 @@ public class Fragment_Outcome extends Fragment {
                                 + etAmount.getText().toString().replace(",", ".");
 
                 break;
-            case Constant.KEY_OUTCOME_PENGADAAN:
+            case KEY_OUTCOME_PENGADAAN:
                 Log.e(TAG, "DETAIL COUNT = " + pengadaanViews.size());
 
                 int selectedSpinnerIndex = spinnerPengadaanType.getSelectedIndex();
@@ -838,7 +842,7 @@ public class Fragment_Outcome extends Fragment {
                         + etAmount.getText().toString().replace(",", ".");
 
                 break;
-            case Constant.KEY_OUTCOME_FASILITAS_PENUNJANG_PELAYAN:
+            case KEY_OUTCOME_FASILITAS_PENUNJANG_PELAYAN:
                 int selectedIndex = spinnerFacility.getSelectedIndex();
                 String selectedFacility = spinnerFacility.getItems().get(selectedIndex).toString();
                 Log.e(TAG, "COST NAME = " + selectedFacility);
@@ -886,7 +890,7 @@ public class Fragment_Outcome extends Fragment {
                         + etAmount.getText().toString().replace(",", ".");
 
                 break;
-            case Constant.KEY_OUTCOME_RAPAT_SIDANG_KONVEN:
+            case KEY_OUTCOME_RAPAT_SIDANG_KONVEN:
 
                 int selectedIndex1 = spinnerRapatSidangKonven.getSelectedIndex();
                 String selectedSpinnerText = spinnerRapatSidangKonven.getItems().get(selectedIndex1).toString();
@@ -975,7 +979,7 @@ public class Fragment_Outcome extends Fragment {
 
 
                 break;
-            case Constant.KEY_OUTCOME_DIAKONIA_BESASISWA:
+            case KEY_OUTCOME_DIAKONIA_BESASISWA:
                 Log.e(TAG, "NAMES COUNT = " + btnAddName.getSelectedList().size());
                 index = 1;
                 for (Adding_RecyclerModel model : btnAddName.getSelectedList()) {
@@ -991,7 +995,7 @@ public class Fragment_Outcome extends Fragment {
                 String diakoniaDetail = etDiakoniaDetail.getText().toString();
                 Log.e(TAG, "Diakonia / Beasiswa Note = " + diakoniaDetail);
 
-                POST_issuedMemberData = Constant.encodeMemberData(btnAddName);
+                POST_issuedMemberData = encodeMemberData(btnAddName);
 
                 if (rgDiakonia.getChildAt(0).getId() == rgDiakonia.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.14.1.2";
@@ -1028,7 +1032,7 @@ public class Fragment_Outcome extends Fragment {
                         + etAmount.getText().toString().replace(",", ".");
 
                 break;
-            case Constant.KEY_OUTCOME_PEMBEKALAN_PELATIHAN:
+            case KEY_OUTCOME_PEMBEKALAN_PELATIHAN:
                 Log.e(TAG, "Pembekalan / Pelatihan NOTE = " + etPembekalanDetail.getText().toString());
                 String selectedRadioText = ((RadioButton) rgPembekalan.findViewById(rgPembekalan.getCheckedRadioButtonId())).getText().toString();
                 Log.e(TAG, "SELECTED OPTION = " + selectedRadioText);
@@ -1056,7 +1060,7 @@ public class Fragment_Outcome extends Fragment {
 
 
                 break;
-            case Constant.KEY_OUTCOME_SUBSIDI_BIPRA_IBADAH_KEGIATAN:
+            case KEY_OUTCOME_SUBSIDI_BIPRA_IBADAH_KEGIATAN:
                 Log.e(TAG, "Subsidi BIPRA NOTE = " + etSubsidiDetail.getText().toString());
                 String selectedSubsidi = spinnerSubsidi.getItems().get(spinnerSubsidi.getSelectedIndex()).toString();
                 if (spinnerSubsidiIbadah.getVisibility() == View.VISIBLE) {
@@ -1107,7 +1111,7 @@ public class Fragment_Outcome extends Fragment {
                         + etAmount.getText().toString().replace(",", ".");
 
                 break;
-            case Constant.KEY_OUTCOME_OTHER:
+            case KEY_OUTCOME_OTHER:
                 int selectedOtherIndex = spinnerOther.getSelectedIndex();
                 String selectedOther = spinnerOther.getItems().get(selectedOtherIndex).toString();
 
@@ -1152,7 +1156,7 @@ public class Fragment_Outcome extends Fragment {
                         + ", Jumlah keseluruhan Rp. "
                         + etAmount.getText().toString().replace(",", ".");
                 break;
-            case Constant.KEY_OUTCOME_OTHER_NO_ACCOUNT:
+            case KEY_OUTCOME_OTHER_NO_ACCOUNT:
                 POST_accountNumberKey = "3.999";
                 Log.e(TAG, "Lainnya No account NOTE : " + etNote.getText());
 
@@ -1167,7 +1171,7 @@ public class Fragment_Outcome extends Fragment {
         Log.e(TAG, "------------------------------------");
         Log.e(TAG, ":REQUEST TO SERVER:");
         Log.e(TAG, "------------------------------------");
-        Log.e(TAG, "member_id: " + SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID));
+        Log.e(TAG, "member_id: " + Guru.getInt(KEY_MEMBER_ID, 0));
         Log.e(TAG, "keyIssue: " + keyIssue);
         Log.e(TAG, "amount: " + etAmount.getText().toString().trim());
         Log.e(TAG, "accountNumberKey: " + POST_accountNumberKey);
@@ -1176,9 +1180,8 @@ public class Fragment_Outcome extends Fragment {
         Log.e(TAG, "description: " + POST_description);
 
         IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
-
-        requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
-                ((Integer) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
+        Call call =RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
+                Guru.getInt(KEY_MEMBER_ID, 0),
                 keyIssue,
                 "-" + etAmount.getText().toString().trim().replace(",", ""),
                 POST_accountNumberKey,
@@ -1186,7 +1189,7 @@ public class Fragment_Outcome extends Fragment {
                 POST_note,
                 POST_description,
                 0
-        ));
+        );
         requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
             public void onTry() {
@@ -1196,7 +1199,7 @@ public class Fragment_Outcome extends Fragment {
             @Override
             public void onSuccess(APIWrapper res, String message) {
 
-                Constant.displayDialog(
+                displayDialog(
                         context,
                         "Pengajuan Berhasil",
                         message,
@@ -1205,25 +1208,17 @@ public class Fragment_Outcome extends Fragment {
                         },
                         null,
                         dialogInterface -> {
-                            context.sendBroadcast(new Intent(Constant.ACTION_ACTIVITY_FINISH));
+                            context.sendBroadcast(new Intent(ACTION_ACTIVITY_FINISH));
                         }
                 );
             }
 
             @Override
             public void onRetry() {
-                requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
-                        ((Integer) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
-                        keyIssue,
-                        "-" + etAmount.getText().toString().trim().replace(",", ""),
-                        POST_accountNumberKey,
-                        POST_issuedMemberData,
-                        POST_note,
-                        POST_description,
-                        0
-                ));
+                requestHandler.enqueue(call);
             }
         });
+        requestHandler.enqueue(call);
 
     }
 

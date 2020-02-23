@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView_underConstruction"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_cog"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView_titleMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/primaryText"
+            android:text="Fitur dalam perbaikan"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageView_underConstruction"/>
+
+        <TextView
+            android:id="@+id/textView_contentMessage"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAlignment="center"
+            android:layout_height="wrap_content"
+            android:text="Yup! we working as hard as humanly possible, with super tight ninja pants budget and insuffiien amount of AWESOME PEOPLE needed to collaborate with....\nBtw are you an AWESOME PEOPLE ? ..."
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView_titleMessage"/>
+
+
+        <TextView
+            android:id="@+id/textView_footerMessage"
+            android:layout_width="0dp"
+            android:textAlignment="center"
+            android:background="#FFFFFF"
+            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content"
+            android:text="@string/meimo_footer_with_emoji"
+            android:textSize="11sp"
+            android:fontFamily="@font/roboto_thin"
+            android:textColor="@color/secondaryText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView_contentMessage"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.core.widget.NestedScrollView>

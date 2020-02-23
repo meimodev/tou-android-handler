@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.github.squti.guru.Guru;
 import com.google.android.material.snackbar.Snackbar;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.CustomWidget.CustomEditText;
@@ -32,6 +33,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.meimodev.sitouhandler.Constant.*;
 
 public class NavFragment_Priest_SeeServiceArea extends Fragment implements View.OnClickListener {
 
@@ -59,7 +62,7 @@ public class NavFragment_Priest_SeeServiceArea extends Fragment implements View.
 
         tvTitle.setText("WILAYAH PELAYANAN");
 
-        progress = Constant.makeProgressCircle(rootView);
+        progress = makeProgressCircle(rootView);
 
         rootView.setOnClickListener(this);
         return rootView;
@@ -68,9 +71,6 @@ public class NavFragment_Priest_SeeServiceArea extends Fragment implements View.
     private void fetchData() {
         IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
 
-        requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().getServiceArea(
-                ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
-        ));
         requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
             public void onTry() {
@@ -104,11 +104,13 @@ public class NavFragment_Priest_SeeServiceArea extends Fragment implements View.
 
             @Override
             public void onRetry() {
-                requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().getServiceArea(
-                        ((int) SharedPrefManager.getInstance(context).loadUserData(SharedPrefManager.KEY_MEMBER_ID))
-                ));
+              fetchData();
             }
         });
+
+        requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().getServiceArea(
+                Guru.getInt(KEY_MEMBER_ID, 0)
+        ));
     }
 
     private void setupCardViews() {
@@ -134,7 +136,7 @@ public class NavFragment_Priest_SeeServiceArea extends Fragment implements View.
             etTo.setFocusable(false);
 
             View.OnClickListener clickListener = view1 -> {
-                context.sendBroadcast(new Intent(Constant.ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED));
+                context.sendBroadcast(new Intent(ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED));
                 Snackbar.make(rootView, "Perubahan hanya bisa dilakukan oleh KETUA JEMAAT", Snackbar.LENGTH_SHORT).show();
             };
             cvViewHolder.setOnClickListener(clickListener);
@@ -162,7 +164,7 @@ public class NavFragment_Priest_SeeServiceArea extends Fragment implements View.
 
     @Override
     public void onClick(View view) {
-        context.sendBroadcast(new Intent(Constant.ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED));
+        context.sendBroadcast(new Intent(ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED));
     }
 
     @Override

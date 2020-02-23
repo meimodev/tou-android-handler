@@ -7,13 +7,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@color/backGround_fragment"
+    android:background="@color/background"
     tools:context=".Dashboard.Dashboard">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/transparent">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide"
@@ -28,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:animateLayoutChanges="true"
-            android:background="@color/colorAccent"
+            android:background="@color/colorPrimary"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             app:layout_constraintBottom_toBottomOf="@id/guide"
@@ -53,34 +54,24 @@
                 android:layout_height="wrap_content"
                 android:animateLayoutChanges="true"
                 android:orientation="vertical"
+                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/layout_guide"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <LinearLayout
-                    android:id="@+id/layout_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toTopOf="@id/layout_infoHolder"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                <!--                <LinearLayout-->
+                <!--                    android:id="@+id/layout_title"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:gravity="center"-->
+                <!--                    android:orientation="vertical"-->
+                <!--                    app:layout_constraintBottom_toTopOf="@id/layout_infoHolder"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent">-->
 
-                    <TextView
-                        android:id="@+id/textView_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:paddingTop="4dp"
-                        android:paddingBottom="4dp"
-                        android:text="TITLE"
-                        android:textColor="@color/mdtp_white"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
 
-                </LinearLayout>
+                <!--                </LinearLayout>-->
 
                 <TextView
                     android:id="@+id/textView_userName"
@@ -96,19 +87,19 @@
                 <TextView
                     android:id="@+id/textView_churchPosition"
                     android:layout_width="match_parent"
-                    android:textColor="@color/ButtonText_LightGrey"
                     android:layout_height="wrap_content"
                     android:paddingTop="2dp"
                     android:text="Bendahara Jemaat"
+                    android:textColor="@color/ButtonText_LightGrey"
                     android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/textView_column"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/ButtonText_LightGrey"
                     android:paddingBottom="4dp"
                     android:text="Kolom 234"
+                    android:textColor="@color/ButtonText_LightGrey"
                     android:textSize="15sp" />
 
                 <TextView
@@ -116,13 +107,62 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/ButtonText_LightGrey"
                     android:drawableStart="@drawable/ic_house_24px"
                     android:drawablePadding="8dp"
                     android:fontFamily="@font/visiby_round_cf_regular"
-                    android:text="Bait-El, Wawalintouwaw" />
+                    android:text="Bait-El, Wawalintouwaw"
+                    android:textColor="@color/ButtonText_LightGrey" />
 
             </LinearLayout>
+
+            <!--Apply Membership holder-->
+            <LinearLayout
+                android:id="@+id/layout_applyMembership"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/layout_guide"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nikmati fitur penuh layanan ini dengan mendaftarkan diri sebagai ANGGOTA GEREJA dari gereja yang menggunakan TOU-System.\nSegera daftarkan diri."
+                    android:textAlignment="center"
+                    android:textColor="@color/foreground" />
+
+                <Button
+                    android:id="@+id/button_apply"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/colorAccent4End"
+                    android:layout_marginTop="8dp"
+                    android:text="DAFTARKAN DIRI" />
+
+            </LinearLayout>
+
+            <!--Title-->
+            <TextView
+                android:id="@+id/textView_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TITLE"
+                android:textAllCaps="true"
+                android:textColor="@color/mdtp_white"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!--Important Date Holder-->
             <androidx.cardview.widget.CardView
@@ -131,6 +171,7 @@
                 android:layout_height="48dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="4dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="@color/colorAccent"
                 app:cardElevation="0dp"
                 app:layout_constraintBottom_toBottomOf="@id/layout_infoHolder"
@@ -184,9 +225,9 @@
         android:id="@+id/floatingActionMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         fab:menu_animationDelayPerItem="50"
         fab:menu_backgroundColor="@android:color/transparent"
         fab:menu_buttonSpacing="0dp"
@@ -221,6 +262,16 @@
         fab:menu_shadowXOffset="1dp"
         fab:menu_shadowYOffset="3dp"
         fab:menu_showShadow="true" />
+
+    <!--Bottom Nav Bar-->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavBar"
+        android:background="@color/mdtp_white"
+        app:menu="@menu/bottom_nav"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_height="wrap_content"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

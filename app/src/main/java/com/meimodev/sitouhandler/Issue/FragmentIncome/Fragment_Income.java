@@ -26,6 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.github.squti.guru.Guru;
 import com.google.android.material.snackbar.Snackbar;
 import com.hmomeni.progresscircula.ProgressCircula;
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -57,6 +58,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.meimodev.sitouhandler.Constant.*;
 
 public class Fragment_Income extends Fragment {
     private static final String TAG = "Fragment_Income";
@@ -199,7 +202,7 @@ public class Fragment_Income extends Fragment {
         issueRequestHandler = new IssueRequestHandler(rootView);
 
         if (getArguments() != null) {
-            keyIssue = getArguments().getString(Constant.KEY_INCOME);
+            keyIssue = getArguments().getString(KEY_INCOME);
 
             if (keyIssue != null) {
                 tvTitle.setText("Pengajuan Pemasukan ".concat(keyIssue));
@@ -208,7 +211,7 @@ public class Fragment_Income extends Fragment {
                 warnAnonymity = false;
 
                 switch (keyIssue) {
-                    case Constant.KEY_INCOME_PERSEMBAHAN_IBADAH:
+                    case KEY_INCOME_PERSEMBAHAN_IBADAH:
                         warnAnonymity = false;
                         llInfoService.setVisibility(View.VISIBLE);
 
@@ -533,7 +536,7 @@ public class Fragment_Income extends Fragment {
                         etExtraTotal.setAsThousandSeparator();
 
                         break;
-                    case Constant.KEY_INCOME_SAMPUL_SYUKUR:
+                    case KEY_INCOME_SAMPUL_SYUKUR:
                         llDetails.setVisibility(View.VISIBLE);
                         warnAnonymity = true;
                         btnAddName.setOnClickListener(view -> {
@@ -602,7 +605,7 @@ public class Fragment_Income extends Fragment {
 
                         break;
 
-                    case Constant.KEY_INCOME_LAINNYA:
+                    case KEY_INCOME_LAINNYA:
 //                        switchChurch.setVisibility(View.GONE);
                         llOther.setVisibility(View.VISIBLE);
                         warnAnonymity = false;
@@ -634,7 +637,7 @@ public class Fragment_Income extends Fragment {
                         }
 
                         break;
-                    case Constant.KEY_INCOME_LAINNYA_NO_ACCOUNT:
+                    case KEY_INCOME_LAINNYA_NO_ACCOUNT:
                         etOther_Note.setVisibility(View.VISIBLE);
                         warnAnonymity = false;
 
@@ -735,7 +738,7 @@ public class Fragment_Income extends Fragment {
         }
 
         // validate "Service Data" if any record matching to "ID ibadah" text
-        if (keyIssue.contentEquals(Constant.KEY_INCOME_PERSEMBAHAN_IBADAH)) {
+        if (keyIssue.contentEquals(KEY_INCOME_PERSEMBAHAN_IBADAH)) {
             if (!isServiceDataFound) {
                 validator.displayErrorMessage(context, "Data Ibadah belum valid, silahkan masukan ID ibadah yang valid dan mempunyai data ibadah");
                 return;
@@ -743,7 +746,7 @@ public class Fragment_Income extends Fragment {
         }
 
         // validate "Name & Detail" in Sampul Syukur confirm if anonymous
-        if (keyIssue.contentEquals(Constant.KEY_INCOME_SAMPUL_SYUKUR) && warnAnonymity) {
+        if (keyIssue.contentEquals(KEY_INCOME_SAMPUL_SYUKUR) && warnAnonymity) {
             if (validator.validateButton_isNotSelectingAnything(btnAddName)) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -803,7 +806,7 @@ public class Fragment_Income extends Fragment {
             Log.e(TAG, "Amount - " + etAmount.getText());
 
             switch (keyIssue) {
-                case Constant.KEY_INCOME_PERSEMBAHAN_IBADAH:
+                case KEY_INCOME_PERSEMBAHAN_IBADAH:
                     Log.e(TAG, "Service ID: " + etFindId.getText());
                     Log.e(TAG, "Service Key Issue: " + keyIssue);
                     Log.e(TAG, "Atas Nama: " + tvInfoName.getText());
@@ -969,7 +972,7 @@ public class Fragment_Income extends Fragment {
                             + etAmount.getText().toString().replace(",", "."));
 
                     break;
-                case Constant.KEY_INCOME_SAMPUL_SYUKUR:
+                case KEY_INCOME_SAMPUL_SYUKUR:
 
                     Log.e(TAG, "NAMES count : " + btnAddName.getSelectedList().size());
                     int index = 1;
@@ -1036,7 +1039,7 @@ public class Fragment_Income extends Fragment {
                         POST_accountNumberKey = "1.31";
                     }
 
-                    POST_issuedMemberData = Constant.encodeMemberData(btnAddName);
+                    POST_issuedMemberData = encodeMemberData(btnAddName);
 
                     String detailHolder = "";
                     for (View v : btnAddDetails.getSelectedView()) {
@@ -1068,7 +1071,7 @@ public class Fragment_Income extends Fragment {
                                     + detailHolder
                     );
                     break;
-                case Constant.KEY_INCOME_LAINNYA:
+                case KEY_INCOME_LAINNYA:
                     Log.e(TAG, "Detail : " + etOtherDetail.getText().toString());
                     RadioButton selectedRadioButton = rgOther.findViewById(rgOther.getCheckedRadioButtonId());
                     Log.e(TAG, "SELECTED_OPTION : " + selectedRadioButton.getText());
@@ -1107,7 +1110,7 @@ public class Fragment_Income extends Fragment {
                     );
 
                     break;
-                case Constant.KEY_INCOME_LAINNYA_NO_ACCOUNT:
+                case KEY_INCOME_LAINNYA_NO_ACCOUNT:
                     Log.e(TAG, "NOTE : " + etOther_Note.getText().toString());
 
                     POST_accountNumberKey = "1.999";
@@ -1123,7 +1126,7 @@ public class Fragment_Income extends Fragment {
             Log.e(TAG, "------------------------------------");
             Log.e(TAG, ":REQUEST TO SERVER:");
             Log.e(TAG, "------------------------------------");
-            Log.e(TAG, "member_id: " + SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID));
+            Log.e(TAG, "member_id: " + Guru.getInt(KEY_MEMBER_ID, 0));
             Log.e(TAG, "keyIssue: " + keyIssue);
             Log.e(TAG, "amount: " + etAmount.getText().toString().trim().replace(",", ""));
             Log.e(TAG, "accountNumberKey: " + POST_accountNumberKey);
@@ -1133,9 +1136,8 @@ public class Fragment_Income extends Fragment {
             Log.e(TAG, "related_service_id: " + POST_serviceId);
 
             IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
-
-            requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
-                    ((Integer) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
+            Call call =RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
+                    Guru.getInt(KEY_MEMBER_ID, 0),
                     keyIssue,
                     etAmount.getText().toString().trim().replace(",", ""),
                     POST_accountNumberKey,
@@ -1143,7 +1145,7 @@ public class Fragment_Income extends Fragment {
                     POST_note,
                     POST_description,
                     POST_serviceId
-            ));
+            );
             requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
                 @Override
                 public void onTry() {
@@ -1153,7 +1155,7 @@ public class Fragment_Income extends Fragment {
                 @Override
                 public void onSuccess(APIWrapper res, String message) {
 
-                    Constant.displayDialog(
+                    displayDialog(
                             context,
                             "Pengajuan Berhasil",
                             message,
@@ -1161,26 +1163,16 @@ public class Fragment_Income extends Fragment {
                             (dialogInterface, i) -> {
                             },
                             null,
-                            dialogInterface -> {
-                                context.sendBroadcast(new Intent(Constant.ACTION_ACTIVITY_FINISH));
-                            }
+                            dialogInterface -> getActivity().finish()
                     );
                 }
 
                 @Override
                 public void onRetry() {
-                    requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
-                            ((Integer) SharedPrefManager.load(context, SharedPrefManager.KEY_MEMBER_ID)),
-                            keyIssue,
-                            etAmount.getText().toString().trim().replace(",", ""),
-                            POST_accountNumberKey,
-                            POST_issuedMemberData,
-                            POST_note,
-                            POST_description,
-                            POST_serviceId
-                    ));
+                    requestHandler.enqueue(call);
                 }
             });
+            requestHandler.enqueue(call);
 
         }
     }
