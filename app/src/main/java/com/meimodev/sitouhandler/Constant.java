@@ -1,7 +1,6 @@
 package com.meimodev.sitouhandler;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,6 +31,7 @@ import com.github.squti.guru.Guru;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.hmomeni.progresscircula.ProgressCircula;
 import com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd;
+import com.meimodev.sitouhandler.CustomWidget.CustomDialog;
 import com.meimodev.sitouhandler.Issue.Adding_RecyclerModel;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.SignIn.SignIn;
@@ -179,11 +179,21 @@ public class Constant {
     public static String formatTime(int hour, int minute, int second, boolean displayWithSecond) {
         String postfix, h, m, s;
 
-        if (hour > 0 && hour < 11) postfix = ", Pagi";
-        else if (hour >= 12 && hour < 15) postfix = ", Siang";
-        else if (hour >= 15 && hour < 19) postfix = ", Sore";
-        else if (hour >= 19 && hour <= 23) postfix = ", Malam";
-        else postfix = ", Subuh";
+        if (hour > 0 && hour < 11) {
+            postfix = ", Pagi";
+        }
+        else if (hour >= 12 && hour < 15) {
+            postfix = ", Siang";
+        }
+        else if (hour >= 15 && hour < 19) {
+            postfix = ", Sore";
+        }
+        else if (hour >= 19 && hour <= 23) {
+            postfix = ", Malam";
+        }
+        else {
+            postfix = ", Subuh";
+        }
 
         h = String.valueOf(hour);
         m = String.valueOf(minute);
@@ -193,8 +203,12 @@ public class Constant {
         if (m.length() == 1) m = "0".concat(m);
         if (s.length() == 1) s = "0".concat(s);
 
-        if (!displayWithSecond) return "Pukul " + h + " : " + m;
-        else return "Pukul, " + h + " : " + m + " '" + s;
+        if (!displayWithSecond) {
+            return "Pukul " + h + " : " + m;
+        }
+        else {
+            return "Pukul, " + h + " : " + m + " '" + s;
+        }
     }
 
     public static void toggleSort(Context context, TextView tv, boolean isSelected) {
@@ -204,29 +218,24 @@ public class Constant {
             tv.setVisibility(View.INVISIBLE);
             tv.setVisibility(View.VISIBLE);
 
-        } else {
+        }
+        else {
             tv.setBackgroundColor(context.getResources().getColor(R.color.ButtonText_LightGrey));
             tv.setTextColor(context.getResources().getColor(R.color.colorAccent));
         }
     }
 
-    public static void displayDialog(@Nullable Context context,
+    public static void displayDialog(Context context,
+                                     @Nullable String title,
+                                     @Nullable String content) {
+        displayDialog(context, title, content, null);
+    }
+
+    public static void displayDialog(Context context,
                                      @Nullable String title,
                                      @Nullable String content,
-                                     @Nullable boolean cancelable,
-                                     @Nullable DialogInterface.OnClickListener positiveClickListener,
-                                     @Nullable DialogInterface.OnClickListener negativeClickListener
-    ) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        if (title != null) builder.setTitle(title);
-        if (content != null) builder.setMessage(content);
-        builder.setCancelable(cancelable);
-        if (positiveClickListener != null) builder.setPositiveButton("OK", positiveClickListener);
-        if (negativeClickListener != null)
-            builder.setNegativeButton("BATAL", negativeClickListener);
-        builder.create().show();
-
+                                     @Nullable DialogInterface.OnClickListener positiveClickListener) {
+        displayDialog(context, title, content, true, positiveClickListener, null, null);
     }
 
     public static void displayDialog(Context context,
@@ -234,21 +243,25 @@ public class Constant {
                                      @Nullable String content,
                                      @Nullable Boolean cancelable,
                                      @Nullable DialogInterface.OnClickListener positiveClickListener,
-                                     @Nullable DialogInterface.OnClickListener negativeClickListener,
-                                     @Nullable DialogInterface.OnDismissListener dismissListener
-    ) {
+                                     @Nullable DialogInterface.OnCancelListener negativeClickListener) {
+        displayDialog(context, title, content, cancelable, positiveClickListener, negativeClickListener, null);
+    }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        if (title != null) builder.setTitle(title);
-        if (content != null) builder.setMessage(content);
-        builder.setCancelable(cancelable == null ? true : cancelable);
-        if (positiveClickListener != null) builder.setPositiveButton("OK", positiveClickListener);
-        if (negativeClickListener != null)
-            builder.setNegativeButton("BATAL", negativeClickListener);
-        if (dismissListener != null) {
-            builder.setOnDismissListener(dismissListener);
-        }
-        builder.create().show();
+    public static void displayDialog(Context context,
+                                     @Nullable String title,
+                                     @Nullable String content,
+                                     @Nullable Boolean cancelable,
+                                     @Nullable DialogInterface.OnClickListener positiveClickListener,
+                                     @Nullable DialogInterface.OnCancelListener negativeClickListener,
+                                     @Nullable DialogInterface.OnDismissListener dismissListener) {
+        CustomDialog dialog = new CustomDialog();
+        dialog.setTitle(title);
+        dialog.setContent(content);
+        dialog.setCancelable(cancelable);
+        dialog.setOnClickPositive(positiveClickListener);
+        dialog.setOnClickNegative(negativeClickListener);
+        dialog.setOnDismissListener(dismissListener);
+        dialog.show(context);
 
     }
 
@@ -299,15 +312,17 @@ public class Constant {
 
         if (customButtonAdd.getSelectedList() != null && !customButtonAdd.getSelectedList().isEmpty()) {
             dataModel = customButtonAdd.getSelectedList();
-        } else if (customButtonAdd.getSelectedView() != null && !customButtonAdd.getSelectedList().isEmpty()) {
+        }
+        else if (customButtonAdd.getSelectedView() != null && !customButtonAdd.getSelectedList().isEmpty()) {
             dataView = customButtonAdd.getSelectedView();
             Log.e(TAG, "encodeMemberData: ERROR, passing selected view not yet supported! will return null");
         }
 
         if (dataModel != null && !dataModel.isEmpty()) {
             for (Adding_RecyclerModel m : dataModel) {
-                if (m.getId() != 0)
+                if (m.getId() != 0) {
                     res.append(":").append(m.getId()).append(":");
+                }
                 else {
                     res.append(":")
                             .append("-")
@@ -325,7 +340,8 @@ public class Constant {
                             .append(":");
                 }
             }
-        } else if (dataView != null && !dataView.isEmpty()) {
+        }
+        else if (dataView != null && !dataView.isEmpty()) {
             Log.e(TAG, "encodeMemberData: ERROR, passing selected view not yet supported! will return null");
         }
 

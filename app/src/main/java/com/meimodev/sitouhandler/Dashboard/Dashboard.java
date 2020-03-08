@@ -2,6 +2,7 @@ package com.meimodev.sitouhandler.Dashboard;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -27,6 +28,7 @@ import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 import com.meimodev.sitouhandler.BuildConfig;
 import com.meimodev.sitouhandler.Constant;
+import com.meimodev.sitouhandler.CustomWidget.CustomDialog;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Cheif.NavFragment_Chief_ManageServiceArea;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member.NavFragment_Member_Home;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Home;

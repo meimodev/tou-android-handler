@@ -1,6 +1,5 @@
 package com.meimodev.sitouhandler.Dashboard.NavFragment;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,7 +16,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.meimodev.sitouhandler.IssueDetail.IssueDetail;
-import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Issue.OnRecyclerItemOperationListener;
 import com.meimodev.sitouhandler.R;
 
@@ -118,22 +116,22 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
             data.putInt("id", model.getAuthId());
 
             if (holder.btnAccept.equals(view)) {
-                title = "Konfirmasi Penerimaan";
+                title = "Konfirmasi Penerimaan!";
                 message = "Anda akan menerima pengajuan atas nama\n" + model.getIssuedByMemberName() + ",\n" + model.getIssuedByMemberColumn() + ".\nSilahkan sentuh tombol 'OK' untuk konfirmasi bahwa pengajuan ini akan diterima";
-                listener = (dialogInterface, i) -> {
+                listener = (dialog, which) -> {
                     data.putInt("status", AUTHORIZATION_STATUS_CODE_ACCEPTED);
                     if (acceptItemListener != null) acceptItemListener.acceptItem(data);
                 };
             } else {
-                title = "Konfirmasi Penolakan";
+                title = "Konfirmasi Penolakan!";
                 message = "Anda akan menolak pengajuan atas nama\n" + model.getIssuedByMemberName() + ",\n" + model.getIssuedByMemberColumn() + ".\nSilahkan sentuh tombol 'OK' untuk konfirmasi bahwa pengajuan ini akan ditolak";
-                listener = (dialogInterface, i) -> {
+                listener = (dialog, which) -> {
                     data.putInt("status", AUTHORIZATION_STATUS_CODE_REJECTED);
                     if (rejectItemListener != null) rejectItemListener.rejectItem(data);
                 };
             }
             displayDialog(
-                    context, title, message, true, listener, null
+                    context, title, message, listener
             );
         };
         holder.btnAccept.setOnClickListener(btnListener);

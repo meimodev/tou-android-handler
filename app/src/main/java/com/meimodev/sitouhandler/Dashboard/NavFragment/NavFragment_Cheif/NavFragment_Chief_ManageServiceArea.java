@@ -3,7 +3,6 @@ package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Cheif;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,29 +16,20 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.github.squti.guru.Guru;
-import com.meimodev.sitouhandler.ApiServices;
-import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.CustomWidget.CustomEditText;
-import com.meimodev.sitouhandler.Helper.APIUtils;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
-import com.meimodev.sitouhandler.SharedPrefManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.meimodev.sitouhandler.Constant.*;
 
@@ -102,9 +92,10 @@ public class NavFragment_Chief_ManageServiceArea extends Fragment {
 
                 setupCardViews();
             }
+
             @Override
             public void onRetry() {
-               fetchData();
+                fetchData();
             }
         });
         requestHandler.enqueue(RetrofitClient.getInstance(null).getApiServices().getServiceArea(
@@ -140,9 +131,11 @@ public class NavFragment_Chief_ManageServiceArea extends Fragment {
                 context.sendBroadcast(new Intent(ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED));
                 if (etFrom.isFocused()) {
                     etTo.requestFocus();
-                } else if (etTo.isFocused()) {
+                }
+                else if (etTo.isFocused()) {
                     etFrom.requestFocus();
-                } else {
+                }
+                else {
                     etFrom.requestFocus();
                 }
             });
@@ -160,14 +153,12 @@ public class NavFragment_Chief_ManageServiceArea extends Fragment {
                         || etFrom.getText().toString().length() == 0
                 ) {
                     displayDialog(context,
-                            "Ups...",
+                            "Perhatian!",
                             "Silahkan pastikan 'Dari Kolom' / 'Hingga Kolom' tidak kosong atau berawalan 0 ",
-                            true,
-                            (dialogInterface, i1) -> {
-                            },
-                            null
+                            (dialog, which) -> {}
                     );
-                } else {
+                }
+                else {
                     sendData(
                             model.getId(),
                             Integer.valueOf(etFrom.getText().toString()),
@@ -304,15 +295,21 @@ public class NavFragment_Chief_ManageServiceArea extends Fragment {
         }
 
         String getFromColumn() {
-            if (fromColumn != 0)
+            if (fromColumn != 0) {
                 return String.valueOf(fromColumn);
-            else return "";
+            }
+            else {
+                return "";
+            }
         }
 
         String getToColumn() {
-            if (toColumn != 0)
+            if (toColumn != 0) {
                 return String.valueOf(toColumn);
-            else return "";
+            }
+            else {
+                return "";
+            }
         }
 
         public int getMemberId() {

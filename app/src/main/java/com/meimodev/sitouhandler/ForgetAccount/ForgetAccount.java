@@ -1,11 +1,6 @@
 package com.meimodev.sitouhandler.ForgetAccount;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -104,7 +99,7 @@ public class ForgetAccount extends AppCompatActivity {
                     String id = res.getData().getString("user_id");
                     String selectedReason = ((RadioButton) findViewById(rgReasons.getCheckedRadioButtonId())).getText().toString();
 //                    Log.e(TAG, "onSuccess: "+selectedReason );
-                    WA_message = "TOU-"+selectedReason + "-(KEY_FORGET_ACCOUNT)" + id;
+                    WA_message = "TOU-" + selectedReason + "-(KEY_FORGET_ACCOUNT)" + id;
 
                     Constant.WhatsAppSendMessage(
                             ForgetAccount.this,
@@ -113,18 +108,10 @@ public class ForgetAccount extends AppCompatActivity {
                     );
                     finish();
 
-                } else {
+                }
+                else {
                     tilEmail.setError(message);
-                    Constant.displayDialog(
-                            ForgetAccount.this,
-                            null,
-                            message,
-                            true,
-                            (dialog, which) -> {
-                                dialog.dismiss();
-                            },
-                            null
-                    );
+                    Constant.displayDialog(ForgetAccount.this, null, message, (dialog, which) -> { });
                 }
             }
 

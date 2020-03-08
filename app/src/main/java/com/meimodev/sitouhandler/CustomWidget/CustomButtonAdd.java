@@ -3,7 +3,6 @@ package com.meimodev.sitouhandler.CustomWidget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
-import android.media.Image;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,11 +18,9 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 
 import com.github.squti.guru.Guru;
-import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Issue.Adding_RecyclerModel;
 import com.meimodev.sitouhandler.Issue.OnRecyclerItemOperationListener;
 import com.meimodev.sitouhandler.R;
-import com.meimodev.sitouhandler.SharedPrefManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -102,14 +99,11 @@ public class CustomButtonAdd extends AppCompatButton {
                 }
             }
             if (alreadyExist) {
-
                 displayDialog(
                         getContext(),
-                        "Perhatian !",
+                        "Perhatian!",
                         "Tidak bisa menambahkan nama.\nNama: " + addingModel.getName() + " sudah ada dalam daftar nama ini",
-                        true,
-                        null,
-                        null
+                        (dialog, which) -> {}
                 );
 
                 return;

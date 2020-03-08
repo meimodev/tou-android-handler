@@ -1,22 +1,17 @@
 package com.meimodev.sitouhandler.Issue;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.meimodev.sitouhandler.ApiServices;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Helper.APIUtils;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.R;
-import com.meimodev.sitouhandler.RetrofitClient;
 
 import org.json.JSONException;
-
-import java.io.IOException;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -65,11 +60,13 @@ public class IssueRequestHandler {
             return;
         }
 
-        if (progress != null && progress.getVisibility() != View.VISIBLE)
+        if (progress != null && progress.getVisibility() != View.VISIBLE) {
             progress.setVisibility(View.VISIBLE);
+        }
 
-        if (mainView != null && mainView.getVisibility() == View.VISIBLE)
+        if (mainView != null && mainView.getVisibility() == View.VISIBLE) {
             mainView.setVisibility(View.INVISIBLE);
+        }
 
         if (onRequestHandler != null) onRequestHandler.onTry();
 
@@ -99,7 +96,8 @@ public class IssueRequestHandler {
 
                         }
 
-                    } else {
+                    }
+                    else {
                         Log.e(TAG, "onResponse:"
                                 + context.getClass().getSimpleName()
                                 + ": response return SUCCESS but Error:true, with message = "
@@ -107,22 +105,23 @@ public class IssueRequestHandler {
 
                         Constant.displayDialog(
                                 context,
-                                "Peringatan",
+                                "Peringatan!",
                                 res.getMessage(),
-                                true,
-                                (dialogInterface, i) -> dialogInterface.dismiss(),
-                                null
+                                (dialog, which) -> { }
                         );
 
 
                     }
-                    if (progress != null && progress.getVisibility() == View.VISIBLE)
+                    if (progress != null && progress.getVisibility() == View.VISIBLE) {
                         progress.setVisibility(View.INVISIBLE);
+                    }
 
-                    if (mainView != null && mainView.getVisibility() != View.VISIBLE)
+                    if (mainView != null && mainView.getVisibility() != View.VISIBLE) {
                         mainView.setVisibility(View.VISIBLE);
+                    }
 
-                } else {
+                }
+                else {
                     APIUtils.parseError(context, response);
                 }
             }
@@ -133,13 +132,15 @@ public class IssueRequestHandler {
                         + context.getClass().getSimpleName()
                         + ": ", t);
 
-                if (progress != null && progress.getVisibility() == View.VISIBLE)
+                if (progress != null && progress.getVisibility() == View.VISIBLE) {
                     progress.setVisibility(View.GONE);
+                }
 
                 Constant.makeFailFetch(rootView, view -> {
                     progress = Constant.makeProgressCircle(rootView);
-                    if (onRequestHandler != null)
+                    if (onRequestHandler != null) {
                         onRequestHandler.onRetry();
+                    }
                 });
             }
         });
@@ -173,14 +174,16 @@ public class IssueRequestHandler {
                             }
                         }
 
-                    } else {
+                    }
+                    else {
 
                         Log.e(TAG, "BACKGROUND REQUEST: onResponse: "
                                 + ": response return SUCCESS but Error = true, message = "
                                 + res.getMessage());
                     }
 
-                } else {
+                }
+                else {
                     Log.e(TAG, "BACKGROUND REQUEST onResponse: response NOT success, Error Code = " + response.code());
                 }
             }
@@ -189,8 +192,9 @@ public class IssueRequestHandler {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e(TAG, "onRetry: "
                         + ": ", t);
-                if (onRequestHandler != null)
+                if (onRequestHandler != null) {
                     onRequestHandler.onRetry();
+                }
             }
         });
 

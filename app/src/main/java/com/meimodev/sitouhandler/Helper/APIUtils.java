@@ -2,7 +2,7 @@ package com.meimodev.sitouhandler.Helper;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.util.Log;
 
 import com.meimodev.sitouhandler.Constant;
@@ -46,25 +46,26 @@ public class APIUtils {
 
             Constant.displayDialog(
                     context,
-                    "Sesi kadaluarsa",
+                    "Sesi kadaluarsa!",
                     "Silahkan masuk kembali dengan mengisi email dan password dari akun anda",
                     false,
-                    (dialogInterface, i) -> {
-                        dialogInterface.dismiss();
-                        Constant.signOut(context);
-                    }, null
+                    (dialog, which) -> {
+                    },
+                    null,
+                    dialog -> Constant.signOut(context)
+
             );
 
-        } else {
+        }
+        else {
             Constant.displayDialog(
                     context,
-                    "Error: "+response.code(),
+                    "Error! " + response.code(),
                     error.getMessage(),
-                    true,
-                    (dialogInterface, i) -> {
-                        ((Activity) context).finish();
-                    },
-                    null
+                    false,
+                    (dialog, which) -> dialog.dismiss(),
+                    null,
+                    dialog -> ((Activity) context).finish()
             );
         }
         Log.e(TAG, "parseError: error response code: " + response.code() + " message: " + error.getMessage());
@@ -85,7 +86,8 @@ public class APIUtils {
             if (obj.toString().contains("\"data\":[")) {
                 apiWrapper.setDataArray(obj.getJSONArray("data"));
                 Log.e(TAG, "parseWrapper: JSON data is Array");
-            } else {
+            }
+            else {
                 apiWrapper.setData(obj.getJSONObject("data"));
                 Log.e(TAG, "parseWrapper: JSON data is Object");
             }
@@ -102,7 +104,8 @@ public class APIUtils {
                 if (obj.toString().contains("\"data\":[")) {
                     apiWrapper.setDataArray(obj.getJSONArray("data"));
                     Log.e(TAG, "parseWrapper: JSON data is Array");
-                } else {
+                }
+                else {
                     apiWrapper.setData(obj.getJSONObject("data"));
                     Log.e(TAG, "parseWrapper: JSON data is Object");
                 }

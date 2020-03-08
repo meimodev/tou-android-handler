@@ -1170,10 +1170,10 @@ public class Fragment_Income extends Fragment {
 
                     displayDialog(
                             context,
-                            "Pengajuan Berhasil",
+                            "OK. Pengajuan Berhasil",
                             message,
                             true,
-                            (dialogInterface, i) -> {
+                            (dialog, which) -> {
                             },
                             null,
                             dialogInterface -> getActivity().finish()

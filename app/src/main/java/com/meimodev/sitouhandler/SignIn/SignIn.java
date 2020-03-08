@@ -147,13 +147,11 @@ public class SignIn extends AppCompatActivity {
                 if (message.contains("konfirmasi")) {
                     Constant.displayDialog(
                             SignIn.this,
-                            "Perhatian",
+                            "Perhatian!",
                             "Akun dengan nomor telepon " +
                                     etPhone.getText().toString()
                                     + " belum dikonfirmasi. silahkan lakukan konfirmasi akun dengan menekan tombol 'konfirmasi Akun' di bawah",
-                            true,
-                            (dialog, which) -> dialog.dismiss(),
-                            null
+                            (dialog, which) -> {}
                     );
                     tilPhone.setError(message);
                     btnConfirm.setVisibility(View.VISIBLE);

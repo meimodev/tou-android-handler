@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +25,6 @@ import com.meimodev.sitouhandler.Dashboard.NavFragment.Notification_Model;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.Notification_RecyclerAdapter;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
-import com.meimodev.sitouhandler.Issue.Issue;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.Issue.OnRecyclerItemOperationListener;
 import com.meimodev.sitouhandler.IssueDetail.IssueDetail;
@@ -243,19 +241,8 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
 
             @Override
             public void onSuccess(APIWrapper res, String message) {
-
                 fetchData();
-
-                Constant.displayDialog(
-                        context,
-                        null,
-                        res.getMessage(),
-                        true,
-                        (dialogInterface, i) -> {
-                        },
-                        null
-                );
-
+                Constant.displayDialog(context, null, res.getMessage(), (dialog, which) -> {});
             }
 
             @Override

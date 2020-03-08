@@ -81,7 +81,6 @@ public class SignUp extends AppCompatActivity {
         validator = new Validator();
 
 
-
         tilSex.getEditText().setShowSoftInputOnFocus(false);
         tilSex.getEditText().setFocusable(false);
 
@@ -182,31 +181,32 @@ public class SignUp extends AppCompatActivity {
                             "OK",
                             "Pendaftaran akun BERHASIL dilakukan. Silahkan lakukan aktivasi akun di halaman berikut",
                             true,
-                            (dialog, which) -> dialog.dismiss(),
+                            (dialog, which) -> {
+                            },
                             null,
                             dialog -> startConfirmationActivity()
                     );
 
 
-                } else if (message.contains("digunakan")) {
+                }
+                else if (message.contains("digunakan")) {
                     tilPhone.setError(message);
                     Constant.displayDialog(
                             SignUp.this,
-                            "Perhatian",
+                            "Perhatian!",
                             message,
-                            true,
-                            (dialog, which) -> dialog.dismiss(),
-                            null
+                            (dialog, which) -> {
+                            }
                     );
-                } else if (message.contains("Tanggal tidak valid")) {
+                }
+                else if (message.contains("Tanggal tidak valid")) {
                     tilDOB.setError(message);
                     Constant.displayDialog(
                             SignUp.this,
-                            "",
+                            "Perhatian!",
                             message,
-                            true,
-                            null,
-                            null
+                            (dialog, which) -> {
+                            }
                     );
                 }
             }

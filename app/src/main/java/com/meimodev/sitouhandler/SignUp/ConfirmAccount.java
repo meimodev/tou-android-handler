@@ -108,10 +108,10 @@ public class ConfirmAccount extends AppCompatActivity {
                 if (type.equals("REQUEST")) {
                     Constant.displayDialog(
                             ConfirmAccount.this,
-                            "Perhatian",
+                            "Perhatian!",
                             message,
                             true,
-                            (dialog, which) -> dialog.dismiss(),
+                            (dialog, which) -> {},
                             null,
                             dialog -> syncCoolDown()
 
@@ -119,10 +119,10 @@ public class ConfirmAccount extends AppCompatActivity {
                 } else {
                     Constant.displayDialog(
                             ConfirmAccount.this,
-                            "Perhatian",
+                            "Perhatian!",
                             message,
                             true,
-                            (dialog, which) -> dialog.dismiss(),
+                            (dialog, which) -> {},
                             null,
                             dialog -> finish()
                     );

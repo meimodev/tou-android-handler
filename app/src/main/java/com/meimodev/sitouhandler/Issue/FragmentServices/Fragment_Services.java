@@ -914,10 +914,10 @@ public class Fragment_Services extends Fragment {
 
                 displayDialog(
                         context,
-                        "Pengajuan Berhasil",
+                        "OK. Pengajuan Berhasil",
                         message,
                         true,
-                        (dialogInterface, i) -> {
+                        (dialog, which) -> {
                         },
                         null,
                         dialogInterface -> context.sendBroadcast(new Intent(ACTION_ACTIVITY_FINISH))

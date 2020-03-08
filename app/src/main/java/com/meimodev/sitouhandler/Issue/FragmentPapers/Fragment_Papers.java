@@ -437,10 +437,10 @@ public class Fragment_Papers extends Fragment {
 
                 displayDialog(
                         context,
-                        "Pengajuan Berhasil",
+                        "OK. Pengajuan Berhasil",
                         message,
                         true,
-                        (dialogInterface, i) -> {
+                        (dialog, which) -> {
                         },
                         null,
                         dialogInterface -> {

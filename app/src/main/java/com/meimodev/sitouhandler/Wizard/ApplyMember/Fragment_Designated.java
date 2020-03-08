@@ -5,19 +5,16 @@
 package com.meimodev.sitouhandler.Wizard.ApplyMember;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -102,29 +99,26 @@ public class Fragment_Designated extends Fragment {
     }
 
     private void validateInputs() {
-
         //validate if radio button is checked
         if (tvCongregation.getVisibility() != View.VISIBLE) {
             Constant.displayDialog(
                     context,
-                    "Perhatian",
+                    "Perhatian!",
                     "Silahkan pilih Jemaat Tujuan dari daftar yang ada",
-                    true,
-                    (dialog, which) -> dialog.dismiss(),
-                    null
+                    (dialog, which) -> {
+                    }
             );
             return;
         }
 
         //validate if designated column is "valid"
-        if (tilDesignatedColumn.getError() != null) {
+        if (tilDesignatedColumn.getError() != null || tilDesignatedColumn.getEditText().getText().length() < 1) {
             Constant.displayDialog(
                     context,
-                    "Perhatian",
-                    "Silahkan periksa kembali Kolom Tujuan anda",
-                    true,
-                    (dialog, which) -> dialog.dismiss(),
-                    null
+                    "Perhatian!",
+                    "Kolom Tujuan tidak valid. Silahkan periksa kembali Kolom Tujuan anda",
+                    (dialog, which) -> {
+                    }
             );
             return;
         }
@@ -134,13 +128,12 @@ public class Fragment_Designated extends Fragment {
         if (designatedColumn > registeredChurch.get(selectedPos).getCountColumn()) {
             Constant.displayDialog(
                     context,
-                    "Perhatian",
+                    "Perhatian!",
                     "Jumlah Kolom Jemaat Tujuan yang dipilih adalah "
                             + registeredChurch.get(selectedPos).getCountColumn()
                             + ". Silahkan memilih Kolom Tujuan yang tidak melebihi jumlah kolom Jemaat Tujuan",
-                    true,
-                    (dialog, which) -> dialog.dismiss(),
-                    null
+                    (dialog, which) -> {
+                    }
             );
             tilDesignatedColumn.setError("Jumlah kolom di Jemaat Tujuan anda adalah " + registeredChurch.get(selectedPos).getCountColumn());
             return;

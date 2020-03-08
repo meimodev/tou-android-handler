@@ -1207,10 +1207,10 @@ public class Fragment_Outcome extends Fragment {
 
                 displayDialog(
                         context,
-                        "Pengajuan Berhasil",
+                        "OK. Pengajuan Berhasil",
                         message,
                         true,
-                        (dialogInterface, i) -> {
+                        (dialog, which) -> {
                         },
                         null,
                         dialogInterface -> {

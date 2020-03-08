@@ -3,44 +3,34 @@ package com.meimodev.sitouhandler.IssueDetail;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
-import com.hmomeni.progresscircula.ProgressCircula;
-import com.meimodev.sitouhandler.ApiServices;
-import com.meimodev.sitouhandler.Helper.APIUtils;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Constant;
-import com.meimodev.sitouhandler.Issue.Adding_RecyclerModel;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
-import com.meimodev.sitouhandler.WebViewActivity;
-import com.squareup.picasso.Picasso;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,8 +39,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.meimodev.sitouhandler.Constant.*;
 
@@ -439,7 +427,7 @@ public class IssueDetail extends AppCompatActivity {
                     data.putInt("AUTH_ID", authId);
                     data.putInt("AUTH_CODE", AUTHORIZATION_STATUS_CODE_ACCEPTED);
 
-                    String title = "Konfirmasi Penerimaan";
+                    String title = "Konfirmasi Penerimaan!";
                     String message = "Anda akan MENERIMA pengajuan ini, silahkan sentuh tombol 'OK' untuk konfirmasi bahwa pengajuan ini akan DITERIMA";
                     Intent i = new Intent(KEY_ISSUE_DETAIL_CONFIRM_AUTH);
                     i.putExtra("AUTH_ID", authId);
@@ -449,10 +437,10 @@ public class IssueDetail extends AppCompatActivity {
                                 sendBroadcast(i);
                                 finish();
                             },
-                            (dialog, which) -> dialog.dismiss());
+                            dialog -> {});
                 });
                 btnReject.setOnClickListener(v -> {
-                    String title = "Konfirmasi Penolakan";
+                    String title = "Konfirmasi Penolakan!";
                     String message = "Anda akan MENOLAK pengajuan ini, silahkan sentuh tombol 'OK' untuk konfirmasi bahwa pengajuan ini akan DITOLAK";
                     Intent i = new Intent(KEY_ISSUE_DETAIL_CONFIRM_AUTH);
                     i.putExtra("AUTH_ID", authId);
@@ -462,7 +450,7 @@ public class IssueDetail extends AppCompatActivity {
                                 sendBroadcast(i);
                                 finish();
                             },
-                            (dialog, which) -> dialog.dismiss());
+                            dialog -> {});
                 });
             }
         }
