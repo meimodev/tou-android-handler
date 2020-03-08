@@ -29,11 +29,13 @@ import com.meimodev.sitouhandler.Helper.APIUtils;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Issue.Adding_RecyclerModel;
+import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.WebViewActivity;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,6 +51,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.meimodev.sitouhandler.Constant.*;
 
 public class IssueDetail extends AppCompatActivity {
 
@@ -81,31 +85,24 @@ public class IssueDetail extends AppCompatActivity {
     @BindView(R.id.textView_acceptedRejectedDate)
     TextView tvAcceptRejectDate;
 
-    @BindView(R.id.linearLayout_buttons)
-    LinearLayout llButtons;
-    @BindView(R.id.button_accept)
-    Button btnAccept;
-    @BindView(R.id.button_deny)
-    Button btnDeny;
-    @BindView(R.id.button_viewPaper)
-    Button btnViewPaper;
-
     @BindView(R.id.cardView_printable)
     CardView cvPrintable;
     @BindView(R.id.button_download)
     CardView cvButtonDownload;
 
-    @BindView(R.id.layout_body)
-    View llBody;
 
     @BindView(R.id.textView_description)
     TextView tvDescription;
     @BindView(R.id.cardView_description)
     CardView cvDescription;
 
+    @BindView(R.id.layout_buttons)
+    LinearLayout llButtons;
+    @BindView(R.id.button_accept)
+    Button btnAccept;
+    @BindView(R.id.button_reject)
+    Button btnReject;
 
-    private boolean isAccepted;
-    private boolean isRejected;
     private String keyIssue;
     private String issuedDate;
     private String finishDate;
@@ -114,6 +111,7 @@ public class IssueDetail extends AppCompatActivity {
     private ArrayList<IssueDetailModelHelper> names;
     private ArrayList<IssueDetailNotation_NotationModel> notations;
     private Map<String, String> issuedByMember;
+    private String issueAuthStatus;
 
     private CardView cvLoading;
 
@@ -124,20 +122,19 @@ public class IssueDetail extends AppCompatActivity {
     @BindView(R.id.text_download)
     TextView tvTextDownload;
 
-    private View progress;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue_detail);
         ButterKnife.bind(this);
+        changeStatusColor(this, R.color.colorPrimary);
 
         registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
-        progress = Constant.makeProgressCircle(findViewById(R.id.layout_main));
+        llButtons.setVisibility(View.GONE);
 
         fetchData();
-
     }
 
     @Override
@@ -148,135 +145,63 @@ public class IssueDetail extends AppCompatActivity {
 
     private void fetchData() {
 
-        Context context = IssueDetail.this;
+        IssueRequestHandler req = new IssueRequestHandler(findViewById(android.R.id.content));
+        Call<ResponseBody> call = RetrofitClient.getInstance(null).getApiServices().getIssue(getIntent().getIntExtra("ISSUE_ID", 0));
 
-        if (llBody.getVisibility() == View.VISIBLE)
-            llBody.setVisibility(View.INVISIBLE);
-//        if (llButtons.getVisibility() == View.VISIBLE)
-//            llButtons.setVisibility(View.INVISIBLE);
-        if (progress.getVisibility() != View.VISIBLE)
-            progress.setVisibility(View.VISIBLE);
-
-        Log.e(TAG, "fetchData: fetching..");
-        ApiServices api = RetrofitClient.getInstance(null).getApiServices();
-        Call<ResponseBody> call = api.getIssue(getIntent().getIntExtra("ISSUE_ID", 0));
-        Callback<ResponseBody> callback = new Callback<ResponseBody>() {
-
+        req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
+            public void onTry() {
 
-                    APIWrapper res = APIUtils.parseWrapper(response.body());
-
-                    if (!res.isError()) {
-
-                        try {
-                            proceed(res);
-                        } catch (JSONException e) {
-                            Log.e(TAG, "onResponse: JSON ERROR: " + e.getMessage(), e);
-                            e.printStackTrace();
-                        }
-                        if (progress.getVisibility() == View.VISIBLE)
-                            progress.setVisibility(View.INVISIBLE);
-                        Log.e(TAG, "onResponse: response return success proceeding");
-                    } else {
-                        Constant.displayDialog(context, null, res.getMessage(), true,
-                                (dialogInterface, i) -> {
-                                },
-                                null
-                        );
-                        Log.e(TAG, "onResponse: response return success but error");
-                    }
-                } else {
-                    APIUtils.parseError(context, response);
-                }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e(TAG, "onRetry: ", t);
-                progress.setVisibility(View.GONE);
-                Constant.makeFailFetch(findViewById(R.id.layout_main), view -> {
-                    progress = Constant.makeProgressCircle(findViewById(R.id.layout_main));
-                    fetchData();
-                });
+            public void onSuccess(APIWrapper res, String message) throws JSONException {
+                proceed(res);
             }
-        };
-        call.enqueue(callback);
+
+            @Override
+            public void onRetry() {
+                fetchData();
+            }
+        });
+
+        req.enqueue(call);
     }
 
     private void proceed(APIWrapper res) throws JSONException {
 
         JSONObject obj = res.getData();
-        JSONArray issueAuth = obj.getJSONArray("issue_authorization");
+        JSONObject issueAuthorization = obj.getJSONObject("issue_authorization");
 
         notations = new ArrayList<>();
 
+        JSONArray issueAuth = issueAuthorization.getJSONArray("auth");
         for (int i = 0; i < issueAuth.length(); i++) {
             JSONObject auth = issueAuth.getJSONObject(i);
-            String authStatus = auth.getString("auth_status");
-            JSONArray authChurchPositions = auth.getJSONArray("auth_church_position");
-            String authOn = auth.getString("auth_on");
+            String authStatus = auth.getString("status");
+            JSONArray authChurchPositions = auth.getJSONArray("church_position");
+            String authOn = auth.getString("on");
 
             notations.add(new IssueDetailNotation_NotationModel(
                     authChurchPositions, authOn, authStatus)
             );
+
         }
-        for (int i = 0; i < issueAuth.length(); i++) {
-            JSONObject auth = issueAuth.getJSONObject(i);
-            String authStatus = auth.getString("auth_status");
-
-            if (authStatus.contentEquals(Constant.AUTHORIZATION_STATUS_ACCEPTED)) {
-                isAccepted = true;
-                isRejected = false;
-            } else {
-                isAccepted = false;
-                break;
-            }
-        }
-
-        for (int i = 0; i < issueAuth.length(); i++) {
-            JSONObject auth = issueAuth.getJSONObject(i);
-            String authStatus = auth.getString("auth_status");
-
-            if (authStatus.contentEquals(Constant.AUTHORIZATION_STATUS_REJECTED)) {
-                isRejected = true;
-                isAccepted = false;
-            } else {
-                isRejected = false;
-                break;
-            }
-        }
-
 
         keyIssue = obj.getString("key_issue");
         issuedDate = obj.getString("issued_on");
-        issuedDate = issuedDate.contains("yang")
-                ? issuedDate.replace("yang ", "")
-                : issuedDate;
+        issueAuthStatus = issueAuthorization.getString("status");
 
-        if (obj.getBoolean("issue_authorization_complete")) {
-            finishDate = obj.getString("issue_authorization_complete_on");
-            finishDate = finishDate.contains("yang")
-                    ? finishDate.replace("yang ", "")
-                    : finishDate;
+        if (issueAuthorization.getBoolean("is_complete")) {
+            finishDate = issueAuthorization.getString("complete_on");
+        }
+        else {
+            finishDate = "";
         }
 
         // Special operation according to issue KEY_ISSUE
-        Log.e(TAG, "proceed: selectiion of key_issue ...");
         Map<String, Object> keyIssueValue = new HashMap<>();
-        String keyIssue = obj.getString("key_issue");
-        if ( /////////////////////////////////////////////////////// OUTCOME ///////////////////////////////////////////////////////
-                keyIssue.contentEquals(Constant.KEY_OUTCOME_CENTRALIZE)
-                        || keyIssue.contentEquals(Constant.KEY_OUTCOME_PAYCHECK)
-                        || keyIssue.contentEquals(Constant.KEY_OUTCOME_PENGADAAN)
-                        || keyIssue.contentEquals(Constant.KEY_OUTCOME_FASILITAS_PENUNJANG_PELAYAN)
-                        || keyIssue.contentEquals(Constant.KEY_OUTCOME_RAPAT_SIDANG_KONVEN)
-                        || keyIssue.contentEquals(Constant.KEY_OUTCOME_DIAKONIA_BESASISWA)
-                        || keyIssue.contentEquals(Constant.KEY_OUTCOME_PEMBEKALAN_PELATIHAN)
-                        || keyIssue.contentEquals(Constant.KEY_OUTCOME_SUBSIDI_BIPRA_IBADAH_KEGIATAN)
-                        || keyIssue.contentEquals(Constant.KEY_OUTCOME_OTHER)
-                        || keyIssue.contentEquals(Constant.KEY_OUTCOME_OTHER_NO_ACCOUNT)) {
+        if (isIssueOutcome(keyIssue)) {
 
             keyIssueValue.put("financial_description", obj.getString("financial_description"));
             keyIssueValue.put("financial_type", obj.getString("financial_type"));
@@ -287,11 +212,8 @@ public class IssueDetail extends AppCompatActivity {
                 cvDescription.setVisibility(View.VISIBLE);
                 tvDescription.setText(keyIssueValue.get("financial_description").toString());
             }
-        } else if ( /////////////////////////////////////////////////////// INCOME ///////////////////////////////////////////////////////
-                keyIssue.contentEquals(Constant.KEY_INCOME_PERSEMBAHAN_IBADAH)
-                        || keyIssue.contentEquals(Constant.KEY_INCOME_SAMPUL_SYUKUR)
-                        || keyIssue.contentEquals(Constant.KEY_INCOME_LAINNYA)
-                        || keyIssue.contentEquals(Constant.KEY_INCOME_LAINNYA_NO_ACCOUNT)) {
+        }
+        else if (isIssueIncome(keyIssue)) {
 
             keyIssueValue.put("financial_description", obj.getString("financial_description"));
             keyIssueValue.put("financial_type", obj.getString("financial_type"));
@@ -302,36 +224,21 @@ public class IssueDetail extends AppCompatActivity {
                 cvDescription.setVisibility(View.VISIBLE);
                 tvDescription.setText(keyIssueValue.get("financial_description").toString());
             }
-        } else if (/////////////////////////////////////////////////////// PAPERS ///////////////////////////////////////////////////////
-                keyIssue.contentEquals(Constant.KEY_PAPERS_VALIDATE_MEMBERS)
-                        || keyIssue.contentEquals(Constant.KEY_PAPERS_CREDENTIAL)
-                        || keyIssue.contentEquals(Constant.KEY_PAPERS_BAPTIZE)
-                        || keyIssue.contentEquals(Constant.KEY_PAPERS_SIDI)
-                        || keyIssue.contentEquals(Constant.KEY_PAPERS_MARRIED)) {
+        }
+        else if (isIssuePaper(keyIssue)) {
 
             keyIssueValue.put("letter_id", obj.getString("letter_id"));
             keyIssueValue.put("letter_entry_number", obj.getString("letter_entry_number"));
             keyIssueValue.put("letter_type", obj.getString("letter_type"));
             keyIssueValue.put("letter_link_printable", obj.getString("letter_link_printable"));
 
-
-            if (isAccepted) {
+            if (!issueAuthStatus.contentEquals(AUTHORIZATION_STATUS_ACCEPTED)) {
                 tvLetterNumberEntry.setVisibility(View.VISIBLE);
                 tvLetterNumberEntry.setText(((String) keyIssueValue.get("letter_entry_number")));
-
             }
 
-        } else if ( /////////////////////////////////////////////////////// SERVICE ///////////////////////////////////////////////////////
-                keyIssue.contentEquals(Constant.KEY_SERVICE_KOLOM)
-                        || keyIssue.contentEquals(Constant.KEY_SERVICE_BIPRA)
-                        || keyIssue.contentEquals(Constant.KEY_SERVICE_HUT)
-                        || keyIssue.contentEquals(Constant.KEY_SERVICE_PEMAKAMAN)
-                        || keyIssue.contentEquals(Constant.KEY_SERVICE_PERINGATAN)
-                        || keyIssue.contentEquals(Constant.KEY_SERVICE_KELUARGA)
-                        || keyIssue.contentEquals(Constant.KEY_SERVICE_HARI_RAYA)
-                        || keyIssue.contentEquals(Constant.KEY_SERVICE_SPECIAL)
-                        || keyIssue.contentEquals(Constant.KEY_SERVICE_LAIN)
-                        || keyIssue.contentEquals(Constant.KEY_SERVICE_SPECIAL_IBADAH_MINGGU)) {
+        }
+        else if (isIssueService(keyIssue)) {
 
             keyIssueValue.put("service_id", obj.getString("service_id"));
             keyIssueValue.put("service_date", obj.getString("service_date"));
@@ -349,18 +256,19 @@ public class IssueDetail extends AppCompatActivity {
                 tvDescription.setText(obj.getString("service_description"));
             }
         }
+        else if (keyIssue.contentEquals(KEY_OTHER_APPLY_MEMBER)) {
+
+            if (!obj.isNull("description")) {
+                cvDescription.setVisibility(View.VISIBLE);
+                tvDescription.setText(obj.getString("description"));
+            }
+        }
 
         JSONObject issuedByMemberObj = obj.getJSONObject("issued_by_member");
         issuedByMember = new HashMap<>();
         issuedByMember.put("name", issuedByMemberObj.getString("name"));
 
-        StringBuilder churchPositionString = new StringBuilder();
-        JSONArray churchpositionArray = issuedByMemberObj.getJSONArray("church_position");
-        for (int j = 0; j < churchpositionArray.length(); j++) {
-            String p = ((String) churchpositionArray.get(j));
-            churchPositionString = j == churchpositionArray.length() - 1 ? churchPositionString.append(p) : churchPositionString.append(p).append("\n");
-        }
-        issuedByMember.put("church_position", churchPositionString.toString());
+        issuedByMember.put("church_position", issuedByMemberObj.getString("church_position"));
         issuedByMember.put("column", issuedByMemberObj.getString("column"));
 
         JSONArray issuedMembers = obj.getJSONArray("issued_members");
@@ -381,56 +289,48 @@ public class IssueDetail extends AppCompatActivity {
         }
         insertCategory(keyIssue);
 
-        String printableKey = obj.getString("printable_key");
-        if (printableKey != null && !printableKey.isEmpty()) {
+        if (!obj.isNull("printable_key")) {
+            String printableKey = obj.getString("printable_key");
             cvPrintable.setVisibility(View.VISIBLE);
             cvButtonDownload.setOnClickListener(view -> downloadFile(printableKey));
             TextView tvLink = cvPrintable.findViewById(R.id.textView_link);
-            String s = Constant.ROOT_URL_PRINTABLE + printableKey;
-            tvLink.setText(s);
+            String url = ROOT_URL_PRINTABLE + printableKey;
+            tvLink.setText(url);
         }
 
         setupHeaderCardView();
         setupIssuedMembers();
         setupNotations();
         setupIssuedBy();
-//        setupButtons();
-
-        if (llBody.getVisibility() != View.VISIBLE)
-            llBody.setVisibility(View.VISIBLE);
-//        if (llButtons.getVisibility() != View.VISIBLE)
-//            llButtons.setVisibility(View.VISIBLE);
-//        if (progress.getVisibility() == View.VISIBLE)
-//            progress.setVisibility(View.INVISIBLE);
+        setupAcceptRejectButtons();
 
     }
 
     private void setupHeaderCardView() {
 
-
         tvKeyIssue.setText(keyIssue);
         tvIssuedDate.setText(issuedDate);
 
-        if (!isAccepted && !isRejected) {
+        if (issueAuthStatus.contentEquals(AUTHORIZATION_STATUS_UNCONFIRMED)) {
 
             tvLetterNumberEntry.setVisibility(View.GONE);
             tvKeyIssue.setPadding(0, 20, 0, 0);
 
             cvAcceptReject.setVisibility(View.GONE);
-        } else if (isAccepted && !isRejected) {
+        }
+        else if (issueAuthStatus.contentEquals(AUTHORIZATION_STATUS_ACCEPTED)) {
 
-            Constant.toggleViewVisibility(cvAcceptReject);
+            cvAcceptReject.setVisibility(View.VISIBLE);
             tvAcceptRejectText.setText("DITERIMA");
             tvAcceptRejectDate.setText(finishDate);
 
-
-        } else if (!isAccepted && isRejected) {
-
+        }
+        else if (issueAuthStatus.contentEquals(AUTHORIZATION_STATUS_REJECTED)) {
 
             tvLetterNumberEntry.setVisibility(View.GONE);
             tvKeyIssue.setPadding(0, 20, 0, 0);
 
-            Constant.toggleViewVisibility(cvAcceptReject);
+            cvAcceptReject.setVisibility(View.VISIBLE);
             tvAcceptRejectText.setText("DITOLAK");
             tvAcceptRejectDate.setText(finishDate);
 
@@ -474,9 +374,11 @@ public class IssueDetail extends AppCompatActivity {
 
         if (notations.isEmpty()) {
             llNotationPlaceHolder.setVisibility(View.GONE);
-        } else {
-            if (llNotationPlaceHolder.getVisibility() == View.GONE)
+        }
+        else {
+            if (llNotationPlaceHolder.getVisibility() == View.GONE) {
                 llNotationPlaceHolder.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -524,16 +426,61 @@ public class IssueDetail extends AppCompatActivity {
 
     }
 
+    public static final String KEY_ISSUE_DETAIL_CONFIRM_AUTH = "key_issue_detail_confirm_auth";
+
+    private void setupAcceptRejectButtons() {
+        int authStatusCode = getIntent().getIntExtra("AUTHORIZATION_STATUS_CODE", 99);
+        int authId = getIntent().getIntExtra("AUTHORIZATION_ID", 0);
+        if (authStatusCode != 99) {
+            if (authStatusCode == AUTHORIZATION_STATUS_CODE_UNCONFIRMED) {
+                llButtons.setVisibility(View.VISIBLE);
+                btnAccept.setOnClickListener(v -> {
+                    Bundle data = new Bundle();
+                    data.putInt("AUTH_ID", authId);
+                    data.putInt("AUTH_CODE", AUTHORIZATION_STATUS_CODE_ACCEPTED);
+
+                    String title = "Konfirmasi Penerimaan";
+                    String message = "Anda akan MENERIMA pengajuan ini, silahkan sentuh tombol 'OK' untuk konfirmasi bahwa pengajuan ini akan DITERIMA";
+                    Intent i = new Intent(KEY_ISSUE_DETAIL_CONFIRM_AUTH);
+                    i.putExtra("AUTH_ID", authId);
+                    i.putExtra("AUTH_CODE", AUTHORIZATION_STATUS_CODE_ACCEPTED);
+                    Constant.displayDialog(IssueDetail.this, title, message, false,
+                            (dialog, which) -> {
+                                sendBroadcast(i);
+                                finish();
+                            },
+                            (dialog, which) -> dialog.dismiss());
+                });
+                btnReject.setOnClickListener(v -> {
+                    String title = "Konfirmasi Penolakan";
+                    String message = "Anda akan MENOLAK pengajuan ini, silahkan sentuh tombol 'OK' untuk konfirmasi bahwa pengajuan ini akan DITOLAK";
+                    Intent i = new Intent(KEY_ISSUE_DETAIL_CONFIRM_AUTH);
+                    i.putExtra("AUTH_ID", authId);
+                    i.putExtra("AUTH_CODE", AUTHORIZATION_STATUS_CODE_REJECTED);
+                    Constant.displayDialog(IssueDetail.this, title, message, false,
+                            (dialog, which) -> {
+                                sendBroadcast(i);
+                                finish();
+                            },
+                            (dialog, which) -> dialog.dismiss());
+                });
+            }
+        }
+        else {
+            Log.e(TAG, "setupAcceptRejectButtons: authStatusCode =" + authStatusCode);
+        }
+    }
+
     private void insertCategory(String keyIssue) {
         if (!names.isEmpty()) {
             switch (keyIssue) {
-                case Constant.KEY_PAPERS_BAPTIZE:
+                case KEY_PAPERS_BAPTIZE:
                     names.get(0).setCategory("Yang di baptis :");
                     names.get(1).setCategory("Ayah :");
                     names.get(2).setCategory("Ibu :");
                     names.get(3).setCategory("Saksi-saksi :");
                     break;
-                case Constant.KEY_PAPERS_MARRIED:
+                case KEY_PAPERS_MARRIED:
                     names.get(0).setCategory("Suami :");
                     names.get(1).setCategory("Ayah Suami :");
                     names.get(2).setCategory("Ibu Suami :");
@@ -577,7 +524,7 @@ public class IssueDetail extends AppCompatActivity {
 
         Snackbar.make(findViewById(android.R.id.content), "Downloading / Mengunduh ...", Snackbar.LENGTH_INDEFINITE).show();
 
-        DownloadManager.Request req = new DownloadManager.Request(Uri.parse(Constant.ROOT_URL_PRINTABLE + printableKey));
+        DownloadManager.Request req = new DownloadManager.Request(Uri.parse(ROOT_URL_PRINTABLE + printableKey));
 
         req.setTitle(keyIssue.toUpperCase().replace(" ", "_") + ".pdf")// Title of the Download Notification
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)// Visibility of the download Notification
@@ -588,7 +535,7 @@ public class IssueDetail extends AppCompatActivity {
         downloadID = dm.enqueue(req);
     }
 
-    private class IssueDetailModelHelper {
+    private static class IssueDetailModelHelper {
         private int id;
         private String name;
         private String dateOfBirth;

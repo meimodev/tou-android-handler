@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Kidung.Fragment_User_Home_Kidung;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_News.Fragment_User_Home_News;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Tatacara.Fragment_User_Home_Tatacara;
@@ -40,7 +41,6 @@ public class Fragment_User_Home extends Fragment {
 
     private BottomNavigationView bottomNavigationView;
 
-    private FloatingActionMenu FAM = null;
 
     @Nullable
     @Override
@@ -50,11 +50,6 @@ public class Fragment_User_Home extends Fragment {
         context = rootView.getContext();
         ButterKnife.bind(this, rootView);
 
-        FAM = getActivity().findViewById(R.id.floatingActionMenu);
-        if (FAM != null) {
-            FAM.close(true);
-            FAM.setVisibility(View.GONE);
-        }
 //        Fetch Data From Server
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavBar);
         bottomNavigationView.setVisibility(View.VISIBLE);
@@ -95,9 +90,9 @@ public class Fragment_User_Home extends Fragment {
 
     @Override
     public void onDetach() {
-        if (FAM != null && FAM.getVisibility() != View.VISIBLE)
-            FAM.setVisibility(View.VISIBLE);
-        bottomNavigationView.setVisibility(View.GONE);
+
+
+        bottomNavigationView.setVisibility(View.INVISIBLE);
 
         super.onDetach();
     }

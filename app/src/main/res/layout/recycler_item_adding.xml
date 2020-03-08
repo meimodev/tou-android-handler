@@ -82,13 +82,14 @@
             </LinearLayout>
 
             <!--Delete Button-->
-            <Button
+            <ImageButton
                 android:id="@+id/button_del"
                 style="@style/Button_DelButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:translationZ="2dp"
                 android:visibility="gone"
+                android:src="@drawable/ic_trash"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -147,7 +148,8 @@
 
                 <TextView
                     style="@style/TextView_recyclerItemBadgeText"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
+                    android:drawableEnd="@drawable/ic_check_24px"
                     android:layout_height="match_parent"
                     android:text="BAPTIS" />
 
@@ -166,7 +168,8 @@
 
                 <TextView
                     style="@style/TextView_recyclerItemBadgeText"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
+                    android:drawableEnd="@drawable/ic_check_24px"
                     android:layout_height="match_parent"
                     android:text="SIDI" />
 
@@ -184,7 +187,8 @@
 
                 <TextView
                     style="@style/TextView_recyclerItemBadgeText"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
+                    android:drawableEnd="@drawable/ic_check_24px"
                     android:layout_height="match_parent"
                     android:text="NIKAH" />
 

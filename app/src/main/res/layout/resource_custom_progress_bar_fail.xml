@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/pc"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:orientation="vertical" >
+    android:layout_margin="4dp"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardElevation="4dp">
 
-    <TextView
-        android:id="@+id/textView_fail"
+    <LinearLayout
+        android:id="@+id/pc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
-        android:gravity="center"
-        android:text="Koneksi Internet anda bermasalah -_-' "/>
+        android:orientation="vertical"
+        android:padding="8dp">
 
-    <ImageButton
-        android:id="@+id/button_tryAgain"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="8dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_menu_manage"/>
+        <TextView
+            android:id="@+id/textView_fail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
+            android:gravity="center"
+            android:maxLines="10"
+            android:text="Koneksi Internet anda bermasalah\nSilahkan coba sesaat lagi"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-</LinearLayout>
+        <ImageButton
+            android:id="@+id/button_tryAgain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/transparent"
+            android:padding="16dp"
+            android:src="@drawable/ic_reload" />
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

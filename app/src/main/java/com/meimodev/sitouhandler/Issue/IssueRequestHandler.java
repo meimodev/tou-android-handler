@@ -73,6 +73,9 @@ public class IssueRequestHandler {
 
         if (onRequestHandler != null) onRequestHandler.onTry();
 
+        if (call.isExecuted()) {
+            call = call.clone();
+        }
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

@@ -76,7 +76,10 @@
             android:name=".SignUp.ConfirmAccount"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <activity
+            android:name=".Wizard.ApplyMember.ApplyMember"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <service
             android:name=".FCM_Service"
             android:exported="false">

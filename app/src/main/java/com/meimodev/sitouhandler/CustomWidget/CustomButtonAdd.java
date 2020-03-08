@@ -3,12 +3,14 @@ package com.meimodev.sitouhandler.CustomWidget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.media.Image;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -115,7 +117,7 @@ public class CustomButtonAdd extends AppCompatButton {
 
             View v = inflater.inflate(R.layout.recycler_item_adding, rootViewGroup, false);
 
-            Button btnDelete = v.findViewById(R.id.button_del);
+            ImageButton btnDelete = v.findViewById(R.id.button_del);
             btnDelete.setVisibility(VISIBLE);
             btnDelete.setOnClickListener(view -> {
                 parentView.removeView(v);

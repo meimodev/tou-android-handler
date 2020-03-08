@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:layout_marginTop="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,8 +22,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:animateLayoutChanges="true"
                 android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
                 android:padding="10dp">
 
                 <TextView
@@ -38,8 +39,8 @@
                     android:id="@+id/linearLayout_Main"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:animateLayoutChanges="true"
-                    android:layout_marginTop="10dp"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -47,16 +48,22 @@
 
                     <!--EditText Amount-->
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_amount"
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        app:prefixText="Rp. "
+                        app:prefixTextColor="@color/colorPrimary"
                         android:animateLayoutChanges="true"
-                        android:layout_height="wrap_content">
+                        android:hint="Jumlah"
+                        app:endIconMode="clear_text">
 
                         <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                             android:id="@+id/editText_amount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Jumlah :"
-                            android:inputType="number" />
+                            android:inputType="number"
+                            android:maxLines="1" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -65,8 +72,8 @@
                         android:id="@+id/radioGroup_sentralisasi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:animateLayoutChanges="true"
+                        android:orientation="horizontal"
                         android:visibility="gone">
 
                         <RadioButton
@@ -89,8 +96,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:orientation="vertical"
                         android:animateLayoutChanges="true"
+                        android:orientation="vertical"
                         android:visibility="gone">
 
                         <LinearLayout
@@ -147,16 +154,16 @@
 
                             <TextView
                                 android:layout_width="wrap_content"
-                                android:text="Jenis Pengadaan"
+                                android:layout_height="fill_parent"
                                 android:gravity="center"
-                                android:textAlignment="gravity"
-                                android:layout_height="fill_parent" />
+                                android:text="Jenis Pengadaan"
+                                android:textAlignment="gravity" />
 
                             <com.jaredrummler.materialspinner.MaterialSpinner
-                                android:layout_width="match_parent"
-                                android:gravity="center_vertical"
                                 android:id="@+id/spinner_pengadaanType"
-                                android:layout_height="fill_parent" />
+                                android:layout_width="match_parent"
+                                android:layout_height="fill_parent"
+                                android:gravity="center_vertical" />
 
                         </LinearLayout>
 
@@ -166,7 +173,7 @@
                             style="@style/Button_TambahNamaButton"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:text="Tambah Pengadaan :" />
+                            android:text="Tambah Pengadaan" />
 
                         <LinearLayout
                             android:id="@+id/linearLayout_pengadaanPlaceHolder"
@@ -184,8 +191,8 @@
                         android:id="@+id/linearLayout_penunjangFasilitas"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:animateLayoutChanges="true"
+                        android:orientation="vertical"
                         android:visibility="gone">
 
                         <LinearLayout
@@ -208,13 +215,14 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:hint="Detil penggunaan"
+                            app:endIconMode="clear_text">
 
                             <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                                 android:id="@+id/editText_detail"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Detil penggunaan"
                                 android:inputType="text"
                                 android:maxLines="1" />
 
@@ -226,8 +234,8 @@
                         android:id="@+id/linearLayout_rapatSidangKonven"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:animateLayoutChanges="true"
+                        android:orientation="vertical"
                         android:visibility="gone">
 
                         <LinearLayout
@@ -273,10 +281,10 @@
                     </LinearLayout>
                     <!--Diakonia-->
                     <LinearLayout
-                        android:animateLayoutChanges="true"
                         android:id="@+id/linearLayout_diakonia"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
                         android:orientation="vertical"
                         android:visibility="gone">
 
@@ -296,8 +304,8 @@
                         <LinearLayout
                             android:id="@+id/linearLayout_tambahNama"
                             android:layout_width="match_parent"
-                            android:animateLayoutChanges="true"
                             android:layout_height="wrap_content"
+                            android:animateLayoutChanges="true"
                             android:orientation="vertical">
 
                             <com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd
@@ -337,13 +345,14 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:hint="Detail"
+                            app:endIconMode="clear_text">
 
                             <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                                 android:id="@+id/editText_pembekalan_detail"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Detail :"
                                 android:inputType="text" />
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -363,19 +372,20 @@
                         android:id="@+id/linearLayout_subsidi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:animateLayoutChanges="true"
+                        android:orientation="vertical"
                         android:visibility="gone">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:hint="Detil Penggunaan"
+                            app:endIconMode="clear_text">
 
                             <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                                 android:id="@+id/editText_subsidi_detail"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Detil Penggunaan:"
                                 android:inputType="text" />
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -394,9 +404,9 @@
 
                             <com.jaredrummler.materialspinner.MaterialSpinner
                                 android:id="@+id/spinner_subsidi"
-                                android:gravity="center"
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent" />
+                                android:layout_height="match_parent"
+                                android:gravity="center" />
 
                         </LinearLayout>
 
@@ -404,8 +414,8 @@
                             android:id="@+id/spinner_subsidiIbadah"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            android:gravity="center" />
+                            android:gravity="center"
+                            android:visibility="gone" />
 
                     </LinearLayout>
                     <!--Lainnya-->
@@ -414,18 +424,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:animateLayoutChanges="true"
-                        android:visibility="gone"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
+                            android:hint="Detil Penggunan"
+                            app:endIconMode="clear_text"
                             android:layout_height="wrap_content">
 
                             <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                                 android:id="@+id/editText_lainnya_detail"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Detil Penggunan :"
                                 android:inputType="text" />
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -445,9 +456,9 @@
 
                             <com.jaredrummler.materialspinner.MaterialSpinner
                                 android:id="@+id/spinner_other"
-                                android:gravity="center"
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent" />
+                                android:layout_height="match_parent"
+                                android:gravity="center" />
 
                         </LinearLayout>
 
@@ -470,13 +481,14 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
+                            android:hint="Detil Penggunaan"
+                            app:endIconMode="clear_text"
                             android:layout_height="wrap_content">
 
                             <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                                 android:id="@+id/editText_note"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Detil Penggunaan :"
                                 android:inputType="text" />
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -505,10 +517,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

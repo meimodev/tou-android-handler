@@ -4,10 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 
 import android.util.Log;
 import android.view.View;
@@ -16,12 +16,15 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 
 import com.github.squti.guru.Guru;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.leinardi.android.speeddial.SpeedDialActionItem;
+import com.leinardi.android.speeddial.SpeedDialView;
 import com.meimodev.sitouhandler.BuildConfig;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Cheif.NavFragment_Chief_ManageServiceArea;
@@ -36,6 +39,7 @@ import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Treasurer.Nav
 import com.meimodev.sitouhandler.Issue.Issue;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
+import com.meimodev.sitouhandler.Wizard.ApplyMember.ApplyMember;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -48,6 +52,7 @@ import android.view.Menu;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -65,7 +70,7 @@ public class Dashboard extends AppCompatActivity {
 
     private DrawerLayout drawer;
 
-    private FloatingActionMenu floatingActionMenu;
+    private SpeedDialView speedDialView;
 
     private NavigationView navigationView;
 
@@ -84,14 +89,33 @@ public class Dashboard extends AppCompatActivity {
                 guideline.setLayoutParams(lp);
 
                 int visibility = isCollapse ? View.GONE : View.VISIBLE;
+//                ConstraintLayout.LayoutParams params = isCollapse ?
+//                        new ConstraintLayout.LayoutParams(
+//                                ConstraintLayout.LayoutParams.MATCH_PARENT,
+//                                (int) TypedValue.applyDimension(
+//                                        TypedValue.COMPLEX_UNIT_DIP,
+//                                        40,
+//                                        getResources().getDisplayMetrics()
+//                                )
+//                        )
+//                        :
+//                        new ConstraintLayout.LayoutParams(
+//                                ConstraintLayout.LayoutParams.MATCH_PARENT,
+//                                (int) TypedValue.applyDimension(
+//                                        TypedValue.COMPLEX_UNIT_DIP,
+//                                        0,
+//                                        getResources().getDisplayMetrics()
+//                                )
+//                        );
+
                 LinearLayout llGuide = findViewById(R.id.layout_guide);
                 llGuide.setVisibility(visibility);
-
+//                llGuide.setLayoutParams(params);
                 TextView tvTitle = findViewById(R.id.textView_title);
                 tvTitle.setVisibility(isCollapse ? View.VISIBLE : View.GONE);
 
-                if (Guru.getInt(KEY_MEMBER_ID, 0) == 0){
-                    if (!isCollapse ){
+                if (Guru.getInt(KEY_MEMBER_ID, 0) == 0) {
+                    if (!isCollapse) {
                         if (llApplyMembership.getVisibility() != View.VISIBLE)
                             llApplyMembership.setVisibility(View.VISIBLE);
                     } else {
@@ -120,7 +144,6 @@ public class Dashboard extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         Constant.changeStatusColor(this, R.color.colorPrimary);
-
 
 //        Binding Auth Token to Retrofit
         RetrofitClient.resetRetrofitClient();
@@ -154,7 +177,7 @@ public class Dashboard extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //       Check if Floating Action Menu open then close it
-        if (floatingActionMenu.isOpened()) floatingActionMenu.close(true);
+        if (speedDialView.isOpen()) speedDialView.close(true);
         else {
 //           Check if drawer open then close it
             if (drawer.isDrawerOpen(GravityCompat.START)) drawer.closeDrawer(GravityCompat.START);
@@ -195,13 +218,13 @@ public class Dashboard extends AppCompatActivity {
         Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to USER");
 
         int member_id = Guru.getInt(KEY_MEMBER_ID, 0);
-        if ( member_id != 0 && Guru.getString(KEY_MEMBER_BIPRA,null) != null) {
+        if (member_id != 0 && Guru.getString(KEY_MEMBER_BIPRA, null) != null) {
 
             //if have church membership than subscribe to gmim member
             fcm.subscribeToTopic(NOTIFICATION_TOPIC_GMIM_MEMBER);
             Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to GMIM Member");
 
-            int churchId = Guru.getInt(KEY_CHURCH_ID,0);
+            int churchId = Guru.getInt(KEY_CHURCH_ID, 0);
             String churchTopic = NOTIFICATION_TOPIC_CHURCH + "_" + churchId;
             // subscribe to church topic
             fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH);
@@ -309,7 +332,7 @@ public class Dashboard extends AppCompatActivity {
     private void setupNavDrawerItemsBasedOnAccountType() {
 
         String memberPosition = Guru.getString(KEY_MEMBER_CHURCH_POSITION, null);
-        Log.e(TAG, "setupNavDrawerItemsBasedOnAccountType: memberPositions "+ memberPosition );
+        Log.e(TAG, "setupNavDrawerItemsBasedOnAccountType: memberPositions " + memberPosition);
 
         if (memberPosition.contains(ACCOUNT_TYPE_CHIEF)) {
             navigationView.setCheckedItem(R.id.nav_home);
@@ -345,49 +368,68 @@ public class Dashboard extends AppCompatActivity {
 
     private void setupFloatingActionMenuAndButtons() {
         //        setup Floating Action Menu & Buttons
-        floatingActionMenu = findViewById(R.id.floatingActionMenu);
-        FloatingActionButton fab = new FloatingActionButton(Dashboard.this);
-        fab.setLabelText("Ajuan Pengeluaran");
-        fab.setButtonSize(FloatingActionButton.SIZE_MINI);
-        fab.setImageResource(R.drawable.ic_menu_send);
-        fab.setOnClickListener(v -> {
-            if (floatingActionMenu.isOpened()) floatingActionMenu.close(true);
-            startActivity(new Intent(Dashboard.this, Issue.class).putExtra("ISSUE_TYPE", ISSUE_TYPE_OUTCOME));
-        });
-        floatingActionMenu.addMenuButton(fab);
+        speedDialView = findViewById(R.id.speedDial);
+        speedDialView.setUseReverseAnimationOnClose(true);
+        speedDialView.setMainFabClosedIconColor(Color.WHITE);
+        speedDialView.setMainFabOpenedIconColor(Color.WHITE);
 
-        floatingActionMenu = findViewById(R.id.floatingActionMenu);
-        fab = new FloatingActionButton(Dashboard.this);
-        fab.setLabelText("Ajuan Pemasukan");
-        fab.setButtonSize(FloatingActionButton.SIZE_MINI);
-        fab.setImageResource(R.drawable.ic_menu_send);
-        fab.setOnClickListener(v -> {
-            if (floatingActionMenu.isOpened()) floatingActionMenu.close(true);
-            startActivity(new Intent(Dashboard.this, Issue.class).putExtra("ISSUE_TYPE", ISSUE_TYPE_INCOME));
-        });
-        floatingActionMenu.addMenuButton(fab);
+        SpeedDialActionItem item;
 
-        fab = new FloatingActionButton(Dashboard.this);
-        fab.setLabelText("Ajuan Surat");
-        fab.setButtonSize(FloatingActionButton.SIZE_MINI);
-        fab.setImageResource(R.drawable.ic_menu_send);
-        fab.setOnClickListener(v -> {
-            if (floatingActionMenu.isOpened()) floatingActionMenu.close(true);
-            startActivity(new Intent(Dashboard.this, Issue.class).putExtra("ISSUE_TYPE", ISSUE_TYPE_PAPERS));
-        });
-        floatingActionMenu.addMenuButton(fab);
+        item = new SpeedDialActionItem.Builder(ISSUE_TYPE_SERVICE, R.drawable.ic_cross)
+                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent4End, getTheme()))
+                .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.mdtp_white, getTheme()))
+                .setLabel("Ajuan Ibadah")
+                .setLabelColor(Color.WHITE)
+                .setFabImageTintColor(Color.WHITE)
+                .setLabelBackgroundColor(Color.TRANSPARENT)
+                .setLabelClickable(true)
+                .create();
+        speedDialView.addActionItem(item);
 
-        fab = new FloatingActionButton(Dashboard.this);
-        fab.setLabelText("Ajuan Ibadah");
-        fab.setButtonSize(FloatingActionButton.SIZE_MINI);
-        fab.setImageResource(R.drawable.ic_menu_send);
-        fab.setOnClickListener(v -> {
-            if (floatingActionMenu.isOpened()) floatingActionMenu.close(true);
-            startActivity(new Intent(Dashboard.this, Issue.class).putExtra("ISSUE_TYPE", ISSUE_TYPE_SERVICE));
-        });
-        floatingActionMenu.addMenuButton(fab);
 
-        floatingActionMenu.setClosedOnTouchOutside(true);
+        item = new SpeedDialActionItem.Builder(ISSUE_TYPE_PAPERS, R.drawable.ic_papers)
+                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent4End, getTheme()))
+                .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.mdtp_white, getTheme()))
+                .setLabel("Ajuan Surat")
+                .setLabelColor(Color.WHITE)
+                .setFabImageTintColor(Color.WHITE)
+                .setLabelBackgroundColor(Color.TRANSPARENT)
+                .setLabelClickable(true)
+                .create();
+        speedDialView.addActionItem(item);
+
+        item = new SpeedDialActionItem.Builder(ISSUE_TYPE_INCOME, R.drawable.ic_arrow_expand_down)
+                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent4End, getTheme()))
+                .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.mdtp_white, getTheme()))
+                .setLabel("Ajuan Pemasukkan")
+                .setLabelColor(Color.WHITE)
+                .setFabImageTintColor(Color.WHITE)
+                .setLabelBackgroundColor(Color.TRANSPARENT)
+                .setLabelClickable(true)
+                .create();
+        speedDialView.addActionItem(item);
+
+
+        item = new SpeedDialActionItem.Builder(ISSUE_TYPE_OUTCOME, R.drawable.ic_arrow_expand_up)
+                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent4End, getTheme()))
+                .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.mdtp_white, getTheme()))
+                .setLabel("Ajuan Pengeluaran")
+                .setLabelColor(Color.WHITE)
+                .setFabImageTintColor(Color.WHITE)
+                .setLabelBackgroundColor(Color.TRANSPARENT)
+                .setLabelClickable(true)
+                .create();
+        speedDialView.addActionItem(item);
+
+
+        speedDialView.setOnActionSelectedListener(actionItem -> {
+            startActivity(new Intent(Dashboard.this, Issue.class).putExtra("ISSUE_TYPE", actionItem.getId()));
+            return true;
+        });
+
+
+
+
     }
 
     private void setupToolbarAndNavigationDrawer() {
@@ -398,7 +440,7 @@ public class Dashboard extends AppCompatActivity {
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-                if (floatingActionMenu.isOpened()) floatingActionMenu.close(true);
+                if (speedDialView.isOpen()) speedDialView.close(true);
             }
 
             @Override
@@ -561,10 +603,13 @@ public class Dashboard extends AppCompatActivity {
     TextView tvChurchNameAndVillage;
     @BindView(R.id.cardView_importantDates)
     CardView cvImportantDates;
-    @BindView(R.id.textView_title)TextView tvTitle;
+    @BindView(R.id.textView_title)
+    TextView tvTitle;
 
-    @BindView(R.id.layout_infoHolder) LinearLayout llInfoHolder;
-    @BindView(R.id.layout_applyMembership)LinearLayout llApplyMembership;
+    @BindView(R.id.layout_infoHolder)
+    LinearLayout llInfoHolder;
+    @BindView(R.id.layout_applyMembership)
+    LinearLayout llApplyMembership;
     @BindView(R.id.button_apply)
     Button btnApply;
 
@@ -577,16 +622,16 @@ public class Dashboard extends AppCompatActivity {
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .addToBackStack(null)
                     .commit();
-            if (floatingActionMenu.isOpened()) floatingActionMenu.close(true);
+            if (speedDialView.isOpen()) speedDialView.close(true);
         });
 
         tvTitle.setText("TOU-System");
-        if (Guru.getInt(KEY_MEMBER_ID, 0) == 0){
+        if (Guru.getInt(KEY_MEMBER_ID, 0) == 0) {
             llInfoHolder.setVisibility(View.GONE);
             llApplyMembership.setVisibility(View.VISIBLE);
 
             btnApply.setOnClickListener(v -> {
-                Snackbar.make(findViewById(android.R.id.content), "TESSTT", Snackbar.LENGTH_LONG).show();
+                startActivity(new Intent(this, ApplyMember.class));
             });
 
 

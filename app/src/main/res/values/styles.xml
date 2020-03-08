@@ -17,12 +17,16 @@
 
         <!--        <item name="android:animateLayoutChanges">true</item>-->
         <item name="fontFamily">@font/montserrat_regular</item> <!-- target android sdk versions < 26 and > 14 if theme other than AppCompat -->
+
+        <item name="android:maxLines">1</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
@@ -75,11 +79,11 @@
     </style>
 
     <style name="Button_DelButton">
+        <item name="android:src">@drawable/ic_trash</item>
         <item name="android:layout_weight">0.3</item>
         <item name="android:backgroundTint">@color/colorAccent</item>
         <item name="android:textColor">@color/ButtonText_LightGrey</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:text">x</item>
         <item name="android:gravity">center</item>
         <item name="android:textAlignment">gravity</item>
         <item name="android:textSize">18sp</item>
@@ -115,6 +119,8 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textColor">@color/ButtonText_LightGrey</item>
+        <item name= "android:drawablePadding">4dp</item>
+        <item name= "android:gravity">center_vertical</item>
     </style>
 
     <style name="TextView_label">
@@ -127,6 +133,8 @@
         <item name="android:textSize">15sp</item>
     </style>
 
-
+    <style name="radioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="fontFamily">@font/montserrat_regular</item>
+    </style>
 
 </resources>

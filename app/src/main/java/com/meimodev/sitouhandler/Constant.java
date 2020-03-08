@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
@@ -67,8 +68,8 @@ public class Constant {
     public static final String ACCOUNT_TYPE_TREASURER = "Bendahara Jemaat";
     public static final String ACCOUNT_TYPE_PEGAWAI = "Pegawai Gereja";
     public static final String ACCOUNT_TYPE_PRIEST = "Pendeta";
-    public static final String ACCOUNT_TYPE_PENATUA = "Penatua";
-    public static final String ACCOUNT_TYPE_SYAMAS = "Syamas";
+    public static final String ACCOUNT_TYPE_PENATUA = "Penatua Kolom";
+    public static final String ACCOUNT_TYPE_SYAMAS = "Syamas Kolom";
     public static final String ACCOUNT_TYPE_PENATUA_PKB = "Penatua PKB";
     public static final String ACCOUNT_TYPE_PENATUA_WKI = "Penatua WKI";
     public static final String ACCOUNT_TYPE_PENATUA_YOUTH = "Penatua Pemuda";
@@ -128,6 +129,8 @@ public class Constant {
 
     public static final String KEY_SERVICE_SPECIAL_IBADAH_MINGGU = "Ibadah Minggu";
 
+    public static final String KEY_OTHER_APPLY_MEMBER = "Anggota Jemaat";
+
     public static final String AUTHORIZATION_STATUS_UNAUTHORIZED = "UNAUTHORIZED";
     public static final String AUTHORIZATION_STATUS_UNCONFIRMED = "UNCONFIRMED";
     public static final String AUTHORIZATION_STATUS_ACCEPTED = "ACCEPTED";
@@ -172,52 +175,6 @@ public class Constant {
     // Minor Univ Methods
     ///////////////////////////////////////////////////////////////////////////
 
-    public static String formatDate(int days, int month, int year) {
-
-        String monthNames;
-        switch (month + 1) {
-            case 1:
-                monthNames = "Januari";
-                break;
-            case 2:
-                monthNames = "Februari";
-                break;
-            case 3:
-                monthNames = "Maret";
-                break;
-            case 4:
-                monthNames = "April";
-                break;
-            case 5:
-                monthNames = "Mei";
-                break;
-            case 6:
-                monthNames = "Juni";
-                break;
-            case 7:
-                monthNames = "Juli";
-                break;
-            case 8:
-                monthNames = "Agustus";
-                break;
-            case 9:
-                monthNames = "September";
-                break;
-            case 10:
-                monthNames = "Oktober";
-                break;
-            case 11:
-                monthNames = "November";
-                break;
-            case 12:
-                monthNames = "Desember";
-                break;
-            default:
-                monthNames = "Invalid month !";
-        }
-
-        return days + " " + monthNames + " " + year;
-    }
 
     public static String formatTime(int hour, int minute, int second, boolean displayWithSecond) {
         String postfix, h, m, s;
@@ -238,11 +195,6 @@ public class Constant {
 
         if (!displayWithSecond) return "Pukul " + h + " : " + m;
         else return "Pukul, " + h + " : " + m + " '" + s;
-    }
-
-    public static void toggleViewVisibility(View view) {
-        if (view.getVisibility() == View.GONE) view.setVisibility(View.VISIBLE);
-        else view.setVisibility(View.GONE);
     }
 
     public static void toggleSort(Context context, TextView tv, boolean isSelected) {
@@ -277,10 +229,10 @@ public class Constant {
 
     }
 
-    public static void displayDialog(@Nullable Context context,
+    public static void displayDialog(Context context,
                                      @Nullable String title,
                                      @Nullable String content,
-                                     @Nullable boolean cancelable,
+                                     @Nullable Boolean cancelable,
                                      @Nullable DialogInterface.OnClickListener positiveClickListener,
                                      @Nullable DialogInterface.OnClickListener negativeClickListener,
                                      @Nullable DialogInterface.OnDismissListener dismissListener
@@ -289,7 +241,7 @@ public class Constant {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         if (title != null) builder.setTitle(title);
         if (content != null) builder.setMessage(content);
-        builder.setCancelable(cancelable);
+        builder.setCancelable(cancelable == null ? true : cancelable);
         if (positiveClickListener != null) builder.setPositiveButton("OK", positiveClickListener);
         if (negativeClickListener != null)
             builder.setNegativeButton("BATAL", negativeClickListener);
@@ -461,7 +413,7 @@ public class Constant {
                     // Get new Instance ID token
                     String token = task.getResult().getToken();
 
-                    int userId= Guru.getInt(KEY_USER_ID, 0);
+                    int userId = Guru.getInt(KEY_USER_ID, 0);
                     if (userId == 0) throw new NumberFormatException("USER ID cannot be 0");
                     IssueRequestHandler req = new IssueRequestHandler(null);
                     req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().setFCMToken(
@@ -480,6 +432,47 @@ public class Constant {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(context, colorId));
+    }
+
+    public static boolean isIssueOutcome(@NonNull String keyIssue) {
+        return keyIssue.contentEquals(KEY_OUTCOME_CENTRALIZE)
+                || keyIssue.contentEquals(KEY_OUTCOME_PAYCHECK)
+                || keyIssue.contentEquals(KEY_OUTCOME_PENGADAAN)
+                || keyIssue.contentEquals(KEY_OUTCOME_FASILITAS_PENUNJANG_PELAYAN)
+                || keyIssue.contentEquals(KEY_OUTCOME_RAPAT_SIDANG_KONVEN)
+                || keyIssue.contentEquals(KEY_OUTCOME_DIAKONIA_BESASISWA)
+                || keyIssue.contentEquals(KEY_OUTCOME_PEMBEKALAN_PELATIHAN)
+                || keyIssue.contentEquals(KEY_OUTCOME_SUBSIDI_BIPRA_IBADAH_KEGIATAN)
+                || keyIssue.contentEquals(KEY_OUTCOME_OTHER)
+                || keyIssue.contentEquals(KEY_OUTCOME_OTHER_NO_ACCOUNT);
+    }
+
+    public static boolean isIssueIncome(@NonNull String keyIssue) {
+        return keyIssue.contentEquals(KEY_INCOME_PERSEMBAHAN_IBADAH)
+                || keyIssue.contentEquals(KEY_INCOME_SAMPUL_SYUKUR)
+                || keyIssue.contentEquals(KEY_INCOME_LAINNYA)
+                || keyIssue.contentEquals(KEY_INCOME_LAINNYA_NO_ACCOUNT);
+    }
+
+    public static boolean isIssuePaper(@NonNull String keyIssue) {
+        return keyIssue.contentEquals(KEY_PAPERS_VALIDATE_MEMBERS)
+                || keyIssue.contentEquals(KEY_PAPERS_CREDENTIAL)
+                || keyIssue.contentEquals(KEY_PAPERS_BAPTIZE)
+                || keyIssue.contentEquals(KEY_PAPERS_SIDI)
+                || keyIssue.contentEquals(KEY_PAPERS_MARRIED);
+    }
+
+    public static boolean isIssueService(@NonNull String keyIssue) {
+        return keyIssue.contentEquals(KEY_SERVICE_KOLOM)
+                || keyIssue.contentEquals(KEY_SERVICE_BIPRA)
+                || keyIssue.contentEquals(KEY_SERVICE_HUT)
+                || keyIssue.contentEquals(KEY_SERVICE_PEMAKAMAN)
+                || keyIssue.contentEquals(KEY_SERVICE_PERINGATAN)
+                || keyIssue.contentEquals(KEY_SERVICE_KELUARGA)
+                || keyIssue.contentEquals(KEY_SERVICE_HARI_RAYA)
+                || keyIssue.contentEquals(KEY_SERVICE_SPECIAL)
+                || keyIssue.contentEquals(KEY_SERVICE_LAIN)
+                || keyIssue.contentEquals(KEY_SERVICE_SPECIAL_IBADAH_MINGGU);
     }
 
 }

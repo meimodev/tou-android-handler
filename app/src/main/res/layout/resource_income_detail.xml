@@ -2,23 +2,22 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:animateLayoutChanges="true"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:baselineAligned="false"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <!--Column left-->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="vertical"
             android:paddingStart="4dp"
             android:paddingEnd="4dp">
@@ -32,7 +31,36 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="bottom"
+                    android:gravity="center_vertical"
+                    android:text="Rp. 500 (Logam)" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    android:gravity="center"
+                    android:text="X"
+                    android:textAlignment="center" />
+
+                <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                    android:id="@+id/editText_500metal"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
                     android:text="Rp. 1.000 (Logam)" />
 
                 <TextView
@@ -91,134 +119,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="Rp. 5.000" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3"
-                    android:gravity="center"
-                    android:text="X"
-                    android:textAlignment="center" />
-
-                <com.meimodev.sitouhandler.CustomWidget.CustomEditText
-                    android:id="@+id/editText_5k"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:inputType="number"
-                    android:textAlignment="center" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="Rp. 20.000" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3"
-                    android:gravity="center"
-                    android:text="X"
-                    android:textAlignment="center" />
-
-                <com.meimodev.sitouhandler.CustomWidget.CustomEditText
-                    android:id="@+id/editText_20k"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:inputType="number"
-                    android:textAlignment="center" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="Rp. 100.000" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3"
-                    android:gravity="center"
-                    android:text="X"
-                    android:textAlignment="center" />
-
-                <com.meimodev.sitouhandler.CustomWidget.CustomEditText
-                    android:id="@+id/editText_100k"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:inputType="number"
-                    android:textAlignment="center" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!--Column Right-->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="bottom"
-                    android:text="Rp. 500 (Logam)" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3"
-                    android:gravity="center"
-                    android:text="X"
-                    android:textAlignment="center" />
-
-                <com.meimodev.sitouhandler.CustomWidget.CustomEditText
-                    android:id="@+id/editText_500metal"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:inputType="number"
-                    android:textAlignment="center" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
                     android:text="Rp. 2.000" />
 
                 <TextView
@@ -231,6 +131,35 @@
 
                 <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                     android:id="@+id/editText_2k"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Rp. 5.000" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    android:gravity="center"
+                    android:text="X"
+                    android:textAlignment="center" />
+
+                <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                    android:id="@+id/editText_5k"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -277,6 +206,35 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="Rp. 20.000" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    android:gravity="center"
+                    android:text="X"
+                    android:textAlignment="center" />
+
+                <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                    android:id="@+id/editText_20k"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
                     android:text="Rp. 50.000" />
 
                 <TextView
@@ -302,29 +260,59 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView_total"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:paddingStart="0dp"
-                    android:paddingEnd="8dp"
-                    android:gravity="center"
-                    android:text="Total Pelayanan"
-                    android:textColor="@color/TextView_Label_Dark" />
+                    android:gravity="center_vertical"
+                    android:text="Rp. 100.000" />
 
-
-                <com.meimodev.sitouhandler.CustomWidget.CustomEditText
-                    android:id="@+id/editText_detailTotal"
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:focusable="false"
+                    android:layout_weight="0.3"
+                    android:gravity="center"
+                    android:text="X"
+                    android:textAlignment="center" />
+
+                <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                    android:id="@+id/editText_100k"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:inputType="number"
                     android:textAlignment="center" />
             </LinearLayout>
 
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/textView_total"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:gravity="center"-->
+<!--                    android:paddingStart="0dp"-->
+<!--                    android:paddingEnd="8dp"-->
+<!--                    android:text="Total Pelayanan"-->
+<!--                    android:textColor="@color/TextView_Label_Dark" />-->
+
+
+<!--                <com.meimodev.sitouhandler.CustomWidget.CustomEditText-->
+<!--                    android:id="@+id/editText_detailTotal"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:focusable="false"-->
+<!--                    android:inputType="number"-->
+<!--                    android:textAlignment="center" />-->
+<!--            </LinearLayout>-->
 
         </LinearLayout>
+
+
 
     </LinearLayout>
 

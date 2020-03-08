@@ -70,7 +70,7 @@ public class SignIn extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
 //        Check if device already logged in
-        if (Guru.getInt(Constant.KEY_MEMBER_ID, 0) != 0) {
+        if (Guru.getInt(Constant.KEY_USER_ID, 0) != 0) {
             startActivity(new Intent(this, Dashboard.class));
             finishAffinity();
         }

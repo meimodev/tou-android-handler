@@ -2,14 +2,15 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:animateLayoutChanges="true"
     android:layout_height="match_parent"
-    android:layout_marginTop="10dp">
+    android:layout_marginTop="10dp"
+    android:animateLayoutChanges="true"
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:animateLayoutChanges="true"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/layout_main"
@@ -24,17 +25,17 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:animateLayoutChanges="true"
                 android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
                 android:padding="10dp">
 
                 <LinearLayout
                     android:id="@+id/linearLayout_main"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:animateLayoutChanges="true"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:animateLayoutChanges="true"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_Title">
 
@@ -84,13 +85,15 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:hint="Tujuan"
+                            app:endIconMode="clear_text">
 
                             <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                                 android:id="@+id/editText_credential_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Tujuan"
                                 android:inputType="text"
                                 android:maxLines="1" />
 
@@ -105,7 +108,9 @@
                             <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1">
+                                android:layout_marginBottom="4dp"
+                                android:layout_weight="1"
+                                app:endIconMode="clear_text">
 
                                 <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                                     android:id="@+id/editText_credential_date"
@@ -118,10 +123,10 @@
                             </com.google.android.material.textfield.TextInputLayout>
 
                             <com.google.android.material.textfield.TextInputLayout
-                                android:visibility="gone"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:visibility="gone">
 
                                 <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                                     android:id="@+id/editText_credential_time"
@@ -137,7 +142,9 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            app:endIconMode="clear_text">
 
                             <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                                 android:id="@+id/editText_credential_place"
@@ -191,8 +198,8 @@
                         android:id="@+id/linearLayout_priestPlaceHolder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:animateLayoutChanges="true"
+                        android:orientation="vertical"
                         android:visibility="visible">
 
                     </LinearLayout>
@@ -229,10 +236,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

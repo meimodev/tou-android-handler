@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.Button;
@@ -38,6 +39,7 @@ import butterknife.OnClick;
 
 public class Issue extends AppCompatActivity {
 
+    private static final String TAG = "Issue";
 
     @BindView(R.id.spinner)
     MaterialSpinner spinner;
@@ -51,6 +53,7 @@ public class Issue extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue);
         ButterKnife.bind(this);
+        Constant.changeStatusColor(this, R.color.colorPrimary);
 
         ArrayList<String> arrayListString = new ArrayList<>();
         ArrayList<String> holder = new ArrayList<>();
@@ -60,7 +63,7 @@ public class Issue extends AppCompatActivity {
         int switchKey = getIntent().getIntExtra("ISSUE_TYPE", 0);
         switch (switchKey) {
             case 0:
-                Toast.makeText(this, "Shit this value is 0", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onCreate: Shit switchKey value cannot be 0!");
                 break;
 
             case Constant.ISSUE_TYPE_OUTCOME:
@@ -204,7 +207,6 @@ public class Issue extends AppCompatActivity {
 
         spinner.setItems(Objects.requireNonNull(arrayListString));
         spinner.setOnItemSelectedListener(listener);
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
 
         registerReceiver(brFinishActivity, new IntentFilter(Constant.ACTION_ACTIVITY_FINISH));
     }

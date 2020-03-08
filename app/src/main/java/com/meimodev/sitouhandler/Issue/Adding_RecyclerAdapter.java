@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -49,7 +50,7 @@ public class Adding_RecyclerAdapter extends RecyclerView.Adapter<Adding_Recycler
     TextView tvUnregistered;
 
     @BindView(R.id.button_del)
-    Button btnDelete;
+    ImageButton btnDelete;
 
     @BindView(R.id.textView_category)
     TextView tvCategory;

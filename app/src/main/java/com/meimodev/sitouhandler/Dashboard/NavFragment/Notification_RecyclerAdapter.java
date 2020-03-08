@@ -2,6 +2,7 @@ package com.meimodev.sitouhandler.Dashboard.NavFragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ import com.meimodev.sitouhandler.Issue.OnRecyclerItemOperationListener;
 import com.meimodev.sitouhandler.R;
 
 import java.util.ArrayList;
+
+import static com.meimodev.sitouhandler.Constant.*;
 
 public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notification_RecyclerAdapter.MyViewHolder> {
 
@@ -55,6 +58,8 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
         holder.cvItem.setOnClickListener(view -> {
             Intent intent = new Intent(context, IssueDetail.class);
             intent.putExtra("ISSUE_ID", model.getIssueId());
+            intent.putExtra("AUTHORIZATION_STATUS_CODE", model.getAuthStatusCode());
+            intent.putExtra("AUTHORIZATION_ID", model.getAuthId());
             context.startActivity(intent);
         });
 
@@ -70,37 +75,42 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
 
         switch (model.getAuthStatusCode()) {
 
-            case Constant.AUTHORIZATION_STATUS_CODE_ACCEPTED:
+            case AUTHORIZATION_STATUS_CODE_ACCEPTED:
                 holder.tvConfirmationStatus.setText("DITERIMA");
                  color = context.getResources().getColor(R.color.accept);
                 holder.tvConfirmationStatus.setTextColor(color);
                 holder.tvConfirmationStatus.setCompoundDrawablesWithIntrinsicBounds(context.getDrawable(R.drawable.ic_check_24px), null, null, null);
                 holder.ivStrip.setBackgroundColor(color);
-                Constant.toggleViewVisibility(holder.btnAccept);
-                Constant.toggleViewVisibility(holder.btnDeny);
+                holder.btnAccept.setVisibility(View.GONE);
+                holder.btnDeny.setVisibility(View.GONE);
                 break;
-            case Constant.AUTHORIZATION_STATUS_CODE_REJECTED:
+            case AUTHORIZATION_STATUS_CODE_REJECTED:
                 holder.tvConfirmationStatus.setText("DITOLAK");
                  color = context.getResources().getColor(R.color.reject);
                 holder.tvConfirmationStatus.setTextColor(color);
                 holder.tvConfirmationStatus.setCompoundDrawablesWithIntrinsicBounds(context.getDrawable(R.drawable.ic_close_24px), null, null, null);
                 holder.ivStrip.setBackgroundColor(color);
-                Constant.toggleViewVisibility(holder.btnAccept);
-                Constant.toggleViewVisibility(holder.btnDeny);
+                holder.btnAccept.setVisibility(View.GONE);
+                holder.btnDeny.setVisibility(View.GONE);
                 break;
-            case Constant.AUTHORIZATION_STATUS_CODE_UNCONFIRMED:
+            case AUTHORIZATION_STATUS_CODE_UNCONFIRMED:
                 holder.tvConfirmationStatus.setText("DIAJUKAN");
                 color = context.getResources().getColor(R.color.colorAccent);
                 holder.tvConfirmationStatus.setTextColor(color);
                 holder.tvConfirmationStatus.setCompoundDrawablesWithIntrinsicBounds(context.getDrawable(R.drawable.ic_priority_high_24px), null, null, null);
                 holder.ivStrip.setBackgroundColor(color);
-                Constant.toggleViewVisibility(holder.btnAccept);
-                Constant.toggleViewVisibility(holder.btnDeny);
+                holder.btnAccept.setVisibility(View.VISIBLE);
+                holder.btnDeny.setVisibility(View.VISIBLE);
+        }
+
+        if (acceptItemListener == null || rejectItemListener == null){
+            holder.btnAccept.setVisibility(View.GONE);
+            holder.btnDeny.setVisibility(View.GONE);
         }
 
         View.OnClickListener btnListener = view -> {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(context);
             String message, title;
+            DialogInterface.OnClickListener listener ;
 
             Bundle data = new Bundle();
             data.putString("name", model.getIssuedByMemberName());
@@ -109,22 +119,22 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
 
             if (holder.btnAccept.equals(view)) {
                 title = "Konfirmasi Penerimaan";
-                message = "Anda akan menerima pengajuan atas nama\n" + model.getIssuedByMemberName() + ",\n" + model.getIssuedByMemberColumn() + ".\nSilahkan sentuh tombol 'KONFIRMASI' untuk konfirmasi bahwa pengajuan ini akan diterima";
-                dialog.setPositiveButton("KONFIRMASI", (dialogInterface, i) -> {
-                    data.putInt("status", Constant.AUTHORIZATION_STATUS_CODE_ACCEPTED);
+                message = "Anda akan menerima pengajuan atas nama\n" + model.getIssuedByMemberName() + ",\n" + model.getIssuedByMemberColumn() + ".\nSilahkan sentuh tombol 'OK' untuk konfirmasi bahwa pengajuan ini akan diterima";
+                listener = (dialogInterface, i) -> {
+                    data.putInt("status", AUTHORIZATION_STATUS_CODE_ACCEPTED);
                     if (acceptItemListener != null) acceptItemListener.acceptItem(data);
-                });
+                };
             } else {
                 title = "Konfirmasi Penolakan";
-                message = "Anda akan menolak pengajuan atas nama\n" + model.getIssuedByMemberName() + ",\n" + model.getIssuedByMemberColumn() + ".\nSilahkan sentuh tombol 'KONFIRMASI' untuk konfirmasi bahwa pengajuan ini akan ditolak";
-                dialog.setPositiveButton("KONFIRMASI", (dialogInterface, i) -> {
-                    data.putInt("status", Constant.AUTHORIZATION_STATUS_CODE_REJECTED);
+                message = "Anda akan menolak pengajuan atas nama\n" + model.getIssuedByMemberName() + ",\n" + model.getIssuedByMemberColumn() + ".\nSilahkan sentuh tombol 'OK' untuk konfirmasi bahwa pengajuan ini akan ditolak";
+                listener = (dialogInterface, i) -> {
+                    data.putInt("status", AUTHORIZATION_STATUS_CODE_REJECTED);
                     if (rejectItemListener != null) rejectItemListener.rejectItem(data);
-                });
+                };
             }
-            dialog.setTitle(title);
-            dialog.setMessage(message);
-            dialog.create().show();
+            displayDialog(
+                    context, title, message, true, listener, null
+            );
         };
         holder.btnAccept.setOnClickListener(btnListener);
         holder.btnDeny.setOnClickListener(btnListener);

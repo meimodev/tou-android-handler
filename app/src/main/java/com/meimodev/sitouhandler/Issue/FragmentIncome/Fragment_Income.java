@@ -44,6 +44,7 @@ import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SharedPrefManager;
 import com.meimodev.sitouhandler.Validator;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -72,7 +73,8 @@ public class Fragment_Income extends Fragment {
 
     private String keyIssue;
 
-    @BindView(R.id.layout_main)View layoutMain;
+    @BindView(R.id.layout_main)
+    View layoutMain;
 
     @BindView(R.id.tv_Title)
     TextView tvTitle;
@@ -201,6 +203,10 @@ public class Fragment_Income extends Fragment {
 
         issueRequestHandler = new IssueRequestHandler(rootView);
 
+        View progressHolder = rootView.findViewById(R.id.layout_progressHolder);
+        if (progressHolder.getVisibility() == View.VISIBLE)
+            progressHolder.setVisibility(View.GONE);
+
         if (getArguments() != null) {
             keyIssue = getArguments().getString(KEY_INCOME);
 
@@ -230,13 +236,16 @@ public class Fragment_Income extends Fragment {
                         p.startRotation();
                         p.setRimColor(rootView.getContext().getResources().getColor(R.color.colorAccent));
                         p.setShowProgress(false);
-                        llProgressServiceHolder.addView(progress);
+
+
+//                        if (llProgressServiceHolder.getVisibility() == View.VISIBLE)
+//                            llProgressServiceHolder.setVisibility(View.GONE);
 
                         CompoundButton.OnCheckedChangeListener checkedChangeListener = (compoundButton, b) -> {
 
-                            View inflatedDetailPel = getLayoutInflater().inflate(R.layout.resource_income_detail, container, false);
-                            View inflatedDetailPem = getLayoutInflater().inflate(R.layout.resource_income_detail, container, false);
-                            View inflatedDetailExtra = getLayoutInflater().inflate(R.layout.resource_income_detail, container, false);
+                            View inflatedDetailPel = getLayoutInflater().inflate(R.layout.resource_income_detail, llPelPlaceHolder, false);
+                            View inflatedDetailPem = getLayoutInflater().inflate(R.layout.resource_income_detail, llPemPlaceHolder, false);
+                            View inflatedDetailExtra = getLayoutInflater().inflate(R.layout.resource_income_detail, llExtraPlaceHolder, false);
                             CustomEditText et1kLogam;
                             CustomEditText et500Logam;
                             CustomEditText et1k;
@@ -246,8 +255,8 @@ public class Fragment_Income extends Fragment {
                             CustomEditText et20k;
                             CustomEditText et50k;
                             CustomEditText et100k;
-                            CustomEditText etDetailTotal;
-                            TextView tvTotal;
+//                            CustomEditText etDetailTotal;
+//                            TextView tvTotal;
 
                             if (compoundButton == switchChurch) {
                                 if (b) {
@@ -336,11 +345,11 @@ public class Fragment_Income extends Fragment {
                                     et20k = inflatedDetailPel.findViewById(R.id.editText_20k);
                                     et50k = inflatedDetailPel.findViewById(R.id.editText_50k);
                                     et100k = inflatedDetailPel.findViewById(R.id.editText_100k);
-                                    etDetailTotal = inflatedDetailPel.findViewById(R.id.editText_detailTotal);
-                                    etDetailTotal.setAsThousandSeparator();
-                                    etDetailTotal.setAsNoLeadingZero();
-                                    tvTotal = inflatedDetailPel.findViewById(R.id.textView_total);
-                                    tvTotal.setText("Total Pelayanan");
+//                                    etDetailTotal = inflatedDetailPel.findViewById(R.id.editText_detailTotal);
+//                                    etDetailTotal.setAsThousandSeparator();
+//                                    etDetailTotal.setAsNoLeadingZero();
+//                                    tvTotal = inflatedDetailPel.findViewById(R.id.textView_total);
+//                                    tvTotal.setText("Total Pelayanan");
                                     editTextsPel = new ArrayList<>();
                                     editTextsPel.add(et1kLogam);
                                     editTextsPel.add(et500Logam);
@@ -366,7 +375,7 @@ public class Fragment_Income extends Fragment {
 
                                             @Override
                                             public void afterTextChanged(Editable editable) {
-                                                calculateDetailTotal(editTextsPel, etDetailTotal, etPelTotal);
+                                                calculateDetailTotal(editTextsPel, /*etDetailTotal,*/ etPelTotal);
 
                                             }
                                         });
@@ -379,6 +388,7 @@ public class Fragment_Income extends Fragment {
                                     if (!etPelTotal.isEnabled()) etPelTotal.setEnabled(true);
 
                                     llPelPlaceHolder.removeAllViews();
+                                    editTextsPel.clear();
 
                                 }
                             } else if (compoundButton == switchPemDetail) {
@@ -396,10 +406,10 @@ public class Fragment_Income extends Fragment {
                                     et20k = inflatedDetailPem.findViewById(R.id.editText_20k);
                                     et50k = inflatedDetailPem.findViewById(R.id.editText_50k);
                                     et100k = inflatedDetailPem.findViewById(R.id.editText_100k);
-                                    etDetailTotal = inflatedDetailPem.findViewById(R.id.editText_detailTotal);
-                                    etDetailTotal.setAsThousandSeparator();
-                                    tvTotal = inflatedDetailPem.findViewById(R.id.textView_total);
-                                    tvTotal.setText("Total Pembangunan");
+//                                    etDetailTotal = inflatedDetailPem.findViewById(R.id.editText_detailTotal);
+//                                    etDetailTotal.setAsThousandSeparator();
+//                                    tvTotal = inflatedDetailPem.findViewById(R.id.textView_total);
+//                                    tvTotal.setText("Total Pembangunan");
                                     editTextsPem = new ArrayList<>();
                                     editTextsPem.add(et1kLogam);
                                     editTextsPem.add(et500Logam);
@@ -425,7 +435,7 @@ public class Fragment_Income extends Fragment {
 
                                             @Override
                                             public void afterTextChanged(Editable editable) {
-                                                calculateDetailTotal(editTextsPem, etDetailTotal, etPemTotal);
+                                                calculateDetailTotal(editTextsPem, /*etDetailTotal,*/ etPemTotal);
 
                                             }
                                         });
@@ -438,14 +448,14 @@ public class Fragment_Income extends Fragment {
                                     if (!etPemTotal.isEnabled()) etPemTotal.setEnabled(true);
 
                                     llPemPlaceHolder.removeAllViews();
-
+                                    editTextsPem.clear();
                                 }
                             } else if (compoundButton == switchExtraDetail) {
                                 if (b) {
                                     llExtraPlaceHolder.setVisibility(View.VISIBLE);
                                     etExtraTotal.setText("");
                                     etExtraTotal.setEnabled(false);
-
+//
                                     et1kLogam = inflatedDetailExtra.findViewById(R.id.editText_1000Metal);
                                     et500Logam = inflatedDetailExtra.findViewById(R.id.editText_500metal);
                                     et1k = inflatedDetailExtra.findViewById(R.id.editText_1k);
@@ -455,10 +465,10 @@ public class Fragment_Income extends Fragment {
                                     et20k = inflatedDetailExtra.findViewById(R.id.editText_20k);
                                     et50k = inflatedDetailExtra.findViewById(R.id.editText_50k);
                                     et100k = inflatedDetailExtra.findViewById(R.id.editText_100k);
-                                    etDetailTotal = inflatedDetailExtra.findViewById(R.id.editText_detailTotal);
-                                    etDetailTotal.setAsThousandSeparator();
-                                    tvTotal = inflatedDetailExtra.findViewById(R.id.textView_total);
-                                    tvTotal.setText("Total Extra");
+//                                    etDetailTotal = inflatedDetailExtra.findViewById(R.id.editText_detailTotal);
+//                                    etDetailTotal.setAsThousandSeparator();
+//                                    tvTotal = inflatedDetailExtra.findViewById(R.id.textView_total);
+//                                    tvTotal.setText("Total Extra");
                                     editTextsExtra = new ArrayList<>();
                                     editTextsExtra.add(et1kLogam);
                                     editTextsExtra.add(et500Logam);
@@ -482,7 +492,7 @@ public class Fragment_Income extends Fragment {
 
                                             @Override
                                             public void afterTextChanged(Editable editable) {
-                                                calculateDetailTotal(editTextsExtra, etDetailTotal, etExtraTotal);
+                                                calculateDetailTotal(editTextsExtra, /*etDetailTotal,*/ etExtraTotal);
                                             }
                                         });
                                     }
@@ -494,6 +504,7 @@ public class Fragment_Income extends Fragment {
                                     if (!etExtraTotal.isEnabled()) etExtraTotal.setEnabled(true);
 
                                     llExtraPlaceHolder.removeAllViews();
+                                    editTextsExtra.clear();
 
                                 }
                             }
@@ -512,7 +523,7 @@ public class Fragment_Income extends Fragment {
 
                             @Override
                             public void afterTextChanged(Editable editable) {
-                                if (cvInfoService.getVisibility() == View.GONE)
+                                if (cvInfoService.getVisibility() != View.VISIBLE)
                                     cvInfoService.setVisibility(View.VISIBLE);
                                 tvLoading.setText("Mencari ID " + etFindId.getText().toString().toUpperCase() + " ...");
                                 if (llServiceInfoFound.getVisibility() == View.VISIBLE)
@@ -670,8 +681,8 @@ public class Fragment_Income extends Fragment {
             if (switchWithDetail.isChecked()) {
                 if (switchPelDetail.isChecked()) {
                     // validate pelayanan detail
-                    if (validator.validateEditText_isEmpty(llPelPlaceHolder.findViewById(R.id.editText_detailTotal))) {
-                        validator.displayErrorMessage(context, "Rincian Persembahan Pelayanan tidak boleh kosong");
+                    if (validator.validateEditText_isEmpty(etPelTotal)) {
+                        validator.displayErrorMessage(context, "Rincian Persembahan Pelayanan tidak valid");
                         return;
                     }
                 } else {
@@ -688,10 +699,11 @@ public class Fragment_Income extends Fragment {
 
                 if (switchPemDetail.isChecked()) {
                     // validate pembangunan detail
-                    if (validator.validateEditText_isEmpty(llPemPlaceHolder.findViewById(R.id.editText_detailTotal))) {
-                        validator.displayErrorMessage(context, "Rincian Persembahan Pembangunan tidak boleh kosong");
+                    if (validator.validateEditText_isEmpty(etPemTotal)) {
+                        validator.displayErrorMessage(context, "Rincian Persembahan Pembangunan tidak valid");
                         return;
                     }
+
                 } else {
                     // validate pembangunan total
                     if (validator.validateEditText_isLeadingZero(etPemTotal)) {
@@ -706,7 +718,7 @@ public class Fragment_Income extends Fragment {
 
                 if (switchExtraDetail.isChecked()) {
                     // validate extra detail
-                    if (validator.validateEditText_isEmpty(llExtraPlaceHolder.findViewById(R.id.editText_detailTotal))) {
+                    if (validator.validateEditText_isEmpty(etExtraTotal)) {
                         validator.displayErrorMessage(context, "Rincian Persembahan Pundi Extra tidak boleh kosong");
                         return;
                     }
@@ -721,7 +733,6 @@ public class Fragment_Income extends Fragment {
                         return;
                     }
                 }
-
             }
         }
 
@@ -1065,7 +1076,7 @@ public class Fragment_Income extends Fragment {
                     POST_description = POST_description.concat(
                             keyIssue
                                     + ", "
-                                    + spinnerSampulSyukurType.getItems().get(spinnerSampulSyukurType.getSelectedIndex()).toString() +" "
+                                    + spinnerSampulSyukurType.getItems().get(spinnerSampulSyukurType.getSelectedIndex()).toString() + " "
                                     + nameHolder
                                     + " "
                                     + detailHolder
@@ -1106,7 +1117,7 @@ public class Fragment_Income extends Fragment {
                                     + sel
                                     + ", berjumlah Rp. "
                                     + etAmount.getText().toString().replace(",", ".")
-                                    + " "+etOtherDetail.getText().toString()
+                                    + " " + etOtherDetail.getText().toString()
                     );
 
                     break;
@@ -1118,7 +1129,7 @@ public class Fragment_Income extends Fragment {
                             keyIssue
                                     + ", berjumlah Rp. "
                                     + etAmount.getText().toString().replace(",", ".")
-                                    + " "+etOther_Note.getText().toString()
+                                    + " " + etOther_Note.getText().toString()
                     );
                     break;
             }
@@ -1136,7 +1147,7 @@ public class Fragment_Income extends Fragment {
             Log.e(TAG, "related_service_id: " + POST_serviceId);
 
             IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
-            Call call =RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
+            Call call = RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
                     Guru.getInt(KEY_MEMBER_ID, 0),
                     keyIssue,
                     etAmount.getText().toString().trim().replace(",", ""),
@@ -1149,7 +1160,9 @@ public class Fragment_Income extends Fragment {
             requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
                 @Override
                 public void onTry() {
-
+                    View progressHolder = rootView.findViewById(R.id.layout_progressHolder);
+                    if (progressHolder.getVisibility() != View.VISIBLE)
+                        progressHolder.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -1220,7 +1233,7 @@ public class Fragment_Income extends Fragment {
     ///////////////////////////////////////////////////////////////////////////
 
     private void calculateDetailTotal(ArrayList<CustomEditText> editTexts,
-                                      CustomEditText totalDetail,
+//                                      CustomEditText totalDetail,
                                       CustomEditText mainEditText) {
         int result = 0;
         int amount;
@@ -1261,10 +1274,10 @@ public class Fragment_Income extends Fragment {
             }
         }
         if (result == 0) {
-            totalDetail.setText("");
+//            totalDetail.setText("");
             mainEditText.setText("");
         } else {
-            totalDetail.setText(String.valueOf(result));
+//            totalDetail.setText(String.valueOf(result));
             mainEditText.setText(String.valueOf(result));
         }
         int a;
@@ -1312,7 +1325,6 @@ public class Fragment_Income extends Fragment {
         if (Objects.requireNonNull(etFindId.getText()).toString().length() > 0) {
 
             Log.e(TAG, "findServiceId: " + etFindId.getText().toString());
-
             ApiServices apiServices = RetrofitClient.getInstance(null).getApiServices();
             Call<ResponseBody> call = apiServices.findService(etFindId.getText().toString().toUpperCase());
             call.enqueue(new Callback<ResponseBody>() {
@@ -1323,8 +1335,6 @@ public class Fragment_Income extends Fragment {
                         APIWrapper res = APIUtils.parseWrapper(response.body());
                         if (!res.isError()) {
 
-                            if (llProgressServiceHolder.getVisibility() == View.VISIBLE)
-                                llProgressServiceHolder.setVisibility(View.GONE);
                             if (tvIdNotFound.getVisibility() == View.VISIBLE)
                                 tvIdNotFound.setVisibility(View.GONE);
                             if (llServiceInfoFound.getVisibility() != View.VISIBLE)
@@ -1378,6 +1388,10 @@ public class Fragment_Income extends Fragment {
                         isServiceDataFound = false;
                         APIUtils.parseError(context, response);
                     }
+
+                    if (llProgressServiceHolder.getVisibility() == View.VISIBLE)
+                        llProgressServiceHolder.setVisibility(View.GONE);
+
                 }
 
                 @Override
@@ -1396,7 +1410,6 @@ public class Fragment_Income extends Fragment {
 
                 }
             });
-
 
         } else cvInfoService.setVisibility(View.GONE);
 

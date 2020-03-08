@@ -33,7 +33,7 @@ public class IssueDetailNotation_NotationModel {
                 str = "DITOLAK";
                 break;
             default:
-                str = "DITEMBUS";
+                str = "DIAJUKAN";
         }
 
 

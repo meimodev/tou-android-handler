@@ -3,21 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
     android:layout_marginTop="10dp"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:animateLayoutChanges="true"
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:animateLayoutChanges="true"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/layout_main"
             android:layout_width="0dp"
-            android:animateLayoutChanges="true"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             app:cardElevation="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -25,9 +24,9 @@
             app:layout_constraintWidth_percent="0.95">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:animateLayoutChanges="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
                 android:padding="10dp">
 
                 <TextView
@@ -43,8 +42,8 @@
                     android:id="@+id/linearLayout_Main"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:animateLayoutChanges="true"
+                    android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="@id/tv_Title"
                     app:layout_constraintTop_toBottomOf="@id/tv_Title">
 
@@ -63,16 +62,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:visibility="gone"
                         android:switchPadding="15dp"
                         android:text="Sertakan Perincian "
-                        android:textColor="@color/TextView_Default" />
+                        android:textColor="@color/TextView_Default"
+                        android:visibility="gone" />
 
                     <!-- Amount Detail in "Received on Church"-->
                     <LinearLayout
                         android:id="@+id/layout_incomeDetailPlaceHolder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
                         android:orientation="vertical"
                         android:visibility="gone">
 
@@ -81,31 +82,30 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:paddingTop="10dp">
+                            android:paddingTop="8dp">
 
-                            <TextView
-                                style="@style/TextView_IssueTitle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="center_vertical"
-                                android:paddingTop="0dp"
-                                android:paddingBottom="0dp"
-                                android:text="Pelayanan :" />
-
-                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
-                                android:id="@+id/editText_pelTotal"
-                                android:layout_width="120dp"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginEnd="8dp"
-                                android:inputType="number" />
+                                android:layout_weight="1"
+                                android:hint="Pelayanan"
+                                app:endIconMode="clear_text">
+
+                                <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                    android:id="@+id/editText_pelTotal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="number" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <Switch
                                 android:id="@+id/switch_pelDetail"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="match_parent"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="0.5"
                                 android:gravity="center_vertical"
-                                android:text="Sertakan\nRincian"
+                                android:text="Rincikan"
                                 android:textColor="@color/TextView_Label_Light" />
 
                         </LinearLayout>
@@ -113,8 +113,8 @@
                         <LinearLayout
                             android:id="@+id/layout_PelPlaceHolder"
                             android:layout_width="match_parent"
-                            android:animateLayoutChanges="true"
                             android:layout_height="wrap_content"
+                            android:animateLayoutChanges="true"
                             android:orientation="vertical"
                             android:visibility="gone">
 
@@ -126,29 +126,28 @@
                             android:orientation="horizontal"
                             android:paddingTop="10dp">
 
-                            <TextView
-                                style="@style/TextView_IssueTitle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="center_vertical"
-                                android:paddingTop="0dp"
-                                android:paddingBottom="0dp"
-                                android:text="Pembangunan :" />
-
-                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
-                                android:id="@+id/editText_pemTotal"
-                                android:layout_width="120dp"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginEnd="8dp"
-                                android:inputType="number" />
+                                android:layout_weight="1"
+                                android:hint="Pembangunan"
+                                app:endIconMode="clear_text">
+
+                                <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                    android:id="@+id/editText_pemTotal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="number" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <Switch
                                 android:id="@+id/switch_pemDetail"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="match_parent"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="0.5"
                                 android:gravity="center_vertical"
-                                android:text="Sertakan\nRincian"
+                                android:text="Rincikan"
                                 android:textColor="@color/TextView_Label_Light" />
 
                         </LinearLayout>
@@ -156,8 +155,8 @@
                         <LinearLayout
                             android:id="@+id/layout_PemPlaceHolder"
                             android:layout_width="match_parent"
-                            android:animateLayoutChanges="true"
                             android:layout_height="wrap_content"
+                            android:animateLayoutChanges="true"
                             android:orientation="vertical"
                             android:visibility="gone">
 
@@ -169,29 +168,28 @@
                             android:orientation="horizontal"
                             android:paddingTop="10dp">
 
-                            <TextView
-                                style="@style/TextView_IssueTitle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="center_vertical"
-                                android:paddingTop="0dp"
-                                android:paddingBottom="0dp"
-                                android:text="Pundi Extra :" />
-
-                            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
-                                android:id="@+id/editText_extraTotal"
-                                android:layout_width="120dp"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginEnd="8dp"
-                                android:inputType="number" />
+                                android:layout_weight="1"
+                                android:hint="Extra"
+                                app:endIconMode="clear_text">
+
+                                <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                                    android:id="@+id/editText_extraTotal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="number" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <Switch
                                 android:id="@+id/switch_extraDetail"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="match_parent"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="0.5"
                                 android:gravity="center_vertical"
-                                android:text="Sertakan\nRincian"
+                                android:text="Rincikan"
                                 android:textColor="@color/TextView_Label_Light" />
 
                         </LinearLayout>
@@ -211,13 +209,17 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp">
+                        android:layout_marginTop="10dp"
+                        android:hint="Jumlah"
+                        android:layout_marginBottom="4dp"
+                        app:prefixText="Rp. "
+                        app:prefixTextColor="@color/colorPrimary"
+                        app:endIconMode="clear_text">
 
                         <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                             android:id="@+id/editText_amount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Jumlah :"
                             android:inputType="number"
                             android:maxLines="1" />
 
@@ -227,15 +229,14 @@
                         android:id="@+id/linearLayout_details"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:animateLayoutChanges="true"
+                        android:orientation="vertical"
                         android:visibility="gone">
 
                         <com.jaredrummler.materialspinner.MaterialSpinner
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:id="@+id/spinner_sampulSyukurType"
-                            >
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
                         </com.jaredrummler.materialspinner.MaterialSpinner>
 
@@ -243,8 +244,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:animateLayoutChanges="true"
+                            android:orientation="vertical"
                             android:visibility="visible">
 
                             <com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd
@@ -252,7 +253,7 @@
                                 style="@style/Button_TambahNamaButton"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Atas Nama :" />
+                                android:text="Atas Nama" />
 
                             <!--Names PlaceHolder-->
                             <LinearLayout
@@ -272,14 +273,14 @@
                             style="@style/Button_TambahNamaButton"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Tambah Perincian :" />
+                            android:text="Tambah Perincian" />
 
                         <!--Details PlaceHolder-->
                         <LinearLayout
                             android:id="@+id/linearLayout_detailsPlaceHolder"
                             android:layout_width="match_parent"
-                            android:animateLayoutChanges="true"
                             android:layout_height="wrap_content"
+                            android:animateLayoutChanges="true"
                             android:orientation="vertical">
 
                         </LinearLayout>
@@ -290,31 +291,30 @@
                         android:id="@+id/linearLayout_infoService"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:animateLayoutChanges="true"
+                        android:orientation="vertical"
                         android:visibility="gone">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-
                             android:orientation="horizontal">
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_marginEnd="5dp"
+                                android:hint="ID Ibadah"
+                                app:endIconMode="clear_text"
                                 android:layout_weight="1.5">
 
                                 <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                                     android:id="@+id/editText_findId"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:hint="ID Ibadah :"
                                     android:inputType="text"
-                                    android:textAllCaps="true"
-                                    android:maxLines="1" />
+                                    android:maxLines="1"
+                                    android:textAllCaps="true" />
 
                             </com.google.android.material.textfield.TextInputLayout>
 
@@ -326,8 +326,8 @@
                             android:id="@+id/cardView_infoService"
                             android:layout_width="match_parent"
                             android:layout_height="150dp"
-                            android:animateLayoutChanges="true"
                             android:layout_margin="10dp"
+                            android:animateLayoutChanges="true"
                             android:visibility="gone"
                             app:cardElevation="3dp">
 
@@ -362,21 +362,21 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_alignParentStart="true"
-                                            android:textAlignment="center"
                                             android:layout_centerVertical="true"
-                                            android:paddingBottom="4dp"
-                                            android:paddingTop="4dp"
                                             android:layout_marginStart="8dp"
+                                            android:paddingTop="4dp"
+                                            android:paddingBottom="4dp"
                                             android:text="Service Type "
+                                            android:textAlignment="center"
                                             android:textColor="@color/TextView_Label_Dark"
                                             android:textStyle="bold" />
 
                                         <TextView
                                             android:id="@+id/textView_infoServiceId"
                                             android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
                                             android:layout_alignParentEnd="true"
                                             android:layout_centerVertical="true"
-                                            android:layout_height="wrap_content"
                                             android:layout_marginEnd="8dp"
                                             android:text="ID 24452" />
 
@@ -385,9 +385,9 @@
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
+                                        android:animateLayoutChanges="true"
                                         android:orientation="horizontal"
                                         android:paddingStart="5dp"
-                                        android:animateLayoutChanges="true"
                                         android:paddingEnd="5dp">
 
                                         <LinearLayout
@@ -399,25 +399,25 @@
                                                 style="@style/TextView_label"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:text="Atas Nama :" />
+                                                android:text="Atas Nama" />
 
                                             <TextView
                                                 style="@style/TextView_label"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:text="Tanggal :" />
+                                                android:text="Tanggal" />
 
                                             <TextView
                                                 style="@style/TextView_label"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:text="Khadim :" />
+                                                android:text="Khadim" />
 
                                             <TextView
                                                 style="@style/TextView_label"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:text="Tempat :" />
+                                                android:text="Tempat" />
 
                                         </LinearLayout>
 
@@ -468,8 +468,8 @@
                                     android:layout_width="0dp"
                                     android:layout_height="0dp"
                                     android:background="#fff"
-                                    android:orientation="vertical"
                                     android:gravity="center"
+                                    android:orientation="vertical"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -493,7 +493,7 @@
                                     android:layout_height="0dp"
                                     android:background="@color/TextView_Default"
                                     android:gravity="center"
-                                    android:text="ID TIDAK DI TEMUKAN -_-'"
+                                    android:text="ID Ibadah tidak valid"
                                     android:textAlignment="gravity"
                                     android:textColor="@color/ButtonText_LightGrey"
                                     android:textStyle="bold"
@@ -506,22 +506,23 @@
                                 <!--Connection Problem-->
                                 <LinearLayout
                                     android:id="@+id/layout_connectionProblem"
-                                    android:layout_width="0dp"
-                                    android:layout_height="0dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
                                     android:visibility="gone"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
                                     app:layout_constraintBottom_toBottomOf="parent"
-                                    android:orientation="vertical">
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
 
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
                                         android:gravity="center"
+                                        android:text="Koneksi internet anda sedang bermasalah\ncobalah sesaat lagi"
                                         android:textAlignment="center"
-                                        android:text="Koneksi internet anda sedang bermasakah, cobalah sesaat lagi"
-                                        android:textColor="@color/TextView_Label_Dark"/>
+                                        android:textColor="@color/TextView_Label_Dark" />
 
                                 </LinearLayout>
 
@@ -534,7 +535,7 @@
                     <!--Other-->
                     <LinearLayout
                         android:id="@+id/linearLayout_other"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:visibility="gone">
@@ -542,14 +543,13 @@
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:layout_weight="1.5">
+                            android:hint="Catatan "
+                            app:endIconMode="clear_text">
 
                             <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                                 android:id="@+id/editText_other_detail"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:hint="Catatan : "
                                 android:inputType="text"
                                 android:maxLines="1" />
 
@@ -559,75 +559,9 @@
                             android:id="@+id/radio_other"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginEnd="15dp"
-                            android:layout_marginBottom="5dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp"
                             android:orientation="vertical">
-
-<!--                            <RadioButton-->
-<!--                                android:id="@+id/radio_bunga"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Bunga Simpanan (No Akun: 1.32.1)" />-->
-
-<!--                            <RadioButton-->
-<!--                                android:id="@+id/radio_jasaBank"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Jasa Bank Lainnya (No Akun: 1.32.2)" />-->
-
-<!--                            <RadioButton-->
-<!--                                android:id="@+id/radio_saldoPelayananSebelum"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Saldo Kas Pelayanan Tahun Sebelumnya (No Akun: 3.2)" />-->
-
-<!--                            <RadioButton-->
-<!--                                android:id="@+id/radio_saldoPembangunanSebelum"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Saldo Kas Pembangunan Tahun Sebelumnya (No Akun: 3.3)" />-->
-
-<!--                            <RadioButton-->
-<!--                                android:id="@+id/radio_usahaKolom"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Usaha Kolom (No. Akun: 1.35)" />-->
-
-<!--                            <RadioButton-->
-<!--                                android:id="@+id/radio_usahaBIPRA"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Usaha BIPRA (No. Akun: 1.36)" />-->
-
-<!--                            <RadioButton-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Rapat Badan Pekerja Sinode Lengkap (RBPSL) (No. Akun: 2.1.1)" />-->
-
-<!--                            <RadioButton-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Sidang Sinode Istimewa (SSI) (No. Akun: 2.1.2)" />-->
-
-<!--                            <RadioButton-->
-<!--                                android:id="@+id/radio_sumbangan_partisipasi"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Partisipasi / Sumbangan (No. Akun: 2.2)" />-->
-
-<!--                            <RadioButton-->
-<!--                                android:id="@+id/radio_sumbangan_pemerintah"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Sumbangan Pemerintah / Lainnya (No. Akun: 3.4)" />-->
-
-<!--                            <RadioButton-->
-<!--                                android:id="@+id/radio_unexpected"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Tak Terduga (No. Akun: 3.5)" />-->
 
                         </RadioGroup>
 
@@ -644,13 +578,14 @@
                     <!--EditText Note-->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
+                        android:hint="Detil Penggunaan: "
+                        app:endIconMode="clear_text"
                         android:layout_height="wrap_content">
 
                         <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                             android:id="@+id/et_other_note"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Detil Penggunaan: "
                             android:inputType="text"
                             android:maxLines="1"
                             android:visibility="gone" />
@@ -678,10 +613,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

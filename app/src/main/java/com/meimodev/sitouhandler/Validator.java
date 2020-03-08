@@ -852,7 +852,7 @@ public class Validator extends Constant {
         builder.setTitle("Pengajuan belum valid");
         builder.setMessage(message);
         builder.setCancelable(true);
-        builder.setPositiveButton("Perbaiki Pengajuan", (dialogInterface, i) -> dialogInterface.dismiss());
+        builder.setPositiveButton("Perbaiki", (dialogInterface, i) -> dialogInterface.dismiss());
         builder.create().show();
     }
 

@@ -25,6 +25,8 @@
 
     <!--Design Color END-->
 
+    <color name="colorPrimaryOverlay">#807563EB</color>
+
     <color name="ButtonText_LightGrey">#F5F5F5</color>
     <color name="TextView_Label_Dark">#1E1E1E</color>
     <color name="TextView_Label_Light">#999898</color>

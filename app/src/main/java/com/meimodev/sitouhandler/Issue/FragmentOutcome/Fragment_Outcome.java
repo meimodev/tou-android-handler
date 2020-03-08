@@ -3,9 +3,11 @@ package com.meimodev.sitouhandler.Issue.FragmentOutcome;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import androidx.fragment.app.Fragment;
 
 import com.github.squti.guru.Guru;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd;
@@ -60,6 +63,9 @@ public class Fragment_Outcome extends Fragment {
     @Nullable
     @BindView(R.id.editText_amount)
     CustomEditText etAmount;
+    @Nullable
+    @BindView(R.id.textInputLayout_amount)
+    TextInputLayout tilAmount;
     @Nullable
     @BindView(R.id.radioGroup_sentralisasi)
     RadioGroup rgSentralisasi;
@@ -196,8 +202,7 @@ public class Fragment_Outcome extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_issue_outcome, container, false);
         ButterKnife.bind(this, rootView);
         context = rootView.getContext();
-
-
+        
         if (getArguments() != null) {
             keyIssue = getArguments().getString(KEY_OUTCOME);
 
@@ -338,9 +343,9 @@ public class Fragment_Outcome extends Fragment {
                         break;
                     case KEY_OUTCOME_PENGADAAN:
                         llPengadaan.setVisibility(View.VISIBLE);
-                        etAmount.setVisibility(View.GONE);
-                        etAmount.setEnabled(false);
-                        etAmount.setHint("Jumlah Total :");
+                        tilAmount.setVisibility(View.GONE);
+                        tilAmount.setEnabled(false);
+                        tilAmount.setHint("Jumlah Total :");
 
                         ArrayList<String> pengadaanType = new ArrayList<>();
                         pengadaanType.add("Pilih Jenis Pengadaan"); // 0
@@ -374,14 +379,15 @@ public class Fragment_Outcome extends Fragment {
                         pengadaanViews = new ArrayList<>();
                         btnAddPengadaan.setOnClickListener(view -> {
 
-                            if (etAmount.getVisibility() == View.GONE) {
-                                etAmount.setVisibility(View.VISIBLE);
-                                etAmount.setText("");
+                            if (tilAmount.getVisibility() != View.VISIBLE) {
+                                tilAmount.setVisibility(View.VISIBLE);
+                                tilAmount.getEditText().setText("");
                             }
                             View v = inflater.inflate(R.layout.recycler_item_adding_details, llPengadaanPlaceHolder, false);
                             CustomEditText etDetail = v.findViewById(R.id.recyclerItem_detail);
                             CustomEditText etSubAmount = v.findViewById(R.id.recyclerItem_amount);
-                            etDetail.setHint("Detil : (Nama - jumlah per unit - dll) ");
+                            TextInputLayout tilDetail = v.findViewById(R.id.textInputLayout_detail);
+                            tilDetail.setHint("Detil : (Nama - jumlah per unit - dll) ");
                             etSubAmount.setAsThousandSeparator();
                             etSubAmount.setAsNoLeadingZero();
                             v.findViewById(R.id.recyclerItem_delete).setOnClickListener(view1 -> {
@@ -389,8 +395,8 @@ public class Fragment_Outcome extends Fragment {
                                 pengadaanViews.remove(v);
                                 calculatePengadaanTotal();
                                 if (pengadaanViews.isEmpty()) {
-                                    etAmount.setVisibility(View.GONE);
-                                    etAmount.setText("");
+                                    tilAmount.setVisibility(View.GONE);
+                                    tilAmount.getEditText().setText("");
                                 }
 
                             });
@@ -1180,7 +1186,7 @@ public class Fragment_Outcome extends Fragment {
         Log.e(TAG, "description: " + POST_description);
 
         IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
-        Call call =RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
+        Call call = RetrofitClient.getInstance(null).getApiServices().setIssueFinancial(
                 Guru.getInt(KEY_MEMBER_ID, 0),
                 keyIssue,
                 "-" + etAmount.getText().toString().trim().replace(",", ""),

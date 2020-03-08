@@ -97,7 +97,7 @@ public interface ApiServices {
             @Field("issued_member_data") String issuedMemberData,
             @Field("note") String note,
             @Field("description") String description,
-            @Field("related_service_id")int serviceId
+            @Field("related_service_id") int serviceId
     );
 
     @FormUrlEncoded
@@ -136,17 +136,19 @@ public interface ApiServices {
 
     @GET("find-member")
     Call<ResponseBody> findMemberByEmail(
-      @Query("email") String email
+            @Query("email") String email
     );
 
     @GET("find-user")
     Call<ResponseBody> findUserById(
             @Query("id") int id
     );
+
     @GET("find-user")
     Call<ResponseBody> findUserByEmail(
             @Query("email") String email
     );
+
     @GET("find-user")
     Call<ResponseBody> findUserByPhone(
             @Query("phone") String phone
@@ -217,6 +219,27 @@ public interface ApiServices {
     Call<ResponseBody> setFCMToken(
             @Field("user_id") int userId,
             @Field("FCM_token") String FCM_token
+    );
+
+    @GET("apply-member/{id}")
+    Call<ResponseBody> getApplyMemberPrep(
+            @Path("id") int user_id
+    );
+
+    @FormUrlEncoded
+    @POST("apply-member")
+    Call<ResponseBody> setApplyMember(
+            @Field("user_id") int userId,
+            @Field("f_name") String fName,
+            @Field("m_name") String mName,
+            @Field("l_name") String lName,
+            @Field("sex") String sex,
+            @Field("dob") String dob,
+            @Field("church_id") int churchId,
+            @Field("column_index") String columnIndex,
+            @Field("baptis") String baptis,
+            @Field("sidi") String sidi,
+            @Field("nikah") String nikah
     );
 
 

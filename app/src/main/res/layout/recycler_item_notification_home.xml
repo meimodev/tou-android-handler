@@ -130,7 +130,7 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:src="@drawable/ic_check_white"
+            android:src="@drawable/ic_check_24px"
             android:padding="8sp"
             android:layout_height="match_parent" />
 
@@ -154,7 +154,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:padding="8sp"
-            android:src="@drawable/ic_close_white"
+            android:src="@drawable/ic_close_24px"
             android:layout_height="match_parent" />
     </androidx.cardview.widget.CardView>
 

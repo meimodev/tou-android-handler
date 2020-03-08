@@ -1,11 +1,16 @@
 package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,7 +26,10 @@ import com.meimodev.sitouhandler.Dashboard.NavFragment.Notification_Model;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.Notification_RecyclerAdapter;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
+import com.meimodev.sitouhandler.Issue.Issue;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
+import com.meimodev.sitouhandler.Issue.OnRecyclerItemOperationListener;
+import com.meimodev.sitouhandler.IssueDetail.IssueDetail;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 
@@ -74,9 +82,6 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
 
         progress = Constant.makeProgressCircle(rootView);
 
-        if (getActivity() != null)
-            getActivity().findViewById(R.id.cardView_importantDates).setEnabled(true);
-
         llSort.setVisibility(View.GONE);
         rvNotifications.setHasFixedSize(false);
         rvNotifications.setItemAnimator(new DefaultItemAnimator());
@@ -86,34 +91,24 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
         tvSortConfirmed.setOnClickListener(this);
         tvSortUnConfirmed.setOnClickListener(this);
 
+        getActivity().registerReceiver(brAuthorizationConfirm, new IntentFilter(IssueDetail.KEY_ISSUE_DETAIL_CONFIRM_AUTH));
 
         return rootView;
     }
 
     private void setupRecyclerView() {
+        OnRecyclerItemOperationListener.AcceptItemListener acceptItemListener =
+                data -> sendData(data.getInt("id"), data.getInt("status"));
+        OnRecyclerItemOperationListener.RejectItemListener rejectItemListener  =
+                data -> sendData(data.getInt("id"), data.getInt("status"));
 
         recyclerAdapter = new Notification_RecyclerAdapter(
                 context,
                 recyclerItems,
-                data -> {
-                    if (data != null) {
-//                        Snackbar.make(rootView, "ACCEPT " + data.getString("name") + " " + data.getString("column"), Snackbar.LENGTH_SHORT).show();
-                        sendData(
-                                data.getInt("id"),
-                                data.getInt("status")
-                        );
-                    }
-                },
-                data -> {
-                    if (data != null) {
-//                        Snackbar.make(rootView, "DENIED " + data.getString("name") + " " + data.getString("column"), Snackbar.LENGTH_SHORT).show();
-                        sendData(
-                                data.getInt("id"),
-                                data.getInt("status")
-                        );
-                    }
-                }
+                acceptItemListener,
+                rejectItemListener
         );
+
         recyclerItemsDefault = new ArrayList<>(recyclerItems);
         rvNotifications.setAdapter(recyclerAdapter);
 
@@ -129,14 +124,12 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
 
         //        Set Default Sort
         tvSortAll.callOnClick();
-
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.textView_sortAll:
-
                 toggleSort(context, tvSortAll, true);
                 toggleSort(context, tvSortConfirmed, false);
                 toggleSort(context, tvSortUnConfirmed, false);
@@ -144,7 +137,6 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
                 resetRecyclerView(recyclerItemsDefault);
                 break;
             case R.id.textView_sortConfirmed:
-                recyclerAdapter.notifyDataSetChanged();
                 toggleSort(context, tvSortAll, false);
                 toggleSort(context, tvSortConfirmed, true);
                 toggleSort(context, tvSortUnConfirmed, false);
@@ -228,7 +220,7 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
 
     }
 
-    private void sendData(int authorizeId, int authorizeKey) {
+    private void sendData(int authorizeId, int authorizeCode) {
         if (progress.getVisibility() != View.VISIBLE)
             progress.setVisibility(View.VISIBLE);
 
@@ -239,7 +231,7 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
 
         Call call = RetrofitClient.getInstance(null).getApiServices().authorizeIssue(
                 authorizeId,
-                authorizeKey == Constant.AUTHORIZATION_STATUS_CODE_ACCEPTED
+                authorizeCode == Constant.AUTHORIZATION_STATUS_CODE_ACCEPTED
                         ? Constant.AUTHORIZATION_STATUS_ACCEPTED
                         : Constant.AUTHORIZATION_STATUS_REJECTED
         );
@@ -302,9 +294,27 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
         rvNotifications.setAdapter(recyclerAdapter);
     }
 
+    private BroadcastReceiver brAuthorizationConfirm = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().contentEquals(IssueDetail.KEY_ISSUE_DETAIL_CONFIRM_AUTH)){
+                Log.e(TAG, "onReceive: auth confirm broadcast received, sending data...." );
+
+                sendData(intent.getIntExtra("AUTH_ID",0), intent.getIntExtra("AUTH_CODE", 99));
+            }
+        }
+    };
+
     @Override
     public void onResume() {
         fetchData();
         super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        getActivity().unregisterReceiver(brAuthorizationConfirm);
+
+        super.onDestroy();
     }
 }

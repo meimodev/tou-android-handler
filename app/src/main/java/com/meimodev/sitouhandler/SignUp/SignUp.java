@@ -1,29 +1,16 @@
 package com.meimodev.sitouhandler.SignUp;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.TextPaint;
-import android.text.style.ImageSpan;
-import android.util.Log;
-import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.meimodev.sitouhandler.Constant;
@@ -32,13 +19,10 @@ import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
-import com.meimodev.sitouhandler.SignIn.SignIn;
 import com.meimodev.sitouhandler.Validator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,7 +68,7 @@ public class SignUp extends AppCompatActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 SignUp.this,
-                R.layout.resoruce_dropdown_popup,
+                R.layout.resoruce_dropdown_popup_large,
                 new String[]{"Laki-laki", "Perempuan"});
 
         AutoCompleteTextView editTextFilledExposedDropdown = findViewById(R.id.filled_exposed_dropdown);

@@ -2,16 +2,19 @@ package com.meimodev.sitouhandler.CustomWidget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -21,8 +24,11 @@ import com.meimodev.sitouhandler.R;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class CustomEditText extends TextInputEditText {
 
@@ -60,7 +66,7 @@ public class CustomEditText extends TextInputEditText {
         try {
             typeface = Typeface.createFromAsset(ctx.getAssets(), "fonts/" + asset);
         } catch (Exception e) {
-//            Log.e(TAG, "Unable to load typeface: " + e.getMessage());
+//            Log.e(TAG, " Unable to load typeface: " + e.getMessage());
             return false;
         }
 
@@ -106,52 +112,40 @@ public class CustomEditText extends TextInputEditText {
                 if (editable.toString().startsWith("0")) {
                     thisET.setError("Angka tidak bisa diawali dengan 0");
 
-                } else
+                }
+                else {
                     thisET.setError(null);
+                }
 
 //                thisET.clearFocus();
             }
         });
     }
 
-    public void setAsEmailInput() {
-        final CustomEditText thisET = this;
-
-        this.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable.toString().contains("@")
-                        && editable.toString().contains(".")
-                        && editable.toString().length() > 3) {
-                    thisET.setError(null);
-                } else {
-                    thisET.setError("E-mail belum valild");
-                    thisET.requestFocus();
-                }
-
-            }
-        });
-    }
 
     void displayDatePickerDialog(FragmentManager fragmentManager, boolean set) {
         if (set) {
             Calendar now = Calendar.getInstance();
-            DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
-                    (view1, year, monthOfYear, dayOfMonth) -> this.setText(Constant.formatDate(dayOfMonth, monthOfYear, year)),
+            Locale locale = new Locale("in", "ID");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", locale);
+
+            com.wdullaer.materialdatetimepicker.date.DatePickerDialog datePickerDialog = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(
+                    (view1, year, monthOfYear, dayOfMonth) -> {
+                        Calendar selectedDate = Calendar.getInstance();
+                        selectedDate.set(year, monthOfYear, dayOfMonth);
+
+                        this.setText(dateFormat.format(selectedDate.getTime()));
+                    },
                     now.get(Calendar.YEAR),
                     now.get(Calendar.MONTH),
                     now.get(Calendar.DAY_OF_MONTH)
             );
             try {
+                datePickerDialog.setOkColor(getResources().getColor(R.color.colorPrimary));
+                datePickerDialog.setCancelColor(getResources().getColor(R.color.secondaryText));
+                datePickerDialog.setCancelText("BATAL");
+                datePickerDialog.setVersion(DatePickerDialog.Version.VERSION_1);
+                datePickerDialog.setLocale(locale);
                 datePickerDialog.show(fragmentManager, null);
             } catch (NullPointerException e) {
                 Log.e(TAG, "displayDatePickerDialog: null refrence on FragmentManager", e);
