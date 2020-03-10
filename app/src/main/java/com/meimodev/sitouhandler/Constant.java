@@ -57,11 +57,15 @@ public class Constant {
     public static final String KEY_COLUMN_ID = "Column_Id";
     public static final String KEY_COLUMN_NAME_INDEX = "Column_Name_Index";
 
-    public static final String ROOT_TRANSFER_PROTOCOL = "http://";
-    public static final String ROOT_DOMAIN = "192.168.1.137:8000";
-    public static final String ROOT_URL_API = ROOT_TRANSFER_PROTOCOL + ROOT_DOMAIN + "/api/";
-    public static final String ROOT_URL_PRINTABLE = ROOT_TRANSFER_PROTOCOL + ROOT_DOMAIN + "/print/";
-    public static final String ROOT_URL_TERMS = ROOT_TRANSFER_PROTOCOL + ROOT_DOMAIN + "/terms-and-condition";
+    public static final String ROOT_TRANSFER_PROTOCOL = "http";
+    public static final String ROOT_IP = "192.168.1.35";
+    public static final String ROOT_PORT = ":8000";
+    public static final String ROOT_PROTOCOL_IP_PORT =
+            ROOT_TRANSFER_PROTOCOL + "://" + ROOT_IP + ROOT_PORT;
+
+    public static final String ROOT_URL_API = ROOT_PROTOCOL_IP_PORT + "/api/";
+    public static final String ROOT_URL_PRINTABLE = ROOT_PROTOCOL_IP_PORT + "/print/";
+    public static final String ROOT_URL_TERMS = ROOT_PROTOCOL_IP_PORT + "/terms-and-condition";
 
     public static final String ACCOUNT_TYPE_CHIEF = "Ketua Jemaat";
     public static final String ACCOUNT_TYPE_SECRETARY = "Sekretaris Jemaat";

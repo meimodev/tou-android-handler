@@ -5,6 +5,7 @@
 package com.meimodev.sitouhandler.Wizard.ApplyMember;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -26,13 +27,20 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.meimodev.sitouhandler.Constant;
+import com.meimodev.sitouhandler.Helper.APIWrapper;
+import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
+import com.meimodev.sitouhandler.RetrofitClient;
 import com.skydoves.expandablelayout.ExpandableLayout;
+import com.squareup.picasso.RequestHandler;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
 
 public class Fragment_Designated extends Fragment {
     private static final String TAG = "Fragment_firstPage";
@@ -78,8 +86,12 @@ public class Fragment_Designated extends Fragment {
     @Override
     public void onPause() {
         ViewPager2 viewPager2 = getActivity().findViewById(R.id.viewPager);
+        if (btnSend.getVisibility() != View.VISIBLE) {
+            btnSend.setVisibility(View.VISIBLE);
+        }
         btnSend.setText("LANJUT");
         btnSend.setOnClickListener(v -> viewPager2.setCurrentItem(viewPager2.getCurrentItem() + 1));
+
         super.onPause();
     }
 
@@ -138,7 +150,68 @@ public class Fragment_Designated extends Fragment {
             tilDesignatedColumn.setError("Jumlah kolom di Jemaat Tujuan anda adalah " + registeredChurch.get(selectedPos).getCountColumn());
             return;
         }
+        sendDataToServer();
     }
+
+    private void sendDataToServer() {
+//        View layoutMain = findViewById(R.id.layout_main);
+//        context.sendBroadcast(new Intent(ApplyMember.ACTION_SEND_DATA_TO_SERVER));
+
+        if (btnSend.getVisibility() == View.VISIBLE) {
+            btnSend.setVisibility(View.GONE);
+        }
+
+        ApplyMember.CHURCH_ID = registeredChurch.get(selectedPos).getChurchId();
+        ApplyMember.COLUMN_INDEX = tilDesignatedColumn.getEditText().getText().toString();
+
+        Call call = RetrofitClient.getInstance(null).getApiServices().setApplyMember(
+                ApplyMember.USER_ID,
+                ApplyMember.USER_FIRST_NAME,
+                ApplyMember.USER_MIDDLE_NAME,
+                ApplyMember.USER_LAST_NAME,
+                ApplyMember.USER_SEX,
+                ApplyMember.USER_DATE_OF_BIRTH,
+                ApplyMember.CHURCH_ID,
+                ApplyMember.COLUMN_INDEX,
+                ApplyMember.BAPTIS,
+                ApplyMember.SIDI,
+                ApplyMember.NIKAH
+        );
+        IssueRequestHandler req = new IssueRequestHandler(rootView);
+        req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
+            @Override
+            public void onTry() {
+            }
+
+            @Override
+            public void onSuccess(APIWrapper res, String message) throws JSONException {
+//                replaceWithFinishFragment();
+                btnSend.setVisibility(View.GONE);
+                context.sendBroadcast(new Intent(ApplyMember.ACTION_REPLACE_WITH_FINISH));
+            }
+
+            @Override
+            public void onRetry() {
+                sendDataToServer();
+            }
+        });
+        req.enqueue(call);
+
+        Log.e(TAG, "==============================================================");
+        Log.e(TAG, "User ID: " + ApplyMember.USER_ID);
+        Log.e(TAG, "first name: " + ApplyMember.USER_FIRST_NAME);
+        Log.e(TAG, "middle name: " + ApplyMember.USER_MIDDLE_NAME);
+        Log.e(TAG, "last name: " + ApplyMember.USER_LAST_NAME);
+        Log.e(TAG, "user sex: " + ApplyMember.USER_SEX);
+        Log.e(TAG, "date of birth: " + ApplyMember.USER_DATE_OF_BIRTH);
+        Log.e(TAG, "church id: " + ApplyMember.CHURCH_ID);
+        Log.e(TAG, "column index: " + ApplyMember.COLUMN_INDEX);
+        Log.e(TAG, "baptis: " + ApplyMember.BAPTIS);
+        Log.e(TAG, "sidi: " + ApplyMember.SIDI);
+        Log.e(TAG, "nikah: " + ApplyMember.NIKAH);
+        Log.e(TAG, "==============================================================");
+    }
+
 
     private void initExpendable() {
         ((TextView) elCongregation.getParentLayout().findViewById(R.id.textView_title)).setText("Jemaat Tujuan");

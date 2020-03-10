@@ -2,6 +2,7 @@ package com.meimodev.sitouhandler.Wizard.ApplyMember;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -162,12 +163,26 @@ public class ApplyMember extends FragmentActivity {
             }
         }
         else {
-            // if member_confirm status == UNCONFIRMED ->
-            // show waiting-for-confirmation-apply-member fragment
-            // check member_confirm status | UNCONFIRMED | ACCEPT/REJECT
+            APPLICABLE = false;
+            JSONObject memberConfirm = obj.getJSONObject("member_confirm");
+            String status = memberConfirm.getString("status");
+            String message;
+            if (status.contentEquals("UNCONFIRMED")) {
+                message = "Permintaan telah terkirim dan sedang diproses. Silahkan menunggu konfirmasi dari Jemaat Tujuan anda ";
+            }
+            else {
+                message = "Permintaan anda telah ditolak. Anda dapat mengajukan pengajuan Anggota Jemaat kembali setelah 24 Jam semenjak permintaan anda ditolak";
+            }
+            Constant.displayDialog(
+                    this,
+                    "Perhatian!",
+                    message,
+                    false,
+                    (dialog, which) -> {
+                    },
+                    null,
+                    dialog -> finish());
         }
-
-
     }
 
     @Override
@@ -214,8 +229,11 @@ public class ApplyMember extends FragmentActivity {
                 .replace(R.id.layout_main, new Fragment_Finish())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
-        btnNext.setVisibility(View.GONE);
+        Button btnFragment = findViewById(R.id.btn_fragment);
+        btnFragment.setVisibility(View.GONE);
         if (viewPager != null) viewPager.setCurrentItem(0);
+        btnFragment.setText("OK");
+        btnFragment.setOnClickListener(v -> finish());
     }
 
     private void sendDataToServer() {

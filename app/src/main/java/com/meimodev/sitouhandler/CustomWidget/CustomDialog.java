@@ -24,7 +24,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.meimodev.sitouhandler.R;
 
-public class CustomDialog extends DialogFragment {
+public class CustomDialog extends DialogFragment implements DialogInterface.OnDismissListener {
 
     private static final String TAG = "CustomDialog";
 
@@ -62,7 +62,7 @@ public class CustomDialog extends DialogFragment {
     }
 
     public void setCancelable(Boolean cancelable) {
-        this.cancelable = cancelable == null ? true : cancelable;
+        this.cancelable = cancelable;
     }
 
     public void show(Context context) {
@@ -91,7 +91,8 @@ public class CustomDialog extends DialogFragment {
             if (title.contains("!")) {
                 tvTitle.setCompoundDrawablesRelativeWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_warning), null, null, null);
                 tvTitle.setCompoundDrawablePadding(8);
-            } else if (title.contains("OK")){
+            }
+            else if (title.contains("OK")) {
                 tvTitle.setCompoundDrawablesRelativeWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_check_24px), null, null, null);
                 tvTitle.setCompoundDrawablePadding(8);
             }
@@ -126,14 +127,18 @@ public class CustomDialog extends DialogFragment {
         }
 
         if (dismissListener != null) {
-            builder.setOnDismissListener(dismissListener);
+            builder.setOnDismissListener(this);
         }
 
-
         builder.setView(view);
-
         return builder.create();
     }
 
-
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (dismissListener != null) {
+            dismissListener.onDismiss(dialog);
+        }
+    }
 }

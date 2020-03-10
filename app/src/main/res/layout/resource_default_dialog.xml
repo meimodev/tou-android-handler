@@ -33,11 +33,12 @@
         android:id="@+id/textView_dialogContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:fontFamily="@font/montserrat_regular"
         android:maxLines="100"
         android:text="lorem ipsum dolor sit ametlorem ipsum dolor sit ametlorem ipsum dolor sit ametlorem ipsum dolor sit amet"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/textView_dialogTitle"
+        app:layout_constraintStart_toEndOf="@id/verticalDash"
         app:layout_constraintTop_toBottomOf="@id/textView_dialogTitle" />
 
     <com.google.android.material.button.MaterialButton

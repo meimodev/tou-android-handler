@@ -47,7 +47,7 @@ public class APIUtils {
             Constant.displayDialog(
                     context,
                     "Sesi kadaluarsa!",
-                    "Silahkan masuk kembali dengan mengisi email dan password dari akun anda",
+                    "Silahkan masuk kembali dengan mengisi nomor dan password dari akun anda",
                     false,
                     (dialog, which) -> {
                     },
@@ -55,7 +55,6 @@ public class APIUtils {
                     dialog -> Constant.signOut(context)
 
             );
-
         }
         else {
             Constant.displayDialog(
@@ -63,7 +62,7 @@ public class APIUtils {
                     "Error! " + response.code(),
                     error.getMessage(),
                     false,
-                    (dialog, which) -> dialog.dismiss(),
+                    (dialog, which) -> ((Activity) context).finish(),
                     null,
                     dialog -> ((Activity) context).finish()
             );

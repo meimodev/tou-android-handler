@@ -141,8 +141,8 @@ public class CustomEditText extends TextInputEditText {
                     now.get(Calendar.DAY_OF_MONTH)
             );
             try {
-                datePickerDialog.setOkColor(getResources().getColor(R.color.colorPrimary));
-                datePickerDialog.setCancelColor(getResources().getColor(R.color.secondaryText));
+                datePickerDialog.setOkColor(getResources().getColor(android.R.color.white));
+                datePickerDialog.setCancelColor(getResources().getColor(android.R.color.white));
                 datePickerDialog.setCancelText("BATAL");
                 datePickerDialog.setVersion(DatePickerDialog.Version.VERSION_1);
                 datePickerDialog.setLocale(locale);

@@ -4,11 +4,13 @@
 
 package com.meimodev.sitouhandler.Wizard.ApplyMember;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,11 +20,12 @@ import com.meimodev.sitouhandler.R;
 
 import butterknife.ButterKnife;
 
-public class Fragment_Finish extends Fragment{
+public class Fragment_Finish extends Fragment {
     private static final String TAG = "Fragment_firstPage";
     private Context context;
     private View rootView;
 
+    private Button btnSend;
 
     @Nullable
     @Override
@@ -32,10 +35,17 @@ public class Fragment_Finish extends Fragment{
         context = rootView.getContext();
         ButterKnife.bind(this, rootView);
 
+
+
+
         return rootView;
     }
 
-
-
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        btnSend = getActivity().findViewById(R.id.btn_fragment);
+        btnSend.setText("OK");
+        btnSend.setOnClickListener(v -> ((Activity) context).finish());
+    }
 }

@@ -2,6 +2,8 @@ package com.meimodev.sitouhandler;
 
 import android.util.Log;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
@@ -23,7 +25,10 @@ public class RetrofitClient {
                     .addHeader("Cache-Control", "max-age=640000")
                     .build();
             return chain.proceed(newRequest);
-        }).build();
+        }).connectTimeout(5, TimeUnit.MINUTES)
+                .readTimeout(5, TimeUnit.MINUTES)
+                .writeTimeout(5, TimeUnit.MINUTES)
+                .build();
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)

@@ -242,7 +242,7 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
             @Override
             public void onSuccess(APIWrapper res, String message) {
                 fetchData();
-                Constant.displayDialog(context, null, res.getMessage(), (dialog, which) -> {});
+                Constant.displayDialog(context, "OK", res.getMessage(), (dialog, which) -> {});
             }
 
             @Override

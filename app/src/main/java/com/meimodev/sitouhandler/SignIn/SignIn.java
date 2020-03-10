@@ -24,9 +24,15 @@ import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SignUp.ConfirmAccount;
 import com.meimodev.sitouhandler.SignUp.SignUp;
 import com.meimodev.sitouhandler.Validator;
+import com.meimodev.sitouhandler.databinding.ActivitySigninBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,35 +43,36 @@ import retrofit2.Call;
 public class SignIn extends AppCompatActivity {
 
     private static final String TAG = "SignIn";
+//
+//    @BindView(R.id.textInputLayout_phone)
+//    TextInputLayout tilPhone;
+//    @BindView(R.id.textInputLayout_password)
+//    TextInputLayout tilPassword;
+//    @BindView(R.id.editText_phone)
+//    CustomEditText etPhone;
+//    @BindView(R.id.editText_Password)
+//    CustomEditText etPassword;
+//
+//
+//    @BindView(R.id.btn_signIn)
+//    Button btnSignIn;
+//    @BindView(R.id.btn_confirm)
+//    Button btnConfirm;
+//    @BindView(R.id.btn_signUp)
+//    Button btnSignUp;
+//    @BindView(R.id.btn_forget)
+//    Button btnForget;
 
-
-    @BindView(R.id.textInputLayout_phone)
-    TextInputLayout tilPhone;
-    @BindView(R.id.textInputLayout_password)
-    TextInputLayout tilPassword;
-    @BindView(R.id.editText_phone)
-    CustomEditText etPhone;
-    @BindView(R.id.editText_Password)
-    CustomEditText etPassword;
-
-    @BindView(R.id.layout_header)
-    LinearLayout llHeader;
-
-    @BindView(R.id.btn_signIn)
-    Button btnSignIn;
-    @BindView(R.id.btn_confirm)
-    Button btnConfirm;
-    @BindView(R.id.btn_signUp)
-    Button btnSignUp;
-    @BindView(R.id.btn_forget)
-    Button btnForget;
-
+    private ActivitySigninBinding b;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signin);
-        ButterKnife.bind(this);
+        b = ActivitySigninBinding.inflate(getLayoutInflater());
+        setContentView(b.getRoot());
+
+//        ButterKnife.bind(this);
+
         Constant.changeStatusColor(this, R.color.background);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
@@ -75,66 +82,33 @@ public class SignIn extends AppCompatActivity {
             finishAffinity();
         }
 
-        etPhone.clearFocus();
-        etPassword.clearFocus();
+        b.editTextPhone.clearFocus();
+        b.editTextPassword.clearFocus();
 
+        b.btnSignIn.setOnClickListener(v -> signIn());
+        b.btnSignUp.setOnClickListener(v -> signUp());
+        b.btnForget.setOnClickListener(v -> forget());
+        b.btnConfirm.setOnClickListener(v -> confirm());
+
+
+        Date d = Calendar.getInstance().getTime();
+        SimpleDateFormat format = new SimpleDateFormat("YYYY", Locale.US);
+        String year = format.format(d);
+        b.textViewDev.setText("TOU-System | Awesomely Possible - Meimo " + year + " | © all rights reserved");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (tilPhone.getError() != null) tilPhone.setError(null);
-        if (tilPassword.getError() != null) tilPassword.setError(null);
-    }
-
-    @OnClick(R.id.btn_signIn)
-    void signIn() {
-
-        etPhone.clearFocus();
-        etPassword.clearFocus();
-
-        tilPhone.setError(null);
-        tilPassword.setError(null);
-
-        Validator validator = new Validator();
-
-        tilPhone.setError(validator.validatePhone(tilPhone));
-
-        tilPassword.setError(validator.validateEmpty(tilPassword));
-
-        if (tilPhone.getError() == null && tilPassword.getError() == null) {
-            fetchData();
-        }
-
-    }
-
-
-    @OnClick(R.id.btn_signUp)
-    void signUp() {
-        etPhone.setText("");
-        etPassword.setText("");
-        startActivity(new Intent(this, SignUp.class));
-    }
-
-    @OnClick(R.id.btn_forget)
-    void forget() {
-        etPhone.setText("");
-        etPassword.setText("");
-        startActivity(new Intent(this, ForgetAccount.class));
-    }
-
-    @OnClick(R.id.btn_confirm)
-    void confirm() {
-        Intent i = new Intent(this, ConfirmAccount.class);
-        i.putExtra("phone", tilPhone.getEditText().getText().toString());
-        startActivity(i);
+        if (b.textInputLayoutPhone.getError() != null) b.textInputLayoutPhone.setError(null);
+        if (b.textInputLayoutPassword.getError() != null) b.textInputLayoutPassword.setError(null);
     }
 
     void fetchData() {
         IssueRequestHandler requestHandler = new IssueRequestHandler(findViewById(android.R.id.content));
         Call call = RetrofitClient.getInstance(null).getApiServices().signIn(
-                etPhone.getText().toString().trim(),
-                etPassword.getText().toString().trim()
+                b.editTextPhone.getText().toString().trim(),
+                b.editTextPassword.getText().toString().trim()
         );
         requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
@@ -149,13 +123,15 @@ public class SignIn extends AppCompatActivity {
                             SignIn.this,
                             "Perhatian!",
                             "Akun dengan nomor telepon " +
-                                    etPhone.getText().toString()
+                                    b.editTextPhone.getText().toString()
                                     + " belum dikonfirmasi. silahkan lakukan konfirmasi akun dengan menekan tombol 'konfirmasi Akun' di bawah",
-                            (dialog, which) -> {}
+                            (dialog, which) -> {
+                            }
                     );
-                    tilPhone.setError(message);
-                    btnConfirm.setVisibility(View.VISIBLE);
-                } else {
+                    b.textInputLayoutPhone.setError(message);
+                    b.btnConfirm.setVisibility(View.VISIBLE);
+                }
+                else {
                     proceed(res);
                 }
             }
@@ -183,7 +159,7 @@ public class SignIn extends AppCompatActivity {
 //                    userObj.getString("access_token")
 //            );
 
-        Log.e(TAG, "proceed: Saving User Data" );
+        Log.e(TAG, "proceed: Saving User Data");
         Guru.putInt(Constant.KEY_USER_ID, userObj.getInt("id"));
         Guru.putString(Constant.KEY_USER_FULL_NAME, userObj.getString("full_name"));
         Guru.putString(Constant.KEY_USER_AGE, userObj.getString("age"));
@@ -197,7 +173,7 @@ public class SignIn extends AppCompatActivity {
 //                        memberObj.getString("church_position_full"),
 //                        memberObj.getString("BIPRA")
 //                );
-            Log.e(TAG, "proceed: Saving Member Data" );
+            Log.e(TAG, "proceed: Saving Member Data");
             Guru.putInt(Constant.KEY_MEMBER_ID, memberObj.getInt("id"));
             Guru.putString(Constant.KEY_MEMBER_CHURCH_POSITION, memberObj.getString("church_position_full"));
             Guru.putString(Constant.KEY_MEMBER_BIPRA, memberObj.getString("BIPRA"));
@@ -207,7 +183,7 @@ public class SignIn extends AppCompatActivity {
 //                        columnObj.getString("name_index")
 //                );
 
-            Log.e(TAG, "proceed: Saving Column Data" );
+            Log.e(TAG, "proceed: Saving Column Data");
             Guru.putInt(Constant.KEY_COLUMN_ID, columnObj.getInt("id"));
             Guru.putString(Constant.KEY_COLUMN_NAME_INDEX, columnObj.getString("name_index"));
 
@@ -217,12 +193,13 @@ public class SignIn extends AppCompatActivity {
 //                        churchObj.getString("church_name"),
 //                        churchObj.getString("church_kelurahan")
 //                );
-            Log.e(TAG, "proceed: Saving Church Data" );
+            Log.e(TAG, "proceed: Saving Church Data");
             Guru.putInt(Constant.KEY_CHURCH_ID, churchObj.getInt("id"));
             Guru.putString(Constant.KEY_CHURCH_NAME, churchObj.getString("church_name"));
             Guru.putString(Constant.KEY_CHURCH_KELURAHAN, churchObj.getString("church_kelurahan"));
 
-        } else {
+        }
+        else {
             Log.e(TAG, "proceed: member is USER");
             Guru.putString(Constant.KEY_MEMBER_CHURCH_POSITION, Constant.ACCOUNT_TYPE_USER);
         }
@@ -231,6 +208,45 @@ public class SignIn extends AppCompatActivity {
         startActivity(new Intent(this, Dashboard.class));
         finishAffinity();
 
+    }
+
+    void signIn() {
+
+        b.editTextPhone.clearFocus();
+        b.editTextPassword.clearFocus();
+
+        b.textInputLayoutPhone.setError(null);
+        b.textInputLayoutPassword.setError(null);
+
+        Validator validator = new Validator();
+
+        b.textInputLayoutPhone.setError(validator.validatePhone(b.textInputLayoutPhone));
+
+        b.textInputLayoutPassword.setError(validator.validateEmpty(b.textInputLayoutPassword));
+
+        if (b.textInputLayoutPhone.getError() == null && b.textInputLayoutPassword.getError() == null) {
+            fetchData();
+        }
+
+    }
+
+
+    void signUp() {
+        b.editTextPhone.setText("");
+        b.editTextPassword.setText("");
+        startActivity(new Intent(this, SignUp.class));
+    }
+
+    void forget() {
+        b.editTextPhone.setText("");
+        b.editTextPassword.setText("");
+        startActivity(new Intent(this, ForgetAccount.class));
+    }
+
+    void confirm() {
+        Intent i = new Intent(this, ConfirmAccount.class);
+        i.putExtra("phone", b.textInputLayoutPhone.getEditText().getText().toString());
+        startActivity(i);
     }
 
 }
