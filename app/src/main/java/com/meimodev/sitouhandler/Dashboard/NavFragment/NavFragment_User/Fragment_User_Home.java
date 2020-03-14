@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User;
 
 import android.content.Context;
@@ -76,8 +80,10 @@ public class Fragment_User_Home extends Fragment {
                         .beginTransaction().replace(R.id.layoutContentFragment, fragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
-            } else
+            }
+            else {
                 Log.e(TAG, "onCreateView: fragment is null");
+            }
 
             return true;
         });
@@ -89,11 +95,18 @@ public class Fragment_User_Home extends Fragment {
 
 
     @Override
-    public void onDetach() {
+    public void onPause() {
+        if (bottomNavigationView.getVisibility() == View.VISIBLE) {
+            bottomNavigationView.setVisibility(View.INVISIBLE);
+        }
+        super.onPause();
+    }
 
-
-        bottomNavigationView.setVisibility(View.INVISIBLE);
-
-        super.onDetach();
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (bottomNavigationView != null && bottomNavigationView.getVisibility() != View.VISIBLE) {
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        }
     }
 }

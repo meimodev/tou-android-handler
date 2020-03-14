@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Dashboard;
 
 import android.content.BroadcastReceiver;
@@ -139,7 +143,6 @@ public class Dashboard extends AppCompatActivity {
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,7 +177,6 @@ public class Dashboard extends AppCompatActivity {
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
     }
-
 
     @Override
     public void onBackPressed() {
@@ -425,6 +427,7 @@ public class Dashboard extends AppCompatActivity {
 
 
         speedDialView.setOnActionSelectedListener(actionItem -> {
+            if (speedDialView.isOpen())speedDialView.close(true);
             startActivity(new Intent(Dashboard.this, Issue.class).putExtra("ISSUE_TYPE", actionItem.getId()));
             return true;
         });

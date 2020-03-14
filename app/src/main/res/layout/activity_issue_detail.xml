@@ -1,503 +1,520 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background"
-    android:fadeScrollbars="true"
-    android:fillViewport="true"
-    android:keepScreenOn="true"
-    android:scrollbars="vertical"
-    tools:context=".IssueDetail.IssueDetail">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="true">
+        android:layout_marginBottom="8dp"
+        android:layout_above="@id/layout_buttons"
+        android:background="@color/background"
+        android:fadeScrollbars="true"
+        android:fillViewport="true"
+        android:keepScreenOn="true"
+        tools:context=".IssueDetail.IssueDetail">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_main"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:animateLayoutChanges="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true">
 
-            <LinearLayout
-                android:id="@+id/layout_namesHolder"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_main"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:animateLayoutChanges="true"
-                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layout_header"
-                app:layout_constraintWidth_percent="0.9">
-
-            </LinearLayout>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView_description"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:animateLayoutChanges="true"
-                android:visibility="gone"
-                app:cardElevation="2dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layout_namesHolder"
-                app:layout_constraintWidth_percent="0.9">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/layout_namesHolder"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:id="@+id/textView_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1000"
-                        android:text="Test"
-                        android:textColor="@color/TextView_Label_Dark" />
+                    android:layout_marginTop="16dp"
+                    android:animateLayoutChanges="true"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layout_header"
+                    app:layout_constraintWidth_percent="0.9">
 
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView_notation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:cardElevation="2dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cardView_description"
-                app:layout_constraintWidth_percent="0.9">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView_description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:animateLayoutChanges="true"
+                    android:visibility="gone"
+                    app:cardElevation="2dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layout_namesHolder"
+                    app:layout_constraintWidth_percent="0.9">
 
                     <LinearLayout
-                        android:id="@+id/linearLayout_notationPlaceholder"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingBottom="10dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textView_notationHead">
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/textView_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1000"
+                            android:text="Test"
+                            android:textColor="@color/TextView_Label_Dark" />
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/textView_notationHead"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="10dp"
-                        android:paddingTop="10dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="0dp"
-                        android:text="Tembusan"
-                        android:textColor="@color/TextView_Label_Light"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.cardview.widget.CardView>
 
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <!--KEY PAPER LETTER-->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView_printable"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:animateLayoutChanges="true"
-                android:elevation="2dp"
-                android:minHeight="50dp"
-                android:visibility="gone"
-                app:cardCornerRadius="4dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cardView_notation"
-                app:layout_constraintWidth_percent="0.9">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:animateLayoutChanges="true"
-                    android:padding="8dp">
-
-                    <TextView
-                        android:id="@+id/text_download"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:text="Download / Unduh Dokumen"
-                        android:textAlignment="textEnd"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@id/button_download"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/textView_link"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@id/text_download"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="8dp"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toStartOf="@id/button_download"
-                        app:layout_constraintStart_toStartOf="@id/text_download"
-                        app:layout_constraintTop_toBottomOf="@id/text_download" />
-
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/button_download"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:animateLayoutChanges="true"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        app:cardBackgroundColor="@color/colorAccent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <ImageView
-                            android:id="@+id/imageView_download"
-                            android:layout_width="45dp"
-                            android:layout_height="match_parent"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_save_alt_24px" />
-
-                    </androidx.cardview.widget.CardView>
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            </androidx.cardview.widget.CardView>
-
-            <LinearLayout
-                android:id="@+id/cardView_issuedBy"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="32dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cardView_printable"
-                app:layout_constraintWidth_percent="0.9">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="5dp"
-                        android:text="Diajukan Oleh: "
-                        android:textColor="@color/TextView_Label_Light" />
-
-                    <TextView
-                        android:id="@+id/textView_issuedByName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:maxLines="1"
-                        android:text="Jhon Manembo nembo "
-                        android:textColor="@color/TextView_Label_Dark"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/textView_issuedByPosition"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="5dp"
-                        android:text="Penatua 40"
-                        android:textColor="@color/TextView_Label_Light"
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/textView_issuedByColumn"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Kolom 40"
-                        android:textColor="@color/TextView_Label_Light" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_header"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.9">
-
-                <LinearLayout
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView_notation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="16dp"
+                    android:layout_marginTop="10dp"
+                    app:cardElevation="2dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cardView_issuedDate">
+                    app:layout_constraintTop_toBottomOf="@id/cardView_description"
+                    app:layout_constraintWidth_percent="0.9">
 
-                    <TextView
-                        android:id="@+id/textView_letterNumberEntry"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:text="Nomor Surat"
-                        android:textAlignment="center"
-                        android:textAllCaps="true"
-                        android:textColor="@color/TextView_Label_Dark"
-                        android:visibility="gone" />
+                        android:layout_height="match_parent">
 
-                    <LinearLayout
-                        android:id="@+id/linearLayout_serviceEntryId"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
+                        <LinearLayout
+                            android:id="@+id/linearLayout_notationPlaceholder"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingBottom="10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/textView_notationHead">
+
+                        </LinearLayout>
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/textView_notationHead"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="ID Ibadah: "
-                            android:textAllCaps="false"
+                            android:paddingStart="10dp"
+                            android:paddingTop="10dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="0dp"
+                            android:text="Tembusan"
+                            android:textColor="@color/TextView_Label_Light"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!--KEY PAPER LETTER-->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView_printable"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:animateLayoutChanges="true"
+                    android:elevation="2dp"
+                    android:minHeight="50dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="4dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cardView_notation"
+                    app:layout_constraintWidth_percent="0.9">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:animateLayoutChanges="true"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/text_download"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:text="Download / Unduh Dokumen"
+                            android:textAlignment="textEnd"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toStartOf="@id/button_download"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView_link"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@id/text_download"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="8dp"
+                            android:textSize="12sp"
+                            app:layout_constraintEnd_toStartOf="@id/button_download"
+                            app:layout_constraintStart_toStartOf="@id/text_download"
+                            app:layout_constraintTop_toBottomOf="@id/text_download" />
+
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/button_download"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:animateLayoutChanges="true"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            app:cardBackgroundColor="@color/colorAccent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:id="@+id/imageView_download"
+                                android:layout_width="45dp"
+                                android:layout_height="match_parent"
+                                android:padding="5dp"
+                                android:src="@drawable/ic_save_alt_24px" />
+
+                        </androidx.cardview.widget.CardView>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/cardView_issuedBy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cardView_printable"
+                    app:layout_constraintWidth_percent="0.9">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="5dp"
+                            android:text="Diajukan Oleh: "
                             android:textColor="@color/TextView_Label_Light" />
 
                         <TextView
-                            android:id="@+id/textView_serviceEntryId"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/textView_issuedByName"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Service Entry ID"
+                            android:layout_marginTop="5dp"
+                            android:maxLines="1"
+                            android:text="Jhon Manembo nembo "
+                            android:textColor="@color/TextView_Label_Dark"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/textView_issuedByPosition"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="5dp"
+                            android:text="Penatua 40"
+                            android:textColor="@color/TextView_Label_Light"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/textView_issuedByColumn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Kolom 40"
+                            android:textColor="@color/TextView_Label_Light" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_header"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.9">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/cardView_issuedDate">
+
+                        <TextView
+                            android:id="@+id/textView_letterNumberEntry"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:text="Nomor Surat"
+                            android:textAlignment="center"
                             android:textAllCaps="true"
-                            android:textColor="@color/colorAccent"
+                            android:textColor="@color/TextView_Label_Dark"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout_serviceEntryId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="ID Ibadah: "
+                                android:textAllCaps="false"
+                                android:textColor="@color/TextView_Label_Light" />
+
+                            <TextView
+                                android:id="@+id/textView_serviceEntryId"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Service Entry ID"
+                                android:textAllCaps="true"
+                                android:textColor="@color/colorAccent"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/textView_keyIssue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:text="Surat Keterangan, Anggota Jemaat"
+                            android:textAlignment="center"
+                            android:textColor="@color/TextView_Label_Dark"
+                            android:textSize="17sp"
                             android:textStyle="bold" />
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/textView_keyIssue"
-                        android:layout_width="match_parent"
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView_acceptRejectBadge"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:text="Surat Keterangan, Anggota Jemaat"
-                        android:textAlignment="center"
-                        android:textColor="@color/TextView_Label_Dark"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="0dp"
+                        android:visibility="visible"
+                        app:cardElevation="4dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                </LinearLayout>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView_acceptRejectBadge"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="0dp"
-                    android:visibility="visible"
-                    app:cardElevation="4dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <LinearLayout
-                            android:id="@+id/layout_authDate"
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:padding="8dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            android:layout_height="wrap_content">
 
-                            <TextView
-                                android:id="@+id/textView_acceptedRejectedText"
+                            <LinearLayout
+                                android:id="@+id/layout_authDate"
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:ellipsize="marquee"
-                                android:marqueeRepeatLimit="marquee_forever"
-                                android:singleLine="true"
-                                android:text="Diterima / ditolak"
-                                android:textAlignment="center"
-                                android:textAllCaps="true"
-                                android:textColor="@color/TextView_Label_Light"
-                                android:textStyle="bold" />
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:padding="8dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
 
-                            <TextView
-                                android:id="@+id/textView_acceptedRejectedDate"
+                                <TextView
+                                    android:id="@+id/textView_acceptedRejectedText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:ellipsize="marquee"
+                                    android:marqueeRepeatLimit="marquee_forever"
+                                    android:singleLine="true"
+                                    android:text="Diterima / ditolak"
+                                    android:textAlignment="center"
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/TextView_Label_Light"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/textView_acceptedRejectedDate"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:marqueeRepeatLimit="marquee_forever"
+                                    android:scrollHorizontally="true"
+                                    android:singleLine="true"
+                                    android:text="01 Jan 2019"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/TextView_Label_Light" />
+
+                            </LinearLayout>
+
+                            <ImageView
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:marqueeRepeatLimit="marquee_forever"
-                                android:scrollHorizontally="true"
-                                android:singleLine="true"
-                                android:text="01 Jan 2019"
-                                android:textAlignment="center"
-                                android:textColor="@color/TextView_Label_Light" />
+                                android:layout_height="3dp"
+                                android:src="@color/colorPrimary"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/layout_authDate" />
 
-                        </LinearLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <ImageView
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView_issuedDate"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="0dp"
+                        app:cardElevation="4dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="3dp"
-                            android:src="@color/colorPrimary"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/layout_authDate" />
+                            android:layout_height="wrap_content">
 
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView_issuedDate"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="0dp"
-                    app:cardElevation="4dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <LinearLayout
-                            android:id="@+id/layout_issuedDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="8dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <TextView
+                            <LinearLayout
+                                android:id="@+id/layout_issuedDate"
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:scrollHorizontally="true"
-                                android:singleLine="true"
-                                android:text="Diajukan"
-                                android:textAlignment="center"
-                                android:textAllCaps="true"
-                                android:textColor="@color/TextView_Label_Light"
-                                android:textStyle="bold" />
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="8dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
 
-                            <TextView
-                                android:id="@+id/textView_issuedDate"
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:scrollHorizontally="true"
+                                    android:singleLine="true"
+                                    android:text="Diajukan"
+                                    android:textAlignment="center"
+                                    android:textAllCaps="true"
+                                    android:textColor="@color/TextView_Label_Light"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/textView_issuedDate"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:marqueeRepeatLimit="marquee_forever"
+                                    android:scrollHorizontally="true"
+                                    android:singleLine="true"
+                                    android:text="01 Des 2019"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/TextView_Label_Light" />
+
+                            </LinearLayout>
+
+                            <ImageView
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:marqueeRepeatLimit="marquee_forever"
-                                android:scrollHorizontally="true"
-                                android:singleLine="true"
-                                android:text="01 Des 2019"
-                                android:textAlignment="center"
-                                android:textColor="@color/TextView_Label_Light" />
+                                android:layout_height="3dp"
+                                android:src="@color/colorPrimary"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/layout_issuedDate" />
 
-                        </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="3dp"
-                            android:src="@color/colorPrimary"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/layout_issuedDate" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                </androidx.cardview.widget.CardView>
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:id="@+id/layout_buttons"
-                android:layout_width="0dp"
+
+            <RelativeLayout
+                android:id="@+id/layout_progressHolder"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:background="@color/transparent"
-                android:visibility="visible"
+                android:animateLayoutChanges="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <Button
-                    android:id="@+id/button_reject"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/colorAccent"
-                    android:drawableEnd="@drawable/ic_close_24px"
-                    android:text="TOLAK" />
-
-                <Button
-                    android:id="@+id/button_accept"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/colorAccent"
-                    android:drawableEnd="@drawable/ic_check_24px"
-                    android:text="TERIMA" />
-
-            </LinearLayout>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <RelativeLayout
-            android:id="@+id/layout_progressHolder"
-            android:layout_width="wrap_content"
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/layout_buttons"
+        style="?android:attr/buttonBarStyle"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/transparent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/button_reject"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorAccent"
+            android:drawableEnd="@drawable/ic_close_24px"
+            android:text="TOLAK" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/button_accept"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorAccent"
+            android:drawableEnd="@drawable/ic_check_24px"
+            android:text="TERIMA" />
 
-</androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+
+</RelativeLayout>
+

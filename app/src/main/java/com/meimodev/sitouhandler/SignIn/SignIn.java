@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.SignIn;
 
 import android.content.Intent;
@@ -34,34 +38,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import retrofit2.Call;
 
 
 public class SignIn extends AppCompatActivity {
 
     private static final String TAG = "SignIn";
-//
-//    @BindView(R.id.textInputLayout_phone)
-//    TextInputLayout tilPhone;
-//    @BindView(R.id.textInputLayout_password)
-//    TextInputLayout tilPassword;
-//    @BindView(R.id.editText_phone)
-//    CustomEditText etPhone;
-//    @BindView(R.id.editText_Password)
-//    CustomEditText etPassword;
-//
-//
-//    @BindView(R.id.btn_signIn)
-//    Button btnSignIn;
-//    @BindView(R.id.btn_confirm)
-//    Button btnConfirm;
-//    @BindView(R.id.btn_signUp)
-//    Button btnSignUp;
-//    @BindView(R.id.btn_forget)
-//    Button btnForget;
 
     private ActivitySigninBinding b;
 
@@ -70,8 +52,6 @@ public class SignIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         b = ActivitySigninBinding.inflate(getLayoutInflater());
         setContentView(b.getRoot());
-
-//        ButterKnife.bind(this);
 
         Constant.changeStatusColor(this, R.color.background);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);

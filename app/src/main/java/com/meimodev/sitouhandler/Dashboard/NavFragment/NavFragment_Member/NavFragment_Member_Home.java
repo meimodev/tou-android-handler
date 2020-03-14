@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member;
 
 import android.content.BroadcastReceiver;
@@ -163,6 +167,9 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
         if (rvNotifications.getVisibility() == View.VISIBLE)
             rvNotifications.setVisibility(View.INVISIBLE);
 
+        if (tvDataNotFound.getVisibility() == View.VISIBLE)
+            tvDataNotFound.setVisibility(View.INVISIBLE);
+
         IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
         Call call = RetrofitClient.getInstance(null).getApiServices().getMemberHome(
                 Guru.getInt(Constant.KEY_MEMBER_ID, 0)
@@ -179,6 +186,8 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
 
                 if (res.getDataArray().length() <= 0) {
                     tvDataNotFound.setVisibility(View.VISIBLE);
+                } else {
+                    tvDataNotFound.setVisibility(View.INVISIBLE);
                 }
 
                 for (int i = 0; i < res.getDataArray().length(); i++) {
