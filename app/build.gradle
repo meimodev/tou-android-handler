@@ -91,5 +91,9 @@ dependencies {
 //    Expandable layout
     implementation "com.github.skydoves:expandablelayout:1.0.4"
 
+    // Fetch2
+    implementation "androidx.tonyodev.fetch2:xfetch2:3.1.4"
+
+
 }
 apply plugin: 'com.google.gms.google-services'

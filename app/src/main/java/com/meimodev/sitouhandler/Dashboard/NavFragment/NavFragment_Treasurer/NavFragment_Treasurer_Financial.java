@@ -1,99 +1,320 @@
 package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Treasurer;
 
+import android.Manifest;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.squti.guru.Guru;
+import com.google.android.material.snackbar.Snackbar;
 import com.meimodev.sitouhandler.Constant;
-import com.meimodev.sitouhandler.R;
+import com.meimodev.sitouhandler.Dashboard.Dashboard;
+import com.meimodev.sitouhandler.Helper.APIWrapper;
+import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
+import com.meimodev.sitouhandler.RetrofitClient;
+import com.meimodev.sitouhandler.databinding.NavActivityTreasurerFinancialBinding;
+import com.tonyodev.fetch2.Download;
+import com.tonyodev.fetch2.Error;
+import com.tonyodev.fetch2.Fetch;
+import com.tonyodev.fetch2.FetchConfiguration;
+import com.tonyodev.fetch2.FetchListener;
+import com.tonyodev.fetch2.NetworkType;
+import com.tonyodev.fetch2.Priority;
+import com.tonyodev.fetch2.Request;
+import com.tonyodev.fetch2core.DownloadBlock;
 
-import java.lang.reflect.Array;
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import retrofit2.Call;
 
-public class NavFragment_Treasurer_Financial extends Fragment implements View.OnClickListener {
+public class NavFragment_Treasurer_Financial extends Fragment {
+
+    private static final String TAG = "Treasurer";
 
     private View rootView;
     private Context context;
+    private String fileName;
+    private long downloadId;
 
-    @BindView(R.id.layout_main)
-    RecyclerView rvMain;
-    private ArrayList<NavFragment_Treasurer_Financial_RecyclerModel> items = new ArrayList<>();
+    private ArrayList<NavFragment_Treasurer_Financial_RecyclerModel> items;
+    private NavActivityTreasurerFinancialBinding b;
+
+    private Fetch fetch;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.nav_activity_treasurer_financial, container, false);
-        context = rootView.getContext();
-        ButterKnife.bind(this, rootView);
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
+        b = NavActivityTreasurerFinancialBinding.inflate(inflater, container, false);
+        rootView = b.getRoot();
+        context = requireContext();
+        Constant.verifyStoragePermissions(getActivity());
 
-//        Fetch this Data
-        items.add(new NavFragment_Treasurer_Financial_RecyclerModel(
-                0, "Januari", "2018"
-        ));
-        items.add(new NavFragment_Treasurer_Financial_RecyclerModel(
-                0, "Februari", "2018"
-        ));
-        items.add(new NavFragment_Treasurer_Financial_RecyclerModel(
-                0, "Maret", "2018"
-        ));
-        items.add(new NavFragment_Treasurer_Financial_RecyclerModel(
-                0, "April", "2018"
-        ));
-        items.add(new NavFragment_Treasurer_Financial_RecyclerModel(
-                0, "Mei", "2018"
-        ));
-        items.add(new NavFragment_Treasurer_Financial_RecyclerModel(
-                0, "Juni", "2018"
-        ));
-        items.add(new NavFragment_Treasurer_Financial_RecyclerModel(
-                0, "Juli", "2018"
-        ));
-        items.add(new NavFragment_Treasurer_Financial_RecyclerModel(
-                0, "Januari-Juli", "2018", "I"
-        ));
-        items.add(new NavFragment_Treasurer_Financial_RecyclerModel(
-                0, "Agustus-Desember", "2018", "II"
-        ));
-        items.add(new NavFragment_Treasurer_Financial_RecyclerModel(
-                0, "Agustus-Desember", "2018", "II"
-        ));
+        int permission = ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+            fetchData();
+        }
 
+        context.registerReceiver(brPermissionGranted, new IntentFilter(Dashboard.ACTION_REQUEST_PERMISSION_GRANTED));
 
-        setupRecyclerView();
-
-        rootView.setOnClickListener(this);
+        Log.e(TAG, "onCreateView: on create view called");
         return rootView;
     }
 
+
+    private void fetchData() {
+
+        IssueRequestHandler req = new IssueRequestHandler(rootView);
+        Call call = RetrofitClient.getInstance(null).getApiServices().getIssuedFinancial(Guru.getInt(Constant.KEY_MEMBER_ID, 0));
+        req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
+            @Override
+            public void onTry() {
+            }
+
+            @Override
+            public void onSuccess(APIWrapper res, String message) throws JSONException {
+                proceed(res);
+            }
+
+            @Override
+            public void onRetry() {
+
+            }
+        });
+        req.enqueue(call);
+
+    }
+
+    private void proceed(APIWrapper res) throws JSONException {
+        items = new ArrayList<>();
+
+        JSONObject data = res.getData();
+
+        if (!data.isNull("bku")) {
+            JSONArray bku = data.getJSONArray("bku");
+
+            for (int i = 0; i < bku.length(); i++) {
+                JSONObject obj = bku.getJSONObject(i);
+                items.add(new NavFragment_Treasurer_Financial_RecyclerModel(
+                        obj.getInt("id"),
+                        obj.getString("month"),
+                        obj.getString("year")
+                ));
+            }
+        }
+
+        if (!data.isNull("eval")) {
+            JSONArray eval = data.getJSONArray("eval");
+            for (int i = 0; i < eval.length(); i++) {
+                JSONObject obj = eval.getJSONObject(i);
+                items.add(new NavFragment_Treasurer_Financial_RecyclerModel(
+                        obj.getInt("id"),
+                        obj.getString("period"),
+                        obj.getString("year"),
+                        obj.getString("semester")
+                ));
+            }
+        }
+        setupRecyclerView();
+    }
+
+    private boolean needToDisplayDialog = true;
+
     private void setupRecyclerView() {
-        rvMain.setHasFixedSize(false);
-        rvMain.setLayoutManager(new LinearLayoutManager(context));
-        rvMain.setItemAnimator(new DefaultItemAnimator());
-        rvMain.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+        if (items == null || items.size() == 0) {
+            if (b.layoutNotFound.getVisibility() != View.VISIBLE) {
+                b.layoutNotFound.setVisibility(View.VISIBLE);
+            }
+            return;
+        }
 
+        if (b.layoutNotFound.getVisibility() == View.VISIBLE) {
+            b.layoutNotFound.setVisibility(View.GONE);
+        }
 
-        NavFragment_Treasurer_Financial_RecyclerAdapter adapter = new NavFragment_Treasurer_Financial_RecyclerAdapter(items, context);
-        rvMain.setAdapter(adapter);
+        b.recyclerViewMain.setHasFixedSize(false);
+        b.recyclerViewMain.setLayoutManager(new LinearLayoutManager(context));
+        b.recyclerViewMain.setItemAnimator(new DefaultItemAnimator());
+
+        NavFragment_Treasurer_Financial_RecyclerAdapter adapter =
+                new NavFragment_Treasurer_Financial_RecyclerAdapter(items, context);
+        adapter.setOnItemClickListener(this::downloadData);
+
+        b.recyclerViewMain.setAdapter(adapter);
+    }
+
+    private void downloadData(Bundle data) {
+
+        int reportId = data.getInt("id");
+        fileName = data.getString("file_name");
+
+        FetchConfiguration fetchConfiguration = new FetchConfiguration.Builder(context)
+                .setDownloadConcurrentLimit(3)
+                .build();
+
+        fetch = Fetch.Impl.getInstance(fetchConfiguration);
+        String url = Constant.ROOT_URL_DOWNLOAD_REPORT + reportId;
+
+        final Request request = new Request(url, "/storage/emulated/0/Download/" + fileName);
+        request.setPriority(Priority.HIGH);
+        request.setNetworkType(NetworkType.ALL);
+//        request.addHeader("clientKey", "SD78DF93_3947&MVNGHE1WONG");
+        fetch.addListener(new FetchListener() {
+            @Override
+            public void onAdded(@NotNull Download download) {
+
+            }
+
+            @Override
+            public void onQueued(@NotNull Download download, boolean bool) {
+
+            }
+
+            @Override
+            public void onWaitingNetwork(@NotNull Download download) {
+                Log.e(TAG, "onCompleted: download is waiting network");
+            }
+
+            @Override
+            public void onCompleted(@NotNull Download download) {
+                if (needToDisplayDialog) {
+                    needToDisplayDialog = false;
+                    Constant.displayDialog(
+                            context,
+                            "OK",
+                            "Selesai mengunduh. silahkan sentuh tombol 'OK' untuk melihat file hasil unduhan",
+                            false,
+                            (dialog, which) -> {
+                                needToDisplayDialog = true;
+                                context.startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
+                            },
+                            null
+                    );
+                }
+            }
+
+            @Override
+            public void onError(@NotNull Download download, @NotNull Error error, @org.jetbrains.annotations.Nullable Throwable throwable) {
+
+            }
+
+            @Override
+            public void onDownloadBlockUpdated(@NotNull Download download, @NotNull DownloadBlock downloadBlock, int i) {
+
+            }
+
+            @Override
+            public void onStarted(@NotNull Download download, @NotNull List<? extends DownloadBlock> list, int i) {
+                Log.e(TAG, "onStarted: download started");
+            }
+
+            @Override
+            public void onProgress(@NotNull Download download, long l, long l1) {
+                Log.e(TAG, "onProgress: download progress long l = " + l + " long l1 = " + l1);
+            }
+
+            @Override
+            public void onPaused(@NotNull Download download) {
+
+            }
+
+            @Override
+            public void onResumed(@NotNull Download download) {
+            }
+
+            @Override
+            public void onCancelled(@NotNull Download download) {
+
+            }
+
+            @Override
+            public void onRemoved(@NotNull Download download) {
+
+            }
+
+            @Override
+            public void onDeleted(@NotNull Download download) {
+
+            }
+        });
+        fetch.enqueue(
+                request,
+                result -> Constant.displayDialog(
+                        context,
+                        "Perhatian !",
+                        "Sedang mengunduh",
+                        false,
+                        (dialog, which) -> {
+                        },
+                        null
+                ),
+                result -> {
+                    Log.e(TAG, "onError: yup an error :D :", result.getThrowable());
+                    Constant.displayDialog(
+                            context,
+                            "Perhatian !",
+                            "Terjadi kesalahan silahkan coba lagi",
+                            true,
+                            (dialog, which) -> {
+                            },
+                            null
+                    );
+                }
+        );
+    }
+
+    private BroadcastReceiver brPermissionGranted = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Dashboard.ACTION_REQUEST_PERMISSION_GRANTED.contentEquals(action)) {
+                fetchData();
+            }
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
-    public void onClick(View view) {
-        context.sendBroadcast(new Intent(Constant.ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED));
+    public void onPause() {
+        super.onPause();
 
     }
+
+
+//    @Override
+//    public void onDestroyView() {
+//        b = null;
+//        Log.e(TAG, "onResume: unregister " );
+//        context.unregisterReceiver(brPermissionGranted);
+//        super.onDestroyView();
+//    }
+
 }

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -122,11 +123,14 @@ public class Dashboard extends AppCompatActivity {
 
                 if (Guru.getInt(KEY_MEMBER_ID, 0) == 0) {
                     if (!isCollapse) {
-                        if (llApplyMembership.getVisibility() != View.VISIBLE)
+                        if (llApplyMembership.getVisibility() != View.VISIBLE) {
                             llApplyMembership.setVisibility(View.VISIBLE);
-                    } else {
-                        if (llApplyMembership.getVisibility() == View.VISIBLE)
+                        }
+                    }
+                    else {
+                        if (llApplyMembership.getVisibility() == View.VISIBLE) {
                             llApplyMembership.setVisibility(View.GONE);
+                        }
                     }
                 }
 
@@ -181,11 +185,17 @@ public class Dashboard extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //       Check if Floating Action Menu open then close it
-        if (speedDialView.isOpen()) speedDialView.close(true);
+        if (speedDialView.isOpen()) {
+            speedDialView.close(true);
+        }
         else {
 //           Check if drawer open then close it
-            if (drawer.isDrawerOpen(GravityCompat.START)) drawer.closeDrawer(GravityCompat.START);
-            else super.onBackPressed();
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            }
+            else {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -254,14 +264,16 @@ public class Dashboard extends AppCompatActivity {
                     fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_T);
                     Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Chief-Treasurer: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_T);
 
-                } else if (churchPosition.contentEquals(ACCOUNT_TYPE_SECRETARY)) {
+                }
+                else if (churchPosition.contentEquals(ACCOUNT_TYPE_SECRETARY)) {
                     fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_S);
                     Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Chief-Secretary: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_S);
 
                     fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_S_T);
                     Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Secretary-Treasurer: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_S_T);
 
-                } else if (churchPosition.contentEquals(ACCOUNT_TYPE_TREASURER)) {
+                }
+                else if (churchPosition.contentEquals(ACCOUNT_TYPE_TREASURER)) {
                     fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_T);
                     Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Chief-Treasurer: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_T);
 
@@ -293,28 +305,32 @@ public class Dashboard extends AppCompatActivity {
                 fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_PKB);
                 Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Column PKB: " + columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_PKB);
 
-            } else if (bipra.contentEquals(BIPRA_WKI)) {
+            }
+            else if (bipra.contentEquals(BIPRA_WKI)) {
                 fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_WKI);
                 Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church WKI: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_WKI);
 
                 fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_WKI);
                 Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Column WKI: " + columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_WKI);
 
-            } else if (bipra.contentEquals(BIPRA_PEMUDA)) {
+            }
+            else if (bipra.contentEquals(BIPRA_PEMUDA)) {
                 fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_YOUTH);
                 Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church YOUTH: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_YOUTH);
 
                 fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_YOUTH);
                 Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Column YOUTH: " + columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_YOUTH);
 
-            } else if (bipra.contentEquals(BIPRA_REMAJA)) {
+            }
+            else if (bipra.contentEquals(BIPRA_REMAJA)) {
                 fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_TEENS);
                 Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church TEENS: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_TEENS);
 
                 fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_TEENS);
                 Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church TEENS: " + columnTopic + "_" + NOTIFICATION_TOPIC_CHURCH_TEENS);
 
-            } else if (bipra.contentEquals(BIPRA_ANAK)) {
+            }
+            else if (bipra.contentEquals(BIPRA_ANAK)) {
                 fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_KIDS);
                 Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church KIDS: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_KIDS);
 
@@ -324,7 +340,8 @@ public class Dashboard extends AppCompatActivity {
             }
 
 
-        } else {
+        }
+        else {
             Log.e(TAG, "handleAccountNotificationSubscription: User not a church member ");
 
 
@@ -341,30 +358,37 @@ public class Dashboard extends AppCompatActivity {
         if (memberPosition.contains(ACCOUNT_TYPE_CHIEF)) {
             navigationView.setCheckedItem(R.id.nav_home);
             navigationView.getMenu().getItem(1).getSubMenu().setGroupVisible(R.id.nav_group_chief, true);
-        } else if (memberPosition.contains(ACCOUNT_TYPE_SECRETARY)) {
+        }
+        else if (memberPosition.contains(ACCOUNT_TYPE_SECRETARY)) {
             navigationView.setCheckedItem(R.id.nav_home);
             navigationView.getMenu().getItem(2).getSubMenu().setGroupVisible(R.id.nav_group_secretary, true);
 
-        } else if (memberPosition.contains(ACCOUNT_TYPE_TREASURER)) {
+        }
+        else if (memberPosition.contains(ACCOUNT_TYPE_TREASURER)) {
             navigationView.setCheckedItem(R.id.nav_home);
             navigationView.getMenu().getItem(3).getSubMenu().setGroupVisible(R.id.nav_group_treasurer, true);
 
-        } else if (memberPosition.contains(ACCOUNT_TYPE_PRIEST)) {
+        }
+        else if (memberPosition.contains(ACCOUNT_TYPE_PRIEST)) {
             navigationView.setCheckedItem(R.id.nav_home);
             navigationView.getMenu().getItem(4).getSubMenu().setGroupVisible(R.id.nav_group_priest, true);
 
-        } else if (memberPosition.contains(ACCOUNT_TYPE_PENATUA)) {
+        }
+        else if (memberPosition.contains(ACCOUNT_TYPE_PENATUA)) {
             navigationView.setCheckedItem(R.id.nav_home);
             navigationView.getMenu().getItem(5).getSubMenu().setGroupVisible(R.id.nav_group_penatua, true);
 
-        } else if (memberPosition.contains(ACCOUNT_TYPE_SYAMAS)) {
+        }
+        else if (memberPosition.contains(ACCOUNT_TYPE_SYAMAS)) {
             navigationView.setCheckedItem(R.id.nav_home);
             navigationView.getMenu().getItem(6).getSubMenu().setGroupVisible(R.id.nav_group_syamas, true);
 
-        } else if (memberPosition.contains(ACCOUNT_TYPE_MEMBER)) {
+        }
+        else if (memberPosition.contains(ACCOUNT_TYPE_MEMBER)) {
             navigationView.setCheckedItem(R.id.nav_home);
 
-        } else {
+        }
+        else {
             navigationView.setCheckedItem(R.id.nav_home);
 
         }
@@ -376,6 +400,7 @@ public class Dashboard extends AppCompatActivity {
         speedDialView.setUseReverseAnimationOnClose(true);
         speedDialView.setMainFabClosedIconColor(Color.WHITE);
         speedDialView.setMainFabOpenedIconColor(Color.WHITE);
+        speedDialView.setExpansionMode(SpeedDialView.ExpansionMode.BOTTOM);
 
         SpeedDialActionItem item;
 
@@ -427,12 +452,10 @@ public class Dashboard extends AppCompatActivity {
 
 
         speedDialView.setOnActionSelectedListener(actionItem -> {
-            if (speedDialView.isOpen())speedDialView.close(true);
+            if (speedDialView.isOpen()) speedDialView.close(true);
             startActivity(new Intent(Dashboard.this, Issue.class).putExtra("ISSUE_TYPE", actionItem.getId()));
             return true;
         });
-
-
 
 
     }
@@ -641,7 +664,8 @@ public class Dashboard extends AppCompatActivity {
 
 
             return;
-        } else {
+        }
+        else {
             llInfoHolder.setVisibility(View.VISIBLE);
             llApplyMembership.setVisibility(View.GONE);
         }
@@ -655,7 +679,8 @@ public class Dashboard extends AppCompatActivity {
         if (column != null) {
             tvColumn.setVisibility(View.VISIBLE);
             tvColumn.setText(column);
-        } else {
+        }
+        else {
             tvColumn.setVisibility(View.GONE);
         }
 
@@ -664,10 +689,40 @@ public class Dashboard extends AppCompatActivity {
             String churchVillage = Guru.getString(KEY_CHURCH_KELURAHAN, null);
             String string = churchName + ", " + churchVillage;
             tvChurchNameAndVillage.setText(string);
-        } else {
+        }
+        else {
             tvChurchNameAndVillage.setVisibility(View.GONE);
         }
 
+
+    }
+
+    public static final String ACTION_REQUEST_PERMISSION_GRANTED = "ACTION_REQUEST_PERMISSION_GRANTED";
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.e(TAG, "onRequestPermissionsResult: CALLED !");
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            sendBroadcast(new Intent(ACTION_REQUEST_PERMISSION_GRANTED));
+        }
+        else {
+            Constant.displayDialog(
+                    this,
+                    "Perhatian !",
+                    "Fitur ini mengharuskan anda memberi izin kepada aplikasi untuk mengakses sistem operasi handphone anda",
+                    false,
+                    (dialog, which) -> {
+                        NavigationView nav = findViewById(R.id.nav_view);
+                        nav.setCheckedItem(R.id.nav_home);
+
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragmentContent, new Fragment_User_Home())
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                .commit();
+
+                    }, null
+            );
+        }
 
     }
 

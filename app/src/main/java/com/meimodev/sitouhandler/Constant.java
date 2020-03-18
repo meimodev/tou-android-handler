@@ -4,10 +4,12 @@
 
 package com.meimodev.sitouhandler;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -29,6 +31,7 @@ import android.widget.TextView;
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.github.squti.guru.Guru;
@@ -68,6 +71,7 @@ public class Constant {
             ROOT_TRANSFER_PROTOCOL + "://" + ROOT_IP + ROOT_PORT;
 
     public static final String ROOT_URL_API = ROOT_PROTOCOL_IP_PORT + "/api/";
+    public static final String ROOT_URL_DOWNLOAD_REPORT = ROOT_URL_API + "print-report/";
     public static final String ROOT_URL_PRINTABLE = ROOT_PROTOCOL_IP_PORT + "/print/";
     public static final String ROOT_URL_TERMS = ROOT_PROTOCOL_IP_PORT + "/terms-and-condition";
 
@@ -497,6 +501,34 @@ public class Constant {
                 || keyIssue.contentEquals(KEY_SERVICE_SPECIAL)
                 || keyIssue.contentEquals(KEY_SERVICE_LAIN)
                 || keyIssue.contentEquals(KEY_SERVICE_SPECIAL_IBADAH_MINGGU);
+    }
+
+    // Storage Permissions
+    public static final int REQUEST_EXTERNAL_STORAGE = 1;
+    public static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    /**
+     * Checks if the app has permission to write to device storage
+     *
+     * If the app does not has permission then the user will be prompted to grant permissions
+     *
+     * @param activity
+     */
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
     }
 
 }

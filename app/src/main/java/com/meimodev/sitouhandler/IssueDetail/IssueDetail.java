@@ -110,7 +110,6 @@ public class IssueDetail extends AppCompatActivity {
     @BindView(R.id.text_download)
     TextView tvTextDownload;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -515,9 +514,10 @@ public class IssueDetail extends AppCompatActivity {
         DownloadManager.Request req = new DownloadManager.Request(Uri.parse(ROOT_URL_PRINTABLE + printableKey));
 
         req.setTitle(keyIssue.toUpperCase().replace(" ", "_") + ".pdf")// Title of the Download Notification
+                .setDescription("Mengunduh ...")
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)// Visibility of the download Notification
-                .setAllowedOverMetered(true)// Set if download is allowed on Mobile network
-                .setAllowedOverRoaming(true);// Set if download is allowed on roaming network
+                .setAllowedOverMetered(true) // Set if download is allowed on Mobile network
+                .setAllowedOverRoaming(true); // Set if download is allowed on roaming network
 
         DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         downloadID = dm.enqueue(req);

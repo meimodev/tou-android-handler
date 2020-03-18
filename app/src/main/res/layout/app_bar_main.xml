@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<?xml version="1.0" encoding="utf-8"?><!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
@@ -13,11 +12,42 @@
     android:background="@color/background"
     tools:context=".Dashboard.Dashboard">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/transparent">
+
+        <com.leinardi.android.speeddial.SpeedDialOverlayLayout
+            android:id="@+id/overlay"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryOverlay"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--Guide SPEED DIAL Layout-->
+        <LinearLayout
+            android:id="@+id/layout_guideSpeedDial"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintBottom_toBottomOf="@id/layout_fancyBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/layout_fancyBackground" />
+
+        <com.leinardi.android.speeddial.SpeedDialView
+            android:id="@+id/speedDial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/layout_guideSpeedDial"
+            app:sdMainFabClosedSrc="@drawable/fab_add"
+            app:sdOverlayLayout="@id/overlay" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide"
@@ -68,7 +98,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_bold"
-
                     android:paddingTop="4dp"
                     android:text="Jhon Manembo"
                     android:textColor="@color/ButtonText_LightGrey"
@@ -121,10 +150,10 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:ellipsize="none"
-                    android:scrollHorizontally="false"
-                    android:maxLines="50"
                     android:layout_height="wrap_content"
+                    android:ellipsize="none"
+                    android:maxLines="50"
+                    android:scrollHorizontally="false"
                     android:text="Nikmati fitur penuh layanan ini dengan mendaftarkan diri sebagai ANGGOTA GEREJA dari gereja yang menggunakan TOU-System.\nSegera daftarkan diri."
                     android:textAlignment="center"
                     android:textColor="@color/foreground" />
@@ -135,10 +164,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
                     android:backgroundTint="@color/colorAccent4End"
                     android:drawableStart="@drawable/ic_church_white"
                     android:drawablePadding="4dp"
-                    android:layout_marginTop="8dp"
                     android:text="DAFTARKAN" />
 
             </LinearLayout>
@@ -148,9 +177,9 @@
                 android:id="@+id/textView_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat"
                 android:text="TITLE"
                 android:textAllCaps="true"
-                android:fontFamily="@font/montserrat"
                 android:textColor="@color/mdtp_white"
                 android:textSize="17sp"
                 android:textStyle="bold"
@@ -216,85 +245,20 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--    &lt;!&ndash;Floating Action Menu&ndash;&gt;-->
-<!--    <com.github.clans.fab.FloatingActionMenu-->
-<!--        android:id="@+id/floatingActionMenu"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_marginBottom="16dp"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:layout_marginEnd="8dp"-->
-<!--        fab:menu_animationDelayPerItem="50"-->
-<!--        fab:menu_backgroundColor="@android:color/transparent"-->
-<!--        fab:menu_buttonSpacing="0dp"-->
-<!--        fab:menu_colorNormal="@color/colorAccent"-->
-<!--        fab:menu_colorPressed="@color/colorAccent"-->
-<!--        fab:menu_colorRipple="#99FFFFFF"-->
-<!--        fab:menu_fab_size="normal"-->
-<!--        fab:menu_icon="@drawable/fab_add"-->
-<!--        fab:menu_icon_tint="#FFF"-->
-<!--        fab:menu_labels_colorNormal="#333333"-->
-<!--        fab:menu_labels_colorPressed="#444444"-->
-<!--        fab:menu_labels_colorRipple="#66FFFFFF"-->
-<!--        fab:menu_labels_cornerRadius="3dp"-->
-<!--        fab:menu_labels_ellipsize="middle"-->
-<!--        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"-->
-<!--        fab:menu_labels_margin="0dp"-->
-<!--        fab:menu_labels_maxLines="-1"-->
-<!--        fab:menu_labels_padding="8dp"-->
-<!--        fab:menu_labels_paddingBottom="4dp"-->
-<!--        fab:menu_labels_paddingLeft="8dp"-->
-<!--        fab:menu_labels_paddingRight="8dp"-->
-<!--        fab:menu_labels_paddingTop="4dp"-->
-<!--        fab:menu_labels_position="left"-->
-<!--        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"-->
-<!--        fab:menu_labels_showShadow="true"-->
-<!--        fab:menu_labels_singleLine="false"-->
-<!--        fab:menu_labels_textColor="#FFFFFF"-->
-<!--        fab:menu_labels_textSize="14sp"-->
-<!--        fab:menu_openDirection="up"-->
-<!--        fab:menu_shadowColor="#66000000"-->
-<!--        fab:menu_shadowRadius="2dp"-->
-<!--        fab:menu_shadowXOffset="1dp"-->
-<!--        fab:menu_shadowYOffset="2dp"-->
-<!--        fab:menu_showShadow="true" />-->
-
-
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.leinardi.android.speeddial.SpeedDialOverlayLayout
-            android:id="@+id/overlay"
-            android:background="@color/colorPrimaryOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <com.leinardi.android.speeddial.SpeedDialView
-            android:id="@+id/speedDial"
-            android:layout_above="@id/bottomNavBar"
-            android:visibility="visible"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:sdMainFabClosedSrc="@drawable/fab_add"
-            app:sdOverlayLayout="@id/overlay" />
-
         <!--Bottom Nav Bar-->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavBar"
-            android:background="@color/mdtp_white"
-            app:menu="@menu/bottom_nav"
-            android:visibility="visible"
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:layout_height="wrap_content"/>
+            android:background="@color/mdtp_white"
+            android:visibility="visible"
+            app:menu="@menu/bottom_nav" />
     </RelativeLayout>
-
-
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

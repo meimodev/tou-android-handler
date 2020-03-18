@@ -8,9 +8,9 @@ public class NavFragment_Treasurer_Financial_RecyclerModel {
 
     private boolean isBKU, isEval;
 
-    public NavFragment_Treasurer_Financial_RecyclerModel(int id, String fromMonthToMonth, String year, String semester) {
+    public NavFragment_Treasurer_Financial_RecyclerModel(int id, String period, String year, String semester) {
         this.id = id;
-        this.month = fromMonthToMonth;
+        this.month = period;
         this.year = year;
         this.semester = semester;
 

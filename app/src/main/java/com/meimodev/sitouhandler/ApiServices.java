@@ -242,5 +242,8 @@ public interface ApiServices {
             @Field("nikah") String nikah
     );
 
+    @GET("financial")Call<ResponseBody> getIssuedFinancial(
+            @Query("member_id")int memberId
+    );
 
 }

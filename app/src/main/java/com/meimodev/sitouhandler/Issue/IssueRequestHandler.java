@@ -144,7 +144,6 @@ public class IssueRequestHandler {
                 });
             }
         });
-
     }
 
     public void backGroundRequest(Call call) {
