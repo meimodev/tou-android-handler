@@ -1,6 +1,12 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler;
 
 import android.util.Log;
+
+import com.github.squti.guru.Guru;
 
 import java.util.concurrent.TimeUnit;
 
@@ -42,7 +48,7 @@ public class RetrofitClient {
     public static synchronized RetrofitClient getInstance(String token) {
 
         if (retrofitClient == null) {
-            retrofitClient = new RetrofitClient(token);
+            retrofitClient = new RetrofitClient(Guru.getString(Constant.KEY_USER_ACCESS_TOKEN, ""));
         }
         return retrofitClient;
     }
@@ -51,7 +57,7 @@ public class RetrofitClient {
         return retrofit;
     }
 
-    public static void resetRetrofitClient() {
+    public static void reBuiltRetrofitClient() {
         retrofitClient = null;
     }
 

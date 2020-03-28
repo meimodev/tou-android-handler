@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler;
 
 import androidx.annotation.Nullable;
@@ -246,4 +250,22 @@ public interface ApiServices {
             @Query("member_id")int memberId
     );
 
+    @GET("duplicate-check")
+    Call<ResponseBody> getDuplicateCheck(
+            @Query("member_id") int memberId
+    );
+
+    @FormUrlEncoded
+    @POST("duplicate-check")
+    Call<ResponseBody> setDuplicateCheck(
+            @Field("claimer_member_id") int claimerMemberId,
+            @Field("param")String param,
+            @Field("claimed_member_id") int claimedMemberId
+    );
+    @FormUrlEncoded
+    @POST("duplicate-check")
+    Call<ResponseBody> setDuplicateCheck(
+            @Field("claimer_member_id") int claimerMemberId,
+            @Field("param")String param
+    );
 }

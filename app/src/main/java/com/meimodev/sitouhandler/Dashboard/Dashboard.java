@@ -28,6 +28,7 @@ import androidx.core.view.GravityCompat;
 import com.github.squti.guru.Guru;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
@@ -44,9 +45,11 @@ import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Priest.NavFra
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Secretary.NavFragment_Secretary_Papers;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Treasurer.NavFragment_Treasurer_Financial;
 import com.meimodev.sitouhandler.Issue.Issue;
+import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.Wizard.ApplyMember.ApplyMember;
+import com.meimodev.sitouhandler.Wizard.DuplicateCheck.DuplicateCheck;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -152,14 +155,14 @@ public class Dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        Constant.changeStatusColor(this, R.color.colorPrimary);
+        changeStatusColor(this, R.color.colorPrimary);
 
 //        Binding Auth Token to Retrofit
-        RetrofitClient.resetRetrofitClient();
-        RetrofitClient.getInstance(Guru.getString(KEY_USER_ACCESS_TOKEN, null)).getApiServices();
+        RetrofitClient.reBuiltRetrofitClient();
+//        RetrofitClient.getInstance(Guru.getString(KEY_USER_ACCESS_TOKEN, null)).getApiServices();
 
 //        Sending this account refreshed FCM Token to server
-        sendFCMTokenToServer(Dashboard.this);
+        sendFCMTokenToServer();
 
         handleAccountNotificationSubscription();
 
@@ -180,6 +183,8 @@ public class Dashboard extends AppCompatActivity {
                 .replace(R.id.fragmentContent, new Fragment_User_Home())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
+
+        initDuplicateCheck();
     }
 
     @Override
@@ -621,6 +626,39 @@ public class Dashboard extends AppCompatActivity {
 
     }
 
+    private void initDuplicateCheck() {
+        int dc = Guru.getInt(KEY_MEMBER_DUPLICATE_CHECK, 0);
+        Log.e(TAG, "initDuplicateCheck: duplicate check = " + dc);
+        if (dc == 0) {
+            startActivity(new Intent(this, DuplicateCheck.class));
+        }
+    }
+
+    private void sendFCMTokenToServer() {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.e(TAG, "sendFCMTokenToServer: getInstanceId/FCM_TOKEN failed: ", task.getException());
+                        return;
+                    }
+
+                    // Get new Instance ID token
+                    String token = task.getResult().getToken();
+
+                    int userId = Guru.getInt(KEY_USER_ID, 0);
+                    if (userId == 0) {
+                        Log.e(TAG, "sendFCMTokenToServer: USER ID cannot be 0");
+                        return;
+                    }
+
+                    Log.e(TAG, "sendFCMTokenToServer: new Token Issued -> sending to Server ...");
+                    IssueRequestHandler req = new IssueRequestHandler(null);
+                    req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().setFCMToken(
+                            userId, token
+                    ));
+                });
+    }
+
     @BindView(R.id.textView_userName)
     TextView tvUserName;
     @BindView(R.id.textView_churchPosition)
@@ -723,7 +761,5 @@ public class Dashboard extends AppCompatActivity {
                     }, null
             );
         }
-
     }
-
 }

@@ -63,6 +63,7 @@ public class Constant {
     public static final String KEY_CHURCH_KELURAHAN = "Church_Village";
     public static final String KEY_COLUMN_ID = "Column_Id";
     public static final String KEY_COLUMN_NAME_INDEX = "Column_Name_Index";
+    public static final String KEY_MEMBER_DUPLICATE_CHECK = "Member_Duplicate_Check";
 
     public static final String ROOT_TRANSFER_PROTOCOL = "http";
     public static final String ROOT_IP = "192.168.1.5";
@@ -430,27 +431,7 @@ public class Constant {
         });
     }
 
-    public static void sendFCMTokenToServer(Context context) {
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.e(TAG, "getInstanceId/FCM_TOKEN failed: ", task.getException());
-                        return;
-                    }
 
-                    // Get new Instance ID token
-                    String token = task.getResult().getToken();
-
-                    int userId = Guru.getInt(KEY_USER_ID, 0);
-                    if (userId == 0) throw new NumberFormatException("USER ID cannot be 0");
-                    IssueRequestHandler req = new IssueRequestHandler(null);
-                    req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().setFCMToken(
-                            userId, token
-                    ));
-                });
-
-
-    }
 
     public static void changeStatusColor(Context context, @ColorRes int colorId) {
         Window window = ((Activity) context).getWindow();

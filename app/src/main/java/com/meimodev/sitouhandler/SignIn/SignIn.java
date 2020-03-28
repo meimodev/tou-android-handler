@@ -65,7 +65,7 @@ public class SignIn extends AppCompatActivity {
         b.editTextPhone.clearFocus();
         b.editTextPassword.clearFocus();
 
-        b.btnSignIn.setOnClickListener(v -> signIn());
+        b.btnSignIn.setOnClickListener(v -> validateSignIn());
         b.btnSignUp.setOnClickListener(v -> signUp());
         b.btnForget.setOnClickListener(v -> forget());
         b.btnConfirm.setOnClickListener(v -> confirm());
@@ -84,7 +84,7 @@ public class SignIn extends AppCompatActivity {
         if (b.textInputLayoutPassword.getError() != null) b.textInputLayoutPassword.setError(null);
     }
 
-    void fetchData() {
+    void signIn() {
         IssueRequestHandler requestHandler = new IssueRequestHandler(findViewById(android.R.id.content));
         Call call = RetrofitClient.getInstance(null).getApiServices().signIn(
                 b.editTextPhone.getText().toString().trim(),
@@ -118,7 +118,7 @@ public class SignIn extends AppCompatActivity {
 
             @Override
             public void onRetry() {
-                fetchData();
+                signIn();
             }
         });
         requestHandler.enqueue(call);
@@ -139,7 +139,7 @@ public class SignIn extends AppCompatActivity {
 //                    userObj.getString("access_token")
 //            );
 
-        Log.e(TAG, "proceed: Saving User Data");
+//        Log.e(TAG, "proceed: Saving User Data");
         Guru.putInt(Constant.KEY_USER_ID, userObj.getInt("id"));
         Guru.putString(Constant.KEY_USER_FULL_NAME, userObj.getString("full_name"));
         Guru.putString(Constant.KEY_USER_AGE, userObj.getString("age"));
@@ -147,32 +147,20 @@ public class SignIn extends AppCompatActivity {
         Guru.putString(Constant.KEY_USER_ACCESS_TOKEN, userObj.getString("access_token"));
 
         if (!data.isNull("member")) {
+
             JSONObject memberObj = data.getJSONObject("member");
-//                SharedPrefManager.getInstance(this).saveMemberData(
-//                        memberObj.getInt("id"),
-//                        memberObj.getString("church_position_full"),
-//                        memberObj.getString("BIPRA")
-//                );
             Log.e(TAG, "proceed: Saving Member Data");
             Guru.putInt(Constant.KEY_MEMBER_ID, memberObj.getInt("id"));
             Guru.putString(Constant.KEY_MEMBER_CHURCH_POSITION, memberObj.getString("church_position_full"));
             Guru.putString(Constant.KEY_MEMBER_BIPRA, memberObj.getString("BIPRA"));
-            JSONObject columnObj = data.getJSONObject("column");
-//                getInstance(this).saveColumnData(
-//                        columnObj.getInt("id"),
-//                        columnObj.getString("name_index")
-//                );
+            Guru.putInt(Constant.KEY_MEMBER_DUPLICATE_CHECK, memberObj.isNull("duplicate_check") ? 0 : 1);
 
+            JSONObject columnObj = data.getJSONObject("column");
             Log.e(TAG, "proceed: Saving Column Data");
             Guru.putInt(Constant.KEY_COLUMN_ID, columnObj.getInt("id"));
             Guru.putString(Constant.KEY_COLUMN_NAME_INDEX, columnObj.getString("name_index"));
 
             JSONObject churchObj = data.getJSONObject("church");
-//                getInstance(this).saveChurchData(
-//                        churchObj.getInt("id"),
-//                        churchObj.getString("church_name"),
-//                        churchObj.getString("church_kelurahan")
-//                );
             Log.e(TAG, "proceed: Saving Church Data");
             Guru.putInt(Constant.KEY_CHURCH_ID, churchObj.getInt("id"));
             Guru.putString(Constant.KEY_CHURCH_NAME, churchObj.getString("church_name"));
@@ -190,7 +178,7 @@ public class SignIn extends AppCompatActivity {
 
     }
 
-    void signIn() {
+    void validateSignIn() {
 
         b.editTextPhone.clearFocus();
         b.editTextPassword.clearFocus();
@@ -205,11 +193,10 @@ public class SignIn extends AppCompatActivity {
         b.textInputLayoutPassword.setError(validator.validateEmpty(b.textInputLayoutPassword));
 
         if (b.textInputLayoutPhone.getError() == null && b.textInputLayoutPassword.getError() == null) {
-            fetchData();
+            signIn();
         }
 
     }
-
 
     void signUp() {
         b.editTextPhone.setText("");
