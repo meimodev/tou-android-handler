@@ -86,7 +86,6 @@ public class DuplicateCheck extends AppCompatActivity {
         req.enqueue(RetrofitClient.getInstance(null).getApiServices().getDuplicateCheck(
                 Guru.getInt(Constant.KEY_MEMBER_ID, 0)
         ));
-        //TODO API services ?
     }
 
     private void proceed(APIWrapper res) throws JSONException {

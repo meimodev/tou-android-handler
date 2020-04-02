@@ -173,7 +173,7 @@ public interface ApiServices {
 
     @FormUrlEncoded
     @POST("column")
-    Call<ResponseBody> setMemberUserData(
+    Call<ResponseBody> addMemberUser(
             @Field("issued_by_member_id") int issuedByMemberId,
             @Field("first_name") String firstName,
             @Field("middle_name") String middleName,
@@ -186,7 +186,8 @@ public interface ApiServices {
             @Field("phone") String phone,
             @Field("baptis_entry") String baptize_entry,
             @Field("sidi_entry") String baptize_sidi,
-            @Field("nikah_entry") String baptize_nikah
+            @Field("nikah_entry") String baptize_nikah,
+            @Field("force_save") boolean forceSave
     );
 
     @FormUrlEncoded

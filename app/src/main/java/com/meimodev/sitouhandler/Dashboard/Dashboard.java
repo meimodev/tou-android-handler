@@ -6,63 +6,53 @@ package com.meimodev.sitouhandler.Dashboard;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import com.github.clans.fab.FloatingActionButton;
-
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.github.squti.guru.Guru;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 import com.meimodev.sitouhandler.BuildConfig;
 import com.meimodev.sitouhandler.Constant;
-import com.meimodev.sitouhandler.CustomWidget.CustomDialog;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Cheif.NavFragment_Chief_ManageServiceArea;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member.NavFragment_Member_Home;
-import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Home;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member.NavFragment_Member_Issue;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member.NavFragment_Member_Setting;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_PntSym.NavFragment_PntSym_manageMemberData;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Priest.NavFragment_Priest_SeeServiceArea;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Secretary.NavFragment_Secretary_Papers;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Treasurer.NavFragment_Treasurer_Financial;
+import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Home;
 import com.meimodev.sitouhandler.Issue.Issue;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.Wizard.ApplyMember.ApplyMember;
 import com.meimodev.sitouhandler.Wizard.DuplicateCheck.DuplicateCheck;
-
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.view.Menu;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -72,7 +62,53 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.meimodev.sitouhandler.Constant.*;
+import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_CHIEF;
+import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_MEMBER;
+import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_PENATUA;
+import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_PRIEST;
+import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_SECRETARY;
+import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_SYAMAS;
+import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_TREASURER;
+import static com.meimodev.sitouhandler.Constant.BIPRA_ANAK;
+import static com.meimodev.sitouhandler.Constant.BIPRA_PEMUDA;
+import static com.meimodev.sitouhandler.Constant.BIPRA_PKB;
+import static com.meimodev.sitouhandler.Constant.BIPRA_REMAJA;
+import static com.meimodev.sitouhandler.Constant.BIPRA_WKI;
+import static com.meimodev.sitouhandler.Constant.ISSUE_TYPE_INCOME;
+import static com.meimodev.sitouhandler.Constant.ISSUE_TYPE_OUTCOME;
+import static com.meimodev.sitouhandler.Constant.ISSUE_TYPE_PAPERS;
+import static com.meimodev.sitouhandler.Constant.ISSUE_TYPE_SERVICE;
+import static com.meimodev.sitouhandler.Constant.KEY_CHURCH_ID;
+import static com.meimodev.sitouhandler.Constant.KEY_CHURCH_KELURAHAN;
+import static com.meimodev.sitouhandler.Constant.KEY_CHURCH_NAME;
+import static com.meimodev.sitouhandler.Constant.KEY_COLUMN_ID;
+import static com.meimodev.sitouhandler.Constant.KEY_COLUMN_NAME_INDEX;
+import static com.meimodev.sitouhandler.Constant.KEY_MEMBER_BIPRA;
+import static com.meimodev.sitouhandler.Constant.KEY_MEMBER_CHURCH_POSITION;
+import static com.meimodev.sitouhandler.Constant.KEY_MEMBER_DUPLICATE_CHECK;
+import static com.meimodev.sitouhandler.Constant.KEY_MEMBER_ID;
+import static com.meimodev.sitouhandler.Constant.KEY_USER_FULL_NAME;
+import static com.meimodev.sitouhandler.Constant.KEY_USER_ID;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_CHURCH;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_CHURCH_EXECUTIVES;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_S;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_T;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_S_T;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_CHURCH_KIDS;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_CHURCH_PELSUS;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_CHURCH_PKB;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_CHURCH_TEENS;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_CHURCH_WKI;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_CHURCH_YOUTH;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_COLUMN;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_COLUMN_KIDS;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_COLUMN_PKB;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_COLUMN_TEENS;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_COLUMN_WKI;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_COLUMN_YOUTH;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_GMIM_MEMBER;
+import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_USER;
+import static com.meimodev.sitouhandler.Constant.changeStatusColor;
 
 public class Dashboard extends AppCompatActivity {
 

@@ -12,9 +12,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.DialogCompat;
@@ -30,7 +33,6 @@ public class CustomDialog extends DialogFragment implements DialogInterface.OnDi
 
     private Context context;
 
-
     private Button btnYES;
     private Button btnNo;
 
@@ -40,6 +42,8 @@ public class CustomDialog extends DialogFragment implements DialogInterface.OnDi
     private DialogInterface.OnClickListener positiveListener;
     private DialogInterface.OnCancelListener negativeListener;
     private DialogInterface.OnDismissListener dismissListener;
+
+    private View customView = null;
 
     public void setTitle(String title) {
         this.title = title;
@@ -63,6 +67,10 @@ public class CustomDialog extends DialogFragment implements DialogInterface.OnDi
 
     public void setCancelable(Boolean cancelable) {
         this.cancelable = cancelable;
+    }
+
+    public void setCustomView(View view) {
+        customView = view;
     }
 
     public void show(Context context) {
@@ -129,8 +137,13 @@ public class CustomDialog extends DialogFragment implements DialogInterface.OnDi
         if (dismissListener != null) {
             builder.setOnDismissListener(this);
         }
+        if(customView != null){
+            LinearLayout llHolder = view.findViewById(R.id.layout_customViewHolder);
+            llHolder.addView(customView);
+        }
 
         builder.setView(view);
+
         return builder.create();
     }
 
@@ -141,4 +154,5 @@ public class CustomDialog extends DialogFragment implements DialogInterface.OnDi
             dismissListener.onDismiss(dialog);
         }
     }
+
 }

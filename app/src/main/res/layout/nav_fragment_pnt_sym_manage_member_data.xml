@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -345,7 +349,6 @@
 
                         </androidx.cardview.widget.CardView>
 
-
                     </LinearLayout>
 
                 </LinearLayout>
@@ -385,20 +388,20 @@
                         android:paddingStart="0dp"
                         android:paddingEnd="16dp">
 
-                        <TextView
+                        <ImageView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.5"
                             android:gravity="center"
-                            android:text="0"
-                            android:textColor="@color/ButtonText_LightGrey"
-                            android:textSize="40sp" />
+                            android:padding="16dp"
+                            android:src="@drawable/ic_members" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
+                            android:maxLines="5"
                             android:text="Lihat keseluruhan data tabel kolom ini"
                             android:textColor="@color/ButtonText_LightGrey" />
 
@@ -427,20 +430,20 @@
                         android:paddingStart="0dp"
                         android:paddingEnd="16dp">
 
-                        <TextView
+                        <ImageView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.5"
                             android:gravity="center"
-                            android:text="+"
-                            android:textColor="@color/ButtonText_LightGrey"
-                            android:textSize="40sp" />
+                            android:padding="16dp"
+                            android:src="@drawable/ic_member_add" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
+                            android:maxLines="5"
                             android:text="Tambah anggota baru dalam data kolom ini"
                             android:textColor="@color/ButtonText_LightGrey" />
 
@@ -469,20 +472,20 @@
                         android:paddingStart="0dp"
                         android:paddingEnd="16dp">
 
-                        <TextView
+                        <ImageView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.5"
                             android:gravity="center"
-                            android:text="/"
-                            android:textColor="@color/ButtonText_LightGrey"
-                            android:textSize="40sp" />
+                            android:padding="16dp"
+                            android:src="@drawable/ic_member_edit" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
+                            android:maxLines="5"
                             android:text="Ubah data anggota yang telah terdaftar dalam kolom ini"
                             android:textColor="@color/ButtonText_LightGrey" />
 
@@ -511,20 +514,21 @@
                         android:paddingStart="0dp"
                         android:paddingEnd="16dp">
 
-                        <TextView
+                        <ImageView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.5"
                             android:gravity="center"
-                            android:text="x"
-                            android:textColor="@color/ButtonText_LightGrey"
-                            android:textSize="40sp" />
+                            android:padding="16dp"
+                            android:src="@drawable/ic_member_remove" />
+
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
+                            android:maxLines="5"
                             android:text="Hapus data keanggotaan dalam kolom ini "
                             android:textColor="@color/ButtonText_LightGrey" />
 

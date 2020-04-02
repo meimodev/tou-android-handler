@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Treasurer;
 
 import android.Manifest;
@@ -72,8 +76,8 @@ public class NavFragment_Treasurer_Financial extends Fragment {
         b = NavActivityTreasurerFinancialBinding.inflate(inflater, container, false);
         rootView = b.getRoot();
         context = requireContext();
-        Constant.verifyStoragePermissions(getActivity());
 
+        Constant.verifyStoragePermissions(getActivity());
         int permission = ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (permission == PackageManager.PERMISSION_GRANTED) {
             fetchData();
@@ -84,7 +88,6 @@ public class NavFragment_Treasurer_Financial extends Fragment {
         Log.e(TAG, "onCreateView: on create view called");
         return rootView;
     }
-
 
     private void fetchData() {
 
@@ -182,7 +185,7 @@ public class NavFragment_Treasurer_Financial extends Fragment {
         final Request request = new Request(url, "/storage/emulated/0/Download/" + fileName);
         request.setPriority(Priority.HIGH);
         request.setNetworkType(NetworkType.ALL);
-//        request.addHeader("clientKey", "SD78DF93_3947&MVNGHE1WONG");
+
         fetch.addListener(new FetchListener() {
             @Override
             public void onAdded(@NotNull Download download) {
@@ -296,18 +299,6 @@ public class NavFragment_Treasurer_Financial extends Fragment {
             }
         }
     };
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-    }
-
 
 //    @Override
 //    public void onDestroyView() {

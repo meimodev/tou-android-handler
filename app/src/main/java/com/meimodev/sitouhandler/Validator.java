@@ -1,7 +1,12 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,13 +34,22 @@ public class Validator extends Constant {
     public static final String MESSAGE_ERROR_IS_LEADING_ZERO = "tidak boleh dimulai dengan '0'";
     public static final String MESSAGE_ERROR_IS_INVALID = "tidak valid";
 
+    private Context context;
+
+    public Validator() {
+    }
+
+    public Validator(Context context) {
+        this.context = context;
+    }
+
     public String validateEmail(String email) {
 
         String[] allowedChar = new String[]{"@", ".", "_", "-"};
         String[] allowedCharReplacement = new String[]{"", "", "", ""};
 
         if (!StringUtils.isEmpty(validateEmpty(email))) {
-            return validateEmpty(email);
+            return "E-mail " + validateEmpty(email);
         }
 
         if (!StringUtils.isAsciiPrintable(email)) {
@@ -71,7 +85,15 @@ public class Validator extends Constant {
     }
 
     public String validateEmail(TextInputLayout textInputLayout) {
-        return validateEmail(Objects.requireNonNull(textInputLayout.getEditText()));
+        String result = validateEmail(Objects.requireNonNull(textInputLayout.getEditText()));
+        if (result != null) {
+            displayErrorMessage(context, result);
+            textInputLayout.setError(result);
+        }
+        else {
+            textInputLayout.setError(null);
+        }
+        return result;
     }
 
     public String validatePhone(String phone) {
@@ -85,7 +107,7 @@ public class Validator extends Constant {
          * */
 
         if (!StringUtils.isEmpty(validateEmpty(phone))) {
-            return validateEmpty(phone);
+            return "Nomor Telepon " + validateEmpty(phone);
         }
 
         if (!StringUtils.isAsciiPrintable(phone)) {
@@ -112,9 +134,16 @@ public class Validator extends Constant {
     }
 
     public String validatePhone(TextInputLayout textInputLayout) {
-        return validatePhone(Objects.requireNonNull(textInputLayout.getEditText()));
+        String result = validatePhone(Objects.requireNonNull(textInputLayout.getEditText()));
+        if (result != null) {
+            displayErrorMessage(context, result);
+            textInputLayout.setError(result);
+        }
+        else {
+            textInputLayout.setError(null);
+        }
+        return result;
     }
-
 
     public String validatePassword(String pass) {
 
@@ -126,7 +155,7 @@ public class Validator extends Constant {
          * */
 
         if (!StringUtils.isEmpty(validateEmpty(pass))) {
-            return validateEmpty(pass);
+            return "Password " + validateEmpty(pass);
         }
 
         if (!StringUtils.isAsciiPrintable(pass)) {
@@ -145,10 +174,16 @@ public class Validator extends Constant {
     }
 
     public String validatePassword(TextInputLayout textInputLayout) {
-        return validatePassword(Objects.requireNonNull(textInputLayout.getEditText()));
+        String result = validatePassword(Objects.requireNonNull(textInputLayout.getEditText()));
+        if (result != null) {
+            displayErrorMessage(context, result);
+            textInputLayout.setError(result);
+        }
+        else {
+            textInputLayout.setError(null);
+        }
+        return result;
     }
-
-
 
     public String validateName(String name) {
 
@@ -160,7 +195,7 @@ public class Validator extends Constant {
          * */
 
         if (!StringUtils.isEmpty(validateEmpty(name))) {
-            return validateEmpty(name);
+            return "Nama " + validateEmpty(name);
         }
 
         if (!StringUtils.isAsciiPrintable(name)) {
@@ -183,11 +218,16 @@ public class Validator extends Constant {
     }
 
     public String validateName(TextInputLayout textInputLayout) {
-        return validateName(Objects.requireNonNull(textInputLayout.getEditText()));
+        String result = validateName(Objects.requireNonNull(textInputLayout.getEditText()));
+        if (result != null) {
+            displayErrorMessage(context, result);
+            textInputLayout.setError(result);
+        }
+        else {
+            textInputLayout.setError(null);
+        }
+        return result;
     }
-
-
-
 
     public String validateSex(String name) {
 
@@ -198,7 +238,7 @@ public class Validator extends Constant {
          * */
 
         if (!StringUtils.isEmpty(validateEmpty(name))) {
-            return validateEmpty(name);
+            return "Jenis Kelamin " + validateEmpty(name);
         }
 
         if (!StringUtils.isAsciiPrintable(name)) {
@@ -217,9 +257,16 @@ public class Validator extends Constant {
     }
 
     public String validateSex(TextInputLayout textInputLayout) {
-        return validateSex(Objects.requireNonNull(textInputLayout.getEditText()));
+        String result = validateSex(Objects.requireNonNull(textInputLayout.getEditText()));
+        if (result != null) {
+            displayErrorMessage(context, result);
+            textInputLayout.setError(result);
+        }
+        else {
+            textInputLayout.setError(null);
+        }
+        return result;
     }
-
 
     public String validateEmpty(String text) {
         return StringUtils.isEmpty(text) ? "tidak boleh kosong" : null;
@@ -230,7 +277,15 @@ public class Validator extends Constant {
     }
 
     public String validateEmpty(TextInputLayout textInputLayout) {
-        return validateEmpty(Objects.requireNonNull(textInputLayout.getEditText()));
+        String result = validateEmpty(Objects.requireNonNull(textInputLayout.getEditText()));
+        if (result != null) {
+            displayErrorMessage(context, result);
+            textInputLayout.setError(result);
+        }
+        else {
+            textInputLayout.setError(null);
+        }
+        return result;
     }
 
 
@@ -247,10 +302,12 @@ public class Validator extends Constant {
             ///////////////////////////////////////////     Handle  OUTCOME     ///////////////////////////////////////////
             case KEY_OUTCOME_CENTRALIZE:
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isLeadingZero(customEditTexts.get(0)))
+                    }
+                    if (validateEditText_isLeadingZero(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah" + MESSAGE_ERROR_IS_LEADING_ZERO);
+                    }
                 }
                 if (isSafe(radioGroups)) {
                     if (validateRadioGroup_isNotSelectedAnything(radioGroups.get(0))) {
@@ -260,10 +317,12 @@ public class Validator extends Constant {
                 break;
             case KEY_OUTCOME_PAYCHECK:
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isLeadingZero(customEditTexts.get(0)))
+                    }
+                    if (validateEditText_isLeadingZero(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah" + MESSAGE_ERROR_IS_LEADING_ZERO);
+                    }
                 }
                 if ((isSafe(spinners))) {
                     if (validateSpinner_isItemNotSelected(spinners.get(2))) {
@@ -276,10 +335,12 @@ public class Validator extends Constant {
                 break;
             case KEY_OUTCOME_PENGADAAN:
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isLeadingZero(customEditTexts.get(0)))
+                    }
+                    if (validateEditText_isLeadingZero(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_LEADING_ZERO);
+                    }
                     if (validateSpinner_isItemNotSelected(spinners.get(3))) {
                         return makeMap(true, "Silahkan pilih jenis pengadaan yang akan diajukan");
                     }
@@ -287,10 +348,12 @@ public class Validator extends Constant {
                 break;
             case KEY_OUTCOME_FASILITAS_PENUNJANG_PELAYAN:
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isLeadingZero(customEditTexts.get(0)))
+                    }
+                    if (validateEditText_isLeadingZero(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_LEADING_ZERO);
+                    }
                 }
                 if (isSafe(spinners)) {
                     if (validateSpinner_isItemNotSelected(spinners.get(1))) {
@@ -298,18 +361,22 @@ public class Validator extends Constant {
                     }
                 }
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(2)))
+                    if (validateEditText_isEmpty(customEditTexts.get(2))) {
                         return makeMap(true, "Detil Penggunaan " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isTooShort(customEditTexts.get(2)))
+                    }
+                    if (validateEditText_isTooShort(customEditTexts.get(2))) {
                         return makeMap(true, "Detil Penggunaan " + MESSAGE_ERROR_IS_INVALID);
+                    }
                 }
                 break;
             case KEY_OUTCOME_RAPAT_SIDANG_KONVEN:
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isLeadingZero(customEditTexts.get(0)))
+                    }
+                    if (validateEditText_isLeadingZero(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_LEADING_ZERO);
+                    }
                 }
 
                 if (isSafe(spinners)) {
@@ -319,27 +386,33 @@ public class Validator extends Constant {
                 }
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(5)))
+                    if (validateEditText_isEmpty(customEditTexts.get(5))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isTooShort(customEditTexts.get(5)))
+                    }
+                    if (validateEditText_isTooShort(customEditTexts.get(5))) {
                         return makeMap(true, "Detil Penggunaan " + MESSAGE_ERROR_IS_INVALID);
+                    }
                 }
 
                 break;
             case KEY_OUTCOME_DIAKONIA_BESASISWA:
                 // Amount
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isLeadingZero(customEditTexts.get(0)))
+                    }
+                    if (validateEditText_isLeadingZero(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_LEADING_ZERO);
+                    }
                 }
                 // Detail
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(7)))
+                    if (validateEditText_isEmpty(customEditTexts.get(7))) {
                         return makeMap(true, "Detil Penggunaan " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isTooShort(customEditTexts.get(7)))
+                    }
+                    if (validateEditText_isTooShort(customEditTexts.get(7))) {
                         return makeMap(true, "Detil Penggunaan " + MESSAGE_ERROR_IS_INVALID);
+                    }
                 }
                 // Button Add Name
 //                if (isSafe(customButtonAdds)) {
@@ -348,41 +421,51 @@ public class Validator extends Constant {
 //                }
                 // Radio Group
                 if (isSafe(radioGroups)) {
-                    if (validateRadioGroup_isNotSelectedAnything(radioGroups.get(2)))
+                    if (validateRadioGroup_isNotSelectedAnything(radioGroups.get(2))) {
                         return makeMap(true, "Silahkan pilih jenis " + keyIssue + " yang akan diajukan");
+                    }
                 }
                 break;
             case KEY_OUTCOME_PEMBEKALAN_PELATIHAN:
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isLeadingZero(customEditTexts.get(0)))
+                    }
+                    if (validateEditText_isLeadingZero(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_LEADING_ZERO);
+                    }
                 }
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(4)))
+                    if (validateEditText_isEmpty(customEditTexts.get(4))) {
                         return makeMap(true, "Detil Penggunaan " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isTooShort(customEditTexts.get(4)))
+                    }
+                    if (validateEditText_isTooShort(customEditTexts.get(4))) {
                         return makeMap(true, "Detil Penggunaan " + MESSAGE_ERROR_IS_INVALID);
+                    }
                 }
                 if (isSafe(radioGroups)) {
-                    if (validateRadioGroup_isNotSelectedAnything(radioGroups.get(4)))
+                    if (validateRadioGroup_isNotSelectedAnything(radioGroups.get(4))) {
                         return makeMap(true, "Silahkan pilih jenis " + keyIssue + " yang akan diajukan");
+                    }
                 }
 
                 break;
             case KEY_OUTCOME_SUBSIDI_BIPRA_IBADAH_KEGIATAN:
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isLeadingZero(customEditTexts.get(0)))
+                    }
+                    if (validateEditText_isLeadingZero(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_LEADING_ZERO);
+                    }
                 }
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(6)))
+                    if (validateEditText_isEmpty(customEditTexts.get(6))) {
                         return makeMap(true, "Detil Penggunaan " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isTooShort(customEditTexts.get(6)))
+                    }
+                    if (validateEditText_isTooShort(customEditTexts.get(6))) {
                         return makeMap(true, "Detil Penggunaan " + MESSAGE_ERROR_IS_INVALID);
+                    }
                 }
                 if (isSafe(spinners)) {
                     if (validateSpinner_isItemNotSelected(spinners.get(5))) {
@@ -394,16 +477,20 @@ public class Validator extends Constant {
             case KEY_OUTCOME_OTHER:
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isLeadingZero(customEditTexts.get(0)))
+                    }
+                    if (validateEditText_isLeadingZero(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_LEADING_ZERO);
+                    }
                 }
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(3)))
+                    if (validateEditText_isEmpty(customEditTexts.get(3))) {
                         return makeMap(true, "Detil Penggunaan " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isTooShort(customEditTexts.get(3)))
+                    }
+                    if (validateEditText_isTooShort(customEditTexts.get(3))) {
                         return makeMap(true, "Detil Penggunaan " + MESSAGE_ERROR_IS_INVALID);
+                    }
                 }
 //                if (isSafe(radioGroups)) {
 //                    if (validateRadioGroup_isNotSelectedAnything(radioGroups.get(3)))
@@ -418,39 +505,49 @@ public class Validator extends Constant {
                 break;
             case KEY_OUTCOME_OTHER_NO_ACCOUNT:
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isLeadingZero(customEditTexts.get(0)))
+                    }
+                    if (validateEditText_isLeadingZero(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_LEADING_ZERO);
+                    }
                 }
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(1)))
+                    if (validateEditText_isEmpty(customEditTexts.get(1))) {
                         return makeMap(true, "Detil Penggunaan " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isTooShort(customEditTexts.get(1)))
+                    }
+                    if (validateEditText_isTooShort(customEditTexts.get(1))) {
                         return makeMap(true, "Detil Penggunaan " + MESSAGE_ERROR_IS_INVALID);
+                    }
                 }
                 break;
             ///////////////////////////////////////////     Handle  INCOME     ///////////////////////////////////////////
             case KEY_INCOME_PERSEMBAHAN_IBADAH:
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isLeadingZero(customEditTexts.get(0)))
+                    }
+                    if (validateEditText_isLeadingZero(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_LEADING_ZERO);
+                    }
                 }
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(1)))
+                    if (validateEditText_isEmpty(customEditTexts.get(1))) {
                         return makeMap(true, "ID Ibadah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isLeadingZero(customEditTexts.get(1)))
+                    }
+                    if (validateEditText_isLeadingZero(customEditTexts.get(1))) {
                         return makeMap(true, "ID Ibadah " + MESSAGE_ERROR_IS_LEADING_ZERO);
+                    }
                 }
                 break;
             case KEY_INCOME_SAMPUL_SYUKUR:
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isLeadingZero(customEditTexts.get(0)))
+                    }
+                    if (validateEditText_isLeadingZero(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_LEADING_ZERO);
+                    }
                 }
 
                 if (isSafe(spinners)) {
@@ -462,120 +559,146 @@ public class Validator extends Constant {
                 break;
             case KEY_INCOME_LAINNYA:
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isLeadingZero(customEditTexts.get(0)))
+                    }
+                    if (validateEditText_isLeadingZero(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_LEADING_ZERO);
+                    }
                 }
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(2)))
+                    if (validateEditText_isEmpty(customEditTexts.get(2))) {
                         return makeMap(true, "Catatan " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isTooShort(customEditTexts.get(2)))
+                    }
+                    if (validateEditText_isTooShort(customEditTexts.get(2))) {
                         return makeMap(true, "Catatan " + MESSAGE_ERROR_IS_INVALID);
+                    }
                 }
 
                 if (isSafe(radioGroups)) {
-                    if (validateRadioGroup_isNotSelectedAnything(radioGroups.get(0)))
+                    if (validateRadioGroup_isNotSelectedAnything(radioGroups.get(0))) {
                         return makeMap(true, "Silahkan pilih jenis pemasukan lainnya");
+                    }
                 }
 
                 break;
             case KEY_INCOME_LAINNYA_NO_ACCOUNT:
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isLeadingZero(customEditTexts.get(0)))
+                    }
+                    if (validateEditText_isLeadingZero(customEditTexts.get(0))) {
                         return makeMap(true, "Jumlah " + MESSAGE_ERROR_IS_LEADING_ZERO);
+                    }
                 }
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(3)))
+                    if (validateEditText_isEmpty(customEditTexts.get(3))) {
                         return makeMap(true, "Detil Penggunaan " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isTooShort(customEditTexts.get(3)))
+                    }
+                    if (validateEditText_isTooShort(customEditTexts.get(3))) {
                         return makeMap(true, "Detil Penggunaan " + MESSAGE_ERROR_IS_INVALID);
+                    }
                 }
 
                 break;
             ///////////////////////////////////////////     Handle  PAPERS     ///////////////////////////////////////////
             case KEY_PAPERS_VALIDATE_MEMBERS:
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Nama yang akan diajukan ");
+                    }
                 }
                 break;
             case KEY_PAPERS_CREDENTIAL:
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Nama yang akan diajukan ");
+                    }
                 }
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Tujuan " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isEmpty(customEditTexts.get(1)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(1))) {
                         return makeMap(true, "Tanggal " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isEmpty(customEditTexts.get(2)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(2))) {
                         return makeMap(true, "Waktu " + MESSAGE_ERROR_IS_EMPTY);
-                    if (validateEditText_isEmpty(customEditTexts.get(3)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(3))) {
                         return makeMap(true, "Tempat " + MESSAGE_ERROR_IS_EMPTY);
+                    }
                 }
 
                 break;
             case KEY_PAPERS_BAPTIZE:
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
-                    if (customButtonAdds.get(0).getSelectedList().size() <= 3)
+                    }
+                    if (customButtonAdds.get(0).getSelectedList().size() <= 3) {
                         return makeMap(true, "Nama yang diajukan tidak cukup, minimal ajukan 4 nama berurutan:" + "\n- 1 Yang Dibatis" + "\n- 1 Ayah" + "\n- 1 Ibu" + "\n- 1 Saksi");
+                    }
                 }
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(4)))
+                    if (validateEditText_isEmpty(customEditTexts.get(4))) {
                         return makeMap(true, "Silahkan pilih Tanggal baptisan");
+                    }
                 }
 
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
                         return makeMap(true, "Silahkan pilih Nama Pendeta yang meneguhkan");
+                    }
                 }
 
                 break;
             case KEY_PAPERS_SIDI:
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
+                    }
                 }
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(4)))
+                    if (validateEditText_isEmpty(customEditTexts.get(4))) {
                         return makeMap(true, "Silahkan pilih Tanggal sidi");
+                    }
                 }
 
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
                         return makeMap(true, "Silahkan pilih Nama Pendeta yang meneguhkan");
+                    }
                 }
 
 
                 break;
             case KEY_PAPERS_MARRIED:
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
-                    if (customButtonAdds.get(0).getSelectedList().size() < 6)
+                    }
+                    if (customButtonAdds.get(0).getSelectedList().size() < 6) {
                         return makeMap(true, "Nama yang diajukan tidak cukup, minimal ajukan 6 nama berurutan:" + "\n- 1 Suami" + "\n- 1 Ayah Suami" + "\n- 1 Ibu Suami" + "\n- 1 Istri" + "\n- 1 Ayah Istri" + "\n- 1 Ibu Istri");
+                    }
                 }
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(4)))
+                    if (validateEditText_isEmpty(customEditTexts.get(4))) {
                         return makeMap(true, "Silahkan pilih Tanggal pernikahan");
+                    }
                 }
 
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
                         return makeMap(true, "Silahkan pilih Nama Pendeta yang meneguhkan");
+                    }
                 }
 
                 break;
@@ -584,19 +707,24 @@ public class Validator extends Constant {
             case KEY_SERVICE_KOLOM:
 
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Khadim yang akan diajukan");
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1)))
+                    }
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
                         return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
+                    }
                 }
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Silahkan pilih Tanggal pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(1)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(1))) {
                         return makeMap(true, "Silahkan pilih Waktu pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(2)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(2))) {
                         return makeMap(true, "Silahkan pilih Tempat pelaksanaan");
+                    }
                 }
 
 
@@ -604,26 +732,33 @@ public class Validator extends Constant {
             case KEY_SERVICE_BIPRA:
 
                 if (isSafe(spinners)) {
-                    if (validateSpinner_isItemNotSelected(spinners.get(3)))
+                    if (validateSpinner_isItemNotSelected(spinners.get(3))) {
                         return makeMap(true, "Silahkan pilih Jangkauan Ibadah");
-                    if (validateSpinner_isItemNotSelected(spinners.get(0)))
+                    }
+                    if (validateSpinner_isItemNotSelected(spinners.get(0))) {
                         return makeMap(true, "Silahkan pilih BIPRA yang bersangkutan");
+                    }
                 }
 
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Khadim yang akan diajukan");
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1)))
+                    }
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
                         return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
+                    }
                 }
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Silahkan pilih Tanggal pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(1)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(1))) {
                         return makeMap(true, "Silahkan pilih Waktu pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(2)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(2))) {
                         return makeMap(true, "Silahkan pilih Tempat pelaksanaan");
+                    }
                 }
 
                 break;
@@ -636,53 +771,68 @@ public class Validator extends Constant {
                 }
 
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Khadim yang akan diajukan");
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1)))
+                    }
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
                         return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
+                    }
                 }
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Silahkan pilih Tanggal pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(1)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(1))) {
                         return makeMap(true, "Silahkan pilih Waktu pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(2)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(2))) {
                         return makeMap(true, "Silahkan pilih Tempat pelaksanaan");
+                    }
                 }
                 break;
             case KEY_SERVICE_PEMAKAMAN:
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Khadim yang akan diajukan");
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1)))
+                    }
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
                         return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
+                    }
                 }
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Silahkan pilih Tanggal pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(1)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(1))) {
                         return makeMap(true, "Silahkan pilih Waktu pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(2)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(2))) {
                         return makeMap(true, "Silahkan pilih Tempat pelaksanaan");
+                    }
                 }
                 break;
             case KEY_SERVICE_PERINGATAN:
 
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Khadim yang akan diajukan");
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1)))
+                    }
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
                         return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
+                    }
                 }
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Silahkan pilih Tanggal pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(1)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(1))) {
                         return makeMap(true, "Silahkan pilih @aktu pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(2)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(2))) {
                         return makeMap(true, "Silahkan pilih Tempat pelaksanaan");
+                    }
                 }
                 break;
             case KEY_SERVICE_KELUARGA:
@@ -692,19 +842,24 @@ public class Validator extends Constant {
                     }
                 }
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Khadim yang akan diajukan");
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1)))
+                    }
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
                         return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
+                    }
                 }
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Silahkan pilih Tanggal pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(1)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(1))) {
                         return makeMap(true, "Silahkan pilih Waktu pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(2)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(2))) {
                         return makeMap(true, "Silahkan pilih Tempat pelaksanaan");
+                    }
                 }
                 break;
             case KEY_SERVICE_HARI_RAYA:
@@ -714,19 +869,24 @@ public class Validator extends Constant {
                     }
                 }
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Khadim yang akan diajukan");
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1)))
+                    }
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
                         return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
+                    }
                 }
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Silahkan pilih Tanggal pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(1)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(1))) {
                         return makeMap(true, "Silahkan pilih Waktu pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(2)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(2))) {
                         return makeMap(true, "Silahkan pilih Tempat pelaksanaan");
+                    }
                 }
                 break;
             case KEY_SERVICE_SPECIAL:
@@ -738,19 +898,24 @@ public class Validator extends Constant {
                 }
 
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Khadim yang akan diajukan");
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1)))
+                    }
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
                         return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
+                    }
                 }
 
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Silahkan pilih Tanggal pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(1)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(1))) {
                         return makeMap(true, "Silahkan pilih Waktu pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(2)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(2))) {
                         return makeMap(true, "Silahkan pilih Tempat pelaksanaan");
+                    }
                 }
 
                 break;
@@ -762,20 +927,26 @@ public class Validator extends Constant {
                 }
 
                 if (isSafe(customButtonAdds)) {
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0)))
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Khadim yang akan diajukan");
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1)))
+                    }
+                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
                         return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
+                    }
                 }
                 if (isSafe(customEditTexts)) {
-                    if (validateEditText_isEmpty(customEditTexts.get(0)))
+                    if (validateEditText_isEmpty(customEditTexts.get(0))) {
                         return makeMap(true, "Silahkan pilih Tanggal pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(1)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(1))) {
                         return makeMap(true, "Silahkan pilih Waktu pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(2)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(2))) {
                         return makeMap(true, "Silahkan pilih Tempat pelaksanaan");
-                    if (validateEditText_isEmpty(customEditTexts.get(3)))
+                    }
+                    if (validateEditText_isEmpty(customEditTexts.get(3))) {
                         return makeMap(true, "Silahkan masukan catatan mengenai ibadah");
+                    }
                 }
                 break;
         }
@@ -831,8 +1002,6 @@ public class Validator extends Constant {
             return true;
         }
         return false;
-
-
     }
 
     private boolean isSafe(ArrayList arrayList) {
@@ -841,31 +1010,38 @@ public class Validator extends Constant {
 
     private Map<String, String> makeMap(boolean error, String message) {
         Map<String, String> map = new HashMap<>();
-        if (error) map.put("result", "ERROR");
-        else map.put("result", "OK");
+        if (error) {
+            map.put("result", "ERROR");
+        }
+        else {
+            map.put("result", "OK");
+        }
         map.put("message", message);
         return map;
     }
 
     public void displayErrorMessage(Context context, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Pengajuan belum valid");
-        builder.setMessage(message);
-        builder.setCancelable(true);
-        builder.setPositiveButton("Perbaiki", (dialogInterface, i) -> dialogInterface.dismiss());
-        builder.create().show();
+        Constant.displayDialog(
+                context,
+                "Pengajuan belum valid!",
+                message,
+                (dialog, which) -> {
+                }
+        );
     }
 
     public void displaySuccessMessage(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("OK! pengajuan telah valid");
-        builder.setMessage("Sedang dalam proses Pengajuan");
-        builder.setCancelable(true);
-        builder.setPositiveButton("OK", (dialogInterface, i) -> {
-            dialogInterface.dismiss();
-        });
-        builder.setOnDismissListener(dialogInterface -> context.sendBroadcast(new Intent(Constant.ACTION_ACTIVITY_FINISH)));
-        builder.create().show();
+        Constant.displayDialog(
+                context,
+                "OK, Pengajuan Valid",
+                "Sedang dalam proses Pengajuan",
+                true,
+                (dialog, which) -> {
+                },
+                null,
+                dialog -> context.sendBroadcast(new Intent(Constant.ACTION_ACTIVITY_FINISH))
+        );
+
     }
 
     public static class MaskWatcher implements TextWatcher {
@@ -901,7 +1077,8 @@ public class Validator extends Constant {
             if (editableLength < mask.length()) {
                 if (mask.charAt(editableLength) != '#') {
                     editable.append(mask.charAt(editableLength));
-                } else if (mask.charAt(editableLength - 1) != '#') {
+                }
+                else if (mask.charAt(editableLength - 1) != '#') {
                     editable.insert(editableLength - 1, mask, editableLength - 1, editableLength);
                 }
             }

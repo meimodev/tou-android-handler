@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.SignUp;
 
 import android.content.Intent;
@@ -120,9 +124,11 @@ public class SignUp extends AppCompatActivity {
 
 //        tilEmail.setError(validator.validateEmail(tilEmail));
 
-        tilPhone.setError(validator.validatePhone(tilPhone));
+//        if (tilEmail.getError() != null) return;
 
-        tilPassword.setError(validator.validatePassword(tilPassword));
+        if (validator.validatePhone(tilPhone) != null) return;
+
+        if (validator.validatePassword(tilPassword) != null) return;
 
         tilPasswordConfirm.setError(
                 StringUtils.equals(
@@ -130,34 +136,17 @@ public class SignUp extends AppCompatActivity {
                         tilPasswordConfirm.getEditText().getText().toString())
                         ? null : "tidak sama dengan password"
         );
-
-        tilFirstName.setError(validator.validateName(tilFirstName));
-
-        tilLastName.setError(validator.validateName(tilLastName));
-
-        tilDOB.setError(validator.validateEmpty(tilDOB));
-
-        tilSex.setError(validator.validateSex(tilSex));
-
-//        if (tilEmail.getError() != null) return;
-
-        if (tilPhone.getError() != null) return;
-
-        if (tilPassword.getError() != null) return;
-
         if (tilPasswordConfirm.getError() != null) return;
 
-        if (tilFirstName.getError() != null) return;
+        if (validator.validateName(tilFirstName) != null) return;
 
-        if (tilLastName.getError() != null) return;
+        if (validator.validateName(tilLastName) != null) return;
 
-        if (tilDOB.getError() != null) return;
+        if (validator.validateEmpty(tilDOB) != null) return;
 
-        if (tilSex.getError() != null) return;
-
+        if (validator.validateSex(tilSex) != null) return;
 
         IS_SIGNUP_OK = true;
-
     }
 
     void sendData(String phone, String password, String firstName, String lastName, String dob, String sex) {

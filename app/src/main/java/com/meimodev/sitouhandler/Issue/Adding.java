@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Issue;
 
 import android.content.BroadcastReceiver;
@@ -19,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -81,6 +86,8 @@ public class Adding extends AppCompatActivity {
         setContentView(R.layout.activity_adding);
         ButterKnife.bind(this);
         registerBroadcastReceiver();
+
+        changeStatusColor(this, R.color.colorPrimary);
 
         View v = LayoutInflater.from(Adding.this).inflate(R.layout.resource_custom_progress_bar_progressing, layoutProgress, false);
         ProgressCircula p = v.findViewById(R.id.pc);

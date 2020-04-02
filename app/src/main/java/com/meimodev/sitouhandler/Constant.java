@@ -73,6 +73,8 @@ public class Constant {
 
     public static final String ROOT_URL_API = ROOT_PROTOCOL_IP_PORT + "/api/";
     public static final String ROOT_URL_DOWNLOAD_REPORT = ROOT_URL_API + "print-report/";
+    public static final String URL_DOWNLOAD_REPORT_COLUMN = ROOT_URL_API + "print-report-column/";
+
     public static final String ROOT_URL_PRINTABLE = ROOT_PROTOCOL_IP_PORT + "/print/";
     public static final String ROOT_URL_TERMS = ROOT_PROTOCOL_IP_PORT + "/terms-and-condition";
 
@@ -430,8 +432,6 @@ public class Constant {
             }
         });
     }
-
-
 
     public static void changeStatusColor(Context context, @ColorRes int colorId) {
         Window window = ((Activity) context).getWindow();

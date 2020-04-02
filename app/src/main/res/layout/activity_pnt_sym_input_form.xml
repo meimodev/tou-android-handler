@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:fadeScrollbars="false"
+    android:fillViewport="true"
     android:scrollbarAlwaysDrawVerticalTrack="true"
     android:scrollbarThumbVertical="@color/colorAccent"
     android:scrollbars="vertical">
@@ -17,7 +22,7 @@
         <LinearLayout
             android:id="@+id/layout_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:animateLayoutChanges="true"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,13 +74,14 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:hintTextColor="@color/colorPrimary"
+                    app:startIconDrawable="@drawable/ic_search_primary">
 
                     <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                         android:id="@+id/editText_findName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/ic_menu_manage"
                         android:drawablePadding="8dp"
                         android:hint="Cari Nama"
                         android:textSize="16sp" />
@@ -99,8 +105,11 @@
                 app:layout_constraintTop_toBottomOf="@id/layout_editMember">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_firstName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundColor="@null"
+                    app:endIconMode="clear_text">
 
                     <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                         android:id="@+id/editText_firstName"
@@ -114,8 +123,11 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_middleName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundColor="@null"
+                    app:endIconMode="clear_text">
 
                     <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                         android:id="@+id/editText_middleName"
@@ -129,8 +141,11 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_lastName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundColor="@null"
+                    app:endIconMode="clear_text">
 
                     <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                         android:id="@+id/editText_lastName"
@@ -143,24 +158,6 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <LinearLayout
-                    android:id="@+id/layout_degreeCardHolder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true"
-                    android:orientation="vertical" />
-
-                <Button
-                    android:id="@+id/button_addDegree"
-                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:elevation="2dp"
-                    android:paddingStart="3dp"
-                    android:paddingEnd="16dp"
-                    android:text="Tambah Gelar Akademik"
-                    android:textAlignment="textStart" />
-
             </LinearLayout>
 
             <!--Membership Layout-->
@@ -172,20 +169,23 @@
                 android:layout_marginEnd="32dp"
                 android:animateLayoutChanges="true"
                 android:orientation="vertical"
-                android:paddingBottom="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layout_name">
 
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_dob"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundColor="@null"
+                    app:endIconMode="clear_text">
 
                     <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                         android:id="@+id/editText_DOB"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_regular"
                         android:hint="Tanggal Lahir"
                         android:inputType="text"
                         android:maxLines="1"
@@ -197,159 +197,90 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:elevation="1dp"
+                    android:elevation="2dp"
+                    android:fontFamily="@font/montserrat_regular"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
-                    android:text="Pilih Jenis Kelamin :" />
+                    android:text="Pilih Jenis Kelamin :"
+                    app:ms_padding_left="16dp" />
 
-                <Switch
-                    android:id="@+id/switch_baptize"
+                <CheckBox
+                    android:id="@+id/checkBox_baptize"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="26dp"
-                    android:paddingTop="16dp"
-                    android:paddingEnd="0dp"
-                    android:paddingBottom="16dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="8dp"
                     android:text="Baptis" />
 
-                <LinearLayout
-                    android:id="@+id/layout_baptize"
+                <CheckBox
+                    android:id="@+id/checkBox_sidi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="16dp"
-                        android:layout_weight="0.5"
-                        android:gravity="center"
-                        android:text="Nomor Surat :" />
-
-                    <com.meimodev.sitouhandler.CustomWidget.CustomEditText
-                        android:id="@+id/editText_baptizeLetter"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="xxx/xxx.xxx/xx/xxxx"
-                        android:inputType="text"
-                        android:maxLines="1" />
-
-                </LinearLayout>
-
-                <Switch
-                    android:id="@+id/switch_sidi"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="26dp"
-                    android:paddingTop="16dp"
-                    android:paddingEnd="0dp"
-                    android:paddingBottom="16dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="8dp"
                     android:text="Sidi" />
 
-                <LinearLayout
-                    android:id="@+id/layout_sidi"
+                <CheckBox
+                    android:id="@+id/checkBox_married"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="16dp"
-                        android:layout_weight="0.5"
-                        android:gravity="center"
-                        android:text="Nomor Surat :" />
-
-                    <com.meimodev.sitouhandler.CustomWidget.CustomEditText
-                        android:id="@+id/editText_sidiLetter"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="xxx/xxx.xxx/xx/xxxx"
-                        android:inputType="text"
-                        android:maxLines="1" />
-
-                </LinearLayout>
-
-                <Switch
-                    android:id="@+id/switch_married"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="26dp"
-                    android:paddingTop="16dp"
-                    android:paddingEnd="0dp"
-                    android:paddingBottom="16dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="8dp"
                     android:text="Nikah" />
-
-                <LinearLayout
-                    android:id="@+id/layout_married"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="16dp"
-                        android:layout_weight="0.5"
-                        android:gravity="center"
-                        android:text="Nomor Surat :" />
-
-                    <com.meimodev.sitouhandler.CustomWidget.CustomEditText
-                        android:id="@+id/editText_marriedLetter"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="xxx/xxx.xxx/xx/xxxx"
-                        android:inputType="text"
-                        android:maxLines="1" />
-
-                </LinearLayout>
 
             </LinearLayout>
 
             <!--End & Cancel Buttons-->
             <LinearLayout
                 android:id="@+id/layout_buttons"
-                android:layout_width="wrap_content"
+                style="?android:attr/buttonBarStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
-                android:orientation="horizontal"
-                android:paddingBottom="16dp">
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:animateLayoutChanges="true"
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/button_cancel"
-                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_marginEnd="16dp"
-                    android:text="Batal"
-                    android:textColor="@color/colorAccent" />
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/transparent"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="BATAL"
+                    android:textColor="@color/colorPrimary" />
 
                 <Button
                     android:id="@+id/button_end"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="@color/colorAccent"
+                    android:fontFamily="@font/montserrat_regular"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:text="End"
-                    android:textColor="@color/ButtonText_LightGrey" />
+                    android:text="END" />
 
             </LinearLayout>
 
         </LinearLayout>
-
 
         <!--Loading-->
         <RelativeLayout
