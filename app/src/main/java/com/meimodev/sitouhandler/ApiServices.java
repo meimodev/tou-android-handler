@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Cheif.ReadJSONNavFragmentChiefManageServiceArea;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member.ReadJSONNavFragmentMemberHome;
 
+import org.json.JSONObject;
+
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -149,6 +151,11 @@ public interface ApiServices {
     );
 
     @GET("find-user")
+    Call<ResponseBody> findUserByName(
+            @Query("name") String name
+    );
+
+    @GET("find-user")
     Call<ResponseBody> findUserByEmail(
             @Query("email") String email
     );
@@ -268,5 +275,32 @@ public interface ApiServices {
     Call<ResponseBody> setDuplicateCheck(
             @Field("claimer_member_id") int claimerMemberId,
             @Field("param")String param
+    );
+
+    /*
+    * Church Creation
+    */
+
+    @FormUrlEncoded
+    @POST("apply-church-info")
+    Call<ResponseBody> churchCreation_setChurchInfo(
+            @Field("name") String name,
+            @Field("kelurahan") String kelurahan,
+            @Field("kecamatan") String kecamatan,
+            @Field("kabupaten") String kabupaten,
+            @Field("territory") String territory,
+            @Field("address") String address,
+            @Field("phone") String phone,
+            @Field("balance") String balance,
+            @Field("columns_count") String columns_count,
+            @Field("priests_count") String priests_count
+    );
+
+    @FormUrlEncoded
+    @POST("apply-church-positions")
+    Call<ResponseBody> churchCreation_setChurchPositions(
+            @Field("church_id") int churchId,
+            @Field("user_json") String userJSON
+
     );
 }

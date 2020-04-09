@@ -34,9 +34,11 @@ import com.hmomeni.progresscircula.ProgressCircula;
 import com.meimodev.sitouhandler.ApiServices;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Helper.APIUtils;
+import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SharedPrefManager;
+import com.meimodev.sitouhandler.databinding.ActivityAddingBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,85 +65,43 @@ public class Adding extends AppCompatActivity {
 
     public static final int REQUEST_CODE_PERSONAL_NAME = 1;
 
-    @BindView(R.id.editText_search)
-    EditText etSearch;
-    @BindView(R.id.recyclerView_adding)
-    RecyclerView rvAdding;
-    @BindView(R.id.layout_progressHolder)
-    RelativeLayout layoutProgress;
-    @BindView(R.id.layout_main)
-    LinearLayout llMain;
+
+//    RelativeLayout layoutProgress;
+//    LinearLayout layoutMain;
+
+    private ActivityAddingBinding b;
 
     private BroadcastReceiver onSelectedItemRecyclerView;
     private BroadcastReceiver onSelectedItemRecyclerViewAlreadySelected;
 
     public static final int OPERATION_ADD_NAME_REGISTERED_ONLY = 2;
     public static final int OPERATION_ADD_NAME_WITH_UNREGISTERED = 1;
+    public static final int OPERATION_FIND_USER = 3;
+
+
     public static int OPERATION_TYPE;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_adding);
-        ButterKnife.bind(this);
-        registerBroadcastReceiver();
+        b = ActivityAddingBinding.inflate(getLayoutInflater());
+        setContentView(b.getRoot());
 
         changeStatusColor(this, R.color.colorPrimary);
 
-        View v = LayoutInflater.from(Adding.this).inflate(R.layout.resource_custom_progress_bar_progressing, layoutProgress, false);
-        ProgressCircula p = v.findViewById(R.id.pc);
-        p.setSpeed(3);
-        p.setIndeterminate(true);
-        p.setRimWidth(6);
-        p.startRotation();
-        p.setRimColor(getResources().getColor(R.color.colorAccent));
-        p.setShowProgress(false);
-        layoutProgress.addView(v);
-        layoutProgress.setVisibility(View.GONE);
+        registerBroadcastReceiver();
 
         OPERATION_TYPE = getIntent().getIntExtra("OPERATION_TYPE", OPERATION_ADD_NAME_WITH_UNREGISTERED);
 
-        rvAdding.setHasFixedSize(true);
-        rvAdding.setItemAnimator(new DefaultItemAnimator());
-        rvAdding.setLayoutManager(new LinearLayoutManager(Adding.this));
+        /*
+         * Init First Views
+         */
+//        initProgressManual();
+//        layoutProgress = b.layoutProgressHolder;
+//        layoutMain = b.layoutMain;
 
-
-        CountDownTimer countdownToFetchData = new CountDownTimer(1500, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-            }
-
-            public void onFinish() {
-                fetchData();
-            }
-        };
-        etSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                countdownToFetchData.cancel();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable.length() > 1) {
-                    layoutProgress.setVisibility(View.VISIBLE);
-                    llMain.setVisibility(View.GONE);
-                } else {
-                    countdownToFetchData.cancel();
-                    layoutProgress.setVisibility(View.GONE);
-                    llMain.setVisibility(View.VISIBLE);
-
-                }
-                countdownToFetchData.start();
-            }
-        });
-
-
+        initEditTextSearch();
     }
 
 
@@ -157,7 +117,8 @@ public class Adding extends AppCompatActivity {
                         resultIntent.putExtra("model.name", intent.getStringExtra("model.name"));
                         resultIntent.putExtra("unregistered", intent.getBooleanExtra("unregistered", false));
 
-                    } else {
+                    }
+                    else {
 
                         resultIntent.putExtra("model.id", intent.getIntExtra("model.id", 0));
                         resultIntent.putExtra("model.name", intent.getStringExtra("model.name"));
@@ -191,107 +152,181 @@ public class Adding extends AppCompatActivity {
         registerReceiver(onSelectedItemRecyclerViewAlreadySelected, new IntentFilter(ACTION_ALREADY_SELECTED_RECYCLER_VIEW));
     }
 
-    private void fetchData() {
-        if (etSearch.length() <= 1) {
+    private void initEditTextSearch() {
+        CountDownTimer countdownToFetchData = new CountDownTimer(1500, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+            }
+
+            public void onFinish() {
+                if (validateInput()) findDataOnServer();
+            }
+        };
+
+        b.editTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                countdownToFetchData.cancel();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() > 1) {
+                }
+                else {
+                    countdownToFetchData.cancel();
+                }
+                countdownToFetchData.start();
+            }
+        });
+    }
+
+    private boolean validateInput() {
+        if (b.editTextSearch.length() <= 1) {
             Snackbar.make(findViewById(android.R.id.content), "Kata kunci yang dicari harus melebihi 1 huruf", Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private void findDataOnServer() {
+        IssueRequestHandler req = new IssueRequestHandler(b.getRoot());
+
+            /*
+            * Find USER
+            */
+        if (OPERATION_TYPE == OPERATION_FIND_USER) {
+            req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
+                @Override
+                public void onTry() {
+
+                }
+
+                @Override
+                public void onSuccess(APIWrapper res, String message) throws JSONException {
+                    InputMethodManager imm = ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE));
+                    imm.hideSoftInputFromWindow(b.editTextSearch.getWindowToken(), 0);
+
+                    proceedFindUser(res.getDataArray());
+                }
+
+                @Override
+                public void onRetry() {
+                    InputMethodManager imm = ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE));
+                    imm.hideSoftInputFromWindow(b.editTextSearch.getWindowToken(), 0);
+                    findDataOnServer();
+                }
+            });
+
+            req.enqueue(RetrofitClient.getInstance(null).getApiServices().findUserByName(
+                    b.editTextSearch.getText().toString()
+            ));
+
             return;
         }
 
-        ApiServices apiServices = RetrofitClient.getInstance(null).getApiServices();
-        Call<ResponseBody> call = apiServices.findMember(
-                Guru.getInt(KEY_MEMBER_ID, 0),
-                etSearch.getText().toString()
-        );
-        call.enqueue(new Callback<ResponseBody>() {
+
+        /*
+         * Find MEMBER
+         */
+        req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    InputMethodManager imm = ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE));
-                    imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.body().string());
-
-                        if (!jsonObject.getBoolean("error")) {
-                            Log.e(TAG, "onResponse: response error = false");
-
-                            JSONArray data = jsonObject.getJSONArray("data");
-
-                            ArrayList<Adding_RecyclerModel> items = new ArrayList<>();
-                            for (int i = 0; i < data.length(); i++) {
-                                JSONObject model = data.getJSONObject(i);
-
-                                Adding_RecyclerModel add;
-                                if (model.getInt("member_id") != 0) {
-
-                                    add = new Adding_RecyclerModel(
-                                            model.getInt("member_id"),
-                                            model.getString("full_name"),
-                                            model.getString("DOB"),
-                                            model.getString("column"),
-                                            model.getString("image_url")
-                                    );
-                                } else {
-                                    add = new Adding_RecyclerModel(
-                                            model.getInt("member_id"),
-                                            model.getString("full_name"),
-                                            "",
-                                            "",
-                                            ""
-                                    );
-                                    add.setUnregistered(true);
-                                }
-                                add.setBaptis(!model.getString("nomor_surat_baptis").isEmpty());
-                                add.setSidi(!model.getString("nomor_surat_sidi").isEmpty());
-                                add.setNikah(!model.getString("nomor_surat_nikah").isEmpty());
-
-                                items.add(add);
-
-                            }
-
-                            if (layoutProgress.getVisibility() == View.VISIBLE)
-                                layoutProgress.setVisibility(View.GONE);
-                            if (llMain.getVisibility() != View.VISIBLE)
-                                llMain.setVisibility(View.VISIBLE);
-
-                            Log.e(TAG, "onResponse: attaching recyclerview adapter");
-                            Log.e(TAG, "onResponse: items size = " + items.size());
-                            rvAdding.setAdapter(new Adding_RecyclerAdapter(Adding.this, items));
-
-                        }
-
-
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    APIUtils.parseError(Adding.this, response);
-                }
-
+            public void onTry() {
 
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onSuccess(APIWrapper res, String message) throws JSONException {
                 InputMethodManager imm = ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE));
-                imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(b.editTextSearch.getWindowToken(), 0);
 
-                Log.e(TAG, "onRetry: "
-                        + getApplicationInfo().className
-                        + ": ", t);
-                makeFailFetch(findViewById(android.R.id.content), view -> {
-                    makeProgressCircle(findViewById(android.R.id.content)).setVisibility(View.VISIBLE);
-                    fetchData();
-                });
+                proceedFindMember(res.getDataArray());
+            }
+
+            @Override
+            public void onRetry() {
+                InputMethodManager imm = ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE));
+                imm.hideSoftInputFromWindow(b.editTextSearch.getWindowToken(), 0);
+                findDataOnServer();
             }
         });
 
+        req.enqueue(RetrofitClient.getInstance(null).getApiServices().findMember(
+                Guru.getInt(KEY_MEMBER_ID, 0),
+                b.editTextSearch.getText().toString()
+        ));
 
-        // hide search result is visible
-        // show loading screen while data searching on back-end
-        // hide loading when response returned
-        // show search result if response is success
-        // show error if response is error
+    }
+
+    private void proceedFindMember(JSONArray data) throws JSONException {
+        ArrayList<Adding_RecyclerModel> items = new ArrayList<>();
+        for (int i = 0; i < data.length(); i++) {
+            JSONObject model = data.getJSONObject(i);
+            Adding_RecyclerModel add;
+            if (model.getInt("member_id") != 0) {
+                add = new Adding_RecyclerModel(
+                        model.getInt("member_id"),
+                        model.getString("full_name"),
+                        model.getString("DOB"),
+                        model.getString("column"),
+                        model.getString("image_url")
+                );
+            }
+            else {
+                add = new Adding_RecyclerModel(
+                        model.getInt("member_id"),
+                        model.getString("full_name"),
+                        "",
+                        "",
+                        ""
+                );
+                add.setUnregistered(true);
+            }
+            add.setBaptis(!model.getString("nomor_surat_baptis").isEmpty());
+            add.setSidi(!model.getString("nomor_surat_sidi").isEmpty());
+            add.setNikah(!model.getString("nomor_surat_nikah").isEmpty());
+            items.add(add);
+        }
+
+        b.recyclerViewAdding.setHasFixedSize(true);
+        b.recyclerViewAdding.setItemAnimator(new DefaultItemAnimator());
+        b.recyclerViewAdding.setLayoutManager(new LinearLayoutManager(Adding.this));
+        b.recyclerViewAdding.setAdapter(new Adding_RecyclerAdapter(Adding.this, items));
+
+//                if (layoutProgress.getVisibility() == View.VISIBLE) {
+//                    layoutProgress.setVisibility(View.GONE);
+//                }
+//                if (layoutMain.getVisibility() != View.VISIBLE) {
+//                    layoutMain.setVisibility(View.VISIBLE);
+//                }
+
+    }
+
+    private void proceedFindUser(JSONArray data) throws JSONException {
+        ArrayList<Adding_RecyclerModel> items = new ArrayList<>();
+        for (int i = 0; i < data.length(); i++) {
+            JSONObject model = data.getJSONObject(i);
+            Adding_RecyclerModel add;
+            add = new Adding_RecyclerModel(
+                    model.getInt("user_id"),
+                    model.getString("full_name"),
+                    model.getString("dob"),
+                    model.getString("sex"),
+                    ""
+            );
+
+            items.add(add);
+        }
+
+        b.recyclerViewAdding.setHasFixedSize(true);
+        b.recyclerViewAdding.setItemAnimator(new DefaultItemAnimator());
+        b.recyclerViewAdding.setLayoutManager(new LinearLayoutManager(Adding.this));
+        b.recyclerViewAdding.setAdapter(new Adding_RecyclerAdapter(Adding.this, items));
+
     }
 
     @Override

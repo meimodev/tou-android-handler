@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Issue;
 
 import android.content.Context;
@@ -150,7 +154,7 @@ public class Adding_RecyclerAdapter extends RecyclerView.Adapter<Adding_Recycler
 
         } else {
             cvMain.setOnClickListener(view -> {
-//                Check if current model already added in seletedModelArray
+//                Check if current model already added in selectedModelArray
                 if (isModelAlreadySelected(model.getId(), staticReference)) {
                     ctx.sendBroadcast(new Intent(Adding.ACTION_ALREADY_SELECTED_RECYCLER_VIEW));
                 } else {

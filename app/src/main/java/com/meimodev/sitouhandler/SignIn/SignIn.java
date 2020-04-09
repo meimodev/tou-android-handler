@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.squti.guru.Guru;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.CustomWidget.CustomEditText;
@@ -28,6 +29,7 @@ import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SignUp.ConfirmAccount;
 import com.meimodev.sitouhandler.SignUp.SignUp;
 import com.meimodev.sitouhandler.Validator;
+import com.meimodev.sitouhandler.Wizard.ApplyChurch.ApplyChurch;
 import com.meimodev.sitouhandler.databinding.ActivitySigninBinding;
 
 import org.json.JSONException;
@@ -47,11 +49,16 @@ public class SignIn extends AppCompatActivity {
 
     private ActivitySigninBinding b;
 
+    private int tapCount = 0;
+    private boolean CHURCH_CREATION = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         b = ActivitySigninBinding.inflate(getLayoutInflater());
         setContentView(b.getRoot());
+
+
 
         Constant.changeStatusColor(this, R.color.background);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -70,9 +77,18 @@ public class SignIn extends AppCompatActivity {
         b.btnForget.setOnClickListener(v -> forget());
         b.btnConfirm.setOnClickListener(v -> confirm());
 
+        b.buttonChurch.setOnClickListener(v -> {
+                    tapCount++;
+                    if (tapCount >= 4) {
+                        tapCount = 0;
+                        CHURCH_CREATION = true;
+                    }
+                }
+        );
+
 
         Date d = Calendar.getInstance().getTime();
-        SimpleDateFormat format = new SimpleDateFormat("YYYY", Locale.US);
+        SimpleDateFormat format = new SimpleDateFormat("y", Locale.US);
         String year = format.format(d);
         b.textViewDev.setText("TOU-System | Awesomely Possible - Meimo " + year + " | © all rights reserved");
     }
@@ -201,7 +217,12 @@ public class SignIn extends AppCompatActivity {
     void signUp() {
         b.editTextPhone.setText("");
         b.editTextPassword.setText("");
-        startActivity(new Intent(this, SignUp.class));
+        if (!CHURCH_CREATION) {
+            startActivity(new Intent(this, SignUp.class));
+        }
+        else {
+            startActivity(new Intent(this, ApplyChurch.class));
+        }
     }
 
     void forget() {

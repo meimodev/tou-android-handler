@@ -82,7 +82,7 @@ public class Constant {
     public static final String ACCOUNT_TYPE_SECRETARY = "Sekretaris Jemaat";
     public static final String ACCOUNT_TYPE_TREASURER = "Bendahara Jemaat";
     public static final String ACCOUNT_TYPE_PEGAWAI = "Pegawai Gereja";
-    public static final String ACCOUNT_TYPE_PRIEST = "Pendeta";
+    public static final String ACCOUNT_TYPE_PRIEST = "Pendeta Pelayanan";
     public static final String ACCOUNT_TYPE_PENATUA = "Penatua Kolom";
     public static final String ACCOUNT_TYPE_SYAMAS = "Syamas Kolom";
     public static final String ACCOUNT_TYPE_PENATUA_PKB = "Penatua PKB";
