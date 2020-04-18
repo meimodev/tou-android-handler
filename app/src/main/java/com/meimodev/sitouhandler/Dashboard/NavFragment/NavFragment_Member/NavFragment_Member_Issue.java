@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member;
 
 import android.content.Context;
@@ -119,7 +123,7 @@ public class NavFragment_Member_Issue extends Fragment {
 
         IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
 
-        Call call = RetrofitClient.getInstance(null).getApiServices().getMemberHome(
+        Call call = RetrofitClient.getInstance(null).getApiServices().getMemberIssue(
                 Guru.getInt(Constant.KEY_MEMBER_ID, 0)
         );
         requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {

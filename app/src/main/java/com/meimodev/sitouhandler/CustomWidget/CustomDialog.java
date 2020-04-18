@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.meimodev.sitouhandler.R;
 
 public class CustomDialog extends DialogFragment implements DialogInterface.OnDismissListener {
@@ -44,6 +45,8 @@ public class CustomDialog extends DialogFragment implements DialogInterface.OnDi
     private DialogInterface.OnDismissListener dismissListener;
 
     private View customView = null;
+
+    private TextInputLayout tilPassword;
 
     public void setTitle(String title) {
         this.title = title;
@@ -78,6 +81,10 @@ public class CustomDialog extends DialogFragment implements DialogInterface.OnDi
     }
 
 
+    public TextInputLayout getPasswordTextInputLayout(){
+        return tilPassword;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -91,6 +98,8 @@ public class CustomDialog extends DialogFragment implements DialogInterface.OnDi
         tvTitle.setVisibility(View.GONE);
         TextView tvContent = view.findViewById(R.id.textView_dialogContent);
         tvContent.setVisibility(View.GONE);
+
+        tilPassword = view.findViewById(R.id.textInputLayout_password);
 
         if (title != null) {
             tvTitle.setVisibility(View.VISIBLE);

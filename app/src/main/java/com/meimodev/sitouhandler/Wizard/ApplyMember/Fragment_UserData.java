@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Wizard.ApplyMember;
 
 import android.content.Context;
@@ -54,7 +58,7 @@ public class Fragment_UserData extends Fragment {
     @BindView(R.id.radioGroup_sex)
     RadioGroup rgSex;
 
-    private Validator validator = new Validator();
+    private Validator validator ;
     private ViewPager2 viewPager2;
 
     private String sex;
@@ -67,6 +71,8 @@ public class Fragment_UserData extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_apply_member_user_data, container, false);
         context = rootView.getContext();
         ButterKnife.bind(this, rootView);
+
+        validator = new Validator(context);
 
 //        spinnerSex.setAdapter(
 //                new ArrayAdapter<>(
@@ -114,9 +120,8 @@ public class Fragment_UserData extends Fragment {
                         : safeMiddleName;
         String middleName = validator.validateName(safeMiddleName);
         tilMiddleName.setError(
-                middleName != null
-                        && (middleName.contentEquals("harus melebihi 1 karakter")
-                        || middleName.contentEquals("tidak boleh kosong"))
+                         middleName.contains("melebihi")
+                        || middleName.contains("kosong")
                         ? null : middleName
         );
         tilLastName.setError(validator.validateName(tilLastName));

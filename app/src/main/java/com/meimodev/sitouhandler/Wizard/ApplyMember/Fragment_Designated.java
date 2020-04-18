@@ -1,6 +1,6 @@
-/**************************************************************************************************
- * Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   *
- **************************************************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 package com.meimodev.sitouhandler.Wizard.ApplyMember;
 
@@ -187,7 +187,17 @@ public class Fragment_Designated extends Fragment {
             public void onSuccess(APIWrapper res, String message) throws JSONException {
 //                replaceWithFinishFragment();
                 btnSend.setVisibility(View.GONE);
-                context.sendBroadcast(new Intent(ApplyMember.ACTION_REPLACE_WITH_FINISH));
+//                context.sendBroadcast(new Intent(ApplyMember.ACTION_REPLACE_WITH_FINISH));
+                Constant.displayDialog(
+                        context,
+                        "Perhatian!",
+                        "Permintaan telah terkirim dan sedang diproses. Silahkan menunggu konfirmasi dari Jemaat Tujuan anda ",
+                        false,
+                        (dialog, which) -> {
+                        },
+                        null,
+                        dialog -> getActivity().finish()
+                );
             }
 
             @Override

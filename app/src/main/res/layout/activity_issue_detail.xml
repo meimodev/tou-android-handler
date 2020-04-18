@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<?xml version="1.0" encoding="utf-8"?><!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
@@ -12,8 +11,8 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
         android:layout_above="@id/layout_buttons"
+        android:layout_marginBottom="8dp"
         android:background="@color/background"
         android:fadeScrollbars="true"
         android:fillViewport="true"
@@ -147,7 +146,7 @@
                         android:padding="8dp">
 
                         <TextView
-                            android:id="@+id/text_download"
+                            android:id="@+id/textView_download"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
@@ -162,13 +161,13 @@
                             android:id="@+id/textView_link"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignBottom="@id/text_download"
+                            android:layout_alignBottom="@id/textView_download"
                             android:layout_marginTop="4dp"
                             android:layout_marginEnd="8dp"
                             android:textSize="12sp"
                             app:layout_constraintEnd_toStartOf="@id/button_download"
-                            app:layout_constraintStart_toStartOf="@id/text_download"
-                            app:layout_constraintTop_toBottomOf="@id/text_download" />
+                            app:layout_constraintStart_toStartOf="@id/textView_download"
+                            app:layout_constraintTop_toBottomOf="@id/textView_download" />
 
 
                         <androidx.cardview.widget.CardView
@@ -382,9 +381,10 @@
                             </LinearLayout>
 
                             <ImageView
+                                android:id="@+id/imageView_dashAuth"
                                 android:layout_width="match_parent"
                                 android:layout_height="3dp"
-                                android:src="@color/colorPrimary"
+                                android:background="@color/colorPrimary"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/layout_authDate" />
@@ -480,9 +480,9 @@
     <LinearLayout
         android:id="@+id/layout_buttons"
         style="?android:attr/buttonBarStyle"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"

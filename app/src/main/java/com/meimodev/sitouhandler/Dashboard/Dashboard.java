@@ -41,7 +41,7 @@ import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Cheif.NavFragment_Chief_ManageServiceArea;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member.NavFragment_Member_Home;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member.NavFragment_Member_Issue;
-import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member.NavFragment_Member_Setting;
+import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member.NavFragment_Account_Setting;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_PntSym.NavFragment_PntSym_manageMemberData;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Priest.NavFragment_Priest_SeeServiceArea;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Secretary.NavFragment_Secretary_Papers;
@@ -396,43 +396,38 @@ public class Dashboard extends AppCompatActivity {
         String memberPosition = Guru.getString(KEY_MEMBER_CHURCH_POSITION, null);
         Log.e(TAG, "setupNavDrawerItemsBasedOnAccountType: memberPositions " + memberPosition);
 
+        navigationView.setCheckedItem(R.id.nav_home);
         if (memberPosition.contains(ACCOUNT_TYPE_CHIEF)) {
-            navigationView.setCheckedItem(R.id.nav_home);
             navigationView.getMenu().getItem(1).getSubMenu().setGroupVisible(R.id.nav_group_chief, true);
+            speedDialView.setVisibility(View.VISIBLE);
         }
-        else if (memberPosition.contains(ACCOUNT_TYPE_SECRETARY)) {
-            navigationView.setCheckedItem(R.id.nav_home);
+
+        if (memberPosition.contains(ACCOUNT_TYPE_SECRETARY)) {
             navigationView.getMenu().getItem(2).getSubMenu().setGroupVisible(R.id.nav_group_secretary, true);
-
+            speedDialView.setVisibility(View.VISIBLE);
         }
-        else if (memberPosition.contains(ACCOUNT_TYPE_TREASURER)) {
-            navigationView.setCheckedItem(R.id.nav_home);
+
+        if (memberPosition.contains(ACCOUNT_TYPE_TREASURER)) {
             navigationView.getMenu().getItem(3).getSubMenu().setGroupVisible(R.id.nav_group_treasurer, true);
-
+            speedDialView.setVisibility(View.VISIBLE);
         }
-        else if (memberPosition.contains(ACCOUNT_TYPE_PRIEST)) {
-            navigationView.setCheckedItem(R.id.nav_home);
+
+        if (memberPosition.contains(ACCOUNT_TYPE_PRIEST)) {
             navigationView.getMenu().getItem(4).getSubMenu().setGroupVisible(R.id.nav_group_priest, true);
-
+            speedDialView.setVisibility(View.VISIBLE);
         }
-        else if (memberPosition.contains(ACCOUNT_TYPE_PENATUA)) {
-            navigationView.setCheckedItem(R.id.nav_home);
+
+        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA)) {
             navigationView.getMenu().getItem(5).getSubMenu().setGroupVisible(R.id.nav_group_penatua, true);
-
+            speedDialView.setVisibility(View.VISIBLE);
         }
-        else if (memberPosition.contains(ACCOUNT_TYPE_SYAMAS)) {
-            navigationView.setCheckedItem(R.id.nav_home);
+
+        if (memberPosition.contains(ACCOUNT_TYPE_SYAMAS)) {
             navigationView.getMenu().getItem(6).getSubMenu().setGroupVisible(R.id.nav_group_syamas, true);
-
+            speedDialView.setVisibility(View.VISIBLE);
         }
-        else if (memberPosition.contains(ACCOUNT_TYPE_MEMBER)) {
-            navigationView.setCheckedItem(R.id.nav_home);
 
-        }
-        else {
-            navigationView.setCheckedItem(R.id.nav_home);
 
-        }
     }
 
     private void setupFloatingActionMenuAndButtons() {
@@ -498,6 +493,7 @@ public class Dashboard extends AppCompatActivity {
             return true;
         });
 
+        speedDialView.setVisibility(View.GONE);
 
     }
 
@@ -644,7 +640,7 @@ public class Dashboard extends AppCompatActivity {
                     fragment = new Fragment_User_Home();
                     break;
                 case R.id.nav_setting:
-                    fragment = new NavFragment_Member_Setting();
+                    fragment = new NavFragment_Account_Setting();
                     break;
             }
 
@@ -664,8 +660,9 @@ public class Dashboard extends AppCompatActivity {
 
     private void initDuplicateCheck() {
         int dc = Guru.getInt(KEY_MEMBER_DUPLICATE_CHECK, 0);
+        int memberId = Guru.getInt(KEY_MEMBER_ID, 0);
         Log.e(TAG, "initDuplicateCheck: duplicate check = " + dc);
-        if (dc == 0) {
+        if (dc == 0 && memberId != 0) {
             startActivity(new Intent(this, DuplicateCheck.class));
         }
     }
@@ -689,6 +686,7 @@ public class Dashboard extends AppCompatActivity {
 
                     Log.e(TAG, "sendFCMTokenToServer: new Token Issued -> sending to Server ...");
                     IssueRequestHandler req = new IssueRequestHandler(null);
+                    req.setContext(Dashboard.this);
                     req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().setFCMToken(
                             userId, token
                     ));
@@ -746,8 +744,9 @@ public class Dashboard extends AppCompatActivity {
 
         tvUserName.setText(Guru.getString(KEY_USER_FULL_NAME, null));
 
-//        String position = ((String) spm.loadSharedData(KEY_MEMBER_CHURCH_POSITION, ACCOUNT_TYPE_USER));
-        tvChurchPosition.setText(Guru.getString(KEY_MEMBER_CHURCH_POSITION, null));
+        String position = Guru.getString(KEY_MEMBER_CHURCH_POSITION, null).replace("\\n", System.lineSeparator());
+        Log.e(TAG, "setupBackgroundHeader: position " + position);
+        tvChurchPosition.setText(position);
 
         String column = Guru.getString(KEY_COLUMN_NAME_INDEX, null);
         if (column != null) {

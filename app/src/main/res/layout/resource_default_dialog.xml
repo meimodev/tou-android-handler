@@ -48,11 +48,29 @@
             android:maxLines="100"
             android:text="lorem ipsum dolor sit ametlorem ipsum dolor sit ametlorem ipsum dolor sit ametlorem ipsum dolor sit amet" />
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_password"
+            android:visibility="gone"
+            android:hint="Password"
+            app:endIconMode="password_toggle"
+            android:layout_width="match_parent"
+            app:boxBackgroundColor="#fafafa"
+            android:layout_height="wrap_content">
+
+            <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                android:layout_width="match_parent"
+                android:id="@+id/editText_password"
+                android:inputType="textPassword"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <LinearLayout
             android:id="@+id/layout_customViewHolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
+
     </LinearLayout>
 
 

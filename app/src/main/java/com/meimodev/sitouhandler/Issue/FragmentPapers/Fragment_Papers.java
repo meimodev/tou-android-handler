@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Issue.FragmentPapers;
 
 import android.animation.LayoutTransition;
@@ -262,7 +266,7 @@ public class Fragment_Papers extends Fragment {
         radioGroups.add(null);
         ////////////////////////////////////// index sensitive //////////////////////////////////////
 
-        Validator validator = new Validator();
+        Validator validator = new Validator(context);
 
 
         if (keyIssue.contentEquals(KEY_PAPERS_BAPTIZE)) {

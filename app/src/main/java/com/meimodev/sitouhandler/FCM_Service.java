@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler;
 
 import android.app.Notification;
@@ -64,7 +68,7 @@ public class FCM_Service extends FirebaseMessagingService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-        notifBuilder.setSmallIcon(R.drawable.fab_add)
+        notifBuilder.setSmallIcon(R.drawable.ic_tou_notification)
                 .setContentTitle(title)
                 .setBadgeIconType(NotificationCompat.BADGE_ICON_LARGE)
                 .setContentText(msg)
@@ -84,9 +88,9 @@ public class FCM_Service extends FirebaseMessagingService {
     @RequiresApi(Build.VERSION_CODES.O)
     private void createNotificationChannel(Context context) {
         NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
-                "MyApp events", NotificationManager.IMPORTANCE_DEFAULT);
+                "TOU notification", NotificationManager.IMPORTANCE_DEFAULT);
         // Configure the notification channel
-        channel.setDescription("MyApp event controls");
+        channel.setDescription("TOU notification control");
         channel.setShowBadge(false);
         channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
         channel.enableLights(true);

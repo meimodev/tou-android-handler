@@ -67,6 +67,7 @@ public class DuplicateCheck extends AppCompatActivity {
 
     private void fetchData() {
         IssueRequestHandler req = new IssueRequestHandler(b.getRoot());
+        req.setIntention(new Throwable());
         req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
             public void onTry() {

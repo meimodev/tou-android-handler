@@ -36,8 +36,8 @@ public class Validator extends Constant {
 
     private Context context;
 
-    public Validator() {
-    }
+//    public Validator() {
+//    }
 
     public Validator(Context context) {
         this.context = context;

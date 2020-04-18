@@ -181,8 +181,8 @@ public class ApplyChurch extends AppCompatActivity {
                         tvPositionPriest.setText(holder);
 
                         @ColorInt int priestBackgroundColor = j % 2 == 0 ?
-                                getResources().getColor(R.color.disabled_background)
-                                : getResources().getColor(android.R.color.transparent);
+                                getResources().getColor(android.R.color.transparent)
+                                : getResources().getColor(R.color.disabled_background);
 
                         viewPriest.setBackgroundColor(priestBackgroundColor);
 
@@ -345,11 +345,11 @@ public class ApplyChurch extends AppCompatActivity {
                 String position = tvPosition.getText().toString();
                 String column = etColumn.getText().toString();
                 if (StringUtils.isEmpty(column)) {
-                    throw new NullPointerException("Empty Column "+position);
+                    throw new NullPointerException("Empty Column " + position);
                 }
                 int columnIndex = Integer.parseInt(column);
                 if (columnIndex > columnCount) {
-                    throw new NumberFormatException(position+" - Max Index = "+columnCount);
+                    throw new NumberFormatException(position + " - Max Index = " + columnCount);
                 }
 
                 JSONObject pos = new JSONObject();
@@ -386,7 +386,7 @@ public class ApplyChurch extends AppCompatActivity {
 
     }
 
-    private void sendPositionsDataToServer(int churchId,JSONObject userData){
+    private void sendPositionsDataToServer(int churchId, JSONObject userData) {
         IssueRequestHandler req = new IssueRequestHandler(b.getRoot());
         req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
@@ -399,8 +399,9 @@ public class ApplyChurch extends AppCompatActivity {
                 Constant.displayDialog(ApplyChurch.this,
                         "OK",
                         res.getMessage(),
-                        (dialog, which) -> {}
-                        );
+                        (dialog, which) -> {
+                        }
+                );
             }
 
             @Override
@@ -412,5 +413,7 @@ public class ApplyChurch extends AppCompatActivity {
                 churchId, userData.toString()
         ));
     }
+
+
 
 }

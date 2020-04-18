@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.IssueDetail;
 
 import android.app.DownloadManager;
@@ -26,6 +30,8 @@ import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
+import com.meimodev.sitouhandler.databinding.ActivityIssueDetailBinding;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,49 +54,6 @@ public class IssueDetail extends AppCompatActivity {
 
     private long downloadID;
 
-    @BindView(R.id.layout_namesHolder)
-    LinearLayout llNames;
-
-    @BindView(R.id.linearLayout_notationPlaceholder)
-    LinearLayout llNotationPlaceHolder;
-
-    @BindView(R.id.textView_letterNumberEntry)
-    TextView tvLetterNumberEntry;
-    @BindView(R.id.textView_serviceEntryId)
-    TextView tvServiceEntryId;
-    @BindView(R.id.linearLayout_serviceEntryId)
-    LinearLayout llServiceEntryId;
-
-    @BindView(R.id.textView_keyIssue)
-    TextView tvKeyIssue;
-
-    @BindView(R.id.textView_issuedDate)
-    TextView tvIssuedDate;
-    @BindView(R.id.cardView_acceptRejectBadge)
-    CardView cvAcceptReject;
-    @BindView(R.id.textView_acceptedRejectedText)
-    TextView tvAcceptRejectText;
-    @BindView(R.id.textView_acceptedRejectedDate)
-    TextView tvAcceptRejectDate;
-
-    @BindView(R.id.cardView_printable)
-    CardView cvPrintable;
-    @BindView(R.id.button_download)
-    CardView cvButtonDownload;
-
-
-    @BindView(R.id.textView_description)
-    TextView tvDescription;
-    @BindView(R.id.cardView_description)
-    CardView cvDescription;
-
-    @BindView(R.id.layout_buttons)
-    LinearLayout llButtons;
-    @BindView(R.id.button_accept)
-    Button btnAccept;
-    @BindView(R.id.button_reject)
-    Button btnReject;
-
     private String keyIssue;
     private String issuedDate;
     private String finishDate;
@@ -101,25 +64,21 @@ public class IssueDetail extends AppCompatActivity {
     private Map<String, String> issuedByMember;
     private String issueAuthStatus;
 
-    private CardView cvLoading;
-
-    @BindView(R.id.imageView_download)
-    ImageView ivDownload;
-    @BindView(R.id.textView_link)
-    TextView tvLink;
-    @BindView(R.id.text_download)
-    TextView tvTextDownload;
+    private ActivityIssueDetailBinding b;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_issue_detail);
-        ButterKnife.bind(this);
+        b = ActivityIssueDetailBinding.inflate(getLayoutInflater());
+        setContentView(b.getRoot());
+
+
+//        ButterKnife.bind(this);
         changeStatusColor(this, R.color.colorPrimary);
 
         registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
-        llButtons.setVisibility(View.GONE);
+        b.layoutButtons.setVisibility(View.GONE);
 
         fetchData();
     }
@@ -196,10 +155,11 @@ public class IssueDetail extends AppCompatActivity {
             keyIssueValue.put("financial_amount", obj.getString("financial_amount"));
 
             if (!keyIssueValue.get("financial_description").toString().isEmpty()) {
-                cvDescription.setVisibility(View.VISIBLE);
-                tvDescription.setText(keyIssueValue.get("financial_description").toString());
+                b.cardViewDescription.setVisibility(View.VISIBLE);
+                b.textViewDescription.setText(keyIssueValue.get("financial_description").toString());
             }
         }
+
         else if (isIssueIncome(keyIssue)) {
 
             keyIssueValue.put("financial_description", obj.getString("financial_description"));
@@ -208,8 +168,8 @@ public class IssueDetail extends AppCompatActivity {
             keyIssueValue.put("financial_amount", obj.getString("financial_amount"));
 
             if (!keyIssueValue.get("financial_description").toString().isEmpty()) {
-                cvDescription.setVisibility(View.VISIBLE);
-                tvDescription.setText(keyIssueValue.get("financial_description").toString());
+                b.cardViewDescription.setVisibility(View.VISIBLE);
+                b.textViewDescription.setText(keyIssueValue.get("financial_description").toString());
             }
         }
         else if (isIssuePaper(keyIssue)) {
@@ -220,8 +180,8 @@ public class IssueDetail extends AppCompatActivity {
             keyIssueValue.put("letter_link_printable", obj.getString("letter_link_printable"));
 
             if (!issueAuthStatus.contentEquals(AUTHORIZATION_STATUS_ACCEPTED)) {
-                tvLetterNumberEntry.setVisibility(View.VISIBLE);
-                tvLetterNumberEntry.setText(((String) keyIssueValue.get("letter_entry_number")));
+                b.textViewLetterNumberEntry.setVisibility(View.VISIBLE);
+                b.textViewLetterNumberEntry.setText(((String) keyIssueValue.get("letter_entry_number")));
             }
 
         }
@@ -235,19 +195,19 @@ public class IssueDetail extends AppCompatActivity {
             keyIssueValue.put("service_entry_id", obj.getString("service_entry_id"));
             keyIssueValue.put("service_description", obj.getString("service_description"));
 
-            llServiceEntryId.setVisibility(View.VISIBLE);
-            tvServiceEntryId.setText(obj.getString("service_entry_id"));
+            b.linearLayoutServiceEntryId.setVisibility(View.VISIBLE);
+            b.textViewServiceEntryId.setText(obj.getString("service_entry_id"));
 
             if (!obj.getString("service_description").isEmpty()) {
-                cvDescription.setVisibility(View.VISIBLE);
-                tvDescription.setText(obj.getString("service_description"));
+                b.cardViewDescription.setVisibility(View.VISIBLE);
+                b.textViewDescription.setText(obj.getString("service_description"));
             }
         }
         else if (keyIssue.contentEquals(KEY_OTHER_APPLY_MEMBER)) {
 
             if (!obj.isNull("description")) {
-                cvDescription.setVisibility(View.VISIBLE);
-                tvDescription.setText(obj.getString("description"));
+                b.cardViewDescription.setVisibility(View.VISIBLE);
+                b.textViewDescription.setText(obj.getString("description"));
             }
         }
 
@@ -278,9 +238,9 @@ public class IssueDetail extends AppCompatActivity {
 
         if (!obj.isNull("printable_key")) {
             String printableKey = obj.getString("printable_key");
-            cvPrintable.setVisibility(View.VISIBLE);
-            cvButtonDownload.setOnClickListener(view -> downloadFile(printableKey));
-            TextView tvLink = cvPrintable.findViewById(R.id.textView_link);
+            b.cardViewPrintable.setVisibility(View.VISIBLE);
+            b.buttonDownload.setOnClickListener(view -> downloadFile(printableKey));
+            TextView tvLink = b.cardViewPrintable.findViewById(R.id.textView_link);
             String url = ROOT_URL_PRINTABLE + printableKey;
             tvLink.setText(url);
         }
@@ -295,31 +255,35 @@ public class IssueDetail extends AppCompatActivity {
 
     private void setupHeaderCardView() {
 
-        tvKeyIssue.setText(keyIssue);
-        tvIssuedDate.setText(issuedDate);
+        b.textViewKeyIssue.setText(keyIssue);
+        b.textViewIssuedDate.setText(issuedDate);
 
         if (issueAuthStatus.contentEquals(AUTHORIZATION_STATUS_UNCONFIRMED)) {
 
-            tvLetterNumberEntry.setVisibility(View.GONE);
-            tvKeyIssue.setPadding(0, 20, 0, 0);
+            b.textViewLetterNumberEntry.setVisibility(View.GONE);
+            b.textViewKeyIssue.setPadding(0, 20, 0, 0);
 
-            cvAcceptReject.setVisibility(View.GONE);
+            b.cardViewAcceptRejectBadge.setVisibility(View.GONE);
         }
         else if (issueAuthStatus.contentEquals(AUTHORIZATION_STATUS_ACCEPTED)) {
 
-            cvAcceptReject.setVisibility(View.VISIBLE);
-            tvAcceptRejectText.setText("DITERIMA");
-            tvAcceptRejectDate.setText(finishDate);
+            b.cardViewAcceptRejectBadge.setVisibility(View.VISIBLE);
+            b.textViewAcceptedRejectedText.setText("DITERIMA");
+            b.textViewAcceptedRejectedText.setTextColor(getResources().getColor(R.color.accept));
+            b.imageViewDashAuth.setBackgroundColor(getResources().getColor(R.color.accept));
+            b.textViewAcceptedRejectedDate.setText(finishDate);
 
         }
         else if (issueAuthStatus.contentEquals(AUTHORIZATION_STATUS_REJECTED)) {
 
-            tvLetterNumberEntry.setVisibility(View.GONE);
-            tvKeyIssue.setPadding(0, 20, 0, 0);
+            b.textViewLetterNumberEntry.setVisibility(View.GONE);
+            b.textViewKeyIssue.setPadding(0, 20, 0, 0);
 
-            cvAcceptReject.setVisibility(View.VISIBLE);
-            tvAcceptRejectText.setText("DITOLAK");
-            tvAcceptRejectDate.setText(finishDate);
+            b.cardViewAcceptRejectBadge.setVisibility(View.VISIBLE);
+            b.textViewAcceptedRejectedText.setText("DITOLAK");
+            b.textViewAcceptedRejectedText.setTextColor(getResources().getColor(R.color.reject));
+            b.imageViewDashAuth.setBackgroundColor(getResources().getColor(R.color.reject));
+            b.textViewAcceptedRejectedDate.setText(finishDate);
 
         }
     }
@@ -332,12 +296,12 @@ public class IssueDetail extends AppCompatActivity {
 
         tvName.setText(issuedByMember.get("name"));
         tvColumn.setText(issuedByMember.get("column"));
-        tvPosition.setText(issuedByMember.get("church_position"));
+        tvPosition.setText(issuedByMember.get("church_position").replace("\\n", System.lineSeparator()));
     }
 
     private void setupNotations() throws JSONException {
 
-        ViewGroup parent = llNotationPlaceHolder;
+        ViewGroup parent = b.linearLayoutNotationPlaceholder;
         for (int i = 0; i < notations.size(); i++) {
             View v = getLayoutInflater().inflate(R.layout.recycler_item_notation, parent, false);
             TextView tvPos = v.findViewById(R.id.textView_position);
@@ -355,16 +319,24 @@ public class IssueDetail extends AppCompatActivity {
             String date = model.getConfirmedDate();
             date = date.contains("yang") ? date.replace("yang ", "") : date;
             String str = model.getAuthStatus() + " " + date;
+
+            if (model.getAuthStatus().contentEquals("DITERIMA")){
+                tvDate.setTextColor(getResources().getColor(R.color.accept));
+            } else if (model.getAuthStatus().contentEquals("DITOLAK")){
+                tvDate.setTextColor(getResources().getColor(R.color.reject));
+            }
+
             tvDate.setText(str);
-            llNotationPlaceHolder.addView(v);
+
+            b.linearLayoutNotationPlaceholder.addView(v);
         }
 
         if (notations.isEmpty()) {
-            llNotationPlaceHolder.setVisibility(View.GONE);
+            b.linearLayoutNotationPlaceholder.setVisibility(View.GONE);
         }
         else {
-            if (llNotationPlaceHolder.getVisibility() == View.GONE) {
-                llNotationPlaceHolder.setVisibility(View.VISIBLE);
+            if (b.linearLayoutNotationPlaceholder.getVisibility() == View.GONE) {
+                b.linearLayoutNotationPlaceholder.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -376,7 +348,7 @@ public class IssueDetail extends AppCompatActivity {
         for (int i = 0; i < names.size(); i++) {
             IssueDetailModelHelper m = names.get(i);
 
-            View v = getLayoutInflater().inflate(R.layout.recycler_item_adding, llNames, false);
+            View v = getLayoutInflater().inflate(R.layout.recycler_item_adding, b.layoutNamesHolder, false);
 
             TextView tvName = v.findViewById(R.id.textView_name);
             TextView tvDOB = v.findViewById(R.id.textView_birthDate);
@@ -408,7 +380,7 @@ public class IssueDetail extends AppCompatActivity {
         }
 
         for (View v : vh) {
-            llNames.addView(v);
+            b.layoutNamesHolder.addView(v);
         }
 
     }
@@ -420,8 +392,9 @@ public class IssueDetail extends AppCompatActivity {
         int authId = getIntent().getIntExtra("AUTHORIZATION_ID", 0);
         if (authStatusCode != 99) {
             if (authStatusCode == AUTHORIZATION_STATUS_CODE_UNCONFIRMED) {
-                llButtons.setVisibility(View.VISIBLE);
-                btnAccept.setOnClickListener(v -> {
+                b.layoutButtons.setVisibility(View.VISIBLE);
+                b.buttonAccept.setOnClickListener(v -> {
+
                     Bundle data = new Bundle();
                     data.putInt("AUTH_ID", authId);
                     data.putInt("AUTH_CODE", AUTHORIZATION_STATUS_CODE_ACCEPTED);
@@ -438,7 +411,8 @@ public class IssueDetail extends AppCompatActivity {
                             },
                             dialog -> {});
                 });
-                btnReject.setOnClickListener(v -> {
+
+                b.buttonReject.setOnClickListener(v -> {
                     String title = "Konfirmasi Penolakan!";
                     String message = "Anda akan MENOLAK pengajuan ini, silahkan sentuh tombol 'OK' untuk konfirmasi bahwa pengajuan ini akan DITOLAK";
                     Intent i = new Intent(KEY_ISSUE_DETAIL_CONFIRM_AUTH);
@@ -486,16 +460,17 @@ public class IssueDetail extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
-                cvButtonDownload.setEnabled(true);
-                cvButtonDownload.setCardBackgroundColor(getResources().getColor(R.color.colorAccent));
+                b.buttonDownload.setEnabled(true);
+                b.buttonDownload.setCardBackgroundColor(getResources().getColor(R.color.colorAccent));
 
-                tvTextDownload.setText("Lihat Dokumen");
 
-                ivDownload.setImageDrawable(getDrawable(R.drawable.ic_description_24px));
+                b.textViewDownload.setText("Lihat Dokumen");
+
+                b.imageViewDownload.setImageDrawable(getDrawable(R.drawable.ic_description_24px));
 
                 View.OnClickListener onClick = v -> startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
 
-                cvButtonDownload.setOnClickListener(onClick);
+                b.buttonDownload.setOnClickListener(onClick);
 
                 Snackbar.make(findViewById(android.R.id.content), keyIssue.toUpperCase().replace(" ", "_") + ".pdf", Snackbar.LENGTH_INDEFINITE).setAction(
                         "Lihat File",
@@ -506,8 +481,8 @@ public class IssueDetail extends AppCompatActivity {
     };
 
     private void downloadFile(String printableKey) {
-        cvButtonDownload.setEnabled(false);
-        cvButtonDownload.setCardBackgroundColor(getResources().getColor(R.color.TextView_Label_Light));
+        b.buttonDownload.setEnabled(false);
+        b.buttonDownload.setCardBackgroundColor(getResources().getColor(R.color.TextView_Label_Light));
 
         Snackbar.make(findViewById(android.R.id.content), "Downloading / Mengunduh ...", Snackbar.LENGTH_INDEFINITE).show();
 

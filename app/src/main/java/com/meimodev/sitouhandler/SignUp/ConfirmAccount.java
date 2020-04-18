@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.SignUp;
 
 import android.os.Bundle;
@@ -51,7 +55,7 @@ public class ConfirmAccount extends AppCompatActivity {
 
         String str = getIntent().getStringExtra("phone");
 
-        validator = new Validator();
+        validator = new Validator(this);
         if (!StringUtils.isEmpty(str)) {
             tilPhone.getEditText().setText(str);
             if (Constant.coolDownMilliSecondsLeft == 0) btnCode.callOnClick();

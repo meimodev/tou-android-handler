@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="Menu">
@@ -20,7 +24,7 @@
     </item>
 
 
-    <item android:title="Chief">
+    <item android:title="Ketua Jemaat">
         <menu>
             <group
                 android:id="@+id/nav_group_chief"
@@ -43,7 +47,7 @@
         </menu>
     </item>
 
-    <item android:title="Secretary">
+    <item android:title="Sekretaris">
         <menu>
             <group
                 android:id="@+id/nav_group_secretary"
@@ -70,7 +74,7 @@
         </menu>
     </item>
 
-    <item android:title="Treasurer">
+    <item android:title="Bendahara">
         <menu>
             <group
                 android:id="@+id/nav_group_treasurer"
@@ -101,7 +105,7 @@
             </group>
         </menu>
     </item>
-    <item android:title="Priest">
+    <item android:title="Pendeta">
         <menu>
             <group
                 android:id="@+id/nav_group_priest"
@@ -123,7 +127,7 @@
             </group>
         </menu>
     </item>
-    <item android:title="Penatua">
+    <item android:title="Penatua Kolom">
         <menu>
             <group
                 android:id="@+id/nav_group_penatua"
@@ -145,7 +149,7 @@
             </group>
         </menu>
     </item>
-    <item android:title="Syamas">
+    <item android:title="Syamas Kolom">
         <menu>
             <group
                 android:id="@+id/nav_group_syamas"
@@ -168,11 +172,10 @@
         </menu>
     </item>
 
-
     <item
         android:id="@+id/nav_signOut"
         android:icon="@drawable/ic_power_settings_new_24px"
-        android:title="Sign Out" />
+        android:title="Keluar" />
 
 
 </menu>

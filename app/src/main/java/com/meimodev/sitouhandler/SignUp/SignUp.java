@@ -82,7 +82,7 @@ public class SignUp extends AppCompatActivity {
         cetDob.setAsDatePicker(getSupportFragmentManager());
         Constant.justify(findViewById(R.id.text));
 
-        validator = new Validator();
+        validator = new Validator(this);
 
 
         tilSex.getEditText().setShowSoftInputOnFocus(false);
@@ -101,30 +101,6 @@ public class SignUp extends AppCompatActivity {
 
     @OnClick(R.id.btn_signUp)
     void onClickSignUp() {
-        validateForm();
-
-        if (!IS_SIGNUP_OK) {
-            Snackbar.make(findViewById(android.R.id.content), "Data belum valid !", Snackbar.LENGTH_LONG).show();
-            return;
-        }
-
-        sendData(
-                tilPhone.getEditText().getText().toString(),
-                tilPassword.getEditText().getText().toString(),
-                tilFirstName.getEditText().getText().toString(),
-                tilLastName.getEditText().getText().toString(),
-                tilDOB.getEditText().getText().toString(),
-                tilSex.getEditText().getText().toString()
-        );
-    }
-
-    void validateForm() {
-
-        IS_SIGNUP_OK = false;
-
-//        tilEmail.setError(validator.validateEmail(tilEmail));
-
-//        if (tilEmail.getError() != null) return;
 
         if (validator.validatePhone(tilPhone) != null) return;
 
@@ -146,7 +122,14 @@ public class SignUp extends AppCompatActivity {
 
         if (validator.validateSex(tilSex) != null) return;
 
-        IS_SIGNUP_OK = true;
+        sendData(
+                tilPhone.getEditText().getText().toString(),
+                tilPassword.getEditText().getText().toString(),
+                tilFirstName.getEditText().getText().toString(),
+                tilLastName.getEditText().getText().toString(),
+                tilDOB.getEditText().getText().toString(),
+                tilSex.getEditText().getText().toString()
+        );
     }
 
     void sendData(String phone, String password, String firstName, String lastName, String dob, String sex) {
@@ -202,7 +185,7 @@ public class SignUp extends AppCompatActivity {
 
             @Override
             public void onRetry() {
-
+                sendData(phone, password, firstName, lastName, dob, sex);
             }
         });
         req.enqueue(call);

@@ -303,4 +303,44 @@ public interface ApiServices {
             @Field("user_json") String userJSON
 
     );
+
+    /*
+    * Account Setting / Editing
+    */
+
+    @GET("account/{id}")
+    Call<ResponseBody> getAccount(
+            @Path("id") int userId
+    );
+
+    @FormUrlEncoded
+    @POST("account-pass")
+    Call<ResponseBody> setAccountPassword(
+            @Field("user_id") int userId,
+            @Field("old_pass") String oldPass,
+            @Field("new_pass") String newPass
+    );
+
+    @FormUrlEncoded
+    @POST("account-id")
+    Call<ResponseBody> setAccountIdentity(
+            @Field("user_id") int userId,
+            @Field("pass") String pass,
+            @Field("f_name") String firstName,
+            @Field("m_name") String middleName,
+            @Field("l_name") String lastName,
+            @Field("dob") String dob,
+            @Field("sex") String sex
+    );
+
+    @FormUrlEncoded
+    @POST("account-member")
+    Call<ResponseBody> setAccountMembership(
+            @Field("user_id") int userId,
+            @Field("pass") String pass,
+            @Field("baptize") String baptize,
+            @Field("sidi") String sidi,
+            @Field("marriage") String marriage
+    );
+
 }

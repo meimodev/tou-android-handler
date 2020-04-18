@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Issue.FragmentServices;
 
 import android.app.Activity;
@@ -523,7 +527,7 @@ public class Fragment_Services extends Fragment {
         radioGroups.add(rgHUT);
         ////////////////////////////////////// index sensitive //////////////////////////////////////
 
-        Validator validator = new Validator();
+        Validator validator = new Validator(context);
         Map<String, String> validation = validator.validateInput(keyIssue, customButtonAdds, customEditTexts, materialSpinners, radioGroups);
 
         if (keyIssue.contentEquals(KEY_SERVICE_SPECIAL_IBADAH_MINGGU)) {

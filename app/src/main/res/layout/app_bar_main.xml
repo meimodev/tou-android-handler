@@ -108,6 +108,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="2dp"
+                    android:maxLines="20"
                     android:text="Bendahara Jemaat"
                     android:textColor="@color/ButtonText_LightGrey"
                     android:textSize="15sp" />

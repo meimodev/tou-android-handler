@@ -85,14 +85,15 @@ public class NavFragment_Treasurer_Financial extends Fragment {
 
         context.registerReceiver(brPermissionGranted, new IntentFilter(Dashboard.ACTION_REQUEST_PERMISSION_GRANTED));
 
-        Log.e(TAG, "onCreateView: on create view called");
         return rootView;
     }
 
     private void fetchData() {
 
         IssueRequestHandler req = new IssueRequestHandler(rootView);
-        Call call = RetrofitClient.getInstance(null).getApiServices().getIssuedFinancial(Guru.getInt(Constant.KEY_MEMBER_ID, 0));
+        Call call = RetrofitClient.getInstance(null).getApiServices().getIssuedFinancial(
+                Guru.getInt(Constant.KEY_MEMBER_ID, 0)
+        );
         req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
             public void onTry() {
@@ -142,6 +143,11 @@ public class NavFragment_Treasurer_Financial extends Fragment {
                 ));
             }
         }
+
+        if (!data.isNull("current_balance")){
+            b.textViewCurrentBalance.setText(data.getString("current_balance"));
+        }
+
         setupRecyclerView();
     }
 
@@ -300,12 +306,5 @@ public class NavFragment_Treasurer_Financial extends Fragment {
         }
     };
 
-//    @Override
-//    public void onDestroyView() {
-//        b = null;
-//        Log.e(TAG, "onResume: unregister " );
-//        context.unregisterReceiver(brPermissionGranted);
-//        super.onDestroyView();
-//    }
 
 }

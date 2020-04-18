@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Helper;
 
 import android.app.Activity;
@@ -21,6 +25,7 @@ import retrofit2.Response;
 
 public class APIUtils {
     private static final String TAG = "APIUtils";
+    public static String intention = "";
 
     public static APIError parseError(Context context, Response<?> response) {
         Converter<ResponseBody, APIError> converter =
@@ -37,13 +42,6 @@ public class APIUtils {
 
         // handle the error according to response HTTP code
         if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-            Log.e(TAG, "parseError: packageName = " + ((Activity) context).getClass().getSimpleName());
-//            if (((Activity) context).getClass().getSimpleName().contentEquals("Dashboard")) {
-//                context.sendBroadcast(new Intent(Constant.ACTION_CONTENT_USER_UNATHENTICATED));
-//            } else {
-//                context.sendBroadcast(new Intent(Constant.ACTION_CONTENT_USER_UNATHENTICATED));
-//            }
-
             Constant.displayDialog(
                     context,
                     "Sesi kadaluarsa!",
@@ -67,12 +65,12 @@ public class APIUtils {
                     dialog -> ((Activity) context).finish()
             );
         }
-        Log.e(TAG, "parseError: error response code: " + response.code() + " message: " + error.getMessage());
+        Log.e(TAG, "parseError: " + "(Class)" + context.getClass().getSimpleName() + ": " + intention + ": response code: " + response.code() + " message: " + error.getMessage());
 
         return error;
     }
 
-    public static APIWrapper parseWrapper(ResponseBody response) {
+    public static APIWrapper parseWrapper(Context context, ResponseBody response) {
 
         APIWrapper apiWrapper = new APIWrapper();
 
@@ -82,36 +80,37 @@ public class APIUtils {
             apiWrapper.setError(obj.getBoolean("error"));
             apiWrapper.setMessage(obj.getString("message"));
 
+
             if (obj.toString().contains("\"data\":[")) {
                 apiWrapper.setDataArray(obj.getJSONArray("data"));
-                Log.e(TAG, "parseWrapper: JSON data is Array");
+                Log.e(TAG, "parseWrapper: " + "(Class)" + context.getClass().getSimpleName() + ": " + intention + ": JSON data is ARRAY");
             }
             else {
                 apiWrapper.setData(obj.getJSONObject("data"));
-                Log.e(TAG, "parseWrapper: JSON data is Object");
+                Log.e(TAG, "parseWrapper: " + "(Class)" + context.getClass().getSimpleName() + ": " + intention + ": JSON data is OBJECT");
             }
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
 
-        if (apiWrapper.getMessage().isEmpty()) {
-            try {
-                obj = new JSONObject(response.string());
-                apiWrapper.setError(obj.getBoolean("error"));
-                apiWrapper.setMessage(obj.getString("message"));
-
-                if (obj.toString().contains("\"data\":[")) {
-                    apiWrapper.setDataArray(obj.getJSONArray("data"));
-                    Log.e(TAG, "parseWrapper: JSON data is Array");
-                }
-                else {
-                    apiWrapper.setData(obj.getJSONObject("data"));
-                    Log.e(TAG, "parseWrapper: JSON data is Object");
-                }
-            } catch (JSONException | IOException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (apiWrapper.getMessage().isEmpty()) {
+//            try {
+//                obj = new JSONObject(response.string());
+//                apiWrapper.setError(obj.getBoolean("error"));
+//                apiWrapper.setMessage(obj.getString("message"));
+//
+//                if (obj.toString().contains("\"data\":[")) {
+//                    apiWrapper.setDataArray(obj.getJSONArray("data"));
+//                    Log.e(TAG, "parseWrapper: " + "(Class)" + context.getClass().getSimpleName() + ": " + intention + ": JSON data is ARRAY");
+//                }
+//                else {
+//                    apiWrapper.setData(obj.getJSONObject("data"));
+//                    Log.e(TAG, "parseWrapper: " + "(Class)" + context.getClass().getSimpleName() + ": " + intention + ": JSON data is OBJECT");
+//                }
+//            } catch (JSONException | IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
 
         return apiWrapper;

@@ -58,8 +58,6 @@ public class SignIn extends AppCompatActivity {
         b = ActivitySigninBinding.inflate(getLayoutInflater());
         setContentView(b.getRoot());
 
-
-
         Constant.changeStatusColor(this, R.color.background);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
@@ -86,7 +84,6 @@ public class SignIn extends AppCompatActivity {
                 }
         );
 
-
         Date d = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("y", Locale.US);
         String year = format.format(d);
@@ -101,7 +98,7 @@ public class SignIn extends AppCompatActivity {
     }
 
     void signIn() {
-        IssueRequestHandler requestHandler = new IssueRequestHandler(findViewById(android.R.id.content));
+        IssueRequestHandler requestHandler = new IssueRequestHandler(b.getRoot());
         Call call = RetrofitClient.getInstance(null).getApiServices().signIn(
                 b.editTextPhone.getText().toString().trim(),
                 b.editTextPassword.getText().toString().trim()
@@ -109,7 +106,6 @@ public class SignIn extends AppCompatActivity {
         requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
             public void onTry() {
-
             }
 
             @Override
@@ -202,15 +198,13 @@ public class SignIn extends AppCompatActivity {
         b.textInputLayoutPhone.setError(null);
         b.textInputLayoutPassword.setError(null);
 
-        Validator validator = new Validator();
+        Validator validator = new Validator(this);
 
-        b.textInputLayoutPhone.setError(validator.validatePhone(b.textInputLayoutPhone));
+        if (validator.validateEmpty(b.textInputLayoutPhone) != null) return;
 
-        b.textInputLayoutPassword.setError(validator.validateEmpty(b.textInputLayoutPassword));
+        if (validator.validateEmpty(b.textInputLayoutPassword) != null) return;
 
-        if (b.textInputLayoutPhone.getError() == null && b.textInputLayoutPassword.getError() == null) {
-            signIn();
-        }
+        signIn();
 
     }
 
@@ -219,6 +213,7 @@ public class SignIn extends AppCompatActivity {
         b.editTextPassword.setText("");
         if (!CHURCH_CREATION) {
             startActivity(new Intent(this, SignUp.class));
+            tapCount = 0;
         }
         else {
             startActivity(new Intent(this, ApplyChurch.class));

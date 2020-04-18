@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Wizard.ApplyMember;
 
 import android.content.Context;
@@ -39,15 +43,15 @@ public class Fragment_MemberData extends Fragment {
         ButterKnife.bind(this, rootView);
 
         cbBaptis.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            ApplyMember.BAPTIS = isChecked ? "x/SB/xxx.xxx/xx/xxxx" : "";
+            ApplyMember.BAPTIS = isChecked ? "SB" : "";
         });
 
         cbSidi.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            ApplyMember.SIDI = isChecked ? "x/SS/xxx.xxx/xx/xxxx" : "";
+            ApplyMember.SIDI = isChecked ? "SS" : "";
         });
 
         cbNikah.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            ApplyMember.NIKAH = isChecked ? "x/SN/xxx.xxx/xx/xxxx" : "";
+            ApplyMember.NIKAH = isChecked ? "SN" : "";
         });
 
         return rootView;

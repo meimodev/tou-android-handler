@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?><!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="40dp"
+    android:animateLayoutChanges="true"
+    android:background="@color/transparent"
+    android:scrollbars="vertical"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:fadeScrollbars="false"
+    android:scrollbarThumbVertical="@color/colorAccent3End"
+    android:fillViewport="true"
+    android:keepScreenOn="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp">
+
+            <LinearLayout
+                android:id="@+id/layout_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:text="Sunting Data"
+                    android:textAlignment="center"
+                    android:textColor="@color/primaryText"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/layout_form"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_title">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_close_24px"
+                    android:drawablePadding="4dp"
+                    android:fontFamily="@font/visiby_round_cf_bold"
+                    android:text="Tentang Akun"
+                    android:textAlignment="viewEnd"
+                    android:layout_marginEnd="16dp"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <!--About Account-->
+                <LinearLayout
+                    android:id="@+id/layout_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <!--Phone-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_phone"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nomor Telepon"
+                        app:boxBackgroundColor="@null"
+                        app:endIconMode="clear_text">
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                            android:id="@+id/editText_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="phone"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/button_savePhone"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/colorAccent"
+                        android:drawableEnd="@drawable/ic_check_24px"
+                        android:text="UBAH NOMOR TELEPON" />
+
+                    <!--Password Confirm-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_passwordNew"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Password Baru"
+                        app:boxBackgroundColor="@null"
+                        app:endIconMode="password_toggle">
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                            android:id="@+id/editText_passwordNew"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!--Password Confirm-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_passwordNewConfirm"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Ulangi Password Baru"
+                        app:boxBackgroundColor="@null"
+                        app:endIconMode="password_toggle">
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                            android:id="@+id/editText_passwordNewConfirm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/button_savePassword"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/colorAccent"
+                        android:drawableEnd="@drawable/ic_check_24px"
+                        android:text="SIMPAN PASSWORD" />
+
+                </LinearLayout>
+
+                <!--About Identity-->
+                <LinearLayout
+                    android:id="@+id/layout_identity"
+                    android:layout_marginTop="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="16dp"
+                    android:visibility="visible">
+
+                    <!--First Name-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_firstName"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nama Depan"
+                        app:boxBackgroundColor="@null"
+                        app:endIconMode="clear_text">
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                            android:id="@+id/editText_fisrtName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!--Middle Name-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_middleName"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nama Tengah"
+                        app:boxBackgroundColor="@null"
+                        app:endIconMode="clear_text">
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                            android:id="@+id/editText_middleName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!--Last Name-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_lastName"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nama Belakang"
+                        app:boxBackgroundColor="@null"
+                        app:endIconMode="clear_text">
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                            android:id="@+id/editText_lastName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!--DOB-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_dob"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Tanggal Lahir"
+                        app:boxBackgroundColor="@null"
+                        app:endIconMode="clear_text">
+
+                        <com.meimodev.sitouhandler.CustomWidget.CustomEditText
+                            android:id="@+id/editText_dob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!--Sex-->
+                    <LinearLayout
+                        android:id="@+id/layout_sex"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:orientation="vertical"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="16dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/roboto_thin"
+                            android:textSize="14sp"
+                            android:text="Jenis Kelamin" />
+
+                        <RadioGroup
+                            android:id="@+id/radioGroup_sex"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/radioButton_male"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/montserrat_regular"
+                                android:layout_weight="1"
+                                android:text="Laki-laki" />
+
+                            <RadioButton
+                                android:id="@+id/radioButton_female"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/montserrat_regular"
+                                android:layout_weight="1"
+                                android:text="Perempuan" />
+                        </RadioGroup>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/button_saveIdentity"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/colorAccent"
+                        android:drawableEnd="@drawable/ic_check_24px"
+                        android:text="SIMPAN DATA IDENTITAS" />
+
+                </LinearLayout>
+
+                <!--About Membership-->
+                <LinearLayout
+                    android:id="@+id/layout_membership"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/ic_close_24px"
+                        android:drawablePadding="4dp"
+                        android:fontFamily="@font/visiby_round_cf_bold"
+                        android:text="Tentang Keanggotaan"
+                        android:textAlignment="viewEnd"
+                        android:layout_marginEnd="16dp"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <!--Membership Status-->
+                    <!--Church name,village column-->
+                    <TextView
+                        android:id="@+id/textView_churchInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:maxLines="20"
+                        android:layout_marginTop="4dp"
+                        android:textStyle="bold"
+                        android:text="BAIT-EL, Wawalintouan Kolom 3"
+                        android:textAlignment="center"
+                        android:textSize="16sp" />
+
+                    <!--Church Position-->
+                    <TextView
+                        android:id="@+id/textView_churchPosition"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_thin"
+                        android:maxLines="20"
+                        android:text="Anggota Jemaat"
+                        android:textAlignment="center" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical">
+
+                        <!--Baptize-->
+                        <com.google.android.material.checkbox.MaterialCheckBox
+                            android:id="@+id/checkbox_baptis"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Sudah Baptis" />
+
+                        <!--Sidi-->
+                        <com.google.android.material.checkbox.MaterialCheckBox
+                            android:id="@+id/checkbox_sidi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Sudah Sidi" />
+
+                        <!--Marriage-->
+                        <com.google.android.material.checkbox.MaterialCheckBox
+                            android:id="@+id/checkbox_nikah"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Sudah Menikah" />
+
+                        <Button
+                            android:id="@+id/button_saveMembership"
+                            style="?android:attr/buttonBarButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_gravity="end"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/colorAccent"
+                            android:drawableEnd="@drawable/ic_check_24px"
+                            android:text="SIMPAN DATA KEANGGOTAAN" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--progress holder-->
+        <RelativeLayout
+            android:id="@+id/layout_progressHolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

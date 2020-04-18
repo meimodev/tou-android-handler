@@ -1,9 +1,14 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Issue;
 
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.meimodev.sitouhandler.Constant;
@@ -26,8 +31,9 @@ public class IssueRequestHandler {
     private Context context;
     private View progress;
 
-    private OnRequestHandler onRequestHandler;
+    private String intention = "";
 
+    private OnRequestHandler onRequestHandler;
 
     public IssueRequestHandler(@Nullable View rootView) {
         if (rootView != null) {
@@ -45,9 +51,18 @@ public class IssueRequestHandler {
         void onRetry();
     }
 
-
     public void setOnRequestHandler(OnRequestHandler onRequestHandler) {
         this.onRequestHandler = onRequestHandler;
+    }
+
+    public void setIntention(String intention) {
+        this.intention = intention;
+    }
+
+    public void setContext (Context context){this.context = context;}
+
+    public void setIntention(Throwable throwableForMethodMame) {
+        setIntention(throwableForMethodMame.getStackTrace()[0].getMethodName());
     }
 
     public void enqueue(Call call) {
@@ -56,7 +71,7 @@ public class IssueRequestHandler {
         try {
             mainView = rootView.findViewById(R.id.layout_main);
         } catch (NullPointerException e) {
-            Log.e(TAG, "enqueue: class initialize with null rootView " + e.getMessage());
+            Log.e(TAG, "enqueue: " + intention + ": class initialize with null rootView " + e.getMessage());
             return;
         }
 
@@ -75,39 +90,46 @@ public class IssueRequestHandler {
         }
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
 
-                    APIWrapper res = APIUtils.parseWrapper(response.body());
+                    APIWrapper res = APIUtils.parseWrapper(context, response.body());
 
                     if (!res.isError()) {
                         Log.e(TAG, "onResponse: "
-                                + context.getClass().getSimpleName()
-                                + ": response SUCCESS -> proceeding -> "
-                                + " response message: " + res.getMessage());
+                                + "(Class)" + context.getClass().getSimpleName() + ": "
+                                + intention + ": "
+                                + "response ERROR = FALSE -> "
+                                + "response message: " + res.getMessage());
 
                         if (onRequestHandler != null) {
                             try {
                                 onRequestHandler.onSuccess(res, res.getMessage());
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Log.e(TAG, context.getClass().getSimpleName() + ": JSON ERROR " + e.getMessage());
+                                Log.e(TAG, "onResponse: "
+                                        + "(Class)" + context.getClass().getSimpleName() + ": "
+                                        + intention + ": "
+                                        + "JSON ERROR: "
+                                        + e.getMessage());
                             }
 
                         }
 
                     }
                     else {
-                        Log.e(TAG, "onResponse:"
-                                + context.getClass().getSimpleName()
-                                + ": response return SUCCESS but Error:true, with message = "
-                                + res.getMessage());
+                        Log.e(TAG, "onResponse: "
+                                + "(Class)" + context.getClass().getSimpleName() + ": "
+                                + intention + ": "
+                                + "response ERROR = TRUE -> "
+                                + "response message: " + res.getMessage());
 
                         Constant.displayDialog(
                                 context,
-                                "Peringatan!",
+                                "Perhatian!",
                                 res.getMessage(),
-                                (dialog, which) -> { }
+                                (dialog, which) -> {
+                                }
                         );
 
 
@@ -122,15 +144,17 @@ public class IssueRequestHandler {
 
                 }
                 else {
+                    APIUtils.intention = intention;
                     APIUtils.parseError(context, response);
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e(TAG, "onRetry: "
-                        + context.getClass().getSimpleName()
-                        + ": ", t);
+                Log.e(TAG, "onFailure: "
+                        + "(Class)" + context.getClass().getSimpleName() + ": "
+                        + intention + ": "
+                        + t.getMessage());
 
                 if (progress != null && progress.getVisibility() == View.VISIBLE) {
                     progress.setVisibility(View.GONE);
@@ -157,40 +181,55 @@ public class IssueRequestHandler {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
 
-                    APIWrapper res = APIUtils.parseWrapper(response.body());
+                    APIWrapper res = APIUtils.parseWrapper(context, response.body());
 
                     if (!res.isError()) {
+
                         Log.e(TAG, "BACKGROUND REQUEST: onResponse: "
-                                + ": response SUCCESS -> proceeding -> "
-                                + " response message: " + res.getMessage());
+                                + "(Class)" + context.getClass().getSimpleName() + ": "
+                                + intention + ": "
+                                + "response ERROR = FALSE -> "
+                                + "response message: " + res.getMessage());
 
                         if (onRequestHandler != null) {
                             try {
                                 onRequestHandler.onSuccess(res, res.getMessage());
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Log.e(TAG, context.getClass().getSimpleName() + ": onResponse: JSON ERROR " + e.getMessage());
+                                Log.e(TAG, "onResponse: "
+                                        + "(Class)" + context.getClass().getSimpleName() + ": "
+                                        + intention + ": "
+                                        + "JSON ERROR: "
+                                        + e.getMessage());
                             }
                         }
 
                     }
                     else {
-
                         Log.e(TAG, "BACKGROUND REQUEST: onResponse: "
-                                + ": response return SUCCESS but Error = true, message = "
-                                + res.getMessage());
+                                + "(Class)" + context.getClass().getSimpleName() + ": "
+                                + intention + ": "
+                                + "response ERROR = TRUE -> "
+                                + "response message: " + res.getMessage());
                     }
 
                 }
                 else {
-                    Log.e(TAG, "BACKGROUND REQUEST onResponse: response NOT success, Error Code = " + response.code());
+                    Log.e(TAG, "BACKGROUND REQUEST: onResponse: "
+                            + "(Class)" + context.getClass().getSimpleName() + ": "
+                            + intention + ": "
+                            + "Error Code: "
+                            + response.code()
+                    );
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e(TAG, "onRetry: "
-                        + ": ", t);
+                Log.e(TAG, "BACKGROUND REQUEST: onFailure: "
+                        + "(Class)" + context.getClass().getSimpleName() + ": "
+                        + intention + ": "
+                        + t.getMessage());
                 if (onRequestHandler != null) {
                     onRequestHandler.onRetry();
                 }

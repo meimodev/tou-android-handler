@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Issue.FragmentOutcome;
 
 import android.app.Activity;
@@ -202,7 +206,7 @@ public class Fragment_Outcome extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_issue_outcome, container, false);
         ButterKnife.bind(this, rootView);
         context = rootView.getContext();
-        
+
         if (getArguments() != null) {
             keyIssue = getArguments().getString(KEY_OUTCOME);
 
@@ -256,13 +260,15 @@ public class Fragment_Outcome extends Fragment {
                                 staff.add("Penasehat Majelis Jemaat");
                                 staff.add("Koordinator Komisi Kerja");
                                 staff.add("Tenaga Orientasi Pelayanan");
-                            } else if (item.toString().contentEquals(paycheckType.get(1))) {
+                            }
+                            else if (item.toString().contentEquals(paycheckType.get(1))) {
                                 staff.add("Ketua BPMJ");
                                 staff.add("Wakil Ketua");
                                 staff.add("Sekretaris");
                                 staff.add("Bendahara");
                                 staff.add("Anggota");
-                            } else if (item.toString().contentEquals(paycheckType.get(2))) {
+                            }
+                            else if (item.toString().contentEquals(paycheckType.get(2))) {
                                 staff.add("Ketua BPMJ");
                                 staff.add("Wakil Ketua");
                                 staff.add("Sekretaris");
@@ -278,8 +284,9 @@ public class Fragment_Outcome extends Fragment {
 
                             }
                             spinnerStaff.setItems(staff);
-                            if (llSpinnerStaff.getVisibility() != View.VISIBLE)
+                            if (llSpinnerStaff.getVisibility() != View.VISIBLE) {
                                 llSpinnerStaff.setVisibility(View.VISIBLE);
+                            }
 
                         });
                         spinnerStaff.setOnItemSelectedListener((view, position, id, item) -> {
@@ -306,7 +313,8 @@ public class Fragment_Outcome extends Fragment {
 
                                 POST_accountNumberKey = holder.get(spinnerStaff.getItems().get(spinnerStaff.getSelectedIndex()).toString());
 
-                            } else if (spinnerPaycheckType.getItems().get(spinnerPaycheckType.getSelectedIndex()).toString()
+                            }
+                            else if (spinnerPaycheckType.getItems().get(spinnerPaycheckType.getSelectedIndex()).toString()
                                     .contentEquals(spinnerPaycheckType.getItems().get(1).toString())) {
                                 Map<String, String> holder = new HashMap<>();
                                 holder.put("Ketua BPMJ", "3.3.1");
@@ -318,7 +326,8 @@ public class Fragment_Outcome extends Fragment {
                                 POST_accountNumberKey = holder.get(spinnerStaff.getItems().get(spinnerStaff.getSelectedIndex()).toString());
 
 
-                            } else if (spinnerPaycheckType.getItems().get(spinnerPaycheckType.getSelectedIndex()).toString()
+                            }
+                            else if (spinnerPaycheckType.getItems().get(spinnerPaycheckType.getSelectedIndex()).toString()
                                     .contentEquals(spinnerPaycheckType.getItems().get(2).toString())) {
                                 Map<String, String> holder = new HashMap<>();
 
@@ -585,7 +594,10 @@ public class Fragment_Outcome extends Fragment {
 
                                 spinnerSubsidiIbadah.setVisibility(View.VISIBLE);
 
-                            } else spinnerSubsidiIbadah.setVisibility(View.GONE);
+                            }
+                            else {
+                                spinnerSubsidiIbadah.setVisibility(View.GONE);
+                            }
                         });
 
 
@@ -648,7 +660,8 @@ public class Fragment_Outcome extends Fragment {
                         null);
 
                 selectedModel.setUnregistered(true);
-            } else {
+            }
+            else {
                 selectedModel = new Adding_RecyclerModel(
                         data.getIntExtra("model.id", 0),
                         data.getStringExtra("model.name"),
@@ -698,7 +711,7 @@ public class Fragment_Outcome extends Fragment {
         radioGroups.add(rgRapatSidangKonven); // 5
         ////////////////////////////////////// index sensitive //////////////////////////////////////
 
-        Validator validator = new Validator();
+        Validator validator = new Validator(context);
 
 //        Special Validation in Pengadaan
         if (pengadaanViews != null) {
@@ -742,10 +755,12 @@ public class Fragment_Outcome extends Fragment {
             case KEY_OUTCOME_CENTRALIZE:
 
                 RadioButton checked = rgSentralisasi.findViewById(rgSentralisasi.getCheckedRadioButtonId());
-                if (checked.getText().toString().contains("Sinode"))
+                if (checked.getText().toString().contains("Sinode")) {
                     POST_accountNumberKey = "I";
-                else
+                }
+                else {
                     POST_accountNumberKey = "II";
+                }
 
                 POST_description =
                         checked.getText().toString().concat(", berjumlah Rp. ")
@@ -767,7 +782,7 @@ public class Fragment_Outcome extends Fragment {
                                 + selectedType
                                 + " kepada "
                                 + selectedStaff
-                                + ", Jumlah keseluruhan Rp. "
+                                + ", Dengan jumlah  Rp. "
                                 + etAmount.getText().toString().replace(",", ".");
 
                 break;
@@ -832,9 +847,11 @@ public class Fragment_Outcome extends Fragment {
                     holder = holder.concat(etDetail.getText().toString())
                             .concat(", ")
                             .concat("Rp. ")
-                            .concat(etAmount.getText().toString().replace(",", ".")
-                                    .concat(" | ")
-                            );
+                            .concat(etAmount.getText().toString().replace(",", "."));
+
+                    if (index != pengadaanViews.size()) {
+                        holder = holder.concat(" | ");
+                    }
 
                     index++;
                 }
@@ -844,7 +861,7 @@ public class Fragment_Outcome extends Fragment {
                         + selectedSpinnerItem
                         + " berupa: "
                         + holder
-                        + ", Jumlah keseluruhan Rp. "
+                        + ", Dengan jumlah  Rp. "
                         + etAmount.getText().toString().replace(",", ".");
 
                 break;
@@ -890,9 +907,9 @@ public class Fragment_Outcome extends Fragment {
                 POST_description = keyIssue
                         + " berupa: "
                         + selectedFacility
-                        + "| "
+                        + " | "
                         + etDetail.getText().toString()
-                        + ", Jumlah keseluruhan Rp. "
+                        + ", Dengan jumlah  Rp. "
                         + etAmount.getText().toString().replace(",", ".");
 
                 break;
@@ -978,9 +995,9 @@ public class Fragment_Outcome extends Fragment {
                 POST_description = keyIssue
                         + " untuk: "
                         + selectedSpinnerText
-                        + "| "
+                        + " | "
                         + etRapatDetail.getText().toString()
-                        + ", Jumlah keseluruhan Rp. "
+                        + ", Dengan jumlah  Rp. "
                         + etAmount.getText().toString().replace(",", ".");
 
 
@@ -1005,36 +1022,47 @@ public class Fragment_Outcome extends Fragment {
 
                 if (rgDiakonia.getChildAt(0).getId() == rgDiakonia.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.14.1.2";
-                } else if (rgDiakonia.getChildAt(1).getId() == rgDiakonia.getCheckedRadioButtonId()) {
+                }
+                else if (rgDiakonia.getChildAt(1).getId() == rgDiakonia.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.14.1.3";
-                } else if (rgDiakonia.getChildAt(2).getId() == rgDiakonia.getCheckedRadioButtonId()) {
+                }
+                else if (rgDiakonia.getChildAt(2).getId() == rgDiakonia.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.14.1.4";
-                } else if (rgDiakonia.getChildAt(3).getId() == rgDiakonia.getCheckedRadioButtonId()) {
+                }
+                else if (rgDiakonia.getChildAt(3).getId() == rgDiakonia.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.14.2.1";
-                } else if (rgDiakonia.getChildAt(4).getId() == rgDiakonia.getCheckedRadioButtonId()) {
+                }
+                else if (rgDiakonia.getChildAt(4).getId() == rgDiakonia.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.14.2.2";
-                } else if (rgDiakonia.getChildAt(5).getId() == rgDiakonia.getCheckedRadioButtonId()) {
+                }
+                else if (rgDiakonia.getChildAt(5).getId() == rgDiakonia.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.14.4";
-                } else if (rgDiakonia.getChildAt(6).getId() == rgDiakonia.getCheckedRadioButtonId()) {
+                }
+                else if (rgDiakonia.getChildAt(6).getId() == rgDiakonia.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.14.6";
-                } else if (rgDiakonia.getChildAt(7).getId() == rgDiakonia.getCheckedRadioButtonId()) {
+                }
+                else if (rgDiakonia.getChildAt(7).getId() == rgDiakonia.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.14.7";
-                } else if (rgDiakonia.getChildAt(8).getId() == rgDiakonia.getCheckedRadioButtonId()) {
+                }
+                else if (rgDiakonia.getChildAt(8).getId() == rgDiakonia.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.14.8";
-                } else if (rgDiakonia.getChildAt(9).getId() == rgDiakonia.getCheckedRadioButtonId()) {
+                }
+                else if (rgDiakonia.getChildAt(9).getId() == rgDiakonia.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.14.9";
-                } else if (rgDiakonia.getChildAt(10).getId() == rgDiakonia.getCheckedRadioButtonId()) {
+                }
+                else if (rgDiakonia.getChildAt(10).getId() == rgDiakonia.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.14.10";
-                } else if (rgDiakonia.getChildAt(11).getId() == rgDiakonia.getCheckedRadioButtonId()) {
+                }
+                else if (rgDiakonia.getChildAt(11).getId() == rgDiakonia.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.14.11";
                 }
 
                 POST_description = keyIssue
                         + " untuk: "
                         + selectedRadio
-                        + "| "
+                        + " | "
                         + diakoniaDetail
-                        + ", Jumlah keseluruhan Rp. "
+                        + ", Dengan jumlah  Rp. "
                         + etAmount.getText().toString().replace(",", ".");
 
                 break;
@@ -1045,13 +1073,17 @@ public class Fragment_Outcome extends Fragment {
 
                 if (rgPembekalan.getChildAt(0).getId() == rgPembekalan.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.12.1";
-                } else if (rgPembekalan.getChildAt(1).getId() == rgPembekalan.getCheckedRadioButtonId()) {
+                }
+                else if (rgPembekalan.getChildAt(1).getId() == rgPembekalan.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.12.2";
-                } else if (rgPembekalan.getChildAt(2).getId() == rgPembekalan.getCheckedRadioButtonId()) {
+                }
+                else if (rgPembekalan.getChildAt(2).getId() == rgPembekalan.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.12.3";
-                } else if (rgPembekalan.getChildAt(3).getId() == rgPembekalan.getCheckedRadioButtonId()) {
+                }
+                else if (rgPembekalan.getChildAt(3).getId() == rgPembekalan.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.12.4";
-                } else if (rgPembekalan.getChildAt(4).getId() == rgPembekalan.getCheckedRadioButtonId()) {
+                }
+                else if (rgPembekalan.getChildAt(4).getId() == rgPembekalan.getCheckedRadioButtonId()) {
                     POST_accountNumberKey = "3.12.4";
                 }
 
@@ -1059,9 +1091,9 @@ public class Fragment_Outcome extends Fragment {
                 POST_description = keyIssue
                         + " untuk: "
                         + selectedRadioText
-                        + "| "
+                        + " | "
                         + etPembekalanDetail.getText().toString()
-                        + ", Jumlah keseluruhan Rp. "
+                        + ", Dengan jumlah  Rp. "
                         + etAmount.getText().toString().replace(",", ".");
 
 
@@ -1075,35 +1107,48 @@ public class Fragment_Outcome extends Fragment {
                     String s = spinnerSubsidiIbadah.getItems().get(spinnerSubsidiIbadah.getSelectedIndex()).toString();
                     if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(0).toString())) {
                         POST_accountNumberKey = "3.15.1";
-                    } else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(1).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(1).toString())) {
                         POST_accountNumberKey = "3.15.2.1";
-                    } else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(2).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(2).toString())) {
                         POST_accountNumberKey = "3.15.2.2";
-                    } else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(3).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(3).toString())) {
                         POST_accountNumberKey = "3.15.2.3";
-                    } else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(4).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(4).toString())) {
                         POST_accountNumberKey = "3.15.2.4";
-                    } else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(5).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(5).toString())) {
                         POST_accountNumberKey = "3.15.2.5";
-                    } else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(6).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(6).toString())) {
                         POST_accountNumberKey = "3.16";
-                    } else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(7).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(7).toString())) {
                         POST_accountNumberKey = "3.17";
-                    } else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(8).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSubsidiIbadah.getItems().get(8).toString())) {
                         POST_accountNumberKey = "3.18";
                     }
 
-                } else {
+                }
+                else {
                     String s = spinnerSubsidi.getItems().get(spinnerSubsidi.getSelectedIndex()).toString();
                     if (s.contentEquals(spinnerSubsidi.getItems().get(0).toString())) {
                         POST_accountNumberKey = "3.1.1";
-                    } else if (s.contentEquals(spinnerSubsidi.getItems().get(1).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSubsidi.getItems().get(1).toString())) {
                         POST_accountNumberKey = "3.1.2";
-                    } else if (s.contentEquals(spinnerSubsidi.getItems().get(2).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSubsidi.getItems().get(2).toString())) {
                         POST_accountNumberKey = "3.1.3";
-                    } else if (s.contentEquals(spinnerSubsidi.getItems().get(3).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSubsidi.getItems().get(3).toString())) {
                         POST_accountNumberKey = "3.1.4";
-                    } else if (s.contentEquals(spinnerSubsidi.getItems().get(4).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSubsidi.getItems().get(4).toString())) {
                         POST_accountNumberKey = "3.1.5";
                     }
                 }
@@ -1111,9 +1156,9 @@ public class Fragment_Outcome extends Fragment {
                 POST_description = keyIssue
                         + " untuk: "
                         + selectedSubsidi
-                        + "| "
+                        + " | "
                         + etSubsidiDetail.getText().toString()
-                        + ", Jumlah keseluruhan Rp. "
+                        + ", Dengan jumlah  Rp. "
                         + etAmount.getText().toString().replace(",", ".");
 
                 break;
@@ -1157,9 +1202,9 @@ public class Fragment_Outcome extends Fragment {
                 POST_description = keyIssue
                         + " untuk: "
                         + selectedOther
-                        + "| "
+                        + " | "
                         + etLainnyaDetail.getText().toString()
-                        + ", Jumlah keseluruhan Rp. "
+                        + ", Dengan jumlah  Rp. "
                         + etAmount.getText().toString().replace(",", ".");
                 break;
             case KEY_OUTCOME_OTHER_NO_ACCOUNT:
@@ -1168,7 +1213,7 @@ public class Fragment_Outcome extends Fragment {
 
                 POST_description = keyIssue
                         + ": " + etNote.getText().toString()
-                        + ", Jumlah keseluruhan Rp. "
+                        + ", Dengan jumlah  Rp. "
                         + etAmount.getText().toString().replace(",", ".");
 
                 break;
@@ -1236,12 +1281,14 @@ public class Fragment_Outcome extends Fragment {
         int count = 0;
         for (View v : pengadaanViews) {
             CustomEditText et = v.findViewById(R.id.recyclerItem_amount);
-            if (et.getText() != null && !et.getText().toString().isEmpty())
+            if (et.getText() != null && !et.getText().toString().isEmpty()) {
                 count += Integer.parseInt(et.getText().toString().replace(",", ""));
+            }
         }
         etAmount.setText(String.valueOf(count));
-        if (etAmount.getText() != null && etAmount.getText().toString().contentEquals("0"))
+        if (etAmount.getText() != null && etAmount.getText().toString().contentEquals("0")) {
             etAmount.setText("");
+        }
 
     }
 

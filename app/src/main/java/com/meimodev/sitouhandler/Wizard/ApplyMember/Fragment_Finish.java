@@ -1,6 +1,6 @@
-/**************************************************************************************************
- * Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   *
- **************************************************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 package com.meimodev.sitouhandler.Wizard.ApplyMember;
 
@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.R;
 
 import butterknife.ButterKnife;
@@ -44,6 +45,18 @@ public class Fragment_Finish extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        Constant.displayDialog(
+                context,
+                "Perhatian!",
+                "Permintaan telah terkirim dan sedang diproses. Silahkan menunggu konfirmasi / pemberitahuan dari Jemaat Tujuan anda ",
+                false,
+                (dialog, which) -> {
+                },
+                null,
+                dialog -> ((Activity) context).finish()
+        );
+
         btnSend = getActivity().findViewById(R.id.btn_fragment);
         btnSend.setText("OK");
         btnSend.setOnClickListener(v -> ((Activity) context).finish());

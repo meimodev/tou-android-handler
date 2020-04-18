@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Issue.FragmentIncome;
 
 import android.app.Activity;
@@ -675,7 +679,7 @@ public class Fragment_Income extends Fragment {
         radioGroups.add(rgOther);
         ////////////////////////////////////// index sensitive //////////////////////////////////////
 
-        Validator validator = new Validator();
+        Validator validator = new Validator(context);
         // validate persembahan ibadah
         if (switchChurch.isChecked()) {
             if (switchWithDetail.isChecked()) {
@@ -1332,7 +1336,7 @@ public class Fragment_Income extends Fragment {
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.isSuccessful()) {
 
-                        APIWrapper res = APIUtils.parseWrapper(response.body());
+                        APIWrapper res = APIUtils.parseWrapper(context,response.body());
                         if (!res.isError()) {
 
                             if (tvIdNotFound.getVisibility() == View.VISIBLE)

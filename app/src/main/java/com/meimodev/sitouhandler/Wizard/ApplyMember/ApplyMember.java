@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Wizard.ApplyMember;
 
 import android.content.BroadcastReceiver;
@@ -181,7 +185,8 @@ public class ApplyMember extends FragmentActivity {
                     (dialog, which) -> {
                     },
                     null,
-                    dialog -> finish());
+                    dialog -> finish()
+            );
         }
     }
 
@@ -227,6 +232,7 @@ public class ApplyMember extends FragmentActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.layout_main, new Fragment_Finish())
+                .addToBackStack(null)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Button btnFragment = findViewById(R.id.btn_fragment);
@@ -262,7 +268,19 @@ public class ApplyMember extends FragmentActivity {
 
             @Override
             public void onSuccess(APIWrapper res, String message) throws JSONException {
-                replaceWithFinishFragment();
+//                replaceWithFinishFragment();
+
+                Constant.displayDialog(
+                        ApplyMember.this,
+                        "Perhatian!",
+                         "Permintaan telah terkirim dan sedang diproses. Silahkan menunggu konfirmasi dari Jemaat Tujuan anda ",
+                        false,
+                        (dialog, which) -> {
+                        },
+                        null,
+                        dialog -> finish()
+                );
+
 //                if (layoutMain.getVisibility() != View.VISIBLE) {
 //                    layoutMain.setVisibility(View.VISIBLE);
 //                }
@@ -275,19 +293,6 @@ public class ApplyMember extends FragmentActivity {
         });
         req.enqueue(call);
 
-//        Log.e(TAG, "==============================================================");
-//        Log.e(TAG, "User ID: " + ApplyMember.USER_ID);
-//        Log.e(TAG, "first name: " + ApplyMember.USER_FIRST_NAME);
-//        Log.e(TAG, "middle name: " + ApplyMember.USER_MIDDLE_NAME);
-//        Log.e(TAG, "last name: " + ApplyMember.USER_LAST_NAME);
-//        Log.e(TAG, "user sex: " + ApplyMember.USER_SEX);
-//        Log.e(TAG, "date of birth: " + ApplyMember.USER_DATE_OF_BIRTH);
-//        Log.e(TAG, "church id: " + ApplyMember.CHURCH_ID);
-//        Log.e(TAG, "column index: " + ApplyMember.COLUMN_INDEX);
-//        Log.e(TAG, "baptis: " + ApplyMember.BAPTIS);
-//        Log.e(TAG, "sidi: " + ApplyMember.SIDI);
-//        Log.e(TAG, "nikah: " + ApplyMember.NIKAH);
-//        Log.e(TAG, "==============================================================");
     }
 
     @Override
