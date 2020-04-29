@@ -872,9 +872,9 @@ public class Validator extends Constant {
                     if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Khadim yang akan diajukan");
                     }
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
-                        return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
-                    }
+//                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
+//                        return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
+//                    }
                 }
 
                 if (isSafe(customEditTexts)) {
@@ -901,9 +901,9 @@ public class Validator extends Constant {
                     if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Khadim yang akan diajukan");
                     }
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
-                        return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
-                    }
+//                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
+//                        return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
+//                    }
                 }
 
                 if (isSafe(customEditTexts)) {

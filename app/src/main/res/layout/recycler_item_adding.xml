@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<?xml version="1.0" encoding="utf-8"?><!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
@@ -32,15 +31,15 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:padding="12dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="12dp">
 
             <!--Unregistered Layout-->
             <LinearLayout
                 android:id="@+id/linearLayout_unregistered"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorAccent4End"
                 android:orientation="vertical"
                 android:paddingTop="10dp"
                 android:translationZ="2dp"
@@ -54,10 +53,12 @@
                     android:id="@+id/textView_unregisteredName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
                     android:gravity="center"
+                    android:maxLines="5"
+                    android:textSize="16sp"
                     android:text="Jhon Manembo"
                     android:textAllCaps="true"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textColor="@color/ButtonText_LightGrey"
                     android:textStyle="bold" />
 
@@ -65,23 +66,31 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:maxLines="5"
                     android:text="Tidak Terdaftar Sistem"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/ButtonText_LightGrey" />
 
                 <TextView
                     android:id="@+id/textView_unregisteredChurch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="GMIM Alfa Omega, Rinegetan"
+                    android:layout_marginTop="8dp"
+                    android:maxLines="5"
+                    android:textStyle="bold"
+                    android:paddingBottom="16dp"
+                    android:textColor="@color/ButtonText_LightGrey"
+                    android:text="Alfa Omega, Rinegetan"
                     android:textAlignment="center" />
-
 
                 <Button
                     android:id="@+id/button_unregisteredName"
-                    style="@style/Button_SubmitButton"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:layout_marginBottom="16dp"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorAccent3End"
                     android:text="TETAP GUNAKAN" />
 
             </LinearLayout>
@@ -92,12 +101,13 @@
                 style="@style/Button_DelButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:src="@drawable/ic_trash"
                 android:translationZ="2dp"
                 android:visibility="gone"
-                android:src="@drawable/ic_trash"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!--Dash-->
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageView_pic"
                 android:layout_width="3dp"
@@ -140,6 +150,7 @@
                 app:layout_constraintStart_toStartOf="@id/textView_name"
                 app:layout_constraintTop_toBottomOf="@id/textView_birthDate" />
 
+            <!--Baptis-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView_baptis"
                 style="@style/CardView_recyclerItemBadge"
@@ -153,13 +164,13 @@
                 <TextView
                     style="@style/TextView_recyclerItemBadgeText"
                     android:layout_width="wrap_content"
-                    android:drawableEnd="@drawable/ic_check_24px"
                     android:layout_height="match_parent"
+                    android:drawableEnd="@drawable/ic_check_24px"
                     android:text="BAPTIS" />
 
 
             </androidx.cardview.widget.CardView>
-
+            <!--Sidi-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView_sidi"
                 style="@style/CardView_recyclerItemBadge"
@@ -173,12 +184,12 @@
                 <TextView
                     style="@style/TextView_recyclerItemBadgeText"
                     android:layout_width="wrap_content"
-                    android:drawableEnd="@drawable/ic_check_24px"
                     android:layout_height="match_parent"
+                    android:drawableEnd="@drawable/ic_check_24px"
                     android:text="SIDI" />
 
             </androidx.cardview.widget.CardView>
-
+            <!--Nikah-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView_nikah"
                 style="@style/CardView_recyclerItemBadge"
@@ -192,8 +203,8 @@
                 <TextView
                     style="@style/TextView_recyclerItemBadgeText"
                     android:layout_width="wrap_content"
-                    android:drawableEnd="@drawable/ic_check_24px"
                     android:layout_height="match_parent"
+                    android:drawableEnd="@drawable/ic_check_24px"
                     android:text="NIKAH" />
 
             </androidx.cardview.widget.CardView>

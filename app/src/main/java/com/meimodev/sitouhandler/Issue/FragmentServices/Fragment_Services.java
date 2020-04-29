@@ -37,6 +37,10 @@ import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SharedPrefManager;
 import com.meimodev.sitouhandler.Validator;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
@@ -154,7 +158,10 @@ public class Fragment_Services extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
 
         if (getArguments() != null) {
             keyIssue = getArguments().getString(KEY_SERVICE);
@@ -174,12 +181,14 @@ public class Fragment_Services extends Fragment {
                 btnAddPriest.setOnClickListener(view -> {
                     Intent intent = new Intent(context, Adding.class);
                     intent.putExtra("request", "priest");
+                    intent.putExtra("OPERATION_TYPE", Adding.OPERATION_ADD_NAME_REGISTERED_ONLY);
                     startActivityForResult(intent, REQUEST_CODE_PRIEST_NAME);
                 });
 
                 btnAddName.setOnClickListener(view -> {
                     Intent intent = new Intent(context, Adding.class);
                     intent.putExtra("request", "name");
+                    intent.putExtra("OPERATION_TYPE", Adding.OPERATION_ADD_NAME_REGISTERED_ONLY);
                     startActivityForResult(intent, REQUEST_CODE_PERSONAL_NAME);
                 });
 
@@ -201,7 +210,7 @@ public class Fragment_Services extends Fragment {
                         levelList.add("Pilih Jangkauan Ibadah : ");
                         levelList.add("Jemaat");
                         levelList.add("Koordinator");
-                        levelList.add("Kolom");
+                        levelList.add(Guru.getString(KEY_COLUMN_NAME_INDEX, ""));
                         spinnerLevel.setItems(levelList);
                         spinnerLevel.setOnItemSelectedListener((view, position, id, item) -> {
                             if (levelList.get(0).contains("Pilih")) {
@@ -232,17 +241,17 @@ public class Fragment_Services extends Fragment {
                     case KEY_SERVICE_HUT:
 
                         rgHUT.setVisibility(View.VISIBLE);
-                        rgHUT.setOnCheckedChangeListener(((radioGroup, i) -> {
-                            int checkedId = radioGroup.getCheckedRadioButtonId();
-                            switch (checkedId) {
-                                case R.id.radio_hut_pribadi:
-                                    Toast.makeText(context, "pribadi", Toast.LENGTH_SHORT).show();
-                                    break;
-                                case R.id.radio_hut_nikah:
-                                    Toast.makeText(context, "nikah", Toast.LENGTH_SHORT).show();
-                                    break;
-                            }
-                        }));
+//                        rgHUT.setOnCheckedChangeListener(((radioGroup, i) -> {
+//                            int checkedId = radioGroup.getCheckedRadioButtonId();
+//                            switch (checkedId) {
+//                                case R.id.radio_hut_pribadi:
+//                                    Toast.makeText(context, "pribadi", Toast.LENGTH_SHORT).show();
+//                                    break;
+//                                case R.id.radio_hut_nikah:
+//                                    Toast.makeText(context, "nikah", Toast.LENGTH_SHORT).show();
+//                                    break;
+//                            }
+//                        }));
 
                         break;
                     case KEY_SERVICE_PEMAKAMAN:
@@ -303,7 +312,7 @@ public class Fragment_Services extends Fragment {
                                 spinnerHariRayaType.setSelectedIndex(position - 1);
                             }
                         });
-
+                        btnAddName.setVisibility(View.GONE);
 
                         break;
                     case KEY_SERVICE_SPECIAL:
@@ -330,7 +339,7 @@ public class Fragment_Services extends Fragment {
                                 spinnerSpecialType.setSelectedIndex(position - 1);
                             }
                         });
-
+                        btnAddName.setVisibility(View.GONE);
 
                         break;
                     case KEY_SERVICE_LAIN:
@@ -375,8 +384,51 @@ public class Fragment_Services extends Fragment {
                         break;
                     case KEY_SERVICE_SPECIAL_IBADAH_MINGGU:
                         llSundayService.setVisibility(View.VISIBLE);
+
                         btnAddName.setVisibility(View.GONE);
                         spinnerSundayServiceTime.setVisibility(View.VISIBLE);
+
+                        int churchColumnCount = Guru.getInt(KEY_CHURCH_COLUMN_COUNT, 0);
+                        ArrayList<String> holderDuty = new ArrayList<>();
+                        holderDuty.add("Pilih Petugas");
+
+                        for (int i = 0; i < churchColumnCount; i++) {
+                            holderDuty.add("Kolom " + (i + 1));
+                        }
+
+                        spinnerDuty.setItems(holderDuty);
+
+                        spinnerDuty.setOnItemSelectedListener((view, position, id, item) -> {
+                            rootView.findViewById(R.id.layout_scroll).invalidate();
+                            rootView.findViewById(R.id.layout_scrollChild).invalidate();
+                            if (holderDuty.get(0).contains("Pilih")) {
+                                holderDuty.remove(0);
+                                spinnerDuty.setItems(Objects.requireNonNull(holderDuty));
+                                spinnerDuty.setSelectedIndex(position - 1);
+                            }
+
+                        });
+
+                        ArrayList<String> holderGuess = new ArrayList<>();
+                        holderGuess.add("Pilih Penerima Tamu");
+
+                        for (int i = 0; i < churchColumnCount; i++) {
+                            holderGuess.add("Kolom " + (i + 1));
+                        }
+
+                        spinnerGuess.setItems(holderGuess);
+
+                        spinnerGuess.setOnItemSelectedListener((view, position, id, item) -> {
+                            rootView.findViewById(R.id.layout_scroll).invalidate();
+                            rootView.findViewById(R.id.layout_scrollChild).invalidate();
+                            if (holderGuess.get(0).contains("Pilih")) {
+                                holderGuess.remove(0);
+                                spinnerGuess.setItems(Objects.requireNonNull(holderGuess));
+                                spinnerGuess.setSelectedIndex(position - 1);
+                            }
+
+                        });
+
                         ArrayList<String> hTime = new ArrayList<>();
                         hTime.add("Pilih Jenis Ibadah Minggu");
                         hTime.add("Subuh");
@@ -391,45 +443,6 @@ public class Fragment_Services extends Fragment {
                             }
                         });
 
-                        ArrayList<String> holderDuty = new ArrayList<>();
-                        holderDuty.add("Pilih Petugas");
-                        holderDuty.add("Kolom 1");
-                        holderDuty.add("Kolom 2");
-                        holderDuty.add("Kolom 3");
-                        holderDuty.add("Kolom 4");
-                        holderDuty.add("Kolom 5");
-                        holderDuty.add("Kolom 6");
-                        holderDuty.add("Kolom 7");
-                        spinnerDuty.setItems(holderDuty);
-
-                        spinnerDuty.setOnItemSelectedListener((view, position, id, item) -> {
-                            if (holderDuty.get(0).contains("Pilih")) {
-                                holderDuty.remove(0);
-                                spinnerDuty.setItems(Objects.requireNonNull(holderDuty));
-                                spinnerDuty.setSelectedIndex(position - 1);
-                            }
-
-                        });
-
-                        ArrayList<String> holderGuess = new ArrayList<>();
-                        holderGuess.add("Pilih Penerima Tamu");
-                        holderGuess.add("Kolom 1");
-                        holderGuess.add("Kolom 2");
-                        holderGuess.add("Kolom 3");
-                        holderGuess.add("Kolom 4");
-                        holderGuess.add("Kolom 5");
-                        holderGuess.add("Kolom 6");
-                        holderGuess.add("Kolom 7");
-                        spinnerGuess.setItems(holderGuess);
-
-                        spinnerGuess.setOnItemSelectedListener((view, position, id, item) -> {
-                            if (holderGuess.get(0).contains("Pilih")) {
-                                holderGuess.remove(0);
-                                spinnerGuess.setItems(Objects.requireNonNull(holderGuess));
-                                spinnerGuess.setSelectedIndex(position - 1);
-                            }
-
-                        });
 
                         btnCoordinator.setOnClickListener(view -> {
                             Intent intent = new Intent(context, Adding.class);
@@ -441,8 +454,16 @@ public class Fragment_Services extends Fragment {
                             Snackbar.make(rootView, "Koordinator Berhasil Dihapus", Snackbar.LENGTH_SHORT).show();
                         });
 
-                        llPenerimaHolder.setOnClickListener(view -> spinnerGuess.expand());
-                        llPetugasHolder.setOnClickListener(view -> spinnerDuty.expand());
+                        llPenerimaHolder.setOnClickListener(view -> {
+                            rootView.findViewById(R.id.layout_scroll).invalidate();
+                            rootView.findViewById(R.id.layout_scrollChild).invalidate();
+                            spinnerGuess.expand();
+                        });
+                        llPetugasHolder.setOnClickListener(view -> {
+                            rootView.findViewById(R.id.layout_scroll).invalidate();
+                            rootView.findViewById(R.id.layout_scrollChild).invalidate();
+                            spinnerDuty.expand();
+                        });
 
                         break;
                 }
@@ -467,7 +488,8 @@ public class Fragment_Services extends Fragment {
                         null);
 
                 selectedModel.setUnregistered(true);
-            } else {
+            }
+            else {
                 selectedModel = new Adding_RecyclerModel(
                         data.getIntExtra("model.id", 0),
                         data.getStringExtra("model.name"),
@@ -584,64 +606,75 @@ public class Fragment_Services extends Fragment {
         switch (keyIssue) {
             case KEY_SERVICE_KOLOM:
                 POST_financialAccountNumber = "1.6";
+                POST_note = Guru.getString(KEY_COLUMN_NAME_INDEX, "");
                 break;
             case KEY_SERVICE_BIPRA:
                 String selectedBIPRA = spinnerBIPRA.getItems().get(spinnerBIPRA.getSelectedIndex()).toString();
                 String selectedArea = spinnerLevel.getItems().get(spinnerLevel.getSelectedIndex()).toString();
 
-                Log.e(TAG, "BIPRA Area = " + selectedArea);
-                Log.e(TAG, " BIPRA = " + selectedBIPRA);
-                POST_note = "Ibadah " + selectedBIPRA;
-
                 if (selectedArea.contentEquals("Jemaat")) {
 
                     if (selectedBIPRA.contains("Bapa")) {
                         POST_financialAccountNumber = "1.5.1.1";
-                    } else if (selectedBIPRA.contains("Ibu")) {
+                    }
+                    else if (selectedBIPRA.contains("Ibu")) {
                         POST_financialAccountNumber = "1.5.2.1";
-                    } else if (selectedBIPRA.contains("Pemuda")) {
+                    }
+                    else if (selectedBIPRA.contains("Pemuda")) {
                         POST_financialAccountNumber = "1.5.3.1";
-                    } else if (selectedBIPRA.contains("Remaja")) {
+                    }
+                    else if (selectedBIPRA.contains("Remaja")) {
                         POST_financialAccountNumber = "1.5.4.1";
-                    } else if (selectedBIPRA.contains("Anak")) {
+                    }
+                    else if (selectedBIPRA.contains("Anak")) {
                         POST_financialAccountNumber = "1.5.5.1";
                     }
 
                     POST_note = POST_note + " Jemaat";
 
-                } else if (selectedArea.contentEquals("Koordinator")) {
+                }
+                else if (selectedArea.contentEquals("Koordinator")) {
 
                     if (selectedBIPRA.contains("Bapa")) {
                         POST_financialAccountNumber = "1.5.1.2";
-                    } else if (selectedBIPRA.contains("Ibu")) {
+                    }
+                    else if (selectedBIPRA.contains("Ibu")) {
                         POST_financialAccountNumber = "1.5.2.2";
-                    } else if (selectedBIPRA.contains("Pemuda")) {
+                    }
+                    else if (selectedBIPRA.contains("Pemuda")) {
                         POST_financialAccountNumber = "1.5.3.2";
-                    } else if (selectedBIPRA.contains("Remaja")) {
+                    }
+                    else if (selectedBIPRA.contains("Remaja")) {
                         POST_financialAccountNumber = "1.5.4.2";
-                    } else if (selectedBIPRA.contains("Anak")) {
+                    }
+                    else if (selectedBIPRA.contains("Anak")) {
                         POST_financialAccountNumber = "1.5.5.2";
                     }
 
                     POST_note = POST_note + " Koordinator";
 
-                } else if (selectedArea.contentEquals("Kolom")) {
+                }
+                else if (selectedArea.contains("Kolom")) {
 
                     if (selectedBIPRA.contains("Bapa")) {
                         POST_financialAccountNumber = "1.5.1.3";
-                    } else if (selectedBIPRA.contains("Ibu")) {
+                    }
+                    else if (selectedBIPRA.contains("Ibu")) {
                         POST_financialAccountNumber = "1.5.2.3";
-                    } else if (selectedBIPRA.contains("Pemuda")) {
+                    }
+                    else if (selectedBIPRA.contains("Pemuda")) {
                         POST_financialAccountNumber = "1.5.3.3";
-                    } else if (selectedBIPRA.contains("Remaja")) {
+                    }
+                    else if (selectedBIPRA.contains("Remaja")) {
                         POST_financialAccountNumber = "1.5.4.3";
-                    } else if (selectedBIPRA.contains("Anak")) {
+                    }
+                    else if (selectedBIPRA.contains("Anak")) {
                         POST_financialAccountNumber = "1.5.5.3";
                     }
 
-                    POST_note = POST_note + " Kolom";
+                    POST_note = POST_note + " " + selectedArea;
                 }
-
+                POST_note = "Ibadah " + selectedBIPRA;
                 break;
             case KEY_SERVICE_HUT:
 
@@ -650,80 +683,102 @@ public class Fragment_Services extends Fragment {
 
                 if (selectedHUT.contains("Pribadi")) {
                     POST_financialAccountNumber = "1.7.1";
-                } else if (selectedHUT.contains("Pernikahan")) {
+                }
+                else if (selectedHUT.contains("Pernikahan")) {
                     POST_financialAccountNumber = "1.7.2";
                 }
-
+                POST_note = selectedHUT + btnAddName.getSelectedList().get(0).getName() + ", " + btnAddName.getSelectedList().get(0).getKolom();
                 break;
             case KEY_SERVICE_PEMAKAMAN:
                 POST_financialAccountNumber = "1.19.9";
+                POST_note = btnAddName.getSelectedList().get(0).getName() + ", " + btnAddName.getSelectedList().get(0).getKolom();
                 break;
-            case KEY_SERVICE_PERINGATAN:
-                break;
+//            case KEY_SERVICE_PERINGATAN:
+//                break;
             case KEY_SERVICE_KELUARGA:
                 String sFamilyService = spinnerFamilyServiceType.getItems().get(spinnerFamilyServiceType.getSelectedIndex()).toString();
-                Log.e(TAG, "SELECTED Family Service Type = " + sFamilyService);
 
                 if (sFamilyService.contentEquals(spinnerFamilyServiceType.getItems().get(0).toString())) {
                     POST_financialAccountNumber = "1.7.4.1";
-                } else if (sFamilyService.contentEquals(spinnerFamilyServiceType.getItems().get(1).toString())) {
+                }
+                else if (sFamilyService.contentEquals(spinnerFamilyServiceType.getItems().get(1).toString())) {
                     POST_financialAccountNumber = "1.7.4.2";
-                } else if (sFamilyService.contentEquals(spinnerFamilyServiceType.getItems().get(2).toString())) {
+                }
+                else if (sFamilyService.contentEquals(spinnerFamilyServiceType.getItems().get(2).toString())) {
                     POST_financialAccountNumber = "1.7.4.3";
-                } else if (sFamilyService.contentEquals(spinnerFamilyServiceType.getItems().get(3).toString())) {
+                }
+                else if (sFamilyService.contentEquals(spinnerFamilyServiceType.getItems().get(3).toString())) {
                     POST_financialAccountNumber = "1.7.4.4";
-                } else if (sFamilyService.contentEquals(spinnerFamilyServiceType.getItems().get(4).toString())) {
+                }
+                else if (sFamilyService.contentEquals(spinnerFamilyServiceType.getItems().get(4).toString())) {
                     POST_financialAccountNumber = "1.7.4.5";
-                } else if (sFamilyService.contentEquals(spinnerFamilyServiceType.getItems().get(5).toString())) {
+                }
+                else if (sFamilyService.contentEquals(spinnerFamilyServiceType.getItems().get(5).toString())) {
                     POST_financialAccountNumber = "1.7.4.6";
                 }
-
+                POST_note = sFamilyService + ", " + btnAddName.getSelectedList().get(0).getName();
                 break;
             case KEY_SERVICE_HARI_RAYA:
-
                 String sHarRaya = spinnerHariRayaType.getItems().get(spinnerHariRayaType.getSelectedIndex()).toString();
-                Log.e(TAG, "SELECTED Hari Raya Type = " + sHarRaya);
 
                 if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(0).toString())) {
                     POST_financialAccountNumber = "1.8.1";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(1).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(1).toString())) {
                     POST_financialAccountNumber = "1.8.2";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(2).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(2).toString())) {
                     POST_financialAccountNumber = "1.8.3";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(3).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(3).toString())) {
                     POST_financialAccountNumber = "1.8.4";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(4).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(4).toString())) {
                     POST_financialAccountNumber = "1.8.5";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(5).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(5).toString())) {
                     POST_financialAccountNumber = "1.8.6";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(6).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(6).toString())) {
                     POST_financialAccountNumber = "1.8.7";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(7).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(7).toString())) {
                     POST_financialAccountNumber = "1.8.8";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(8).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(8).toString())) {
                     POST_financialAccountNumber = "1.8.9";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(9).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(9).toString())) {
                     POST_financialAccountNumber = "1.18.1";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(10).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(10).toString())) {
                     POST_financialAccountNumber = "1.18.2";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(11).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(11).toString())) {
                     POST_financialAccountNumber = "1.18.3";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(12).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(12).toString())) {
                     POST_financialAccountNumber = "1.18.4";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(13).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(13).toString())) {
                     POST_financialAccountNumber = "1.18.5";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(14).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(14).toString())) {
                     POST_financialAccountNumber = "1.18.6";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(15).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(15).toString())) {
                     POST_financialAccountNumber = "1.18.7";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(16).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(16).toString())) {
                     POST_financialAccountNumber = "1.18.8";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(17).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(17).toString())) {
                     POST_financialAccountNumber = "1.18.9";
-                } else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(18).toString())) {
+                }
+                else if (sHarRaya.contentEquals(spinnerHariRayaType.getItems().get(18).toString())) {
                     POST_financialAccountNumber = "1.18.10";
                 }
-
+                POST_note = sHarRaya;
                 break;
             case KEY_SERVICE_SPECIAL:
                 String sSpecial = spinnerSpecialType.getItems().get(spinnerSpecialType.getSelectedIndex()).toString();
@@ -731,90 +786,152 @@ public class Fragment_Services extends Fragment {
 
                 if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(0).toString())) {
                     POST_financialAccountNumber = "1.19.1";
-                } else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(1).toString())) {
+                }
+                else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(1).toString())) {
                     POST_financialAccountNumber = "1.19.2";
-                } else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(2).toString())) {
+                }
+                else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(2).toString())) {
                     POST_financialAccountNumber = "1.19.3";
-                } else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(3).toString())) {
+                }
+                else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(3).toString())) {
                     POST_financialAccountNumber = "1.19.4";
-                } else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(4).toString())) {
+                }
+                else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(4).toString())) {
                     POST_financialAccountNumber = "1.19.5";
-                } else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(5).toString())) {
+                }
+                else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(5).toString())) {
                     POST_financialAccountNumber = "1.19.6";
-                } else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(6).toString())) {
+                }
+                else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(6).toString())) {
                     POST_financialAccountNumber = "1.19.7";
-                } else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(7).toString())) {
+                }
+                else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(7).toString())) {
                     POST_financialAccountNumber = "1.19.8";
-                } else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(8).toString())) {
+                }
+                else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(8).toString())) {
                     POST_financialAccountNumber = "1.17.2.1";
-                } else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(9).toString())) {
+                }
+                else if (sSpecial.contentEquals(spinnerSpecialType.getItems().get(9).toString())) {
                     POST_financialAccountNumber = "1.17.2.3";
                 }
-                POST_note = sSpecial;
 
+                POST_note = sSpecial;
                 break;
             case KEY_SERVICE_LAIN:
-                Log.e(TAG, "NOTE = " + etNote.getText());
 
                 String sOtherType = spinnerOtherType.getItems().get(spinnerOtherType.getSelectedIndex()).toString();
-                POST_note = sOtherType + "| " + etNote.getText().toString();
 
                 if (sOtherType.contentEquals(spinnerOtherType.getItems().get(0).toString())) {
                     POST_financialAccountNumber = "1.5.6.1";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(1).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(1).toString())) {
                     POST_financialAccountNumber = "1.5.6.2";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(2).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(2).toString())) {
                     POST_financialAccountNumber = "1.5.6.3";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(3).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(3).toString())) {
                     POST_financialAccountNumber = "1.9.1";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(4).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(4).toString())) {
                     POST_financialAccountNumber = "1.9.2";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(5).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(5).toString())) {
                     POST_financialAccountNumber = "1.9.3";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(6).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(6).toString())) {
                     POST_financialAccountNumber = "1.9.4";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(7).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(7).toString())) {
                     POST_financialAccountNumber = "1.10";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(8).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(8).toString())) {
                     POST_financialAccountNumber = "1.11";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(9).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(9).toString())) {
                     POST_financialAccountNumber = "1.12";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(10).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(10).toString())) {
                     POST_financialAccountNumber = "1.13.1";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(11).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(11).toString())) {
                     POST_financialAccountNumber = "1.13.2";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(12).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(12).toString())) {
                     POST_financialAccountNumber = "1.14";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(13).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(13).toString())) {
                     POST_financialAccountNumber = "1.15";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(14).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(14).toString())) {
                     POST_financialAccountNumber = "1.16.1";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(15).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(15).toString())) {
                     POST_financialAccountNumber = "1.20";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(16).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(16).toString())) {
                     POST_financialAccountNumber = "1.21";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(17).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(17).toString())) {
                     POST_financialAccountNumber = "1.22.1";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(18).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(18).toString())) {
                     POST_financialAccountNumber = "1.22.2";
-                } else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(19).toString())) {
+                }
+                else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(19).toString())) {
                     POST_financialAccountNumber = "1.22.3";
                 }
-
+                POST_note = sOtherType + " | " + etNote.getText().toString();
                 break;
-
             case KEY_SERVICE_SPECIAL_IBADAH_MINGGU:
+
                 String sTime = spinnerSundayServiceTime.getItems().get(spinnerSundayServiceTime.getSelectedIndex()).toString();
-                Log.e(TAG, "SUNDAY SERVICE TYPE = " + sTime);
 
                 if (sTime.contentEquals("Subuh")) {
                     POST_financialAccountNumber = "1.1.1";
-                } else if (sTime.contentEquals("Pagi")) {
+                }
+                else if (sTime.contentEquals("Pagi")) {
                     POST_financialAccountNumber = "1.2.1";
-                } else if (sTime.contentEquals("Malam")) {
+                }
+                else if (sTime.contentEquals("Malam")) {
                     POST_financialAccountNumber = "1.3.1";
                 }
 
+                // encode the data required in this note!
+                //khadiim, koordinator, on guess, on duty
+
+                JSONObject note = new JSONObject();
+                JSONArray roles = new JSONArray();
+
+                try {
+
+                    JSONObject khadim = new JSONObject();
+                    khadim.put("role", "khadim");
+                    khadim.put("id", btnAddPriest.getSelectedList().get(0).getId());
+                    roles.put(khadim);
+
+                    JSONObject koord = new JSONObject();
+                    koord.put("role", "koorinator");
+                    koord.put("id", btnCoordinator.getSelectedList().get(0).getId());
+                    roles.put(koord);
+
+                    JSONObject onGuess = new JSONObject();
+                    onGuess.put("role", "on_guess");
+                    onGuess.put("id", spinnerGuess.getItems().get(spinnerGuess.getSelectedIndex()));
+                    roles.put(onGuess);
+
+                    JSONObject onDuty = new JSONObject();
+                    onDuty.put("role", "on_duty");
+                    onDuty.put("id", spinnerDuty.getItems().get(spinnerGuess.getSelectedIndex()));
+                    roles.put(onDuty);
+
+                    note.accumulate("roles", roles);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "btnSubmit: JSON IN SUNDAY SERVICE NOTE IS ERROR : " + e.getMessage());
+                }
+                POST_note = note.toString();
                 break;
         }
 
@@ -840,13 +957,19 @@ public class Fragment_Services extends Fragment {
 
         if (keyIssue.contentEquals(KEY_SERVICE_SPECIAL_IBADAH_MINGGU)) {
             selectedNames = btnCoordinator.getSelectedList();
+        } else if (keyIssue.contentEquals(KEY_SERVICE_HARI_RAYA)){
+            selectedNames =btnAddPriest.getSelectedList();
+        }else if (keyIssue.contentEquals(KEY_SERVICE_SPECIAL)){
+            selectedNames = btnAddPriest.getSelectedList();
         }
+
         Log.e(TAG, "Names count : " + selectedNames.size());
         index = 1;
         for (Adding_RecyclerModel model : selectedNames) {
             Log.e(TAG, "Name " + index + " Id : " + model.getId());
-            if (model.isCategoryHead())
+            if (model.isCategoryHead()) {
                 Log.e(TAG, "Name " + index + " Category : " + model.getCategory());
+            }
             Log.e(TAG, "Name " + index + " Name : " + model.getName());
             Log.e(TAG, "Name " + index + " BOD : " + model.getBirthDate());
             Log.e(TAG, "Name " + index + " Kol : " + model.getKolom());
@@ -856,7 +979,10 @@ public class Fragment_Services extends Fragment {
             Log.e(TAG, "---------------------------------------------------");
             index++;
         }
+        s = "";
+        if (!selectedNames.isEmpty())
         s = String.valueOf(selectedNames.get(0).getId());
+
         POST_issuedMemberData = s.isEmpty() ? "" : s;
 
 
@@ -895,7 +1021,7 @@ public class Fragment_Services extends Fragment {
         Log.e(TAG, "financial_account_number: " + POST_financialAccountNumber);
 
         IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
-        Call call =RetrofitClient.getInstance(null).getApiServices().setIssueService(
+        Call call = RetrofitClient.getInstance(null).getApiServices().setIssueService(
                 Guru.getInt(KEY_MEMBER_ID, 0),
                 keyIssue,
                 POST_issuedMemberData,
@@ -936,6 +1062,4 @@ public class Fragment_Services extends Fragment {
         requestHandler.enqueue(call);
 
     }
-
-
 }

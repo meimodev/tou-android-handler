@@ -5,7 +5,6 @@
 package com.meimodev.sitouhandler.Issue.FragmentIncome;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,34 +20,31 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 
 import com.github.squti.guru.Guru;
 import com.google.android.material.snackbar.Snackbar;
-import com.hmomeni.progresscircula.ProgressCircula;
 import com.jaredrummler.materialspinner.MaterialSpinner;
-import com.meimodev.sitouhandler.ApiServices;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd;
 import com.meimodev.sitouhandler.CustomWidget.CustomEditText;
-import com.meimodev.sitouhandler.Helper.APIUtils;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Issue.Adding;
 import com.meimodev.sitouhandler.Issue.Adding_RecyclerModel;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
-import com.meimodev.sitouhandler.SharedPrefManager;
 import com.meimodev.sitouhandler.Validator;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -59,10 +55,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.meimodev.sitouhandler.Constant.*;
 
@@ -129,10 +122,10 @@ public class Fragment_Income extends Fragment {
     CardView cvInfoService;
     @BindView(R.id.editText_findId)
     CustomEditText etFindId;
-    @BindView(R.id.textView_loading)
-    TextView tvLoading;
-    @BindView(R.id.linearLayout_progressHolder)
-    LinearLayout llProgressServiceHolder;
+//    @BindView(R.id.textView_loading)
+//    TextView tvLoading;
+//    @BindView(R.id.linearLayout_progressHolder)
+//    LinearLayout llProgressServiceHolder;
 
     @BindView(R.id.linearLayout_details)
     LinearLayout llDetails;
@@ -150,25 +143,11 @@ public class Fragment_Income extends Fragment {
     @BindView(R.id.et_other_note)
     CustomEditText etOther_Note;
 
-    @BindView(R.id.textView_idNotFound)
-    TextView tvIdNotFound;
-    @BindView(R.id.linearLayout_serviceInfoFound)
-    LinearLayout llServiceInfoFound;
-    @BindView(R.id.textView_infoServiceType)
-    TextView tvInfoServiceType;
-    @BindView(R.id.textView_infoServiceId)
-    TextView tvInfoServiceId;
-    @BindView(R.id.textView_infoName)
-    TextView tvInfoName;
-    @BindView(R.id.textView_infoDate)
-    TextView tvInfoDate;
-    @BindView(R.id.textView_infoKhadim)
-    TextView tvInfoKhadim;
-    @BindView(R.id.textView_infoPlace)
-    TextView tvInfoPlace;
-    @BindView(R.id.layout_connectionProblem)
-    LinearLayout llConnectionProblem;
+    @BindView(R.id.layout_scroll)
+    NestedScrollView nestedScrollView;
 
+    @BindView(R.id.layout_scrollChild)
+    ConstraintLayout nestedScrollViewChild;
 
 //    private ArrayList<Integer> recordPelDetails = new ArrayList<>();
 //    private ArrayList<Integer> recordPemDetails = new ArrayList<>();
@@ -208,15 +187,15 @@ public class Fragment_Income extends Fragment {
         issueRequestHandler = new IssueRequestHandler(rootView);
 
         View progressHolder = rootView.findViewById(R.id.layout_progressHolder);
-        if (progressHolder.getVisibility() == View.VISIBLE)
+        if (progressHolder.getVisibility() == View.VISIBLE) {
             progressHolder.setVisibility(View.GONE);
+        }
 
         if (getArguments() != null) {
             keyIssue = getArguments().getString(KEY_INCOME);
 
             if (keyIssue != null) {
                 tvTitle.setText("Pengajuan Pemasukan ".concat(keyIssue));
-                Toast.makeText(context, keyIssue, Toast.LENGTH_SHORT).show();
 
                 warnAnonymity = false;
 
@@ -232,20 +211,10 @@ public class Fragment_Income extends Fragment {
                         etExtraTotal.setAsNoLeadingZero();
                         etExtraTotal.setAsThousandSeparator();
 
-                        View progress = getLayoutInflater().inflate(R.layout.resource_custom_progress_bar_progressing, llProgressServiceHolder, false);
-                        ProgressCircula p = progress.findViewById(R.id.pc);
-                        p.setSpeed(3);
-                        p.setIndeterminate(true);
-                        p.setRimWidth(6);
-                        p.startRotation();
-                        p.setRimColor(rootView.getContext().getResources().getColor(R.color.colorAccent));
-                        p.setShowProgress(false);
-
-
-//                        if (llProgressServiceHolder.getVisibility() == View.VISIBLE)
-//                            llProgressServiceHolder.setVisibility(View.GONE);
-
                         CompoundButton.OnCheckedChangeListener checkedChangeListener = (compoundButton, b) -> {
+
+                            nestedScrollViewChild.invalidate();
+                            nestedScrollViewChild.invalidate();
 
                             View inflatedDetailPel = getLayoutInflater().inflate(R.layout.resource_income_detail, llPelPlaceHolder, false);
                             View inflatedDetailPem = getLayoutInflater().inflate(R.layout.resource_income_detail, llPemPlaceHolder, false);
@@ -265,11 +234,13 @@ public class Fragment_Income extends Fragment {
                             if (compoundButton == switchChurch) {
                                 if (b) {
                                     switchWithDetail.setVisibility(View.VISIBLE);
-                                } else {
+                                }
+                                else {
                                     switchWithDetail.setVisibility(View.GONE);
                                     switchWithDetail.setChecked(false);
                                 }
-                            } else if (compoundButton == switchWithDetail) {
+                            }
+                            else if (compoundButton == switchWithDetail) {
                                 if (b) {
                                     llIncomeDetailPlaceHolder.setVisibility(View.VISIBLE);
 
@@ -298,21 +269,24 @@ public class Fragment_Income extends Fragment {
                                                 int a;
                                                 if (etPelTotal.getText().toString().isEmpty()) {
                                                     a = 0;
-                                                } else {
+                                                }
+                                                else {
                                                     a = Integer.valueOf(etPelTotal.getText().toString().replace(",", ""));
                                                 }
 
                                                 int b;
                                                 if (etPemTotal.getText().toString().isEmpty()) {
                                                     b = 0;
-                                                } else {
+                                                }
+                                                else {
                                                     b = Integer.valueOf(etPemTotal.getText().toString().replace(",", ""));
                                                 }
 
                                                 int c;
                                                 if (etExtraTotal.getText().toString().isEmpty()) {
                                                     c = 0;
-                                                } else {
+                                                }
+                                                else {
                                                     c = Integer.valueOf(etExtraTotal.getText().toString().replace(",", ""));
                                                 }
 
@@ -321,7 +295,8 @@ public class Fragment_Income extends Fragment {
                                         });
                                     }
 
-                                } else {
+                                }
+                                else {
                                     llIncomeDetailPlaceHolder.setVisibility(View.GONE);
                                     switchPelDetail.setChecked(false);
                                     switchPemDetail.setChecked(false);
@@ -334,7 +309,8 @@ public class Fragment_Income extends Fragment {
                                     etAmount.setText("");
 
                                 }
-                            } else if (compoundButton == switchPelDetail) {
+                            }
+                            else if (compoundButton == switchPelDetail) {
                                 if (b) {
                                     llPelPlaceHolder.setVisibility(View.VISIBLE);
                                     etPelTotal.setText("");
@@ -387,7 +363,8 @@ public class Fragment_Income extends Fragment {
 
                                     llPelPlaceHolder.addView(inflatedDetailPel);
 
-                                } else {
+                                }
+                                else {
                                     llPelPlaceHolder.setVisibility(View.GONE);
                                     if (!etPelTotal.isEnabled()) etPelTotal.setEnabled(true);
 
@@ -395,7 +372,8 @@ public class Fragment_Income extends Fragment {
                                     editTextsPel.clear();
 
                                 }
-                            } else if (compoundButton == switchPemDetail) {
+                            }
+                            else if (compoundButton == switchPemDetail) {
                                 if (b) {
                                     llPemPlaceHolder.setVisibility(View.VISIBLE);
                                     etPemTotal.setText("");
@@ -446,15 +424,16 @@ public class Fragment_Income extends Fragment {
                                     }
 
                                     llPemPlaceHolder.addView(inflatedDetailPem);
-
-                                } else {
+                                }
+                                else {
                                     llPemPlaceHolder.setVisibility(View.GONE);
                                     if (!etPemTotal.isEnabled()) etPemTotal.setEnabled(true);
 
                                     llPemPlaceHolder.removeAllViews();
                                     editTextsPem.clear();
                                 }
-                            } else if (compoundButton == switchExtraDetail) {
+                            }
+                            else if (compoundButton == switchExtraDetail) {
                                 if (b) {
                                     llExtraPlaceHolder.setVisibility(View.VISIBLE);
                                     etExtraTotal.setText("");
@@ -503,7 +482,8 @@ public class Fragment_Income extends Fragment {
 
                                     llExtraPlaceHolder.addView(inflatedDetailExtra);
 
-                                } else {
+                                }
+                                else {
                                     llExtraPlaceHolder.setVisibility(View.GONE);
                                     if (!etExtraTotal.isEnabled()) etExtraTotal.setEnabled(true);
 
@@ -514,7 +494,15 @@ public class Fragment_Income extends Fragment {
                             }
                         };
 
+                        CountDownTimer countdownToFetchData = new CountDownTimer(1500, 1000) {
 
+                            public void onTick(long millisUntilFinished) {
+                            }
+
+                            public void onFinish() {
+                                findService();
+                            }
+                        };
                         etFindId.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -527,15 +515,8 @@ public class Fragment_Income extends Fragment {
 
                             @Override
                             public void afterTextChanged(Editable editable) {
-                                if (cvInfoService.getVisibility() != View.VISIBLE)
-                                    cvInfoService.setVisibility(View.VISIBLE);
-                                tvLoading.setText("Mencari ID " + etFindId.getText().toString().toUpperCase() + " ...");
-                                if (llServiceInfoFound.getVisibility() == View.VISIBLE)
-                                    llServiceInfoFound.setVisibility(View.GONE);
-                                if (tvIdNotFound.getVisibility() == View.VISIBLE)
-                                    tvIdNotFound.setVisibility(View.GONE);
-                                if (llProgressServiceHolder.getVisibility() != View.VISIBLE)
-                                    llProgressServiceHolder.setVisibility(View.VISIBLE);
+                                findServiceLayoutOpen();
+                                findServiceLayoutStatus(FIND_SERVICE_STATUS_LOADING);
                                 countdownToFetchData.start();
                             }
                         });
@@ -557,6 +538,7 @@ public class Fragment_Income extends Fragment {
                         btnAddName.setOnClickListener(view -> {
                             Intent intent = new Intent(context, Adding.class);
                             intent.putExtra("request", "name");
+                            intent.putExtra("OPERATION_TYPE", Adding.OPERATION_ADD_NAME_REGISTERED_ONLY);
                             startActivityForResult(intent, REQUEST_CODE_PERSONAL_NAME);
                         });
 
@@ -666,6 +648,7 @@ public class Fragment_Income extends Fragment {
 
     @OnClick(R.id.button_submit)
     void btnSubmit() {
+
         rootView.clearFocus();
 
         ////////////////////////////////////// index sensitive //////////////////////////////////////
@@ -689,7 +672,8 @@ public class Fragment_Income extends Fragment {
                         validator.displayErrorMessage(context, "Rincian Persembahan Pelayanan tidak valid");
                         return;
                     }
-                } else {
+                }
+                else {
                     // validate pelayanan total
                     if (validator.validateEditText_isLeadingZero(etPelTotal)) {
                         validator.displayErrorMessage(context, "Jumlah Persembahan Pelayanan " + Validator.MESSAGE_ERROR_IS_LEADING_ZERO);
@@ -708,7 +692,8 @@ public class Fragment_Income extends Fragment {
                         return;
                     }
 
-                } else {
+                }
+                else {
                     // validate pembangunan total
                     if (validator.validateEditText_isLeadingZero(etPemTotal)) {
                         validator.displayErrorMessage(context, "Jumlah Persembahan Pembangunan " + Validator.MESSAGE_ERROR_IS_LEADING_ZERO);
@@ -726,7 +711,8 @@ public class Fragment_Income extends Fragment {
                         validator.displayErrorMessage(context, "Rincian Persembahan Pundi Extra tidak boleh kosong");
                         return;
                     }
-                } else {
+                }
+                else {
                     // validate extra total
                     if (validator.validateEditText_isLeadingZero(etExtraTotal)) {
                         validator.displayErrorMessage(context, "Jumlah Persembahan Pundi Extra " + Validator.MESSAGE_ERROR_IS_LEADING_ZERO);
@@ -764,24 +750,27 @@ public class Fragment_Income extends Fragment {
         if (keyIssue.contentEquals(KEY_INCOME_SAMPUL_SYUKUR) && warnAnonymity) {
             if (validator.validateButton_isNotSelectingAnything(btnAddName)) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-                String title = "Anda yakin ?";
-                String msg = "Ingin melanjutkan pengajuan Sampul Syukur TANPA NAMA (NN)";
+                String msg = "Pengajuan ini akan menjadi TANPA NAMA (NN). ";
 
                 if (validator.validateButton_isNotContainAnyView(btnAddDetails)) {
-                    msg = "Ingin melanjutkan pengajuan Sampul Syukur TANPA NAMA (NN) dan TANPA PERINCIAN";
+                    msg = "Pengajuan ini akan menjadi TANPA NAMA (NN) dan TANPA PERINCIAN. ";
                 }
 
-
-                builder.setTitle(title);
-                builder.setMessage(msg.concat("?\n\nSilahkan sentuh kembali tombol 'AJUKAN' untuk melanjutkan"));
-                builder.setCancelable(false);
-                builder.setPositiveButton("OK", (dialogInterface, i) -> warnAnonymity = false);
-                builder.create().show();
+                Constant.displayDialog(
+                        context,
+                        "Perhatian !",
+                        msg.concat(System.lineSeparator())
+                                .concat(System.lineSeparator())
+                                .concat("Silahkan sentuh kembali tombol 'AJUKAN' untuk melanjutkan"),
+                        false,
+                        (dialog, which) -> warnAnonymity = false,
+                        dialog -> {
+                        }
+                );
 
             }
-        } else {
+        }
+        else {
 
             // validate "Detail" in sampul Syukur
             if (!validator.validateButton_isNotContainAnyView(btnAddDetails)) {
@@ -808,15 +797,16 @@ public class Fragment_Income extends Fragment {
                 radioGroups.clear();
             }
 
-            Snackbar.make(rootView, " SUBMITING ...", Snackbar.LENGTH_SHORT).show();
-
             Log.e(TAG, "------------------------ LOG HEAD ------------------------");
             Log.e(TAG, "SUBMIT FRAGMENT INCOME : KEYBUNDLE -- " + keyIssue);
 
             Log.e(TAG, "PENERIMAAN DI GEREJA : " + switchChurch.isChecked());
-            if (switchChurch.isChecked())
+            if (switchChurch.isChecked()) {
                 POST_description = "Diterima di Gereja, ";
-            else POST_description = "";
+            }
+            else {
+                POST_description = "";
+            }
 
             Log.e(TAG, "Amount - " + etAmount.getText());
 
@@ -824,10 +814,10 @@ public class Fragment_Income extends Fragment {
                 case KEY_INCOME_PERSEMBAHAN_IBADAH:
                     Log.e(TAG, "Service ID: " + etFindId.getText());
                     Log.e(TAG, "Service Key Issue: " + keyIssue);
-                    Log.e(TAG, "Atas Nama: " + tvInfoName.getText());
-                    Log.e(TAG, "Tanggal: " + tvInfoDate.getText());
-                    Log.e(TAG, "Khadim: " + tvInfoKhadim.getText());
-                    Log.e(TAG, "Tempat: " + tvInfoPlace.getText());
+                    Log.e(TAG, "Atas Nama: " + layoutFoundTvName.getText());
+                    Log.e(TAG, "Tanggal: " + layoutFoundTvDate.getText());
+                    Log.e(TAG, "Khadim: " + layoutFoundTvKhadim.getText());
+                    Log.e(TAG, "Tempat: " + layoutFoundTvPlace.getText());
 
                     if (switchWithDetail.isChecked()) {
                         Log.e(TAG, "Extra With Detail = " + switchWithDetail.isChecked());
@@ -850,7 +840,10 @@ public class Fragment_Income extends Fragment {
                                 int quantity;
                                 if (!editTextsPel.get(i).getText().toString().isEmpty()) {
                                     quantity = Integer.valueOf(editTextsPel.get(i).getText().toString());
-                                } else quantity = 0;
+                                }
+                                else {
+                                    quantity = 0;
+                                }
 
                                 h = h.concat("-").concat(String.valueOf(quantity)).concat("-");
 
@@ -895,7 +888,10 @@ public class Fragment_Income extends Fragment {
                                 int quantity;
                                 if (!editTextsPem.get(i).getText().toString().isEmpty()) {
                                     quantity = Integer.valueOf(editTextsPem.get(i).getText().toString());
-                                } else quantity = 0;
+                                }
+                                else {
+                                    quantity = 0;
+                                }
                                 h = h.concat("-").concat(String.valueOf(quantity)).concat("-");
 
                                 switch (i) {
@@ -941,7 +937,10 @@ public class Fragment_Income extends Fragment {
                                 int quantity;
                                 if (!editTextsExtra.get(i).getText().toString().isEmpty()) {
                                     quantity = Integer.valueOf(editTextsExtra.get(i).getText().toString());
-                                } else quantity = 0;
+                                }
+                                else {
+                                    quantity = 0;
+                                }
                                 h = h.concat("-").concat(String.valueOf(quantity)).concat("-");
 
                                 switch (i) {
@@ -978,13 +977,22 @@ public class Fragment_Income extends Fragment {
                         }
 
                         POST_note = holderPel + holderPem + holderExt;
+                        POST_note = handleIssueServiceJSONConcatWithIncome();
                     }
+
+                    // read the service data and compose them in description
+                    String serviceType = layoutFoundTvServiceType.getText().toString();
 
                     POST_description = POST_description.concat(keyIssue
                             + ", "
-                            + tvInfoServiceType.getText().toString()
-                            + " berjumlah Rp. "
-                            + etAmount.getText().toString().replace(",", "."));
+                            + serviceType
+                            + (serviceType.contentEquals(KEY_SERVICE_BIPRA) || serviceType.contentEquals(KEY_SERVICE_KOLOM)
+                                ? ": " + layoutFoundTvNote.getText().toString() + " " : " ")
+
+                            + "dengan " + layoutFoundTvServiceId.getText().toString() + ", "
+                            + "bertempat di " + layoutFoundTvPlace.getText().toString() + ", " + layoutFoundTvDate.getText().toString() + " "
+                            + "berjumlah "
+                            + "Rp. " + etAmount.getText().toString().replace(",", "."));
 
                     break;
                 case KEY_INCOME_SAMPUL_SYUKUR:
@@ -1001,6 +1009,7 @@ public class Fragment_Income extends Fragment {
                     }
                     Log.e(TAG, "===========================================================================");
                     Log.e(TAG, "DETAILS count : " + btnAddDetails.getSelectedView().size());
+
                     index = 1;
                     for (View detailView : btnAddDetails.getSelectedView()) {
                         CustomEditText etDetail = detailView.findViewById(R.id.recyclerItem_detail), etAmount = detailView.findViewById(R.id.recyclerItem_amount);
@@ -1012,59 +1021,80 @@ public class Fragment_Income extends Fragment {
                     String s = spinnerSampulSyukurType.getItems().get(spinnerSampulSyukurType.getSelectedIndex()).toString();
                     if (s.contentEquals(spinnerSampulSyukurType.getItems().get(0).toString())) {
                         POST_accountNumberKey = "1.4.1";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(1).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(1).toString())) {
                         POST_accountNumberKey = "1.4.2";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(2).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(2).toString())) {
                         POST_accountNumberKey = "1.16.2";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(3).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(3).toString())) {
                         POST_accountNumberKey = "1.23.1";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(4).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(4).toString())) {
                         POST_accountNumberKey = "1.23.2";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(5).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(5).toString())) {
                         POST_accountNumberKey = "1.23.3";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(6).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(6).toString())) {
                         POST_accountNumberKey = "1.23.4";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(7).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(7).toString())) {
                         POST_accountNumberKey = "1.24.1";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(8).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(8).toString())) {
                         POST_accountNumberKey = "1.24.2";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(9).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(9).toString())) {
                         POST_accountNumberKey = "1.25";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(10).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(10).toString())) {
                         POST_accountNumberKey = "1.26.1";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(11).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(11).toString())) {
                         POST_accountNumberKey = "1.26.2";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(12).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(12).toString())) {
                         POST_accountNumberKey = "1.26.3";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(13).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(13).toString())) {
                         POST_accountNumberKey = "1.26.4";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(14).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(14).toString())) {
                         POST_accountNumberKey = "1.26.5";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(15).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(15).toString())) {
                         POST_accountNumberKey = "1.27.1";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(16).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(16).toString())) {
                         POST_accountNumberKey = "1.27.2";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(17).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(17).toString())) {
                         POST_accountNumberKey = "1.28";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(18).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(18).toString())) {
                         POST_accountNumberKey = "1.29";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(19).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(19).toString())) {
                         POST_accountNumberKey = "1.30";
-                    } else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(20).toString())) {
+                    }
+                    else if (s.contentEquals(spinnerSampulSyukurType.getItems().get(20).toString())) {
                         POST_accountNumberKey = "1.31";
                     }
 
                     POST_issuedMemberData = encodeMemberData(btnAddName);
 
-                    String detailHolder = "";
+                    String detailHolder = btnAddDetails.getSelectedView().size() == 0 ? ": " : "";
                     for (View v : btnAddDetails.getSelectedView()) {
                         EditText etDetail = v.findViewById(R.id.recyclerItem_detail);
                         EditText etAmount = v.findViewById(R.id.recyclerItem_amount);
 
                         detailHolder = detailHolder
                                 .concat(etDetail.getText().toString())
-                                .concat(", Rp. ")
-                                .concat(etAmount.getText().toString().replace(",", "."));
+                                .concat(", ")
+                                .concat("Rp. " + etAmount.getText().toString().replace(",", "."))
+                                .concat(" ");
 
                     }
                     String nameHolder = "";
@@ -1072,9 +1102,13 @@ public class Fragment_Income extends Fragment {
                         for (Adding_RecyclerModel model : btnAddName.getSelectedList()) {
                             nameHolder = nameHolder.concat(model.getName()).concat(" ").concat(model.getKolom()).concat("&");
                         }
-                    } else if (btnAddName.getSelectedList().size() == 1) {
+                    }
+                    else if (btnAddName.getSelectedList().size() == 1) {
                         Adding_RecyclerModel model = btnAddName.getSelectedList().get(0);
                         nameHolder = model.getName() + " " + model.getKolom();
+                    }
+                    else if (btnAddName.getSelectedList().size() == 0) {
+                        nameHolder = "NN";
                     }
 
                     POST_description = POST_description.concat(
@@ -1092,28 +1126,39 @@ public class Fragment_Income extends Fragment {
                     Log.e(TAG, "SELECTED_OPTION : " + selectedRadioButton.getText());
 
                     String sel = selectedRadioButton.getText().toString();
-                    if (sel.contentEquals(radioOtherArray.get(0)))
+                    if (sel.contentEquals(radioOtherArray.get(0))) {
                         POST_accountNumberKey = "1.32.1";
-                    else if (sel.contentEquals(radioOtherArray.get(1)))
+                    }
+                    else if (sel.contentEquals(radioOtherArray.get(1))) {
                         POST_accountNumberKey = "1.32.2";
-                    else if (sel.contentEquals(radioOtherArray.get(2)))
+                    }
+                    else if (sel.contentEquals(radioOtherArray.get(2))) {
                         POST_accountNumberKey = "1.35";
-                    else if (sel.contentEquals(radioOtherArray.get(3)))
+                    }
+                    else if (sel.contentEquals(radioOtherArray.get(3))) {
                         POST_accountNumberKey = "1.36";
-                    else if (sel.contentEquals(radioOtherArray.get(4)))
+                    }
+                    else if (sel.contentEquals(radioOtherArray.get(4))) {
                         POST_accountNumberKey = "1.38";
-                    else if (sel.contentEquals(radioOtherArray.get(5)))
+                    }
+                    else if (sel.contentEquals(radioOtherArray.get(5))) {
                         POST_accountNumberKey = "1.39";
-                    else if (sel.contentEquals(radioOtherArray.get(6)))
+                    }
+                    else if (sel.contentEquals(radioOtherArray.get(6))) {
                         POST_accountNumberKey = "1.40";
-                    else if (sel.contentEquals(radioOtherArray.get(7)))
+                    }
+                    else if (sel.contentEquals(radioOtherArray.get(7))) {
                         POST_accountNumberKey = "1.44";
-                    else if (sel.contentEquals(radioOtherArray.get(8)))
+                    }
+                    else if (sel.contentEquals(radioOtherArray.get(8))) {
                         POST_accountNumberKey = "1.45";
-                    else if (sel.contentEquals(radioOtherArray.get(9)))
+                    }
+                    else if (sel.contentEquals(radioOtherArray.get(9))) {
                         POST_accountNumberKey = "1.46";
-                    else if (sel.contentEquals(radioOtherArray.get(10)))
+                    }
+                    else if (sel.contentEquals(radioOtherArray.get(10))) {
                         POST_accountNumberKey = "1.47";
+                    }
 
                     POST_description = POST_description.concat(
                             keyIssue
@@ -1123,7 +1168,6 @@ public class Fragment_Income extends Fragment {
                                     + etAmount.getText().toString().replace(",", ".")
                                     + " " + etOtherDetail.getText().toString()
                     );
-
                     break;
                 case KEY_INCOME_LAINNYA_NO_ACCOUNT:
                     Log.e(TAG, "NOTE : " + etOther_Note.getText().toString());
@@ -1165,8 +1209,9 @@ public class Fragment_Income extends Fragment {
                 @Override
                 public void onTry() {
                     View progressHolder = rootView.findViewById(R.id.layout_progressHolder);
-                    if (progressHolder.getVisibility() != View.VISIBLE)
+                    if (progressHolder.getVisibility() != View.VISIBLE) {
                         progressHolder.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 @Override
@@ -1174,7 +1219,7 @@ public class Fragment_Income extends Fragment {
 
                     displayDialog(
                             context,
-                            "OK. Pengajuan Berhasil",
+                            "OK, Pengajuan Berhasil",
                             message,
                             true,
                             (dialog, which) -> {
@@ -1209,7 +1254,8 @@ public class Fragment_Income extends Fragment {
 
                 selectedModel.setUnregistered(true);
 
-            } else {
+            }
+            else {
                 selectedModel = new Adding_RecyclerModel(
                         data.getIntExtra("model.id", 0),
                         data.getStringExtra("model.name"),
@@ -1236,15 +1282,17 @@ public class Fragment_Income extends Fragment {
     // Minor function & Variable
     ///////////////////////////////////////////////////////////////////////////
 
-    private void calculateDetailTotal(ArrayList<CustomEditText> editTexts,
-//                                      CustomEditText totalDetail,
-                                      CustomEditText mainEditText) {
+    private void calculateDetailTotal(ArrayList<CustomEditText> editTexts, CustomEditText mainEditText) {
         int result = 0;
         int amount;
         for (int i = 0; i < editTexts.size(); i++) {
 
-            if (editTexts.get(i).getText().toString().isEmpty()) amount = 0;
-            else amount = Integer.valueOf(editTexts.get(i).getText().toString());
+            if (editTexts.get(i).getText().toString().isEmpty()) {
+                amount = 0;
+            }
+            else {
+                amount = Integer.valueOf(editTexts.get(i).getText().toString());
+            }
 
 
             switch (i) {
@@ -1280,143 +1328,260 @@ public class Fragment_Income extends Fragment {
         if (result == 0) {
 //            totalDetail.setText("");
             mainEditText.setText("");
-        } else {
+        }
+        else {
 //            totalDetail.setText(String.valueOf(result));
             mainEditText.setText(String.valueOf(result));
         }
         int a;
         if (etPelTotal.getText().toString().isEmpty()) {
             a = 0;
-        } else {
+        }
+        else {
             a = Integer.valueOf(etPelTotal.getText().toString().replace(",", ""));
         }
 
         int b;
         if (etPemTotal.getText().toString().isEmpty()) {
             b = 0;
-        } else {
+        }
+        else {
             b = Integer.valueOf(etPemTotal.getText().toString().replace(",", ""));
         }
 
         int c;
         if (etExtraTotal.getText().toString().isEmpty()) {
             c = 0;
-        } else {
+        }
+        else {
             c = Integer.valueOf(etExtraTotal.getText().toString().replace(",", ""));
         }
 
         etAmount.setText(String.valueOf(a + b + c));
     }
 
-    private void defaultCase() {
-        if (switchChurch.isChecked()) switchChurch.setChecked(false);
-        etOther_Note.setVisibility(View.GONE);
-        etOther_Note.setText("");
-        switchChurch.setVisibility(View.GONE);
-    }
+    /*
+     * About Find Service
+     */
+    private void findService() {
 
-    private CountDownTimer countdownToFetchData = new CountDownTimer(1500, 1000) {
-
-        public void onTick(long millisUntilFinished) {
-        }
-
-        public void onFinish() {
-            findId();
-        }
-    };
-
-    private void findId() {
         if (Objects.requireNonNull(etFindId.getText()).toString().length() > 0) {
-
+            findServiceLayoutOpen();
+            findServiceLayoutStatus(FIND_SERVICE_STATUS_LOADING);
             Log.e(TAG, "findServiceId: " + etFindId.getText().toString());
-            ApiServices apiServices = RetrofitClient.getInstance(null).getApiServices();
-            Call<ResponseBody> call = apiServices.findService(etFindId.getText().toString().toUpperCase());
-            call.enqueue(new Callback<ResponseBody>() {
+            IssueRequestHandler req = new IssueRequestHandler(context);
+            req.setIntention(new Throwable());
+            req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if (response.isSuccessful()) {
+                public void onTry() {
 
-                        APIWrapper res = APIUtils.parseWrapper(context,response.body());
-                        if (!res.isError()) {
+                }
 
-                            if (tvIdNotFound.getVisibility() == View.VISIBLE)
-                                tvIdNotFound.setVisibility(View.GONE);
-                            if (llServiceInfoFound.getVisibility() != View.VISIBLE)
-                                llServiceInfoFound.setVisibility(View.VISIBLE);
-
-                            try {
-                                JSONObject obj = res.getData();
-                                tvInfoServiceType.setText(obj.getString("key_issue"));
-                                tvInfoServiceId.setText(String.format("ID: %s", obj.getString("service_entry_id")));
-                                tvInfoName.setText(obj.getString("first_member_name"));
-                                tvInfoDate.setText(obj.getString("date"));
-                                tvInfoKhadim.setText(obj.getString("khadim_name"));
-                                tvInfoPlace.setText(obj.getString("place"));
-                                POST_accountNumberKey = obj.getString("financial_account_number");
-                                POST_serviceId = obj.getInt("service_id");
-
-                                isServiceDataFound = true;
-
-                            } catch (JSONException e) {
-                                Log.e(TAG, "onResponse: JSON ERROR = " + e.getMessage());
-                                e.printStackTrace();
-                            }
-
-
-                            Log.e(TAG, "onResponse:"
-                                    + context.getClass().getSimpleName()
-                                    + ": response return SUCCESS proceeding"
-                                    + " message: " + res.getMessage());
-
-                        } else {
-
-                            if (llServiceInfoFound.getVisibility() == View.VISIBLE)
-                                llServiceInfoFound.setVisibility(View.GONE);
-
-                            if (llProgressServiceHolder.getVisibility() == View.VISIBLE)
-                                llProgressServiceHolder.setVisibility(View.GONE);
-
-                            if (tvIdNotFound.getVisibility() != View.VISIBLE) {
-                                tvIdNotFound.setVisibility(View.VISIBLE);
-                                tvIdNotFound.setText(res.getMessage());
-                            }
-                            isServiceDataFound = false;
-
-                            Log.e(TAG, "onResponse:"
-                                    + context.getClass().getSimpleName()
-                                    + ": response return SUCCESS but Error = true, with message = "
-                                    + res.getMessage());
-                        }
-
-                    } else {
-                        isServiceDataFound = false;
-                        APIUtils.parseError(context, response);
+                @Override
+                public void onSuccess(APIWrapper res, String message) throws JSONException {
+                    if (res.getDataArray() != null) {
+                        findServiceLayoutStatus(FIND_SERVICE_STATUS_NOT_FOUND);
+                        return;
                     }
 
-                    if (llProgressServiceHolder.getVisibility() == View.VISIBLE)
-                        llProgressServiceHolder.setVisibility(View.GONE);
+                    JSONObject data = res.getData();
 
+                    if (data.isNull("income")) {
+                        findServiceLayoutFound(data);
+                    }
+                    else {
+                        findServiceLayoutStatus(FIND_SERVICE_STATUS_ALREADY_HAVE_INCOME);
+                    }
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    if (llServiceInfoFound.getVisibility() == View.VISIBLE)
-                        llServiceInfoFound.setVisibility(View.GONE);
-
-                    if (llProgressServiceHolder.getVisibility() == View.VISIBLE)
-                        llProgressServiceHolder.setVisibility(View.GONE);
-
-                    if (tvIdNotFound.getVisibility() == View.VISIBLE)
-                        tvIdNotFound.setVisibility(View.GONE);
-
-                    if (llConnectionProblem.getVisibility() != View.VISIBLE)
-                        llConnectionProblem.setVisibility(View.VISIBLE);
-
+                public void onRetry() {
+                    isServiceDataFound = false;
+                    findService();
                 }
             });
+            req.setOnRequestHandlerFailure(() -> {
+                displayDialog(
+                        context,
+                        "Perhatian!",
+                        "Koneksi internet anda bermasalah, silahkan sentuh tombol 'OK' untuk mencoba kembali",
+                        (dialog, which) -> findService()
+                );
+                findServiceLayoutClose();
+            });
+            req.enqueue(RetrofitClient.getInstance(null).getApiServices().findService(
+                    etFindId.getText().toString().trim().toUpperCase())
+            );
 
-        } else cvInfoService.setVisibility(View.GONE);
+        }
+        else {
+            findServiceLayoutClose();
+        }
 
+    }
+
+    @BindView(R.id.layout_found)
+    LinearLayout layoutFound;
+    @BindView(R.id.textView_infoServiceType)
+    TextView layoutFoundTvServiceType;
+    @BindView(R.id.textView_infoServiceId)
+    TextView layoutFoundTvServiceId;
+    @BindView(R.id.textView_infoName)
+    TextView layoutFoundTvName;
+    @BindView(R.id.textView_infoDate)
+    TextView layoutFoundTvDate;
+    @BindView(R.id.textView_infoKhadim)
+    TextView layoutFoundTvKhadim;
+    @BindView(R.id.textView_infoPlace)
+    TextView layoutFoundTvPlace;
+    @BindView(R.id.textView_infoNote)
+    TextView layoutFoundTvNote;
+
+    @BindView(R.id.layout_status)
+    RelativeLayout layoutStatus;
+    @BindView(R.id.textView_status)
+    TextView layoutStatusTvStatus;
+    @BindView(R.id.textView_id)
+    TextView layoutStatusTvId;
+
+    @BindView(R.id.layout_loading)
+    RelativeLayout layoutLoading;
+
+
+    private void findServiceLayoutOpen() {
+        if (cvInfoService.getVisibility() != View.VISIBLE) {
+            cvInfoService.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void findServiceLayoutClose() {
+        if (cvInfoService.getVisibility() == View.VISIBLE) {
+            cvInfoService.setVisibility(View.GONE);
+        }
+
+    }
+
+    private void findServiceLayoutFound(JSONObject data) throws JSONException {
+        findServiceLayoutOpen();
+        layoutStatus.setVisibility(View.GONE);
+        layoutLoading.setVisibility(View.GONE);
+        layoutFound.setVisibility(View.VISIBLE);
+
+        JSONObject issue = data.getJSONObject("issue");
+        layoutFoundTvServiceType.setText(issue.getString("key_issue"));
+        layoutFoundTvName.setText(issue.getString("first_member_name"));
+
+        JSONObject service = data.getJSONObject("service");
+        layoutFoundTvServiceId.setText(String.format("ID: %s", service.getString("entry_id")));
+        layoutFoundTvDate.setText(service.getString("date"));
+        layoutFoundTvKhadim.setText(service.getString("khadim_name"));
+        layoutFoundTvPlace.setText(service.getString("place"));
+        POST_accountNumberKey = service.getString("financial_account_number");
+        POST_serviceId = service.getInt("id");
+
+        isServiceDataFound = true;
+
+        layoutFoundTvNote.setVisibility(View.VISIBLE);
+        layoutFoundTvNote.setText(service.getString("note"));
+
+        if (!issue.getString("key_issue").contentEquals(KEY_SERVICE_BIPRA)) {
+            layoutFoundTvNote.setVisibility(View.GONE);
+        }
+
+        switchChurch.setChecked(false);
+        if (issue.getString("key_issue").contentEquals(KEY_SERVICE_SPECIAL_IBADAH_MINGGU)) {
+
+            jsonNote = new JSONObject(service.getString("note"));
+
+            switchChurch.setChecked(true);
+            switchChurch.setEnabled(false);
+            switchWithDetail.setChecked(true);
+            if (POST_accountNumberKey.contentEquals("1.1.1")
+                    || POST_accountNumberKey.contentEquals("1.2.1")
+                    || POST_accountNumberKey.contentEquals("1.3.1")){
+                layoutFoundTvServiceType.setText(issue.getString("key_issue").concat(" Subuh"));
+            } else if (POST_accountNumberKey.contentEquals("1.1.2")
+                    || POST_accountNumberKey.contentEquals("1.2.2")
+                    || POST_accountNumberKey.contentEquals("1.3.2")){
+                layoutFoundTvServiceType.setText(issue.getString("key_issue").concat(" Pagi"));
+            }else if (POST_accountNumberKey.contentEquals("1.1.3")
+                    || POST_accountNumberKey.contentEquals("1.2.3")
+                    || POST_accountNumberKey.contentEquals("1.3.3")){
+                layoutFoundTvServiceType.setText(issue.getString("key_issue").concat(" Malam"));
+            }
+        }
+
+        else {
+            switchChurch.setEnabled(true);
+        }
+
+    }
+
+    private final int FIND_SERVICE_STATUS_NOT_FOUND = 1;
+    private final int FIND_SERVICE_STATUS_ALREADY_HAVE_INCOME = 2;
+    private final int FIND_SERVICE_STATUS_LOADING = 3;
+    private final int FIND_SERVICE_STATUS_ERROR = 4;
+
+    private JSONObject jsonNote = null;
+
+    private void findServiceLayoutStatus(int status) {
+        findServiceLayoutOpen();
+        switchChurch.setChecked(false);
+        switchWithDetail.setEnabled(false);
+        switchChurch.setEnabled(true);
+
+        if (status == FIND_SERVICE_STATUS_LOADING) {
+            layoutLoading.setVisibility(View.VISIBLE);
+            layoutFound.setVisibility(View.GONE);
+            layoutStatus.setVisibility(View.GONE);
+        }
+        else if (status == FIND_SERVICE_STATUS_ALREADY_HAVE_INCOME) {
+            layoutLoading.setVisibility(View.GONE);
+            layoutFound.setVisibility(View.GONE);
+            layoutStatus.setVisibility(View.VISIBLE);
+
+            String stats = "Persembahan dengan ID Ibadah " + etFindId.getText().toString().trim() + System.lineSeparator() + " telah diajukan ";
+            layoutStatusTvStatus.setText(stats);
+            layoutStatusTvId.setText("");
+
+            isServiceDataFound = false;
+
+        }
+        else if (status == FIND_SERVICE_STATUS_NOT_FOUND) {
+            layoutLoading.setVisibility(View.GONE);
+            layoutFound.setVisibility(View.GONE);
+            layoutStatus.setVisibility(View.VISIBLE);
+
+            layoutStatusTvStatus.setText("Tidak menemukan data dengan ID Ibadah");
+            layoutStatusTvId.setText(etFindId.getText().toString().trim());
+
+            isServiceDataFound = false;
+
+        }
+
+    }
+
+    private String handleIssueServiceJSONConcatWithIncome() {
+
+        JSONObject amount = new JSONObject();
+
+        try {
+            amount.put("pel", etPelTotal.getText().toString().trim().replace(",", ""));
+            amount.put("pel_detail", "");
+            amount.put("pem", etPemTotal.getText().toString().trim().replace(",", ""));
+            amount.put("pem_detail", "");
+            amount.put("ex", etExtraTotal.getText().toString().trim().replace(",", ""));
+            amount.put("ex_detail", "");
+            amount.put("total", etAmount.getText().toString().trim().replace(",", ""));
+
+            if (jsonNote != null) return jsonNote.accumulate("amount", amount).toString();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, "handleIssueServiceJSONConcatWithIncome: JSON IS ERROR " + e.getMessage());
+        }
+
+        return "";
     }
 
 

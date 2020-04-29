@@ -203,9 +203,9 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
             Log.e(TAG, "========================================================================================");
 
             // Server Request
-            IssueRequestHandler req = new IssueRequestHandler(findViewById(android.R.id.content));
+            IssueRequestHandler req = new IssueRequestHandler(b.getRoot());
             Call call = null;
-            String operationMessage = "";
+            req.setIntention(new Throwable());
             IssueRequestHandler.OnRequestHandler addingOnRequestHandler = null;
             switch (OPERATION_TYPE) {
                 case ADD_MEMBER:
@@ -237,12 +237,8 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
                             if (data.isNull("similar_members")) {
                                 Constant.displayDialog(
                                         PntSym_InputForm.this,
-                                        "OK! Operasi berhasil",
-                                        "Data anggota bernama"
-                                                + firstName
-                                                + " "
-                                                + lastName
-                                                + " berhasil di tambahkan dalam kolom ",
+                                        "OK, Operasi berhasil",
+                                        message,
                                         false,
                                         (dialog, which) -> {
                                         },
@@ -278,16 +274,13 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
                             letterSidi,
                             letterMarried
                     );
-                    operationMessage = " berhasil di ubah ";
                     break;
                 case DELETE_MEMBER:
                     call = RetrofitClient.getInstance(null).getApiServices().deleteMember(
                             MEMBER_ID
                     );
-                    operationMessage = " berhasil di hapus ";
                     break;
             }
-            String finalOperationMessage = operationMessage;
             Call finalCall = call;
             IssueRequestHandler.OnRequestHandler defaultOnRequestHandler =
                     new IssueRequestHandler.OnRequestHandler() {
@@ -300,8 +293,8 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
                         public void onSuccess(APIWrapper res, String message) {
                             Constant.displayDialog(
                                     PntSym_InputForm.this,
-                                    "OK! Operasi berhasil",
-                                    "Data anggota bernama " + firstName + " " + lastName + finalOperationMessage,
+                                    "OK, Operasi berhasil",
+                                    message,
                                     false,
                                     (dialog, which) -> {
                                     },
@@ -326,7 +319,8 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
 
         if (resultCode == Activity.RESULT_OK && data != null) {
             int memberId = data.getIntExtra("model.id", 0);
-            IssueRequestHandler req = new IssueRequestHandler(findViewById(android.R.id.content));
+            IssueRequestHandler req = new IssueRequestHandler(b.getRoot());
+            req.setIntention(new Throwable());
             req.enqueue(RetrofitClient.getInstance(null).getApiServices().getMemberUserData(memberId));
             req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
                 @Override
@@ -414,6 +408,7 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
 
     private void forceSaveData() {
         IssueRequestHandler req = new IssueRequestHandler(b.getRoot());
+        req.setIntention(new Throwable());
         req.setOnRequestHandler(new OnRequestHandler() {
             @Override
             public void onTry() {
@@ -424,12 +419,8 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
             public void onSuccess(APIWrapper res, String message) throws JSONException {
                     Constant.displayDialog(
                             PntSym_InputForm.this,
-                            "OK! Operasi berhasil",
-                            "Data anggota bernama"
-                                    + firstName
-                                    + " "
-                                    + lastName
-                                    + " berhasil di tambahkan dalam kolom ",
+                            "OK, Operasi berhasil",
+                            message,
                             false,
                             (dialog, which) -> {
                             },

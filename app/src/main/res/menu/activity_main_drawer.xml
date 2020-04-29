@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<?xml version="1.0" encoding="utf-8"?><!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Menu">
+    <item
+        android:id="@+id/nav_menu"
+        android:title="Menu">
         <menu>
             <group
                 android:id="@+id/nav_group_member"
@@ -18,26 +19,38 @@
                     android:id="@+id/nav_setting"
                     android:icon="@drawable/ic_face_24px"
                     android:title="Tentang Akun" />
+                <item
+                    android:id="@+id/nav_authorize"
+                    android:enabled="false"
+                    android:icon="@drawable/ic_call_received_24px"
+                    android:title="Persetujuan" />
+                <item
+                    android:id="@+id/nav_issue"
+                    android:enabled="false"
+                    android:icon="@drawable/ic_call_made_24px"
+                    android:title="Pengajuan" />
 
             </group>
         </menu>
     </item>
 
 
-    <item android:title="Ketua Jemaat">
+    <item
+        android:id="@+id/nav_chief"
+        android:title="Ketua Jemaat">
         <menu>
             <group
                 android:id="@+id/nav_group_chief"
                 android:checkableBehavior="single"
                 android:visible="false">
-                <item
-                    android:id="@+id/nav_chief_home"
-                    android:icon="@drawable/ic_call_received_24px"
-                    android:title="Persetujuan" />
-                <item
-                    android:id="@+id/nav_chief_issue"
-                    android:icon="@drawable/ic_call_made_24px"
-                    android:title="Pengajuan" />
+                <!--                <item-->
+                <!--                    android:id="@+id/nav_chief_home"-->
+                <!--                    android:icon="@drawable/ic_call_received_24px"-->
+                <!--                    android:title="Persetujuan" />-->
+                <!--                <item-->
+                <!--                    android:id="@+id/nav_chief_issue"-->
+                <!--                    android:icon="@drawable/ic_call_made_24px"-->
+                <!--                    android:title="Pengajuan" />-->
                 <item
                     android:id="@+id/nav_chief_manageServiceArea"
                     android:icon="@drawable/ic_star_24px"
@@ -46,57 +59,59 @@
             </group>
         </menu>
     </item>
-
-    <item android:title="Sekretaris">
+    <item
+        android:id="@+id/nav_secretary"
+        android:title="Sekretaris">
         <menu>
             <group
                 android:id="@+id/nav_group_secretary"
                 android:checkableBehavior="single"
                 android:visible="false">
-                <item
-                    android:id="@+id/nav_secretary_home"
-                    android:icon="@drawable/ic_call_received_24px"
-                    android:title="Persetujuan" />
-                <item
-                    android:id="@+id/nav_secretary_issue"
-                    android:icon="@drawable/ic_call_made_24px"
-                    android:title="Pengajuan" />
+                <!--                <item-->
+                <!--                    android:id="@+id/nav_secretary_home"-->
+                <!--                    android:icon="@drawable/ic_call_received_24px"-->
+                <!--                    android:title="Persetujuan" />-->
+                <!--                <item-->
+                <!--                    android:id="@+id/nav_secretary_issue"-->
+                <!--                    android:icon="@drawable/ic_call_made_24px"-->
+                <!--                    android:title="Pengajuan" />-->
                 <item
                     android:id="@+id/nav_secretary_papers"
                     android:icon="@drawable/ic_star_24px"
                     android:title="Riwayat Berkas" />
-<!--                <item-->
-<!--                    android:id="@+id/nav_secretary_sunday_schedules"-->
-<!--                    android:icon="@drawable/ic_menu_slideshow"-->
-<!--                    android:title="Jadwal Ibadah Minggu" />-->
+                <!--                <item-->
+                <!--                    android:id="@+id/nav_secretary_sunday_schedules"-->
+                <!--                    android:icon="@drawable/ic_menu_slideshow"-->
+                <!--                    android:title="Jadwal Ibadah Minggu" />-->
 
             </group>
         </menu>
     </item>
-
-    <item android:title="Bendahara">
+    <item
+        android:id="@+id/nav_treasurer"
+        android:title="Bendahara">
         <menu>
             <group
                 android:id="@+id/nav_group_treasurer"
                 android:checkableBehavior="single"
                 android:visible="false">
-                <item
-                    android:id="@+id/nav_treasurer_home"
-                    android:icon="@drawable/ic_call_received_24px"
-                    android:title="Persetujuan" />
-                <item
-                    android:id="@+id/nav_treasurer_issue"
-                    android:icon="@drawable/ic_call_made_24px"
-                    android:title="Pengajuan" />
+                <!--                <item-->
+                <!--                    android:id="@+id/nav_treasurer_home"-->
+                <!--                    android:icon="@drawable/ic_call_received_24px"-->
+                <!--                    android:title="Persetujuan" />-->
+                <!--                <item-->
+                <!--                    android:id="@+id/nav_treasurer_issue"-->
+                <!--                    android:icon="@drawable/ic_call_made_24px"-->
+                <!--                    android:title="Pengajuan" />-->
                 <!--<item-->
-                    <!--android:id="@+id/nav_treasurer_auth_history"-->
-                    <!--android:icon="@drawable/ic_menu_gallery"-->
-                    <!--android:title="Riwayat Authentifikasi" />-->
+                <!--android:id="@+id/nav_treasurer_auth_history"-->
+                <!--android:icon="@drawable/ic_menu_gallery"-->
+                <!--android:title="Riwayat Authentifikasi" />-->
                 <!--<item-->
-                    <!--android:id="@+id/nav_treasurer_alter_budget"-->
-                    <!--android:checkable="false"-->
-                    <!--android:icon="@drawable/ic_menu_gallery"-->
-                    <!--android:title="Anggaran Jemaat" />-->
+                <!--android:id="@+id/nav_treasurer_alter_budget"-->
+                <!--android:checkable="false"-->
+                <!--android:icon="@drawable/ic_menu_gallery"-->
+                <!--android:title="Anggaran Jemaat" />-->
                 <item
                     android:id="@+id/nav_treasurer_financial"
                     android:icon="@drawable/ic_star_24px"
@@ -105,20 +120,22 @@
             </group>
         </menu>
     </item>
-    <item android:title="Pendeta">
+    <item
+        android:id="@+id/nav_priest"
+        android:title="Pendeta">
         <menu>
             <group
                 android:id="@+id/nav_group_priest"
                 android:checkableBehavior="single"
                 android:visible="false">
-                <item
-                    android:id="@+id/nav_priest_home"
-                    android:icon="@drawable/ic_call_received_24px"
-                    android:title="Persetujuan" />
-                <item
-                    android:id="@+id/nav_priest_issue"
-                    android:icon="@drawable/ic_call_made_24px"
-                    android:title="Pengajuan" />
+                <!--                <item-->
+                <!--                    android:id="@+id/nav_priest_home"-->
+                <!--                    android:icon="@drawable/ic_call_received_24px"-->
+                <!--                    android:title="Persetujuan" />-->
+                <!--                <item-->
+                <!--                    android:id="@+id/nav_priest_issue"-->
+                <!--                    android:icon="@drawable/ic_call_made_24px"-->
+                <!--                    android:title="Pengajuan" />-->
                 <item
                     android:id="@+id/nav_priest_serviceArea"
                     android:icon="@drawable/ic_star_24px"
@@ -127,20 +144,22 @@
             </group>
         </menu>
     </item>
-    <item android:title="Penatua Kolom">
+    <item
+        android:id="@+id/nav_penatua"
+        android:title="Penatua Kolom">
         <menu>
             <group
                 android:id="@+id/nav_group_penatua"
                 android:checkableBehavior="single"
                 android:visible="false">
-                <item
-                    android:id="@+id/nav_penatua_home"
-                    android:icon="@drawable/ic_call_received_24px"
-                    android:title="Persetujuan" />
-                <item
-                    android:id="@+id/nav_penatua_issue"
-                    android:icon="@drawable/ic_call_made_24px"
-                    android:title="Pengajuan" />
+                <!--                <item-->
+                <!--                    android:id="@+id/nav_penatua_home"-->
+                <!--                    android:icon="@drawable/ic_call_received_24px"-->
+                <!--                    android:title="Persetujuan" />-->
+                <!--                <item-->
+                <!--                    android:id="@+id/nav_penatua_issue"-->
+                <!--                    android:icon="@drawable/ic_call_made_24px"-->
+                <!--                    android:title="Pengajuan" />-->
                 <item
                     android:id="@+id/nav_penatua_manageMemberData"
                     android:icon="@drawable/ic_star_24px"
@@ -149,24 +168,87 @@
             </group>
         </menu>
     </item>
-    <item android:title="Syamas Kolom">
+    <item
+        android:id="@+id/nav_syamas"
+        android:title="Syamas Kolom">
         <menu>
             <group
                 android:id="@+id/nav_group_syamas"
                 android:checkableBehavior="single"
                 android:visible="false">
-                <item
-                    android:id="@+id/nav_syamas_home"
-                    android:icon="@drawable/ic_call_received_24px"
-                    android:title="Persetujuan" />
-                <item
-                    android:id="@+id/nav_syamas_issue"
-                    android:icon="@drawable/ic_call_made_24px"
-                    android:title="Pengajuan" />
+                <!--                <item-->
+                <!--                    android:id="@+id/nav_syamas_home"-->
+                <!--                    android:icon="@drawable/ic_call_received_24px"-->
+                <!--                    android:title="Persetujuan" />-->
+                <!--                <item-->
+                <!--                    android:id="@+id/nav_syamas_issue"-->
+                <!--                    android:icon="@drawable/ic_call_made_24px"-->
+                <!--                    android:title="Pengajuan" />-->
                 <item
                     android:id="@+id/nav_syamas_manageMemberData"
                     android:icon="@drawable/ic_star_24px"
                     android:title="Data Anggota" />
+
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/nav_penatua_pkb"
+        android:title="Penatua PKB">
+        <menu>
+            <group
+                android:id="@+id/nav_group_penatua_pkb"
+                android:checkableBehavior="single"
+                android:visible="false">
+
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/nav_penatua_wki"
+        android:title="Penatua WKI">
+        <menu>
+            <group
+                android:id="@+id/nav_group_penatua_wki"
+                android:checkableBehavior="single"
+                android:visible="false">
+
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/nav_penatua_pemuda"
+        android:title="Penatua Pemuda">
+        <menu>
+            <group
+                android:id="@+id/nav_group_penatua_pemuda"
+                android:checkableBehavior="single"
+                android:visible="false">
+
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/nav_penatua_remaja"
+        android:title="Penatua Remaja">
+        <menu>
+            <group
+                android:id="@+id/nav_group_penatua_remaja"
+                android:checkableBehavior="single"
+                android:visible="false">
+
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/nav_penatua_anak"
+        android:title="Penatua Anak">
+        <menu>
+            <group
+                android:id="@+id/nav_group_penatua_anak"
+                android:checkableBehavior="single"
+                android:visible="false">
 
             </group>
         </menu>

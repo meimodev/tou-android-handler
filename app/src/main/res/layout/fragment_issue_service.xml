@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:id="@+id/layout_scroll"
     android:layout_height="match_parent"
     android:layout_marginTop="10dp"
     android:descendantFocusability="beforeDescendants"
@@ -13,6 +18,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:animateLayoutChanges="true"
+        android:id="@+id/layout_scrollChild"
         android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
@@ -50,6 +56,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
+                        android:maxLines="3"
+                        android:fontFamily="@font/montserrat_regular"
                         android:elevation="2dp"
                         android:paddingBottom="10dp"
                         android:visibility="gone" />
@@ -61,6 +69,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
+                        android:maxLines="3"
+                        android:fontFamily="@font/montserrat_regular"
                         android:paddingTop="4dp"
                         android:elevation="2dp"
                         android:paddingBottom="10dp"
@@ -72,6 +82,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
+                        android:maxLines="3"
+                        android:fontFamily="@font/montserrat_regular"
                         android:layout_marginEnd="10dp"
                         android:elevation="2dp"
                         android:paddingBottom="10dp"
@@ -83,6 +95,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
+                        android:maxLines="3"
+                        android:fontFamily="@font/montserrat_regular"
                         android:layout_marginEnd="10dp"
                         android:elevation="2dp"
                         android:paddingBottom="10dp"
@@ -94,6 +108,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
+                        android:maxLines="3"
+                        android:fontFamily="@font/montserrat_regular"
                         android:layout_marginEnd="10dp"
                         android:elevation="2dp"
                         android:paddingBottom="10dp"
@@ -104,6 +120,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
+                        android:maxLines="3"
+                        android:fontFamily="@font/montserrat_regular"
                         android:layout_marginEnd="10dp"
                         android:elevation="2dp"
                         android:paddingBottom="10dp"
@@ -116,6 +134,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
+                        android:maxLines="3"
+                        android:fontFamily="@font/montserrat_regular"
                         android:elevation="2dp"
                         android:paddingBottom="10dp"
                         android:visibility="gone" />
@@ -206,13 +226,13 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
+                            android:hint="Tanggal"
                             android:layout_weight="1">
 
                             <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                                 android:id="@+id/editText_date"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Tanggal"
                                 android:maxLines="1" />
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -221,13 +241,13 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
+                            android:hint="Waktu"
                             android:layout_weight="1">
 
                             <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                                 android:id="@+id/editText_time"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Waktu"
                                 android:maxLines="1" />
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -237,13 +257,14 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="Tempat"
                         android:layout_marginTop="5dp">
 
                         <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                             android:id="@+id/editText_place"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Tempat"
+                            android:inputType="text"
                             android:maxLines="1" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -251,14 +272,15 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="Catatan"
                         android:layout_marginTop="5dp">
 
                         <com.meimodev.sitouhandler.CustomWidget.CustomEditText
                             android:id="@+id/editText_note"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Catatan"
                             android:maxLines="5"
+                            android:inputType="text"
                             android:visibility="gone" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -311,6 +333,8 @@
                                 android:id="@+id/spinner_guess"
                                 android:layout_weight="1"
                                 android:layout_width="0dp"
+                                android:maxLines="3"
+                                android:fontFamily="@font/montserrat_regular"
                                 android:layout_height="wrap_content" />
 
                         </LinearLayout>
@@ -334,6 +358,8 @@
                             <com.jaredrummler.materialspinner.MaterialSpinner
                                 android:id="@+id/spinner_onDuty"
                                 android:layout_weight="1"
+                                android:maxLines="3"
+                                android:fontFamily="@font/montserrat_regular"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content" />
 

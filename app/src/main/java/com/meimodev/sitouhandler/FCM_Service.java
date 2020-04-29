@@ -71,6 +71,7 @@ public class FCM_Service extends FirebaseMessagingService {
         notifBuilder.setSmallIcon(R.drawable.ic_tou_notification)
                 .setContentTitle(title)
                 .setBadgeIconType(NotificationCompat.BADGE_ICON_LARGE)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                 .setContentText(msg)
                 .setAutoCancel(false)
                 .setSound(defaultSoundUri)

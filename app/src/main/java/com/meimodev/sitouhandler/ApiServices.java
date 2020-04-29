@@ -150,6 +150,11 @@ public interface ApiServices {
             @Query("id") int id
     );
 
+    @GET("find-church")
+    Call<ResponseBody> findChurchById(
+            @Query("id") int id
+    );
+
     @GET("find-user")
     Call<ResponseBody> findUserByName(
             @Query("name") String name

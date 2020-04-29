@@ -61,6 +61,7 @@ public class Constant {
     public static final String KEY_CHURCH_ID = "Church_Id";
     public static final String KEY_CHURCH_NAME = "Church_Name";
     public static final String KEY_CHURCH_KELURAHAN = "Church_Village";
+    public static final String KEY_CHURCH_COLUMN_COUNT = "Church_Column_Count";
     public static final String KEY_COLUMN_ID = "Column_Id";
     public static final String KEY_COLUMN_NAME_INDEX = "Column_Name_Index";
     public static final String KEY_MEMBER_DUPLICATE_CHECK = "Member_Duplicate_Check";
@@ -281,8 +282,12 @@ public class Constant {
     }
 
     public static View makeProgressCircle(View rootView) {
+        return makeProgressCircle(rootView.getContext());
+    }
 
-        View v = LayoutInflater.from(rootView.getContext()).inflate(R.layout.resource_custom_progress_bar_progressing, ((ViewGroup) rootView), false);
+    public static View makeProgressCircle(Context context) {
+        View rootView = ((Activity) context).findViewById(android.R.id.content);
+        View v = LayoutInflater.from(context).inflate(R.layout.resource_custom_progress_bar_progressing, ((ViewGroup) rootView), false);
         ProgressCircula p = v.findViewById(R.id.pc);
 
         try {
@@ -295,7 +300,7 @@ public class Constant {
             p.setIndeterminate(true);
             p.setRimWidth(6);
             p.startRotation();
-            p.setRimColor(rootView.getContext().getResources().getColor(R.color.colorAccent));
+            p.setRimColor(context.getResources().getColor(R.color.colorAccent));
             p.setShowProgress(false);
 
         } catch (NullPointerException e) {
@@ -307,15 +312,19 @@ public class Constant {
         return v;
     }
 
-    public static View makeFailFetch(View rootView, View.OnClickListener retryFetchOnclickListener) {
-
-        View v = LayoutInflater.from(rootView.getContext()).inflate(R.layout.resource_custom_progress_bar_fail, ((ViewGroup) rootView), false);
+    public static View makeFailFetch(Context context, View.OnClickListener retryFetchOnclickListener) {
+        View rootView = ((Activity) context).findViewById(android.R.id.content);
+        View v = LayoutInflater.from(context).inflate(R.layout.resource_custom_progress_bar_fail, ((ViewGroup) rootView), false);
         RelativeLayout holder = rootView.findViewById(R.id.layout_progressHolder);
         holder.removeAllViews();
         holder.addView(v);
         ImageButton btn = v.findViewById(R.id.button_tryAgain);
         btn.setOnClickListener(retryFetchOnclickListener);
         return v;
+    }
+    public static View makeFailFetch(View rootView, View.OnClickListener retryFetchOnclickListener) {
+        return makeFailFetch(rootView.getContext(), retryFetchOnclickListener);
+
     }
 
     public static String encodeMemberData(CustomButtonAdd customButtonAdd) {
@@ -493,7 +502,7 @@ public class Constant {
 
     /**
      * Checks if the app has permission to write to device storage
-     *
+     * <p>
      * If the app does not has permission then the user will be prompted to grant permissions
      *
      * @param activity

@@ -34,6 +34,7 @@ public class IssueRequestHandler {
     private String intention = "";
 
     private OnRequestHandler onRequestHandler;
+    private OnRequestHandlerFailure onRequestHandlerFailure;
 
     public IssueRequestHandler(@Nullable View rootView) {
         if (rootView != null) {
@@ -41,6 +42,11 @@ public class IssueRequestHandler {
             context = rootView.getContext();
             progress = Constant.makeProgressCircle(rootView);
         }
+    }
+
+    public IssueRequestHandler(Context context) {
+            this.context = context;
+            progress = Constant.makeProgressCircle(context);
     }
 
     public interface OnRequestHandler {
@@ -51,6 +57,14 @@ public class IssueRequestHandler {
         void onRetry();
     }
 
+    public interface  OnRequestHandlerFailure{
+        void onFailure();
+    }
+
+    public void setOnRequestHandlerFailure(OnRequestHandlerFailure onRequestHandlerFailure){
+        this.onRequestHandlerFailure = onRequestHandlerFailure;
+    }
+
     public void setOnRequestHandler(OnRequestHandler onRequestHandler) {
         this.onRequestHandler = onRequestHandler;
     }
@@ -59,20 +73,19 @@ public class IssueRequestHandler {
         this.intention = intention;
     }
 
-    public void setContext (Context context){this.context = context;}
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
     public void setIntention(Throwable throwableForMethodMame) {
         setIntention(throwableForMethodMame.getStackTrace()[0].getMethodName());
     }
 
     public void enqueue(Call call) {
+        View mainView = null;
 
-        View mainView;
-        try {
+        if (rootView != null) {
             mainView = rootView.findViewById(R.id.layout_main);
-        } catch (NullPointerException e) {
-            Log.e(TAG, "enqueue: " + intention + ": class initialize with null rootView " + e.getMessage());
-            return;
         }
 
         if (progress != null && progress.getVisibility() != View.VISIBLE) {
@@ -88,6 +101,7 @@ public class IssueRequestHandler {
         if (call.isExecuted()) {
             call = call.clone();
         }
+        View finalMainView = mainView;
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
@@ -138,8 +152,8 @@ public class IssueRequestHandler {
                         progress.setVisibility(View.INVISIBLE);
                     }
 
-                    if (mainView != null && mainView.getVisibility() != View.VISIBLE) {
-                        mainView.setVisibility(View.VISIBLE);
+                    if (finalMainView != null && finalMainView.getVisibility() != View.VISIBLE) {
+                        finalMainView.setVisibility(View.VISIBLE);
                     }
 
                 }
@@ -150,7 +164,7 @@ public class IssueRequestHandler {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e(TAG, "onFailure: "
                         + "(Class)" + context.getClass().getSimpleName() + ": "
                         + intention + ": "
@@ -160,8 +174,12 @@ public class IssueRequestHandler {
                     progress.setVisibility(View.GONE);
                 }
 
-                Constant.makeFailFetch(rootView, view -> {
-                    progress = Constant.makeProgressCircle(rootView);
+                if (onRequestHandlerFailure != null){
+                    onRequestHandlerFailure.onFailure();
+                }
+
+                Constant.makeFailFetch(context, view -> {
+                    progress = Constant.makeProgressCircle(context);
                     if (onRequestHandler != null) {
                         onRequestHandler.onRetry();
                     }
@@ -178,7 +196,7 @@ public class IssueRequestHandler {
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
 
                     APIWrapper res = APIUtils.parseWrapper(context, response.body());
@@ -225,12 +243,15 @@ public class IssueRequestHandler {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
                 Log.e(TAG, "BACKGROUND REQUEST: onFailure: "
                         + "(Class)" + context.getClass().getSimpleName() + ": "
                         + intention + ": "
                         + t.getMessage());
                 if (onRequestHandler != null) {
+                    Log.e(TAG, "BACKGROUND REQUEST: onFailure: "
+                            + "(Class)" + context.getClass().getSimpleName() + ": "
+                            + intention + ": !!! RETRYING !!!");
                     onRequestHandler.onRetry();
                 }
             }

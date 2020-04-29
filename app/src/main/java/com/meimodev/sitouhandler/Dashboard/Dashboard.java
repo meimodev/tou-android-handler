@@ -47,12 +47,16 @@ import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Priest.NavFra
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Secretary.NavFragment_Secretary_Papers;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Treasurer.NavFragment_Treasurer_Financial;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Home;
+import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Issue.Issue;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.Wizard.ApplyMember.ApplyMember;
 import com.meimodev.sitouhandler.Wizard.DuplicateCheck.DuplicateCheck;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -65,6 +69,11 @@ import butterknife.ButterKnife;
 import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_CHIEF;
 import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_MEMBER;
 import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_PENATUA;
+import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_PENATUA_ANAK;
+import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_PENATUA_PKB;
+import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_PENATUA_REMAJA;
+import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_PENATUA_WKI;
+import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_PENATUA_YOUTH;
 import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_PRIEST;
 import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_SECRETARY;
 import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_SYAMAS;
@@ -78,6 +87,7 @@ import static com.meimodev.sitouhandler.Constant.ISSUE_TYPE_INCOME;
 import static com.meimodev.sitouhandler.Constant.ISSUE_TYPE_OUTCOME;
 import static com.meimodev.sitouhandler.Constant.ISSUE_TYPE_PAPERS;
 import static com.meimodev.sitouhandler.Constant.ISSUE_TYPE_SERVICE;
+import static com.meimodev.sitouhandler.Constant.KEY_CHURCH_COLUMN_COUNT;
 import static com.meimodev.sitouhandler.Constant.KEY_CHURCH_ID;
 import static com.meimodev.sitouhandler.Constant.KEY_CHURCH_KELURAHAN;
 import static com.meimodev.sitouhandler.Constant.KEY_CHURCH_NAME;
@@ -200,6 +210,8 @@ public class Dashboard extends AppCompatActivity {
 //        Sending this account refreshed FCM Token to server
         sendFCMTokenToServer();
 
+        fetchFreshChurchData();
+
         handleAccountNotificationSubscription();
 
 //        init Toolbar And navigation drawer
@@ -213,6 +225,8 @@ public class Dashboard extends AppCompatActivity {
 
 //        set items on nav drawer & default item selected
         setupNavDrawerItemsBasedOnAccountType();
+
+
 
 //        transact default checked navigation menu fragment
         getSupportFragmentManager().beginTransaction()
@@ -396,38 +410,81 @@ public class Dashboard extends AppCompatActivity {
         String memberPosition = Guru.getString(KEY_MEMBER_CHURCH_POSITION, null);
         Log.e(TAG, "setupNavDrawerItemsBasedOnAccountType: memberPositions " + memberPosition);
 
+
         navigationView.setCheckedItem(R.id.nav_home);
         if (memberPosition.contains(ACCOUNT_TYPE_CHIEF)) {
-            navigationView.getMenu().getItem(1).getSubMenu().setGroupVisible(R.id.nav_group_chief, true);
+            navigationView.getMenu().findItem(R.id.nav_chief).getSubMenu().setGroupVisible(R.id.nav_group_chief, true);
             speedDialView.setVisibility(View.VISIBLE);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
         }
 
         if (memberPosition.contains(ACCOUNT_TYPE_SECRETARY)) {
-            navigationView.getMenu().getItem(2).getSubMenu().setGroupVisible(R.id.nav_group_secretary, true);
+            navigationView.getMenu().findItem(R.id.nav_secretary).getSubMenu().setGroupVisible(R.id.nav_group_secretary, true);
             speedDialView.setVisibility(View.VISIBLE);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
         }
 
         if (memberPosition.contains(ACCOUNT_TYPE_TREASURER)) {
-            navigationView.getMenu().getItem(3).getSubMenu().setGroupVisible(R.id.nav_group_treasurer, true);
+            navigationView.getMenu().findItem(R.id.nav_treasurer).getSubMenu().setGroupVisible(R.id.nav_group_treasurer, true);
             speedDialView.setVisibility(View.VISIBLE);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
         }
 
         if (memberPosition.contains(ACCOUNT_TYPE_PRIEST)) {
-            navigationView.getMenu().getItem(4).getSubMenu().setGroupVisible(R.id.nav_group_priest, true);
+            navigationView.getMenu().findItem(R.id.nav_priest).getSubMenu().setGroupVisible(R.id.nav_group_priest, true);
             speedDialView.setVisibility(View.VISIBLE);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
         }
 
         if (memberPosition.contains(ACCOUNT_TYPE_PENATUA)) {
-            navigationView.getMenu().getItem(5).getSubMenu().setGroupVisible(R.id.nav_group_penatua, true);
+            navigationView.getMenu().findItem(R.id.nav_penatua).getSubMenu().setGroupVisible(R.id.nav_group_penatua, true);
             speedDialView.setVisibility(View.VISIBLE);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
         }
 
         if (memberPosition.contains(ACCOUNT_TYPE_SYAMAS)) {
-            navigationView.getMenu().getItem(6).getSubMenu().setGroupVisible(R.id.nav_group_syamas, true);
+            navigationView.getMenu().findItem(R.id.nav_syamas).getSubMenu().setGroupVisible(R.id.nav_group_syamas, true);
             speedDialView.setVisibility(View.VISIBLE);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
         }
 
+        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_PKB)) {
+            navigationView.getMenu().findItem(R.id.nav_penatua_pkb).getSubMenu().setGroupVisible(R.id.nav_group_penatua_pkb, true);
+            speedDialView.setVisibility(View.VISIBLE);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+        }
 
+        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_WKI)) {
+            navigationView.getMenu().findItem(R.id.nav_penatua_pkb).getSubMenu().setGroupVisible(R.id.nav_group_penatua_wki, true);
+            speedDialView.setVisibility(View.VISIBLE);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+        }
+        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_YOUTH)) {
+            navigationView.getMenu().findItem(R.id.nav_penatua_pemuda).getSubMenu().setGroupVisible(R.id.nav_group_penatua_pemuda, true);
+            speedDialView.setVisibility(View.VISIBLE);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+        }
+        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_REMAJA)) {
+            navigationView.getMenu().findItem(R.id.nav_penatua_remaja).getSubMenu().setGroupVisible(R.id.nav_group_penatua_remaja, true);
+            speedDialView.setVisibility(View.VISIBLE);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+        }
+        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_ANAK)) {
+            navigationView.getMenu().findItem(R.id.nav_penatua_anak).getSubMenu().setGroupVisible(R.id.nav_group_penatua_anak, true);
+            speedDialView.setVisibility(View.VISIBLE);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
+            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+        }
     }
 
     private void setupFloatingActionMenuAndButtons() {
@@ -559,36 +616,42 @@ public class Dashboard extends AppCompatActivity {
             }
 
             switch (item.getItemId()) {
-
-                //===================================================== CHIEF fragment =====================================================
-                case R.id.nav_chief_home:
+                case R.id.nav_authorize:
                     fragment = new NavFragment_Member_Home();
                     break;
-                case R.id.nav_chief_issue:
+                case R.id.nav_issue:
                     fragment = new NavFragment_Member_Issue();
                     break;
+
+                //===================================================== CHIEF fragment =====================================================
+//                case R.id.nav_chief_home:
+//                    fragment = new NavFragment_Member_Home();
+//                    break;
+//                case R.id.nav_chief_issue:
+//                    fragment = new NavFragment_Member_Issue();
+//                    break;
                 case R.id.nav_chief_manageServiceArea:
                     fragment = new NavFragment_Chief_ManageServiceArea();
                     break;
 
                 //===================================================== SECRETARY fragment =====================================================
-                case R.id.nav_secretary_home:
-                    fragment = new NavFragment_Member_Home();
-                    break;
-                case R.id.nav_secretary_issue:
-                    fragment = new NavFragment_Member_Issue();
-                    break;
+//                case R.id.nav_secretary_home:
+//                    fragment = new NavFragment_Member_Home();
+//                    break;
+//                case R.id.nav_secretary_issue:
+//                    fragment = new NavFragment_Member_Issue();
+//                    break;
                 case R.id.nav_secretary_papers:
                     fragment = new NavFragment_Secretary_Papers();
                     break;
 
                 //===================================================== TREASURER fragment =====================================================
-                case R.id.nav_treasurer_home:
-                    fragment = new NavFragment_Member_Home();
-                    break;
-                case R.id.nav_treasurer_issue:
-                    fragment = new NavFragment_Member_Issue();
-                    break;
+//                case R.id.nav_treasurer_home:
+//                    fragment = new NavFragment_Member_Home();
+//                    break;
+//                case R.id.nav_treasurer_issue:
+//                    fragment = new NavFragment_Member_Issue();
+//                    break;
                 case R.id.nav_treasurer_financial:
                     fragment = new NavFragment_Treasurer_Financial();
                     break;
@@ -602,34 +665,34 @@ public class Dashboard extends AppCompatActivity {
 //                        fragment = new NavFragment_Member_Home();
 
                 //===================================================== PRIEST fragment =====================================================
-                case R.id.nav_priest_home:
-                    fragment = new NavFragment_Member_Home();
-                    break;
-                case R.id.nav_priest_issue:
-                    fragment = new NavFragment_Member_Issue();
-                    break;
+//                case R.id.nav_priest_home:
+//                    fragment = new NavFragment_Member_Home();
+//                    break;
+//                case R.id.nav_priest_issue:
+//                    fragment = new NavFragment_Member_Issue();
+//                    break;
                 case R.id.nav_priest_serviceArea:
                     fragment = new NavFragment_Priest_SeeServiceArea();
                     break;
 
                 //===================================================== PENATUA fragment =====================================================
-                case R.id.nav_penatua_home:
-                    fragment = new NavFragment_Member_Home();
-                    break;
-                case R.id.nav_penatua_issue:
-                    fragment = new NavFragment_Member_Issue();
-                    break;
+//                case R.id.nav_penatua_home:
+//                    fragment = new NavFragment_Member_Home();
+//                    break;
+//                case R.id.nav_penatua_issue:
+//                    fragment = new NavFragment_Member_Issue();
+//                    break;
                 case R.id.nav_penatua_manageMemberData:
                     fragment = new NavFragment_PntSym_manageMemberData();
                     break;
 
                 //===================================================== SYAMAS fragment =====================================================
-                case R.id.nav_syamas_home:
-                    fragment = new NavFragment_Member_Home();
-                    break;
-                case R.id.nav_syamas_issue:
-                    fragment = new NavFragment_Member_Issue();
-                    break;
+//                case R.id.nav_syamas_home:
+//                    fragment = new NavFragment_Member_Home();
+//                    break;
+//                case R.id.nav_syamas_issue:
+//                    fragment = new NavFragment_Member_Issue();
+//                    break;
                 case R.id.nav_syamas_manageMemberData:
                     fragment = new NavFragment_PntSym_manageMemberData();
                     break;
@@ -685,12 +748,41 @@ public class Dashboard extends AppCompatActivity {
                     }
 
                     Log.e(TAG, "sendFCMTokenToServer: new Token Issued -> sending to Server ...");
-                    IssueRequestHandler req = new IssueRequestHandler(null);
+                    IssueRequestHandler req = new IssueRequestHandler(Dashboard.this);
                     req.setContext(Dashboard.this);
                     req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().setFCMToken(
                             userId, token
                     ));
                 });
+    }
+
+    private void fetchFreshChurchData(){
+        int churchId = Guru.getInt(KEY_CHURCH_ID, 0);
+        if (churchId == 0) return;
+
+        //fetch church data in dashboard so the data always fresh
+
+        IssueRequestHandler req = new IssueRequestHandler(Dashboard.this);
+        req.setIntention(new Throwable());
+        req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
+            @Override
+            public void onTry() {
+
+            }
+
+            @Override
+            public void onSuccess(APIWrapper res, String message) throws JSONException {
+                JSONArray columns = res.getData().getJSONArray("columns");
+                Guru.putInt(KEY_CHURCH_COLUMN_COUNT, columns.length());
+            }
+
+            @Override
+            public void onRetry() {
+                fetchFreshChurchData();
+            }
+        });
+        req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().findChurchById(churchId));
+
     }
 
     @BindView(R.id.textView_userName)

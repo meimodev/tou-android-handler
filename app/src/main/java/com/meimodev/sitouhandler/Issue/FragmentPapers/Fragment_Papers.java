@@ -20,6 +20,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 
 import com.github.squti.guru.Guru;
@@ -120,6 +122,11 @@ public class Fragment_Papers extends Fragment {
     private String POST_ceremonyDate = "";
     private String POST_priestId = "";
 
+    @BindView(R.id.layout_scroll)
+    NestedScrollView scrollView;
+    @BindView(R.id.layout_scrollChild)
+    ConstraintLayout scrollViewChild;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -137,14 +144,18 @@ public class Fragment_Papers extends Fragment {
                 etDateExecuted.setAsDatePicker(getFragmentManager());
 
                 btnAddName.setOnClickListener(view -> {
+                    scrollView.invalidate();
+                    scrollViewChild.invalidate();
                     Intent intent = new Intent(context, Adding.class);
                     intent.putExtra("request", "name");
+                    intent.putExtra("OPERATION_TYPE", Adding.OPERATION_ADD_NAME_REGISTERED_ONLY);
                     startActivityForResult(intent, REQUEST_CODE_PERSONAL_NAME);
                 });
 
                 btnAddPriest.setOnClickListener(view -> {
                     Intent intent = new Intent(context, Adding.class);
                     intent.putExtra("request", "priest");
+                    intent.putExtra("OPERATION_TYPE", Adding.OPERATION_ADD_NAME_REGISTERED_ONLY);
                     startActivityForResult(intent, REQUEST_CODE_PRIEST_NAME);
                 });
                 btnAddPriest.setAsAddingButton(container, inflater, llpriestPlaceHolder, 1, () -> {
@@ -158,11 +169,13 @@ public class Fragment_Papers extends Fragment {
                 defaultLayoutTransition = llnamePlaceHolder.getLayoutTransition();
                 switch (keyIssue) {
                     case KEY_PAPERS_VALIDATE_MEMBERS:
+
                         btnAddName.setAsAddingButton(container, inflater, llnamePlaceHolder, 1, deleteListener);
                         break;
 
                     case KEY_PAPERS_CREDENTIAL:
                         llKredensi.setVisibility(View.VISIBLE);
+
                         btnAddName.setAsAddingButton(container, inflater, llnamePlaceHolder, 1000, deleteListener);
 
                         etCredentialDate.setAsDatePicker(getFragmentManager());
@@ -189,6 +202,11 @@ public class Fragment_Papers extends Fragment {
                     case KEY_PAPERS_MARRIED:
                         lldateExec_pendeta.setVisibility(View.VISIBLE);
                         llNikah.setVisibility(View.VISIBLE);
+                        btnAddName.setOnClickListener(view -> {
+                            Intent intent = new Intent(context, Adding.class);
+                            intent.putExtra("request", "name");
+                            startActivityForResult(intent, REQUEST_CODE_PERSONAL_NAME);
+                        });
                         deleteListener = () -> {
                             Snackbar.make(rootView, "Nama Berhasil Dihapus", Snackbar.LENGTH_SHORT).show();
                             resetPlaceHolderView(llnamePlaceHolder, btnAddName);
@@ -257,7 +275,7 @@ public class Fragment_Papers extends Fragment {
         ////////////////////////////////////// index sensitive //////////////////////////////////////
         customEditTexts.add(etCredentialName); // 0
         customEditTexts.add(etCredentialDate); // 1
-        customEditTexts.add(etCredentialTime); // 2
+        customEditTexts.add(etCredentialPlace); // 2
         customEditTexts.add(etCredentialPlace); // 3
         customEditTexts.add(etDateExecuted); // 4
         customButtonAdds.add(btnAddName); // 0
@@ -302,9 +320,6 @@ public class Fragment_Papers extends Fragment {
             return;
         }
 
-
-        Snackbar.make(rootView, " SUBMITING ...", Snackbar.LENGTH_SHORT).show();
-
         Log.e(TAG, "------------------------ LOG HEAD ------------------------");
         Log.e(TAG, "SUBMIT FRAGMENT INCOME : KEYBUNDLE -- " + keyIssue);
 
@@ -316,7 +331,6 @@ public class Fragment_Papers extends Fragment {
             case KEY_PAPERS_VALIDATE_MEMBERS:
                 break;
             case KEY_PAPERS_CREDENTIAL:
-
                 POST_destination = etCredentialName.getText().toString();
                 POST_date = etCredentialDate.getText().toString();
                 POST_time = etCredentialTime.getText().toString();
@@ -327,8 +341,6 @@ public class Fragment_Papers extends Fragment {
                 Log.e(TAG, "Time :" + POST_time);
                 Log.e(TAG, "Place :" + POST_place);
                 Log.e(TAG, "============ Issued Member ===========");
-
-
                 break;
             case KEY_PAPERS_BAPTIZE:
                 POST_ceremonyDate = etDateExecuted.getText().toString().trim();

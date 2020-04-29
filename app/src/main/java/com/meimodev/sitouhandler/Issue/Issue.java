@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Issue;
 
 import android.content.BroadcastReceiver;
@@ -107,9 +111,9 @@ public class Issue extends AppCompatActivity {
                 holder.add("Pilih Jenis Surat");
                 holder.add(Constant.KEY_PAPERS_VALIDATE_MEMBERS);
                 holder.add(Constant.KEY_PAPERS_CREDENTIAL);
-                holder.add(Constant.KEY_PAPERS_BAPTIZE);
-                holder.add(Constant.KEY_PAPERS_SIDI);
-                holder.add(Constant.KEY_PAPERS_MARRIED);
+//                holder.add(Constant.KEY_PAPERS_BAPTIZE);
+//                holder.add(Constant.KEY_PAPERS_SIDI);
+//                holder.add(Constant.KEY_PAPERS_MARRIED);
 
                 arrayListString.addAll(holder);
 

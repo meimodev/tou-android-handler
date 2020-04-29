@@ -240,6 +240,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingTop="5dp"
+                            android:maxLines="20"
                             android:text="Penatua 40"
                             android:textColor="@color/TextView_Label_Light"
                             android:visibility="visible" />

@@ -508,6 +508,7 @@ public class Fragment_Outcome extends Fragment {
                         btnAddName.setOnClickListener(view -> {
                             Intent intent = new Intent(context, Adding.class);
                             intent.putExtra("request", "name");
+                            intent.putExtra("OPERATION_TYPE",Adding.OPERATION_ADD_NAME_REGISTERED_ONLY);
                             startActivityForResult(intent, REQUEST_CODE_PERSONAL_NAME);
                         });
 

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?><!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:animateLayoutChanges="true">
+
+    <!--Service is Found-->
+    <LinearLayout
+        android:id="@+id/layout_found"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!--Title-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:animateLayoutChanges="true"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView_infoServiceType"
+                style="@style/TextView_IssueTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="Service Type "
+                android:textAlignment="center"
+                android:textColor="@color/TextView_Label_Dark"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView_infoServiceId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="ID 24452" />
+
+        </RelativeLayout>
+        <!--Content-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextView_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Atas Nama" />
+
+                <TextView
+                    style="@style/TextView_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tanggal" />
+
+                <TextView
+                    style="@style/TextView_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Khadim" />
+
+                <TextView
+                    style="@style/TextView_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tempat" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView_infoName"
+                    style="@style/TextView_label_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="JHON MANEMBO" />
+
+                <TextView
+                    android:id="@+id/textView_infoDate"
+                    style="@style/TextView_label_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="26 Agustus 2050" />
+
+                <TextView
+                    android:id="@+id/textView_infoKhadim"
+                    style="@style/TextView_label_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pdt. Jhon jhon" />
+
+                <TextView
+                    android:id="@+id/textView_infoPlace"
+                    style="@style/TextView_label_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Kel. Jhonny Mambz" />
+
+                <TextView
+                    android:id="@+id/textView_infoNote"
+                    style="@style/TextView_label_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="note"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--Status / Not Found / Error-->
+    <RelativeLayout
+        android:id="@+id/layout_status"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_regular"
+            android:gravity="center"
+            android:maxLines="10"
+            android:text="Mencari ID ..."
+            android:textAlignment="gravity" />
+
+        <TextView
+            android:id="@+id/textView_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:fontFamily="@font/montserrat_regular"
+            android:gravity="center"
+            android:textColor="@color/colorAccent3End"
+            android:maxLines="10"
+            android:text="3M4"
+            android:textAlignment="gravity" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!--Loading-->
+    <RelativeLayout
+        android:id="@+id/layout_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+       <ProgressBar
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_margin="48dp"/>
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

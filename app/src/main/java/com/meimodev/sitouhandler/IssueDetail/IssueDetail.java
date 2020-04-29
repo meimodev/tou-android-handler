@@ -126,10 +126,12 @@ public class IssueDetail extends AppCompatActivity {
             JSONObject auth = issueAuth.getJSONObject(i);
             String authStatus = auth.getString("status");
             JSONArray authChurchPositions = auth.getJSONArray("church_position");
+            String churchPositionString = auth.getString("church_position_string");
+
             String authOn = auth.getString("on");
 
             notations.add(new IssueDetailNotation_NotationModel(
-                    authChurchPositions, authOn, authStatus)
+                    churchPositionString, authOn, authStatus)
             );
 
         }
@@ -197,6 +199,7 @@ public class IssueDetail extends AppCompatActivity {
 
             b.linearLayoutServiceEntryId.setVisibility(View.VISIBLE);
             b.textViewServiceEntryId.setText(obj.getString("service_entry_id"));
+
 
             if (!obj.getString("service_description").isEmpty()) {
                 b.cardViewDescription.setVisibility(View.VISIBLE);
@@ -296,7 +299,7 @@ public class IssueDetail extends AppCompatActivity {
 
         tvName.setText(issuedByMember.get("name"));
         tvColumn.setText(issuedByMember.get("column"));
-        tvPosition.setText(issuedByMember.get("church_position").replace("\\n", System.lineSeparator()));
+        tvPosition.setText(issuedByMember.get("church_position").replace(",", System.lineSeparator()));
     }
 
     private void setupNotations() throws JSONException {
@@ -309,13 +312,8 @@ public class IssueDetail extends AppCompatActivity {
 
             IssueDetailNotation_NotationModel model = notations.get(i);
 
-            StringBuilder positions = new StringBuilder();
-            for (int j = 0; j < model.getPositions().length(); j++) {
-                String p = ((String) model.getPositions().get(j));
-                positions = j == model.getPositions().length() - 1 ? positions.append(p) : positions.append(p).append("\n");
-            }
 
-            tvPos.setText(positions.toString());
+            tvPos.setText(model.getPositionsString().replace(",",System.lineSeparator()));
             String date = model.getConfirmedDate();
             date = date.contains("yang") ? date.replace("yang ", "") : date;
             String str = model.getAuthStatus() + " " + date;
@@ -449,7 +447,10 @@ public class IssueDetail extends AppCompatActivity {
                     names.get(4).setCategory("Ayah Istri :");
                     names.get(5).setCategory("Ibu Istri");
                     break;
-                default:
+                case KEY_SERVICE_SPECIAL_IBADAH_MINGGU:
+                    names.get(0).setCategory("Koordinator :");
+                    break;
+                 default:
                     names.get(0).setCategory("Atas Nama :");
             }
         }

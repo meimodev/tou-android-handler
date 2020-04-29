@@ -67,6 +67,7 @@ public class SignIn extends AppCompatActivity {
             finishAffinity();
         }
 
+
         b.editTextPhone.clearFocus();
         b.editTextPassword.clearFocus();
 
@@ -88,6 +89,9 @@ public class SignIn extends AppCompatActivity {
         SimpleDateFormat format = new SimpleDateFormat("y", Locale.US);
         String year = format.format(d);
         b.textViewDev.setText("TOU-System | Awesomely Possible - Meimo " + year + " | © all rights reserved");
+
+        // TODO remove this on production
+        initHelper();
     }
 
     @Override
@@ -161,22 +165,23 @@ public class SignIn extends AppCompatActivity {
         if (!data.isNull("member")) {
 
             JSONObject memberObj = data.getJSONObject("member");
-            Log.e(TAG, "proceed: Saving Member Data");
+
             Guru.putInt(Constant.KEY_MEMBER_ID, memberObj.getInt("id"));
             Guru.putString(Constant.KEY_MEMBER_CHURCH_POSITION, memberObj.getString("church_position_full"));
             Guru.putString(Constant.KEY_MEMBER_BIPRA, memberObj.getString("BIPRA"));
             Guru.putInt(Constant.KEY_MEMBER_DUPLICATE_CHECK, memberObj.isNull("duplicate_check") ? 0 : 1);
 
             JSONObject columnObj = data.getJSONObject("column");
-            Log.e(TAG, "proceed: Saving Column Data");
+
             Guru.putInt(Constant.KEY_COLUMN_ID, columnObj.getInt("id"));
             Guru.putString(Constant.KEY_COLUMN_NAME_INDEX, columnObj.getString("name_index"));
 
             JSONObject churchObj = data.getJSONObject("church");
-            Log.e(TAG, "proceed: Saving Church Data");
+
             Guru.putInt(Constant.KEY_CHURCH_ID, churchObj.getInt("id"));
             Guru.putString(Constant.KEY_CHURCH_NAME, churchObj.getString("church_name"));
             Guru.putString(Constant.KEY_CHURCH_KELURAHAN, churchObj.getString("church_kelurahan"));
+            Guru.putInt(Constant.KEY_CHURCH_COLUMN_COUNT, churchObj.getInt("column_count"));
 
         }
         else {
@@ -230,6 +235,60 @@ public class SignIn extends AppCompatActivity {
         Intent i = new Intent(this, ConfirmAccount.class);
         i.putExtra("phone", b.textInputLayoutPhone.getEditText().getText().toString());
         startActivity(i);
+    }
+
+    private void initHelper() {
+
+        View.OnClickListener helper = v -> {
+            String phone = "", pass = "password";
+
+            if (v == b.buttonChief) {
+                phone = "1";
+            }
+            else if (v == b.buttonSecretary) {
+                phone = "2";
+            }
+            else if (v == b.buttonTreasurer) {
+                phone = "3";
+            }
+            else if (v == b.buttonPriest) {
+                phone = "4";
+            }
+            else if (v == b.buttonSym) {
+                phone = "6";
+            }
+            else if (v == b.buttonPkb) {
+                phone = "8";
+            }
+            else if (v == b.buttonWki) {
+                phone = "9";
+            }
+            else if (v == b.buttonYouths) {
+                phone = "12";
+            }
+            else if (v == b.buttonTeens) {
+                phone = "10";
+            }
+            else if (v == b.buttonKids) {
+                phone = "11";
+            }
+
+            b.editTextPhone.setText(String.format("0852%s", phone));
+            b.editTextPassword.setText(pass);
+            signIn();
+        };
+
+        b.buttonChief.setOnClickListener(helper);
+        b.buttonSecretary.setOnClickListener(helper);
+        b.buttonTreasurer.setOnClickListener(helper);
+        b.buttonPriest.setOnClickListener(helper);
+        b.buttonSym.setOnClickListener(helper);
+        b.buttonPkb.setOnClickListener(helper);
+        b.buttonWki.setOnClickListener(helper);
+        b.buttonYouths.setOnClickListener(helper);
+        b.buttonTeens.setOnClickListener(helper);
+        b.buttonKids.setOnClickListener(helper);
+
     }
 
 }

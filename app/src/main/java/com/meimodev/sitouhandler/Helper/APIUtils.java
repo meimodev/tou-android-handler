@@ -73,6 +73,8 @@ public class APIUtils {
     public static APIWrapper parseWrapper(Context context, ResponseBody response) {
 
         APIWrapper apiWrapper = new APIWrapper();
+        apiWrapper.setDataArray(null);
+        apiWrapper.setData(null);
 
         JSONObject obj;
         try {
@@ -83,10 +85,12 @@ public class APIUtils {
 
             if (obj.toString().contains("\"data\":[")) {
                 apiWrapper.setDataArray(obj.getJSONArray("data"));
+                apiWrapper.setData(null);
                 Log.e(TAG, "parseWrapper: " + "(Class)" + context.getClass().getSimpleName() + ": " + intention + ": JSON data is ARRAY");
             }
             else {
                 apiWrapper.setData(obj.getJSONObject("data"));
+                apiWrapper.setDataArray(null);
                 Log.e(TAG, "parseWrapper: " + "(Class)" + context.getClass().getSimpleName() + ": " + intention + ": JSON data is OBJECT");
             }
         } catch (JSONException | IOException e) {

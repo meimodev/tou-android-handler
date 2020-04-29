@@ -5,6 +5,7 @@
 package com.meimodev.sitouhandler.Issue;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -113,8 +114,9 @@ public class Adding_RecyclerAdapter extends RecyclerView.Adapter<Adding_Recycler
         Intent intent = new Intent(Adding.ACTION_SELECT_ITEM_RECYCLER_VIEW);
         holder.setIsRecyclable(false);
 
-        if (ctx.getClass().getSimpleName().equals(Adding.class.getSimpleName()))
+        if (ctx.getClass().getSimpleName().equals(Adding.class.getSimpleName())) {
             btnDelete.setVisibility(View.GONE);
+        }
         else {
             btnDelete.setVisibility(View.VISIBLE);
             btnDelete.setOnClickListener(view -> {
@@ -129,35 +131,40 @@ public class Adding_RecyclerAdapter extends RecyclerView.Adapter<Adding_Recycler
             String churchName = Guru.getString(KEY_CHURCH_NAME, null);
             String churchVillage = Guru.getString(KEY_CHURCH_KELURAHAN, null);
             tvUnregistered.setText(model.getName());
-            tvUnregisteredChurch.setText(String.format("%s, %s", churchName, churchVillage));
-            if (Adding.OPERATION_TYPE == Adding.OPERATION_ADD_NAME_REGISTERED_ONLY)
+            tvUnregisteredChurch.setText(String.format("Jemaat '%s', %s", churchName.toUpperCase(), churchVillage));
+
+            if (Adding.OPERATION_TYPE == Adding.OPERATION_ADD_NAME_REGISTERED_ONLY) {
                 btnUnregistered.setVisibility(View.GONE);
-            btnUnregistered.setOnClickListener(view -> {
+            }
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                builder.setMessage("Anda menggunakan nama yang tidak terdaftar sistem\n" + churchName + ", " + churchVillage + "\n Pastikan NAMA tersebut sesuai");
-                builder.setTitle("Peringatan");
-                builder.setPositiveButton("OK", (dialogInterface, i) -> {
-//                Check if current model already added in selectedModelArray
-                    if (isModelAlreadySelected(model.getId(), staticReference)) {
-                        ctx.sendBroadcast(new Intent(Adding.ACTION_ALREADY_SELECTED_RECYCLER_VIEW));
-                    } else {
-                        intent.putExtra("unregistered", true);
-                        intent.putExtra("model.name", model.getName());
-
-                        ctx.sendBroadcast(intent);
-                    }
-                });
-                builder.create().show();
-
-            });
-
-        } else {
+            btnUnregistered.setOnClickListener(view ->
+                    Constant.displayDialog(
+                            ctx,
+                            "Perhatian !",
+                            "Anda menggunakan nama yang tidak terdaftar sistem"
+                                    + System.lineSeparator()
+                                    + "Jemaat " + churchName + ", " + churchVillage
+                                    + System.lineSeparator()
+                                    + "Pastikan NAMA tersebut sesuai",
+                            (dialog, which) -> {
+                                if (isModelAlreadySelected(model.getId(), staticReference)) {
+                                    ctx.sendBroadcast(new Intent(Adding.ACTION_ALREADY_SELECTED_RECYCLER_VIEW));
+                                }
+                                else {
+                                    intent.putExtra("unregistered", true);
+                                    intent.putExtra("model.name", model.getName());
+                                    ctx.sendBroadcast(intent);
+                                }
+                            }
+                    ));
+        }
+        else {
             cvMain.setOnClickListener(view -> {
 //                Check if current model already added in selectedModelArray
                 if (isModelAlreadySelected(model.getId(), staticReference)) {
                     ctx.sendBroadcast(new Intent(Adding.ACTION_ALREADY_SELECTED_RECYCLER_VIEW));
-                } else {
+                }
+                else {
                     intent.putExtra("model.id", model.getId());
                     intent.putExtra("model.name", model.getName());
                     intent.putExtra("model.bod", model.getBirthDate());
@@ -174,18 +181,22 @@ public class Adding_RecyclerAdapter extends RecyclerView.Adapter<Adding_Recycler
             });
 
             if (model.getImageUrl() != null) {
-                if (model.getImageUrl().contains("/"))
+                if (model.getImageUrl().contains("/")) {
                     Picasso.get().load(model.getImageUrl()).resize(50, 50).centerCrop().into(ivMain);
+                }
             }
 
-            if (model.getName() != null)
+            if (model.getName() != null) {
                 tvName.setText(model.getName());
+            }
 
-            if (model.getBirthDate() != null)
+            if (model.getBirthDate() != null) {
                 tvDate.setText(model.getBirthDate());
+            }
 
-            if (model.getKolom() != null)
+            if (model.getKolom() != null) {
                 tvKolom.setText(model.getKolom());
+            }
 
             if (model.isBaptis()) {
                 cvBaptis.setVisibility(View.VISIBLE);
@@ -213,7 +224,10 @@ public class Adding_RecyclerAdapter extends RecyclerView.Adapter<Adding_Recycler
                 if (model.getId() == modelId) return true;
             }
             return false;
-        } else return false;
+        }
+        else {
+            return false;
+        }
     }
 
     private OnRecyclerItemOperationListener.DeleteListener onRecyclerItemDeleteListener;
