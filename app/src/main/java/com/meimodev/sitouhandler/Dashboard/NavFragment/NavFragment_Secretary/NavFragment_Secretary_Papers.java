@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Secretary;
 
 import android.content.Context;
@@ -127,7 +131,6 @@ public class NavFragment_Secretary_Papers extends Fragment implements View.OnCli
                         ));
                     }
                 }
-
 
                 if (isOutbound) {
                     rvLetters.setAdapter(new NavFragment_Secretary_Papers_RecyclerAdapter(context, outboundLetter, recyclerItemClickListener));

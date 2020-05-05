@@ -1,14 +1,20 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.CustomWidget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -35,22 +41,34 @@ public class CustomEditText extends TextInputEditText {
     private static final String TAG = "CustomEdtText";
     private Context context;
 
+    CountDownTimer countdownToClearFocus = new CountDownTimer(1500, 1000) {
+
+        public void onTick(long millisUntilFinished) {
+        }
+
+        public void onFinish() {
+            CustomEditText.this.clearFocus();
+        }
+    };
+
     public CustomEditText(Context context) {
         super(context);
         this.context = context;
+        addOnFocusEscape();
     }
 
     public CustomEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         setCustomFont(context, attrs);
         this.context = context;
-
+        addOnFocusEscape();
     }
 
     public CustomEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setCustomFont(context, attrs);
         this.context = context;
+        addOnFocusEscape();
     }
 
     private void setCustomFont(Context ctx, AttributeSet attrs) {
@@ -122,7 +140,6 @@ public class CustomEditText extends TextInputEditText {
         });
     }
 
-
     void displayDatePickerDialog(FragmentManager fragmentManager, boolean set) {
         if (set) {
             Calendar now = Calendar.getInstance();
@@ -160,6 +177,9 @@ public class CustomEditText extends TextInputEditText {
                 this.setText(Constant.formatTime(hourOfDay, minute, second, false));
             }, true);
             try {
+                timePickerDialog.setCancelText("BATAL");
+                timePickerDialog.setOkColor(getResources().getColor(android.R.color.white));
+                timePickerDialog.setCancelColor(getResources().getColor(android.R.color.white));
                 timePickerDialog.show(fragmentManager, null);
             } catch (NullPointerException e) {
                 Log.e(TAG, "displayTimePickerDialog: null refrence on FragmentManager", e);
@@ -167,5 +187,25 @@ public class CustomEditText extends TextInputEditText {
 
         }
     }
+
+    private void addOnFocusEscape() {
+        this.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                countdownToClearFocus.start();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                countdownToClearFocus.cancel();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                countdownToClearFocus.start();
+            }
+        });
+    }
+
 }
 

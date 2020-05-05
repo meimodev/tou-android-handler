@@ -66,17 +66,17 @@ public class IssueDetail extends AppCompatActivity {
 
     private ActivityIssueDetailBinding b;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         b = ActivityIssueDetailBinding.inflate(getLayoutInflater());
         setContentView(b.getRoot());
 
-
-//        ButterKnife.bind(this);
         changeStatusColor(this, R.color.colorPrimary);
 
         registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
 
         b.layoutButtons.setVisibility(View.GONE);
 
@@ -164,14 +164,16 @@ public class IssueDetail extends AppCompatActivity {
 
         else if (isIssueIncome(keyIssue)) {
 
-            keyIssueValue.put("financial_description", obj.getString("financial_description"));
+            keyIssueValue.put("financial_description", obj.getString("financial_description").replace("\\n", System.lineSeparator()));
             keyIssueValue.put("financial_type", obj.getString("financial_type"));
             keyIssueValue.put("financial_account_number", obj.getString("financial_account_number"));
             keyIssueValue.put("financial_amount", obj.getString("financial_amount"));
 
             if (!keyIssueValue.get("financial_description").toString().isEmpty()) {
                 b.cardViewDescription.setVisibility(View.VISIBLE);
-                b.textViewDescription.setText(keyIssueValue.get("financial_description").toString());
+                b.textViewDescription.setText(
+                        keyIssueValue.get("financial_description").toString()
+                );
             }
         }
         else if (isIssuePaper(keyIssue)) {
@@ -313,14 +315,15 @@ public class IssueDetail extends AppCompatActivity {
             IssueDetailNotation_NotationModel model = notations.get(i);
 
 
-            tvPos.setText(model.getPositionsString().replace(",",System.lineSeparator()));
+            tvPos.setText(model.getPositionsString().replace(",", System.lineSeparator()));
             String date = model.getConfirmedDate();
             date = date.contains("yang") ? date.replace("yang ", "") : date;
             String str = model.getAuthStatus() + " " + date;
 
-            if (model.getAuthStatus().contentEquals("DITERIMA")){
+            if (model.getAuthStatus().contentEquals("DITERIMA")) {
                 tvDate.setTextColor(getResources().getColor(R.color.accept));
-            } else if (model.getAuthStatus().contentEquals("DITOLAK")){
+            }
+            else if (model.getAuthStatus().contentEquals("DITOLAK")) {
                 tvDate.setTextColor(getResources().getColor(R.color.reject));
             }
 
@@ -384,8 +387,11 @@ public class IssueDetail extends AppCompatActivity {
     }
 
     public static final String KEY_ISSUE_DETAIL_CONFIRM_AUTH = "key_issue_detail_confirm_auth";
+    public static final String OPERATION_VIEW_ONLY = "VIEW_ONLY";
 
     private void setupAcceptRejectButtons() {
+        if (getIntent().getBooleanExtra(OPERATION_VIEW_ONLY, false)) return;
+
         int authStatusCode = getIntent().getIntExtra("AUTHORIZATION_STATUS_CODE", 99);
         int authId = getIntent().getIntExtra("AUTHORIZATION_ID", 0);
         if (authStatusCode != 99) {
@@ -407,7 +413,8 @@ public class IssueDetail extends AppCompatActivity {
                                 sendBroadcast(i);
                                 finish();
                             },
-                            dialog -> {});
+                            dialog -> {
+                            });
                 });
 
                 b.buttonReject.setOnClickListener(v -> {
@@ -421,7 +428,8 @@ public class IssueDetail extends AppCompatActivity {
                                 sendBroadcast(i);
                                 finish();
                             },
-                            dialog -> {});
+                            dialog -> {
+                            });
                 });
             }
         }
@@ -450,7 +458,7 @@ public class IssueDetail extends AppCompatActivity {
                 case KEY_SERVICE_SPECIAL_IBADAH_MINGGU:
                     names.get(0).setCategory("Koordinator :");
                     break;
-                 default:
+                default:
                     names.get(0).setCategory("Atas Nama :");
             }
         }

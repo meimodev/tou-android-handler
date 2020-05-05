@@ -930,9 +930,9 @@ public class Validator extends Constant {
                     if (validateButton_isNotSelectingAnything(customButtonAdds.get(0))) {
                         return makeMap(true, "Silahkan pilih Khadim yang akan diajukan");
                     }
-                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
-                        return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
-                    }
+//                    if (validateButton_isNotSelectingAnything(customButtonAdds.get(1))) {
+//                        return makeMap(true, "Silahkan pilih Nama yang akan diajukan");
+//                    }
                 }
                 if (isSafe(customEditTexts)) {
                     if (validateEditText_isEmpty(customEditTexts.get(0))) {
@@ -944,9 +944,9 @@ public class Validator extends Constant {
                     if (validateEditText_isEmpty(customEditTexts.get(2))) {
                         return makeMap(true, "Silahkan pilih Tempat pelaksanaan");
                     }
-                    if (validateEditText_isEmpty(customEditTexts.get(3))) {
-                        return makeMap(true, "Silahkan masukan catatan mengenai ibadah");
-                    }
+//                    if (validateEditText_isEmpty(customEditTexts.get(3))) {
+//                        return makeMap(true, "Silahkan masukan catatan mengenai ibadah");
+//                    }
                 }
                 break;
         }

@@ -200,6 +200,13 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
             Log.e(TAG, "DOB: " + dateOfBirth);
             selectedSex = b.spinnerSex.getSelectedIndex() == 0 ? "MALE" : "FEMALE";
             Log.e(TAG, "Sex: " + selectedSex);
+
+            letterBaptize = b.checkBoxBaptize.isChecked() ? "SB" : "";
+            Log.e(TAG, "Baptize: " + b.checkBoxBaptize.isChecked() + " " + letterBaptize);
+            letterSidi = b.checkBoxSidi.isChecked() ? "SS" : "";
+            Log.e(TAG, "Sidi: " + b.checkBoxSidi.isChecked()+ " " + letterSidi);
+            letterMarried = b.checkBoxMarried.isChecked() ? "SN" : "";
+            Log.e(TAG, "Nikah: " + b.checkBoxMarried.isChecked()+ " " + letterMarried);
             Log.e(TAG, "========================================================================================");
 
             // Server Request
@@ -321,7 +328,6 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
             int memberId = data.getIntExtra("model.id", 0);
             IssueRequestHandler req = new IssueRequestHandler(b.getRoot());
             req.setIntention(new Throwable());
-            req.enqueue(RetrofitClient.getInstance(null).getApiServices().getMemberUserData(memberId));
             req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
                 @Override
                 public void onTry() {
@@ -343,20 +349,19 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
                     b.editTextLastName.setText(data.getString("last_name"));
                     b.editTextDOB.setText(data.getString("date_of_birth"));
 
+                    String[] sexes = new String[]{"Laki-laki", "Perempuan"};
+                    b.spinnerSex.setItems(sexes);
+
                     if (data.getString("sex").contentEquals("Laki-laki")) {
-                        b.spinnerSex.setSelectedIndex(1);
+                        b.spinnerSex.setSelectedIndex(0);
                     }
                     else {
-                        b.spinnerSex.setSelectedIndex(2);
+                        b.spinnerSex.setSelectedIndex(1);
                     }
 
-                    String baptizeLetterEntry = data.getString("baptize_letter_entry"),
-                            sidiLetterEntry = data.getString("sidi_letter_entry"),
-                            marriedLetterEntry = data.getString("married_letter_entry");
-
-                    b.checkBoxBaptize.setChecked(!baptizeLetterEntry.isEmpty());
-                    b.checkBoxSidi.setChecked(!sidiLetterEntry.isEmpty());
-                    b.checkBoxMarried.setChecked(!marriedLetterEntry.isEmpty());
+                    b.checkBoxBaptize.setChecked(!data.isNull("baptize"));
+                    b.checkBoxSidi.setChecked(!data.isNull("sidi"));
+                    b.checkBoxMarried.setChecked(!data.isNull("marriage"));
                 }
 
                 @Override
@@ -364,6 +369,8 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
                     req.enqueue(RetrofitClient.getInstance(null).getApiServices().getMemberUserData(memberId));
                 }
             });
+            req.enqueue(RetrofitClient.getInstance(null).getApiServices().getMemberUserData(memberId));
+
         }
     }
 
@@ -417,16 +424,16 @@ public class PntSym_InputForm extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onSuccess(APIWrapper res, String message) throws JSONException {
-                    Constant.displayDialog(
-                            PntSym_InputForm.this,
-                            "OK, Operasi berhasil",
-                            message,
-                            false,
-                            (dialog, which) -> {
-                            },
-                            null,
-                            dialog -> finish()
-                    );
+                Constant.displayDialog(
+                        PntSym_InputForm.this,
+                        "OK, Operasi berhasil",
+                        message,
+                        false,
+                        (dialog, which) -> {
+                        },
+                        null,
+                        dialog -> finish()
+                );
 
             }
 

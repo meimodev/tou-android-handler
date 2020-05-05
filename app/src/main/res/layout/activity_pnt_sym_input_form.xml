@@ -10,6 +10,7 @@
     android:animateLayoutChanges="true"
     android:fadeScrollbars="false"
     android:fillViewport="true"
+    android:keepScreenOn="true"
     android:scrollbarAlwaysDrawVerticalTrack="true"
     android:scrollbarThumbVertical="@color/colorAccent"
     android:scrollbars="vertical">

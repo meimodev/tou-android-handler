@@ -230,6 +230,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
+                            android:fontFamily="@font/montserrat_regular"
                             android:maxLines="1"
                             android:text="Jhon Manembo nembo "
                             android:textColor="@color/TextView_Label_Dark"
@@ -251,6 +252,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Kolom 40"
+                            android:fontFamily="@font/montserrat_regular"
+                            android:paddingBottom="16dp"
                             android:textColor="@color/TextView_Label_Light" />
 
                     </LinearLayout>

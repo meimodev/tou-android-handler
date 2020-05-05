@@ -90,7 +90,6 @@ public class Adding_RecyclerAdapter extends RecyclerView.Adapter<Adding_Recycler
     public Adding_RecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(ctx).inflate(R.layout.recycler_item_adding, parent, false);
 
-
         ButterKnife.bind(this, view);
         return new MyViewHolder(view);
     }

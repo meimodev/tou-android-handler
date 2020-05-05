@@ -196,9 +196,9 @@ public interface ApiServices {
             @Field("sex") String sex,
             @Field("nik") String nik,
             @Field("phone") String phone,
-            @Field("baptis_entry") String baptize_entry,
-            @Field("sidi_entry") String baptize_sidi,
-            @Field("nikah_entry") String baptize_nikah,
+            @Field("baptize") String baptize_entry,
+            @Field("sidi") String sidi_entry,
+            @Field("marriage") String nikah_entry,
             @Field("force_save") boolean forceSave
     );
 
@@ -216,9 +216,9 @@ public interface ApiServices {
             @Field("sex") String sex,
             @Field("nik") String nik,
             @Field("phone") String phone,
-            @Field("baptis_entry") String baptize_entry,
-            @Field("sidi_entry") String baptize_sidi,
-            @Field("nikah_entry") String baptize_nikah
+            @Field("baptize") String baptize_entry,
+            @Field("sidi") String sidi_entry,
+            @Field("marriage") String nikah_entry
     );
 
     @DELETE("column/{id}")
@@ -346,6 +346,11 @@ public interface ApiServices {
             @Field("baptize") String baptize,
             @Field("sidi") String sidi,
             @Field("marriage") String marriage
+    );
+
+    @GET("sunday-income")
+    Call<ResponseBody> getSundayIncome(
+            @Query("member_id") int memberId
     );
 
 }

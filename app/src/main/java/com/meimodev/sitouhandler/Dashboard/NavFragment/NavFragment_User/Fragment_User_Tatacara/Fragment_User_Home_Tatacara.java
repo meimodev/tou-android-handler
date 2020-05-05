@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Tatacara;
 
 import android.content.Context;
@@ -36,7 +40,7 @@ public class Fragment_User_Home_Tatacara extends Fragment {
 
 
         if (getActivity().findViewById(R.id.layout_guide).getVisibility() == View.VISIBLE)
-            context.sendBroadcast(new Intent(Dashboard.ACTION_TOGGLE_COLLAPSE_HEADER));
+            context.sendBroadcast(new Intent(Dashboard.ACTION_HEADER_COLLAPSE));
 
 
         return rootView;

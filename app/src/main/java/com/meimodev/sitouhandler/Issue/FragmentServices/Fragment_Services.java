@@ -210,7 +210,7 @@ public class Fragment_Services extends Fragment {
                         levelList.add("Pilih Jangkauan Ibadah : ");
                         levelList.add("Jemaat");
                         levelList.add("Koordinator");
-                        levelList.add(Guru.getString(KEY_COLUMN_NAME_INDEX, ""));
+                        levelList.add(Guru.getString(KEY_COLUMN_NAME_INDEX, "Kolom"));
                         spinnerLevel.setItems(levelList);
                         spinnerLevel.setOnItemSelectedListener((view, position, id, item) -> {
                             if (levelList.get(0).contains("Pilih")) {
@@ -295,9 +295,9 @@ public class Fragment_Services extends Fragment {
                         hrType.add("Ibadah Hari Natal II"); // 7
                         hrType.add("Ibadah Akhir Tahun"); // 8
                         hrType.add("Ibadah Pra Natal Jemaat"); // 9
-                        hrType.add("Ibadah Pra Natal Kolom"); // 10
+                        hrType.add("Ibadah Pra Natal "+Guru.getString(KEY_COLUMN_NAME_INDEX,"Kolom")); // 10
                         hrType.add("Ibadah Pra Natal BIPRA Jemaat"); // 11
-                        hrType.add("Ibadah Pra Natal BIPRA Kolom"); // 12
+                        hrType.add("Ibadah Pra Natal BIPRA "+Guru.getString(KEY_COLUMN_NAME_INDEX,"Kolom")); // 12
                         hrType.add("Ibadah Pra Natal Keluarga Pelayan"); // 13
                         hrType.add("Ibadah Pra Natal Komisi Kerja"); // 14
                         hrType.add("Ibadah Pra Natal Rukun Keluarga"); // 15
@@ -368,7 +368,7 @@ public class Fragment_Services extends Fragment {
                         otherType.add("Ibadah Inatura"); // 15
                         otherType.add("Ibadah KPI"); // 16
                         otherType.add("Ibadah Puasa Diakonal Jemaat"); // 17
-                        otherType.add("Ibadah Puasa Diakonal Kolom"); // 18
+                        otherType.add("Ibadah Puasa Diakonal "+Guru.getString(KEY_COLUMN_NAME_INDEX,"Kolom")); // 18
                         otherType.add("Ibadah Puasa Diakonal BIPRA"); // 19
 
                         spinnerOtherType.setItems(otherType);
@@ -378,8 +378,9 @@ public class Fragment_Services extends Fragment {
                                 spinnerOtherType.setItems(Objects.requireNonNull(otherType));
                                 spinnerOtherType.setSelectedIndex(position - 1);
                             }
-
                         });
+
+                        btnAddName.setVisibility(View.GONE);
 
                         break;
                     case KEY_SERVICE_SPECIAL_IBADAH_MINGGU:
@@ -630,7 +631,6 @@ public class Fragment_Services extends Fragment {
                         POST_financialAccountNumber = "1.5.5.1";
                     }
 
-                    POST_note = POST_note + " Jemaat";
 
                 }
                 else if (selectedArea.contentEquals("Koordinator")) {
@@ -651,7 +651,6 @@ public class Fragment_Services extends Fragment {
                         POST_financialAccountNumber = "1.5.5.2";
                     }
 
-                    POST_note = POST_note + " Koordinator";
 
                 }
                 else if (selectedArea.contains("Kolom")) {
@@ -672,9 +671,8 @@ public class Fragment_Services extends Fragment {
                         POST_financialAccountNumber = "1.5.5.3";
                     }
 
-                    POST_note = POST_note + " " + selectedArea;
                 }
-                POST_note = "Ibadah " + selectedBIPRA;
+                POST_note = "Ibadah " + selectedBIPRA + " " + selectedArea;
                 break;
             case KEY_SERVICE_HUT:
 
@@ -687,7 +685,7 @@ public class Fragment_Services extends Fragment {
                 else if (selectedHUT.contains("Pernikahan")) {
                     POST_financialAccountNumber = "1.7.2";
                 }
-                POST_note = selectedHUT + btnAddName.getSelectedList().get(0).getName() + ", " + btnAddName.getSelectedList().get(0).getKolom();
+                POST_note = selectedHUT + " " + btnAddName.getSelectedList().get(0).getName() + ", " + btnAddName.getSelectedList().get(0).getKolom();
                 break;
             case KEY_SERVICE_PEMAKAMAN:
                 POST_financialAccountNumber = "1.19.9";
@@ -716,7 +714,11 @@ public class Fragment_Services extends Fragment {
                 else if (sFamilyService.contentEquals(spinnerFamilyServiceType.getItems().get(5).toString())) {
                     POST_financialAccountNumber = "1.7.4.6";
                 }
-                POST_note = sFamilyService + ", " + btnAddName.getSelectedList().get(0).getName();
+                POST_note = sFamilyService
+                        + ", "
+                        + btnAddName.getSelectedList().get(0).getName()
+                        + " "
+                        + btnAddName.getSelectedList().get(0).getKolom();
                 break;
             case KEY_SERVICE_HARI_RAYA:
                 String sHarRaya = spinnerHariRayaType.getItems().get(spinnerHariRayaType.getSelectedIndex()).toString();
@@ -881,7 +883,7 @@ public class Fragment_Services extends Fragment {
                 else if (sOtherType.contentEquals(spinnerOtherType.getItems().get(19).toString())) {
                     POST_financialAccountNumber = "1.22.3";
                 }
-                POST_note = sOtherType + " | " + etNote.getText().toString();
+                POST_note = sOtherType.concat(etNote.getText().toString().length() > 0 ? " | " + etNote.getText().toString().trim() : "");
                 break;
             case KEY_SERVICE_SPECIAL_IBADAH_MINGGU:
 
@@ -957,9 +959,14 @@ public class Fragment_Services extends Fragment {
 
         if (keyIssue.contentEquals(KEY_SERVICE_SPECIAL_IBADAH_MINGGU)) {
             selectedNames = btnCoordinator.getSelectedList();
-        } else if (keyIssue.contentEquals(KEY_SERVICE_HARI_RAYA)){
-            selectedNames =btnAddPriest.getSelectedList();
-        }else if (keyIssue.contentEquals(KEY_SERVICE_SPECIAL)){
+        }
+        else if (keyIssue.contentEquals(KEY_SERVICE_HARI_RAYA)) {
+            selectedNames = btnAddPriest.getSelectedList();
+        }
+        else if (keyIssue.contentEquals(KEY_SERVICE_SPECIAL)) {
+            selectedNames = btnAddPriest.getSelectedList();
+        }
+        else if (keyIssue.contentEquals(KEY_SERVICE_LAIN)) {
             selectedNames = btnAddPriest.getSelectedList();
         }
 
@@ -980,8 +987,9 @@ public class Fragment_Services extends Fragment {
             index++;
         }
         s = "";
-        if (!selectedNames.isEmpty())
-        s = String.valueOf(selectedNames.get(0).getId());
+        if (!selectedNames.isEmpty()) {
+            s = String.valueOf(selectedNames.get(0).getId());
+        }
 
         POST_issuedMemberData = s.isEmpty() ? "" : s;
 
@@ -1035,9 +1043,7 @@ public class Fragment_Services extends Fragment {
 
         requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
-            public void onTry() {
-
-            }
+            public void onTry() {}
 
             @Override
             public void onSuccess(APIWrapper res, String message) {

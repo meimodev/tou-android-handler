@@ -104,7 +104,6 @@ public class Adding extends AppCompatActivity {
         initEditTextSearch();
     }
 
-
     private void registerBroadcastReceiver() {
         onSelectedItemRecyclerView = new BroadcastReceiver() {
             @Override
@@ -183,6 +182,8 @@ public class Adding extends AppCompatActivity {
                 countdownToFetchData.start();
             }
         });
+        b.textInputLayoutSearch.requestFocus();
+
     }
 
     private boolean validateInput() {
@@ -286,9 +287,9 @@ public class Adding extends AppCompatActivity {
                 );
                 add.setUnregistered(true);
             }
-            add.setBaptis(!model.getString("nomor_surat_baptis").isEmpty());
-            add.setSidi(!model.getString("nomor_surat_sidi").isEmpty());
-            add.setNikah(!model.getString("nomor_surat_nikah").isEmpty());
+            add.setBaptis(!model.isNull("nomor_surat_baptis"));
+            add.setSidi(!model.isNull("nomor_surat_sidi"));
+            add.setNikah(!model.isNull("nomor_surat_nikah"));
             items.add(add);
         }
 

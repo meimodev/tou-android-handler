@@ -282,7 +282,31 @@ public class Constant {
     }
 
     public static View makeProgressCircle(View rootView) {
-        return makeProgressCircle(rootView.getContext());
+        Context context = rootView.getContext();
+        View v = LayoutInflater.from(context).inflate(R.layout.resource_custom_progress_bar_progressing, ((ViewGroup) rootView), false);
+        ProgressCircula p = v.findViewById(R.id.pc);
+
+        try {
+
+            RelativeLayout holder = rootView.findViewById(R.id.layout_progressHolder);
+            holder.removeAllViews();
+            holder.addView(v);
+
+            
+        p.setSpeed(3);
+            p.setIndeterminate(true);
+            p.setRimWidth(6);
+            p.startRotation();
+            p.setRimColor(context.getResources().getColor(R.color.colorAccent));
+            p.setShowProgress(false);
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            Log.e("IMPORTANT !", "makeProgressCircle: Parent Layout is not found (no id: R.id.layout_progressHolder) on rootView");
+        }
+
+
+        return v;
     }
 
     public static View makeProgressCircle(Context context) {

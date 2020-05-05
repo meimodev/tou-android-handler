@@ -306,5 +306,12 @@ public class NavFragment_Treasurer_Financial extends Fragment {
         }
     };
 
+    @Override
+    public void onPause() {
+        fetch.cancelAll();
+        super.onPause();
+    }
+
+
 
 }

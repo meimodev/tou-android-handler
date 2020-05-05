@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -38,13 +39,12 @@ import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 import com.meimodev.sitouhandler.BuildConfig;
 import com.meimodev.sitouhandler.Constant;
-import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Cheif.NavFragment_Chief_ManageServiceArea;
+import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member.NavFragment_Account_Setting;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member.NavFragment_Member_Home;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member.NavFragment_Member_Issue;
-import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Member.NavFragment_Account_Setting;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_PntSym.NavFragment_PntSym_manageMemberData;
-import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Priest.NavFragment_Priest_SeeServiceArea;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Secretary.NavFragment_Secretary_Papers;
+import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_SundayServiceIncome;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Treasurer.NavFragment_Treasurer_Financial;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Home;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
@@ -67,7 +67,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_CHIEF;
-import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_MEMBER;
 import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_PENATUA;
 import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_PENATUA_ANAK;
 import static com.meimodev.sitouhandler.Constant.ACCOUNT_TYPE_PENATUA_PKB;
@@ -132,67 +131,52 @@ public class Dashboard extends AppCompatActivity {
 
     private boolean isCollapse = false;
 
-    public static final String ACTION_TOGGLE_COLLAPSE_HEADER = "toggle_header";
+    public static final String ACTION_HEADER_COLLAPSE = "collapse_header";
+    public static final String ACTION_HEADER_EXPAND = "expand_header";
     BroadcastReceiver brToggleHeaderCollapse = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().contentEquals(ACTION_TOGGLE_COLLAPSE_HEADER)) {
+            if (intent.getAction().contentEquals(ACTION_HEADER_COLLAPSE)) {
+                isCollapse = true;
+            }
+            else if (intent.getAction().equalsIgnoreCase(ACTION_HEADER_EXPAND)) {
+                isCollapse = false;
+            }
 
-                isCollapse = !isCollapse;
-                Guideline guideline = findViewById(R.id.guide);
-                ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) guideline.getLayoutParams();
-                lp.guidePercent = isCollapse ? 0.10f : 0.30f;
-                guideline.setLayoutParams(lp);
+            Guideline guideline = findViewById(R.id.guide);
+            ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) guideline.getLayoutParams();
+            lp.guidePercent = isCollapse ? 0.10f : 0.30f;
+            guideline.setLayoutParams(lp);
 
-                int visibility = isCollapse ? View.GONE : View.VISIBLE;
-//                ConstraintLayout.LayoutParams params = isCollapse ?
-//                        new ConstraintLayout.LayoutParams(
-//                                ConstraintLayout.LayoutParams.MATCH_PARENT,
-//                                (int) TypedValue.applyDimension(
-//                                        TypedValue.COMPLEX_UNIT_DIP,
-//                                        40,
-//                                        getResources().getDisplayMetrics()
-//                                )
-//                        )
-//                        :
-//                        new ConstraintLayout.LayoutParams(
-//                                ConstraintLayout.LayoutParams.MATCH_PARENT,
-//                                (int) TypedValue.applyDimension(
-//                                        TypedValue.COMPLEX_UNIT_DIP,
-//                                        0,
-//                                        getResources().getDisplayMetrics()
-//                                )
-//                        );
+            int visibility = isCollapse ? View.GONE : View.VISIBLE;
 
-                LinearLayout llGuide = findViewById(R.id.layout_guide);
-                llGuide.setVisibility(visibility);
+            LinearLayout llGuide = findViewById(R.id.layout_guide);
+            llGuide.setVisibility(visibility);
 //                llGuide.setLayoutParams(params);
-                TextView tvTitle = findViewById(R.id.textView_title);
-                tvTitle.setVisibility(isCollapse ? View.VISIBLE : View.GONE);
+            TextView tvTitle = findViewById(R.id.textView_title);
+            tvTitle.setVisibility(isCollapse ? View.VISIBLE : View.GONE);
 
-                if (Guru.getInt(KEY_MEMBER_ID, 0) == 0) {
-                    if (!isCollapse) {
-                        if (llApplyMembership.getVisibility() != View.VISIBLE) {
-                            llApplyMembership.setVisibility(View.VISIBLE);
-                        }
-                    }
-                    else {
-                        if (llApplyMembership.getVisibility() == View.VISIBLE) {
-                            llApplyMembership.setVisibility(View.GONE);
-                        }
+            if (Guru.getInt(KEY_MEMBER_ID, 0) == 0) {
+                if (!isCollapse) {
+                    if (llApplyMembership.getVisibility() != View.VISIBLE) {
+                        llApplyMembership.setVisibility(View.VISIBLE);
                     }
                 }
-
-                TextView tvUserName = findViewById(R.id.textView_userName);
-                tvUserName.setVisibility(visibility);
-                TextView tvChurchPosition = findViewById(R.id.textView_churchPosition);
-                tvChurchPosition.setVisibility(visibility);
-                TextView tvColumn = findViewById(R.id.textView_column);
-                tvColumn.setVisibility(visibility);
-                TextView tvChurchAndVillage = findViewById(R.id.textView_churchNameAndVillage);
-                tvChurchAndVillage.setVisibility(visibility);
-
+                else {
+                    if (llApplyMembership.getVisibility() == View.VISIBLE) {
+                        llApplyMembership.setVisibility(View.GONE);
+                    }
+                }
             }
+
+            TextView tvUserName = findViewById(R.id.textView_userName);
+            tvUserName.setVisibility(visibility);
+            TextView tvChurchPosition = findViewById(R.id.textView_churchPosition);
+            tvChurchPosition.setVisibility(visibility);
+            TextView tvColumn = findViewById(R.id.textView_column);
+            tvColumn.setVisibility(visibility);
+            TextView tvChurchAndVillage = findViewById(R.id.textView_churchNameAndVillage);
+            tvChurchAndVillage.setVisibility(visibility);
         }
     };
 
@@ -226,12 +210,11 @@ public class Dashboard extends AppCompatActivity {
 //        set items on nav drawer & default item selected
         setupNavDrawerItemsBasedOnAccountType();
 
-
-
 //        transact default checked navigation menu fragment
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContent, new Fragment_User_Home())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack(null)
                 .commit();
 
         initDuplicateCheck();
@@ -273,7 +256,8 @@ public class Dashboard extends AppCompatActivity {
     @Override
     protected void onResume() {
 //        registerReceiver(brUnauthenticatedSignIn, new IntentFilter(ACTION_CONTENT_USER_UNATHENTICATED));
-        registerReceiver(brToggleHeaderCollapse, new IntentFilter(ACTION_TOGGLE_COLLAPSE_HEADER));
+        registerReceiver(brToggleHeaderCollapse, new IntentFilter(ACTION_HEADER_EXPAND));
+        registerReceiver(brToggleHeaderCollapse, new IntentFilter(ACTION_HEADER_COLLAPSE));
 //        registerReceiver(brContentInFragmentIsClicked, new IntentFilter(ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED));
 //        registerReceiver(brFetchHome, new IntentFilter(Constant.ACTION_REFETCH_MEMBER_HOME));
         super.onResume();
@@ -410,81 +394,104 @@ public class Dashboard extends AppCompatActivity {
         String memberPosition = Guru.getString(KEY_MEMBER_CHURCH_POSITION, null);
         Log.e(TAG, "setupNavDrawerItemsBasedOnAccountType: memberPositions " + memberPosition);
 
+        boolean showSundayIncome = false;
+        boolean enableAuthorize = false;
+        boolean enableIssuing = false;
 
         navigationView.setCheckedItem(R.id.nav_home);
+
         if (memberPosition.contains(ACCOUNT_TYPE_CHIEF)) {
             navigationView.getMenu().findItem(R.id.nav_chief).getSubMenu().setGroupVisible(R.id.nav_group_chief, true);
             speedDialView.setVisibility(View.VISIBLE);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+            enableIssuing = true;
+            enableAuthorize = true;
+            showSundayIncome = true;
         }
 
         if (memberPosition.contains(ACCOUNT_TYPE_SECRETARY)) {
             navigationView.getMenu().findItem(R.id.nav_secretary).getSubMenu().setGroupVisible(R.id.nav_group_secretary, true);
             speedDialView.setVisibility(View.VISIBLE);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+            enableIssuing = true;
+            enableAuthorize = true;
+            showSundayIncome = true;
         }
 
         if (memberPosition.contains(ACCOUNT_TYPE_TREASURER)) {
             navigationView.getMenu().findItem(R.id.nav_treasurer).getSubMenu().setGroupVisible(R.id.nav_group_treasurer, true);
             speedDialView.setVisibility(View.VISIBLE);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+            enableIssuing = true;
+            enableAuthorize = true;
+            showSundayIncome = true;
         }
 
         if (memberPosition.contains(ACCOUNT_TYPE_PRIEST)) {
             navigationView.getMenu().findItem(R.id.nav_priest).getSubMenu().setGroupVisible(R.id.nav_group_priest, true);
             speedDialView.setVisibility(View.VISIBLE);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+            enableIssuing = true;
+            enableAuthorize = true;
+            showSundayIncome = true;
         }
 
         if (memberPosition.contains(ACCOUNT_TYPE_PENATUA)) {
             navigationView.getMenu().findItem(R.id.nav_penatua).getSubMenu().setGroupVisible(R.id.nav_group_penatua, true);
             speedDialView.setVisibility(View.VISIBLE);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+            enableIssuing = true;
+            enableAuthorize = true;
+            showSundayIncome = true;
         }
 
         if (memberPosition.contains(ACCOUNT_TYPE_SYAMAS)) {
             navigationView.getMenu().findItem(R.id.nav_syamas).getSubMenu().setGroupVisible(R.id.nav_group_syamas, true);
             speedDialView.setVisibility(View.VISIBLE);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+            enableIssuing = true;
+            enableAuthorize = true;
+            showSundayIncome = true;
         }
 
         if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_PKB)) {
             navigationView.getMenu().findItem(R.id.nav_penatua_pkb).getSubMenu().setGroupVisible(R.id.nav_group_penatua_pkb, true);
             speedDialView.setVisibility(View.VISIBLE);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+            enableIssuing = true;
+            enableAuthorize = true;
+            showSundayIncome = true;
         }
 
         if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_WKI)) {
             navigationView.getMenu().findItem(R.id.nav_penatua_pkb).getSubMenu().setGroupVisible(R.id.nav_group_penatua_wki, true);
             speedDialView.setVisibility(View.VISIBLE);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+            enableIssuing = true;
+            enableAuthorize = true;
+            showSundayIncome = true;
         }
+
         if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_YOUTH)) {
             navigationView.getMenu().findItem(R.id.nav_penatua_pemuda).getSubMenu().setGroupVisible(R.id.nav_group_penatua_pemuda, true);
             speedDialView.setVisibility(View.VISIBLE);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+            enableIssuing = true;
+            enableAuthorize = true;
+            showSundayIncome = true;
         }
+
         if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_REMAJA)) {
             navigationView.getMenu().findItem(R.id.nav_penatua_remaja).getSubMenu().setGroupVisible(R.id.nav_group_penatua_remaja, true);
             speedDialView.setVisibility(View.VISIBLE);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+            enableIssuing = true;
+            enableAuthorize = true;
+            showSundayIncome = true;
         }
+
         if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_ANAK)) {
             navigationView.getMenu().findItem(R.id.nav_penatua_anak).getSubMenu().setGroupVisible(R.id.nav_group_penatua_anak, true);
             speedDialView.setVisibility(View.VISIBLE);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_authorize).setEnabled(true);
-            navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu().findItem(R.id.nav_issue).setEnabled(true);
+            showSundayIncome = true;
+            enableIssuing = true;
+            enableAuthorize = true;
         }
+        SubMenu navSubMenu = navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu();
+        navSubMenu.findItem(R.id.nav_authorize).setEnabled(enableAuthorize);
+        navSubMenu.findItem(R.id.nav_issue).setEnabled(enableIssuing);
+
+        navSubMenu.findItem(R.id.nav_sundayIncome).setVisible(showSundayIncome);
     }
 
     private void setupFloatingActionMenuAndButtons() {
@@ -622,6 +629,9 @@ public class Dashboard extends AppCompatActivity {
                 case R.id.nav_issue:
                     fragment = new NavFragment_Member_Issue();
                     break;
+                case R.id.nav_sundayIncome:
+                    fragment = new NavFragment_SundayServiceIncome();
+                    break;
 
                 //===================================================== CHIEF fragment =====================================================
 //                case R.id.nav_chief_home:
@@ -630,9 +640,9 @@ public class Dashboard extends AppCompatActivity {
 //                case R.id.nav_chief_issue:
 //                    fragment = new NavFragment_Member_Issue();
 //                    break;
-                case R.id.nav_chief_manageServiceArea:
-                    fragment = new NavFragment_Chief_ManageServiceArea();
-                    break;
+//                case R.id.nav_chief_manageServiceArea:
+//                    fragment = new NavFragment_Chief_ManageServiceArea();
+//                    break;
 
                 //===================================================== SECRETARY fragment =====================================================
 //                case R.id.nav_secretary_home:
@@ -671,9 +681,9 @@ public class Dashboard extends AppCompatActivity {
 //                case R.id.nav_priest_issue:
 //                    fragment = new NavFragment_Member_Issue();
 //                    break;
-                case R.id.nav_priest_serviceArea:
-                    fragment = new NavFragment_Priest_SeeServiceArea();
-                    break;
+//                case R.id.nav_priest_serviceArea:
+//                    fragment = new NavFragment_Priest_SeeServiceArea();
+//                    break;
 
                 //===================================================== PENATUA fragment =====================================================
 //                case R.id.nav_penatua_home:
@@ -756,7 +766,7 @@ public class Dashboard extends AppCompatActivity {
                 });
     }
 
-    private void fetchFreshChurchData(){
+    private void fetchFreshChurchData() {
         int churchId = Guru.getInt(KEY_CHURCH_ID, 0);
         if (churchId == 0) return;
 
@@ -805,7 +815,19 @@ public class Dashboard extends AppCompatActivity {
     @BindView(R.id.button_apply)
     Button btnApply;
 
+    @BindView(R.id.layout_fancyBackground)
+    ConstraintLayout layoutFancyBackground;
+
     void setupBackgroundHeader() {
+
+        layoutFancyBackground.setOnClickListener(v -> {
+            if (isCollapse) {
+                sendBroadcast(new Intent(ACTION_HEADER_EXPAND));
+            }
+            else {
+                sendBroadcast(new Intent(ACTION_HEADER_COLLAPSE));
+            }
+        });
 
         cvImportantDates.setVisibility(View.GONE);
         cvImportantDates.setOnClickListener(view -> {

@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Kidung;
 
 import android.content.Context;
@@ -35,7 +39,7 @@ public class Fragment_User_Home_Kidung extends Fragment {
         ButterKnife.bind(this, rootView);
 
         if (getActivity().findViewById(R.id.layout_guide).getVisibility() == View.VISIBLE)
-            context.sendBroadcast(new Intent(Dashboard.ACTION_TOGGLE_COLLAPSE_HEADER));
+            context.sendBroadcast(new Intent(Dashboard.ACTION_HEADER_COLLAPSE));
 
         return rootView;
     }

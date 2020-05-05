@@ -174,7 +174,6 @@ public class Fragment_Income extends Fragment {
     private int POST_serviceId = 0;
     private ArrayList<String> radioOtherArray;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -562,6 +561,9 @@ public class Fragment_Income extends Fragment {
 
                             btnAddDetails.addSelectedView(v);
                             llDetailsPlaceHolder.addView(v);
+
+//                            nestedScrollView.invalidate();
+//                            nestedScrollViewChild.invalidate();
 
 //                            llDetailsPlaceHolder.addView(btnAddDetails.getSelectedView().get(btnAddDetails.getSelectedView().size() - 1));
                         });
@@ -986,8 +988,9 @@ public class Fragment_Income extends Fragment {
                     POST_description = POST_description.concat(keyIssue
                             + ", "
                             + serviceType
-                            + (serviceType.contentEquals(KEY_SERVICE_BIPRA) || serviceType.contentEquals(KEY_SERVICE_KOLOM)
-                                ? ": " + layoutFoundTvNote.getText().toString() + " " : " ")
+//                            + (serviceType.contentEquals(KEY_SERVICE_BIPRA) || serviceType.contentEquals(KEY_SERVICE_KOLOM)
+//                            ? ": " + layoutFoundTvNote.getText().toString() + " " : " ")
+                            + (serviceType.contentEquals(KEY_SERVICE_SPECIAL_IBADAH_MINGGU) ? " " : ", " + layoutFoundTvNote.getText().toString().concat(" "))
 
                             + "dengan " + layoutFoundTvServiceId.getText().toString() + ", "
                             + "bertempat di " + layoutFoundTvPlace.getText().toString() + ", " + layoutFoundTvDate.getText().toString() + " "
@@ -1086,21 +1089,26 @@ public class Fragment_Income extends Fragment {
                     POST_issuedMemberData = encodeMemberData(btnAddName);
 
                     String detailHolder = btnAddDetails.getSelectedView().size() == 0 ? ": " : "";
+                    int in = 0;
                     for (View v : btnAddDetails.getSelectedView()) {
                         EditText etDetail = v.findViewById(R.id.recyclerItem_detail);
                         EditText etAmount = v.findViewById(R.id.recyclerItem_amount);
 
                         detailHolder = detailHolder
+                                .concat( in == 0? "Dengan Perincian: ":"")
                                 .concat(etDetail.getText().toString())
                                 .concat(", ")
                                 .concat("Rp. " + etAmount.getText().toString().replace(",", "."))
-                                .concat(" ");
-
+                                .concat(in == btnAddDetails.getSelectedView().size()-1 ? "": " & ");
+                        in++;
                     }
                     String nameHolder = "";
+                    in = 0;
                     if (btnAddName.getSelectedList().size() > 1) {
                         for (Adding_RecyclerModel model : btnAddName.getSelectedList()) {
-                            nameHolder = nameHolder.concat(model.getName()).concat(" ").concat(model.getKolom()).concat("&");
+                            nameHolder = nameHolder.concat(model.getName()).concat(" ").concat(model.getKolom())
+                                    .concat(in == btnAddName.getSelectedList().size() - 1 ? " " : " & ");
+                            in++;
                         }
                     }
                     else if (btnAddName.getSelectedList().size() == 1) {
@@ -1253,7 +1261,6 @@ public class Fragment_Income extends Fragment {
                         null);
 
                 selectedModel.setUnregistered(true);
-
             }
             else {
                 selectedModel = new Adding_RecyclerModel(
@@ -1447,7 +1454,6 @@ public class Fragment_Income extends Fragment {
     @BindView(R.id.layout_loading)
     RelativeLayout layoutLoading;
 
-
     private void findServiceLayoutOpen() {
         if (cvInfoService.getVisibility() != View.VISIBLE) {
             cvInfoService.setVisibility(View.VISIBLE);
@@ -1484,7 +1490,7 @@ public class Fragment_Income extends Fragment {
         layoutFoundTvNote.setVisibility(View.VISIBLE);
         layoutFoundTvNote.setText(service.getString("note"));
 
-        if (!issue.getString("key_issue").contentEquals(KEY_SERVICE_BIPRA)) {
+        if (issue.getString("key_issue").contentEquals(KEY_SERVICE_SPECIAL_IBADAH_MINGGU)) {
             layoutFoundTvNote.setVisibility(View.GONE);
         }
 
@@ -1498,15 +1504,17 @@ public class Fragment_Income extends Fragment {
             switchWithDetail.setChecked(true);
             if (POST_accountNumberKey.contentEquals("1.1.1")
                     || POST_accountNumberKey.contentEquals("1.2.1")
-                    || POST_accountNumberKey.contentEquals("1.3.1")){
+                    || POST_accountNumberKey.contentEquals("1.3.1")) {
                 layoutFoundTvServiceType.setText(issue.getString("key_issue").concat(" Subuh"));
-            } else if (POST_accountNumberKey.contentEquals("1.1.2")
+            }
+            else if (POST_accountNumberKey.contentEquals("1.1.2")
                     || POST_accountNumberKey.contentEquals("1.2.2")
-                    || POST_accountNumberKey.contentEquals("1.3.2")){
+                    || POST_accountNumberKey.contentEquals("1.3.2")) {
                 layoutFoundTvServiceType.setText(issue.getString("key_issue").concat(" Pagi"));
-            }else if (POST_accountNumberKey.contentEquals("1.1.3")
+            }
+            else if (POST_accountNumberKey.contentEquals("1.1.3")
                     || POST_accountNumberKey.contentEquals("1.2.3")
-                    || POST_accountNumberKey.contentEquals("1.3.3")){
+                    || POST_accountNumberKey.contentEquals("1.3.3")) {
                 layoutFoundTvServiceType.setText(issue.getString("key_issue").concat(" Malam"));
             }
         }
@@ -1523,7 +1531,6 @@ public class Fragment_Income extends Fragment {
     private final int FIND_SERVICE_STATUS_ERROR = 4;
 
     private JSONObject jsonNote = null;
-
     private void findServiceLayoutStatus(int status) {
         findServiceLayoutOpen();
         switchChurch.setChecked(false);
@@ -1560,7 +1567,6 @@ public class Fragment_Income extends Fragment {
         }
 
     }
-
     private String handleIssueServiceJSONConcatWithIncome() {
 
         JSONObject amount = new JSONObject();

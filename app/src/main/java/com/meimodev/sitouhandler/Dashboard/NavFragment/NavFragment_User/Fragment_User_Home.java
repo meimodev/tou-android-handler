@@ -54,7 +54,6 @@ public class Fragment_User_Home extends Fragment {
         context = rootView.getContext();
         ButterKnife.bind(this, rootView);
 
-//        Fetch Data From Server
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavBar);
         bottomNavigationView.setVisibility(View.VISIBLE);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -87,9 +86,8 @@ public class Fragment_User_Home extends Fragment {
 
             return true;
         });
-
-//        default select news bottom navbar
         bottomNavigationView.setSelectedItemId(R.id.bottomNavBar_news);
+
         return rootView;
     }
 

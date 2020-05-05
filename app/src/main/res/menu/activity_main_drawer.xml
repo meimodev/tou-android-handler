@@ -29,6 +29,11 @@
                     android:enabled="false"
                     android:icon="@drawable/ic_call_made_24px"
                     android:title="Pengajuan" />
+                <item
+                    android:id="@+id/nav_sundayIncome"
+                    android:visible="false"
+                    android:icon="@drawable/ic_church"
+                    android:title="Tambahan Ibadah Minggu" />
 
             </group>
         </menu>
@@ -51,10 +56,10 @@
                 <!--                    android:id="@+id/nav_chief_issue"-->
                 <!--                    android:icon="@drawable/ic_call_made_24px"-->
                 <!--                    android:title="Pengajuan" />-->
-                <item
-                    android:id="@+id/nav_chief_manageServiceArea"
-                    android:icon="@drawable/ic_star_24px"
-                    android:title="Atur Wilayah Pelayanan" />
+<!--                <item-->
+<!--                    android:id="@+id/nav_chief_manageServiceArea"-->
+<!--                    android:icon="@drawable/ic_star_24px"-->
+<!--                    android:title="Atur Wilayah Pelayanan" />-->
 
             </group>
         </menu>
@@ -136,10 +141,10 @@
                 <!--                    android:id="@+id/nav_priest_issue"-->
                 <!--                    android:icon="@drawable/ic_call_made_24px"-->
                 <!--                    android:title="Pengajuan" />-->
-                <item
-                    android:id="@+id/nav_priest_serviceArea"
-                    android:icon="@drawable/ic_star_24px"
-                    android:title="Lihat Wilayah Pelayanan" />
+<!--                <item-->
+<!--                    android:id="@+id/nav_priest_serviceArea"-->
+<!--                    android:icon="@drawable/ic_star_24px"-->
+<!--                    android:title="Lihat Wilayah Pelayanan" />-->
 
             </group>
         </menu>
@@ -258,6 +263,5 @@
         android:id="@+id/nav_signOut"
         android:icon="@drawable/ic_power_settings_new_24px"
         android:title="Keluar" />
-
 
 </menu>

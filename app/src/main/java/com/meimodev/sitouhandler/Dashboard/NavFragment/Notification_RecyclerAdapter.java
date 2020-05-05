@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Dashboard.NavFragment;
 
 import android.content.Context;
@@ -104,6 +108,14 @@ public class Notification_RecyclerAdapter extends RecyclerView.Adapter<Notificat
         if (acceptItemListener == null || rejectItemListener == null){
             holder.btnAccept.setVisibility(View.GONE);
             holder.btnDeny.setVisibility(View.GONE);
+            holder.cvItem.setOnClickListener(view -> {
+                Intent intent = new Intent(context, IssueDetail.class);
+                intent.putExtra("ISSUE_ID", model.getIssueId());
+                intent.putExtra("AUTHORIZATION_STATUS_CODE", model.getAuthStatusCode());
+                intent.putExtra("AUTHORIZATION_ID", model.getAuthId());
+                intent.putExtra(IssueDetail.OPERATION_VIEW_ONLY, true);
+                context.startActivity(intent);
+            });
         }
 
         View.OnClickListener btnListener = view -> {
