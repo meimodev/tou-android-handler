@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.meimodev.sitouhandler.Constant;
+import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Activity.Fragment_User_Home_Activity;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Kidung.Fragment_User_Home_Kidung;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_News.Fragment_User_Home_News;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Tatacara.Fragment_User_Home_Tatacara;
@@ -42,7 +43,6 @@ public class Fragment_User_Home extends Fragment {
 
     @BindView(R.id.layoutContentFragment)
     FrameLayout layoutFragmentContainer;
-
     private BottomNavigationView bottomNavigationView;
 
 
@@ -55,7 +55,6 @@ public class Fragment_User_Home extends Fragment {
         ButterKnife.bind(this, rootView);
 
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavBar);
-        bottomNavigationView.setVisibility(View.VISIBLE);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             Fragment fragment = null;
 
@@ -72,32 +71,38 @@ public class Fragment_User_Home extends Fragment {
                 case R.id.bottomNavBar_warta:
                     fragment = new Fragment_User_Home_Warta();
                     break;
+                case R.id.bottomNavBar_activity:
+                    fragment = new Fragment_User_Home_Activity();
+                    break;
             }
 
             if (fragment != null) {
                 getFragmentManager()
                         .beginTransaction().replace(R.id.layoutContentFragment, fragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .addToBackStack(null)
                         .commit();
             }
             else {
-                Log.e(TAG, "onCreateView: fragment is null");
+                Log.e(TAG, "setupBottomNavBar: fragment is null");
             }
 
             return true;
         });
         bottomNavigationView.setSelectedItemId(R.id.bottomNavBar_news);
+        bottomNavigationView.setVisibility(View.VISIBLE);
 
+        rootView.setPaddingRelative(0,0,0, 140);
         return rootView;
     }
 
 
     @Override
     public void onPause() {
-        if (bottomNavigationView.getVisibility() == View.VISIBLE) {
-            bottomNavigationView.setVisibility(View.INVISIBLE);
-        }
         super.onPause();
+        if (bottomNavigationView.getVisibility() == View.VISIBLE) {
+            bottomNavigationView.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -67,7 +67,6 @@ public class SignIn extends AppCompatActivity {
             finishAffinity();
         }
 
-
         b.editTextPhone.clearFocus();
         b.editTextPassword.clearFocus();
 

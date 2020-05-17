@@ -158,8 +158,8 @@ public class CustomEditText extends TextInputEditText {
                     now.get(Calendar.DAY_OF_MONTH)
             );
             try {
-                datePickerDialog.setOkColor(getResources().getColor(android.R.color.white));
-                datePickerDialog.setCancelColor(getResources().getColor(android.R.color.white));
+                datePickerDialog.setOkColor(getResources().getColor(R.color.colorPrimary));
+                datePickerDialog.setCancelColor(getResources().getColor(R.color.disabled_background));
                 datePickerDialog.setCancelText("BATAL");
                 datePickerDialog.setVersion(DatePickerDialog.Version.VERSION_1);
                 datePickerDialog.setLocale(locale);
@@ -178,8 +178,8 @@ public class CustomEditText extends TextInputEditText {
             }, true);
             try {
                 timePickerDialog.setCancelText("BATAL");
-                timePickerDialog.setOkColor(getResources().getColor(android.R.color.white));
-                timePickerDialog.setCancelColor(getResources().getColor(android.R.color.white));
+                timePickerDialog.setOkColor(getResources().getColor(R.color.colorPrimary));
+                timePickerDialog.setCancelColor(getResources().getColor(R.color.disabled_background));
                 timePickerDialog.show(fragmentManager, null);
             } catch (NullPointerException e) {
                 Log.e(TAG, "displayTimePickerDialog: null refrence on FragmentManager", e);

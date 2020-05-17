@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
@@ -9,6 +8,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/background"
     tools:context=".Dashboard.Dashboard">
 
@@ -33,9 +33,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="vertical"
-            app:layout_constraintHeight_percent="0.1"
             app:layout_constraintBottom_toBottomOf="@id/layout_fancyBackground"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/layout_fancyBackground" />
 
@@ -61,11 +61,11 @@
             android:id="@+id/layout_fancyBackground"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:animateLayoutChanges="true"
+            android:background="@color/colorPrimary"
             android:clickable="true"
             android:focusable="true"
-            android:animateLayoutChanges="true"
             android:foreground="?attr/selectableItemBackground"
-            android:background="@color/colorPrimary"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             app:layout_constraintBottom_toBottomOf="@id/guide"
@@ -110,8 +110,8 @@
                     android:id="@+id/textView_churchPosition"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="2dp"
                     android:maxLines="20"
+                    android:paddingTop="2dp"
                     android:text="Bendahara Jemaat"
                     android:textColor="@color/ButtonText_LightGrey"
                     android:textSize="15sp" />
@@ -182,6 +182,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat"
+                android:paddingBottom="16dp"
                 android:text="TITLE"
                 android:textAllCaps="true"
                 android:textColor="@color/mdtp_white"
@@ -251,7 +252,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
 
         <!--Bottom Nav Bar-->
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -260,6 +262,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
+            android:animateLayoutChanges="true"
             android:background="@color/mdtp_white"
             android:visibility="visible"
             app:menu="@menu/bottom_nav" />

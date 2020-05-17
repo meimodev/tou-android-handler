@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/recyclerItem_placeHolder"
@@ -20,72 +24,59 @@
         <ImageView
             android:id="@+id/recyclerItem_image"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="0dp"
+            android:padding="8dp"
             android:src="@color/colorAccent4End"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <LinearLayout
-            android:id="@+id/layout_contentHolder"
+        <androidx.cardview.widget.CardView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="@id/recyclerItem_image"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recyclerItem_image">
-
-            <TextView
-                android:id="@+id/recyclerItem_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/TextView_Label_Dark"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/visiby_round_cf_bold"
-                android:text="Content Title"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/recyclerItem_description"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/roboto"
-                android:text="Lorem Ipsum Dolor Amet (ContentLorem Ipsum Dolor Amet (Content)"
-                android:textSize="14sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="2dp"
-            android:orientation="horizontal"
+            android:layout_height="0dp"
+            app:cardBackgroundColor="#BFFFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_contentHolder">
+            app:layout_constraintHeight_percent="0.3"
+            app:layout_constraintStart_toStartOf="parent">
 
-            <TextView
-                android:id="@+id/recyclerItem_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:drawableStart="@drawable/ic_menu_camera"
-                android:drawablePadding="4dp"
-                android:textSize="14sp"
-                android:fontFamily="@font/roboto"
-                android:text="1 jam lalu"
-                android:textColor="@color/TextView_Label_Light" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="12dp">
 
+                <TextView
+                    android:id="@+id/recyclerItem_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:drawablePadding="4dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/roboto"
+                    android:text="Title"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/recyclerItem_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:drawableStart="@drawable/ic_calendar_clock_24px"
+                    android:drawablePadding="4dp"
+                    android:textColor="@color/secondaryText"
+                    android:fontFamily="@font/roboto"
+                    android:gravity="center"
+                    android:text="1 jam lalu"
+                    android:textSize="13sp" />
 
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

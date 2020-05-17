@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -21,6 +23,7 @@ import androidx.constraintlayout.widget.Guideline;
 import androidx.fragment.app.Fragment;
 
 import com.github.clans.fab.FloatingActionMenu;
+import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Dashboard.Dashboard;
 import com.meimodev.sitouhandler.R;
 
@@ -41,8 +44,10 @@ public class Fragment_User_Home_Warta extends Fragment {
         context = rootView.getContext();
         ButterKnife.bind(this, rootView);
 
-        if (getActivity().findViewById(R.id.layout_guide).getVisibility() == View.VISIBLE)
+        if (!Dashboard.IS_HEADER_COLLAPSE) {
             context.sendBroadcast(new Intent(Dashboard.ACTION_HEADER_COLLAPSE));
+        }
+        Constant.handleOnBackPressedFragment(requireActivity(), this);
 
         return rootView;
     }

@@ -114,12 +114,14 @@ public class Fragment_UserData extends Fragment {
     public void onPause() {
         tilFirstName.setError(validator.validateName(tilFirstName));
         String safeMiddleName = tilMiddleName.getEditText().getText().toString();
+
         safeMiddleName =
                 safeMiddleName.contains(" ")
                         ? StringUtils.replace(safeMiddleName, " ", "XXX")
                         : safeMiddleName;
         String middleName = validator.validateName(safeMiddleName);
         tilMiddleName.setError(
+                !StringUtils.isEmpty(middleName) ||
                          middleName.contains("melebihi")
                         || middleName.contains("kosong")
                         ? null : middleName

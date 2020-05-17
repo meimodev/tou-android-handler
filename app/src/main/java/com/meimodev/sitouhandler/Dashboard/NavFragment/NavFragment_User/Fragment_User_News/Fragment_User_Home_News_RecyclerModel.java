@@ -1,6 +1,12 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_News;
 
 import android.content.Intent;
+
+import androidx.annotation.DrawableRes;
 
 public class Fragment_User_Home_News_RecyclerModel {
 
@@ -11,12 +17,11 @@ public class Fragment_User_Home_News_RecyclerModel {
     private String title;
     private String time;
 
-    public Fragment_User_Home_News_RecyclerModel(int id,
-                                                 String imageUrl,
-                                                 Intent toActivityIntent,
-                                                 String description,
-                                                 String title,
-                                                 String time) {
+    Fragment_User_Home_News_RecyclerModel(int id, String imageUrl,
+                                          Intent toActivityIntent,
+                                          String title,
+                                          String description,
+                                          String time) {
         this.id = id;
         this.imageUrl = imageUrl;
         this.toActivityIntent = toActivityIntent;
@@ -24,6 +29,7 @@ public class Fragment_User_Home_News_RecyclerModel {
         this.title = title;
         this.time = time;
     }
+
 
     public int getId() {
         return id;

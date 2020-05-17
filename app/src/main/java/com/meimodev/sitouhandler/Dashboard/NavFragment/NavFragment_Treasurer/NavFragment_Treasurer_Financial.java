@@ -308,7 +308,7 @@ public class NavFragment_Treasurer_Financial extends Fragment {
 
     @Override
     public void onPause() {
-        fetch.cancelAll();
+        if (fetch != null) fetch.cancelAll();
         super.onPause();
     }
 

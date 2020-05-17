@@ -28,17 +28,21 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.github.squti.guru.Guru;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.hmomeni.progresscircula.ProgressCircula;
 import com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd;
 import com.meimodev.sitouhandler.CustomWidget.CustomDialog;
+import com.meimodev.sitouhandler.Dashboard.Dashboard;
 import com.meimodev.sitouhandler.Issue.Adding_RecyclerModel;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.SignIn.SignIn;
@@ -543,6 +547,16 @@ public class Constant {
                     REQUEST_EXTERNAL_STORAGE
             );
         }
+    }
+
+    public static void handleOnBackPressedFragment(FragmentActivity fragmentActivity, LifecycleOwner owner){
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                fragmentActivity.sendBroadcast(new Intent(Dashboard.ACTION_BOTTOM_NAV_HOME));
+            }
+        };
+        fragmentActivity.getOnBackPressedDispatcher().addCallback(owner, callback);
     }
 
 }

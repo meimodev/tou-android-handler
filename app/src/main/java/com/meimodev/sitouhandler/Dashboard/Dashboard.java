@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +33,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.github.squti.guru.Guru;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -46,7 +48,12 @@ import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_PntSym.NavFra
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Secretary.NavFragment_Secretary_Papers;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_SundayServiceIncome;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Treasurer.NavFragment_Treasurer_Financial;
+import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Activity.Fragment_User_Home_Activity;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Home;
+import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Kidung.Fragment_User_Home_Kidung;
+import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_News.Fragment_User_Home_News;
+import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Tatacara.Fragment_User_Home_Tatacara;
+import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Warta.Fragment_User_Home_Warta;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Issue.Issue;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
@@ -129,35 +136,36 @@ public class Dashboard extends AppCompatActivity {
 
     private NavigationView navigationView;
 
-    private boolean isCollapse = false;
+    public static boolean IS_HEADER_COLLAPSE = false;
 
     public static final String ACTION_HEADER_COLLAPSE = "collapse_header";
     public static final String ACTION_HEADER_EXPAND = "expand_header";
     BroadcastReceiver brToggleHeaderCollapse = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().contentEquals(ACTION_HEADER_COLLAPSE)) {
-                isCollapse = true;
+
+            if (intent.getAction().equalsIgnoreCase(ACTION_HEADER_COLLAPSE)) {
+                IS_HEADER_COLLAPSE = true;
             }
-            else if (intent.getAction().equalsIgnoreCase(ACTION_HEADER_EXPAND)) {
-                isCollapse = false;
+            if (intent.getAction().equalsIgnoreCase(ACTION_HEADER_EXPAND)) {
+                IS_HEADER_COLLAPSE = false;
             }
 
             Guideline guideline = findViewById(R.id.guide);
             ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) guideline.getLayoutParams();
-            lp.guidePercent = isCollapse ? 0.10f : 0.30f;
+            lp.guidePercent = IS_HEADER_COLLAPSE ? 0.10f : 0.30f;
             guideline.setLayoutParams(lp);
 
-            int visibility = isCollapse ? View.GONE : View.VISIBLE;
+            int visibility = IS_HEADER_COLLAPSE ? View.GONE : View.VISIBLE;
 
             LinearLayout llGuide = findViewById(R.id.layout_guide);
             llGuide.setVisibility(visibility);
 //                llGuide.setLayoutParams(params);
             TextView tvTitle = findViewById(R.id.textView_title);
-            tvTitle.setVisibility(isCollapse ? View.VISIBLE : View.GONE);
+            tvTitle.setVisibility(IS_HEADER_COLLAPSE ? View.VISIBLE : View.GONE);
 
             if (Guru.getInt(KEY_MEMBER_ID, 0) == 0) {
-                if (!isCollapse) {
+                if (!IS_HEADER_COLLAPSE) {
                     if (llApplyMembership.getVisibility() != View.VISIBLE) {
                         llApplyMembership.setVisibility(View.VISIBLE);
                     }
@@ -177,6 +185,15 @@ public class Dashboard extends AppCompatActivity {
             tvColumn.setVisibility(visibility);
             TextView tvChurchAndVillage = findViewById(R.id.textView_churchNameAndVillage);
             tvChurchAndVillage.setVisibility(visibility);
+        }
+    };
+    public static final String ACTION_BOTTOM_NAV_HOME = "bottomNavHome";
+    BroadcastReceiver brActivateBottomNavHome = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().contentEquals(ACTION_BOTTOM_NAV_HOME)) {
+                bottomNavigationView.setSelectedItemId(R.id.bottomNavBar_news);
+            }
         }
     };
 
@@ -200,6 +217,8 @@ public class Dashboard extends AppCompatActivity {
 
 //        init Toolbar And navigation drawer
         setupToolbarAndNavigationDrawer();
+
+        setupBottomNavBar();
 
 //        Setup Floating Action Menu
         setupFloatingActionMenuAndButtons();
@@ -225,16 +244,20 @@ public class Dashboard extends AppCompatActivity {
 //       Check if Floating Action Menu open then close it
         if (speedDialView.isOpen()) {
             speedDialView.close(true);
+            return;
         }
-        else {
 //           Check if drawer open then close it
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            }
-            else {
-                super.onBackPressed();
-            }
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+            return;
         }
+
+        //check if fragment
+        if (bottomNavigationView.getSelectedItemId() == R.id.bottomNavBar_news) {
+            finish();
+        }
+
+        super.onBackPressed();
     }
 
     @Override
@@ -249,6 +272,7 @@ public class Dashboard extends AppCompatActivity {
 //        unregisterReceiver(brContentInFragmentIsClicked);
 //        unregisterReceiver(brUnauthenticatedSignIn);
         unregisterReceiver(brToggleHeaderCollapse);
+        unregisterReceiver(brActivateBottomNavHome);
 //        unregisterReceiver(brFetchHome);
         super.onStop();
     }
@@ -258,6 +282,7 @@ public class Dashboard extends AppCompatActivity {
 //        registerReceiver(brUnauthenticatedSignIn, new IntentFilter(ACTION_CONTENT_USER_UNATHENTICATED));
         registerReceiver(brToggleHeaderCollapse, new IntentFilter(ACTION_HEADER_EXPAND));
         registerReceiver(brToggleHeaderCollapse, new IntentFilter(ACTION_HEADER_COLLAPSE));
+        registerReceiver(brActivateBottomNavHome, new IntentFilter(ACTION_BOTTOM_NAV_HOME));
 //        registerReceiver(brContentInFragmentIsClicked, new IntentFilter(ACTION_CONTENT_IN_FRAGMENT_IS_CLICKED));
 //        registerReceiver(brFetchHome, new IntentFilter(Constant.ACTION_REFETCH_MEMBER_HOME));
         super.onResume();
@@ -488,8 +513,8 @@ public class Dashboard extends AppCompatActivity {
             enableAuthorize = true;
         }
         SubMenu navSubMenu = navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu();
-        navSubMenu.findItem(R.id.nav_authorize).setEnabled(enableAuthorize);
-        navSubMenu.findItem(R.id.nav_issue).setEnabled(enableIssuing);
+        navSubMenu.findItem(R.id.nav_authorize).setVisible(enableAuthorize);
+        navSubMenu.findItem(R.id.nav_issue).setVisible(enableIssuing);
 
         navSubMenu.findItem(R.id.nav_sundayIncome).setVisible(showSundayIncome);
     }
@@ -795,6 +820,20 @@ public class Dashboard extends AppCompatActivity {
 
     }
 
+    @BindView(R.id.bottomNavBar)
+    BottomNavigationView bottomNavigationView;
+
+    private void setupBottomNavBar() {
+
+        if (Guru.getInt(KEY_MEMBER_ID, 0) == 0) {
+            bottomNavigationView.getMenu().findItem(R.id.bottomNavBar_warta).setVisible(false);
+            bottomNavigationView.getMenu().findItem(R.id.bottomNavBar_tatacara).setVisible(false);
+            bottomNavigationView.getMenu().findItem(R.id.bottomNavBar_kidung).setVisible(false);
+        }
+
+        bottomNavigationView.setVisibility(View.GONE);
+    }
+
     @BindView(R.id.textView_userName)
     TextView tvUserName;
     @BindView(R.id.textView_churchPosition)
@@ -818,10 +857,10 @@ public class Dashboard extends AppCompatActivity {
     @BindView(R.id.layout_fancyBackground)
     ConstraintLayout layoutFancyBackground;
 
-    void setupBackgroundHeader() {
+    private void setupBackgroundHeader() {
 
         layoutFancyBackground.setOnClickListener(v -> {
-            if (isCollapse) {
+            if (IS_HEADER_COLLAPSE) {
                 sendBroadcast(new Intent(ACTION_HEADER_EXPAND));
             }
             else {
