@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,12 +47,9 @@ import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_PntSym.NavFra
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Secretary.NavFragment_Secretary_Papers;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_SundayServiceIncome;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_Treasurer.NavFragment_Treasurer_Financial;
-import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Activity.Fragment_User_Home_Activity;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Home;
-import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Kidung.Fragment_User_Home_Kidung;
-import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_News.Fragment_User_Home_News;
-import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Tatacara.Fragment_User_Home_Tatacara;
-import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Warta.Fragment_User_Home_Warta;
+import com.meimodev.sitouhandler.Dashboard.Services.ActivityOrderDetail;
+import com.meimodev.sitouhandler.Dashboard.Services.ActivityServiceLocation;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Issue.Issue;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
@@ -203,6 +199,7 @@ public class Dashboard extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         changeStatusColor(this, R.color.colorPrimary);
+
 
 //        Binding Auth Token to Retrofit
         RetrofitClient.reBuiltRetrofitClient();

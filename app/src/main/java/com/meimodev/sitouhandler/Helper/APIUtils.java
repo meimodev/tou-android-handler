@@ -104,6 +104,7 @@ public class APIUtils {
                 apiWrapper.setDataArray(null);
                 Log.e(TAG, "parseWrapper: " + "(Class)" + context.getClass().getSimpleName() + ": " + intention + ": JSON data is OBJECT");
             }
+
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }

@@ -29,6 +29,7 @@ import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SignUp.ConfirmAccount;
 import com.meimodev.sitouhandler.SignUp.SignUp;
 import com.meimodev.sitouhandler.Validator;
+import com.meimodev.sitouhandler.Vendor.VendorHome;
 import com.meimodev.sitouhandler.Wizard.ApplyChurch.ApplyChurch;
 import com.meimodev.sitouhandler.databinding.ActivitySigninBinding;
 
@@ -61,6 +62,7 @@ public class SignIn extends AppCompatActivity {
         Constant.changeStatusColor(this, R.color.background);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
+
 //        Check if device already logged in
         if (Guru.getInt(Constant.KEY_USER_ID, 0) != 0) {
             startActivity(new Intent(this, Dashboard.class));
@@ -89,8 +91,7 @@ public class SignIn extends AppCompatActivity {
         String year = format.format(d);
         b.textViewDev.setText("TOU-System | Awesomely Possible - Meimo " + year + " | © all rights reserved");
 
-        // TODO remove this on production
-        initHelper();
+//        initHelper();
     }
 
     @Override
@@ -143,18 +144,11 @@ public class SignIn extends AppCompatActivity {
     private void proceed(APIWrapper res) throws JSONException {
         JSONObject data = res.getData();
 
+        Guru.putInt(Constant.KEY_VENDOR_ID, -5);
 
         //save data in shared preference for further usage
         JSONObject userObj = data.getJSONObject("user");
-//            SharedPrefManager.getInstance(this).saveUserData(
-//                    userObj.getInt("id"),
-//                    userObj.getString("full_name"),
-//                    userObj.getString("age"),
-//                    userObj.getString("sex"),
-//                    userObj.getString("access_token")
-//            );
 
-//        Log.e(TAG, "proceed: Saving User Data");
         Guru.putInt(Constant.KEY_USER_ID, userObj.getInt("id"));
         Guru.putString(Constant.KEY_USER_FULL_NAME, userObj.getString("full_name"));
         Guru.putString(Constant.KEY_USER_AGE, userObj.getString("age"));
@@ -202,6 +196,16 @@ public class SignIn extends AppCompatActivity {
         b.textInputLayoutPhone.setError(null);
         b.textInputLayoutPassword.setError(null);
 
+        //vendor experimental
+        if (b.textInputLayoutPhone.getEditText().getText().toString().contentEquals("0000") &&
+                b.textInputLayoutPassword.getEditText().getText().toString().contentEquals("0000"))
+        {
+            Guru.putInt(Constant.KEY_VENDOR_ID, 1);
+            startActivity(new Intent(this, VendorHome.class));
+            finish();
+            return;
+        }
+
         Validator validator = new Validator(this);
 
         if (validator.validateEmpty(b.textInputLayoutPhone) != null) return;
@@ -234,60 +238,6 @@ public class SignIn extends AppCompatActivity {
         Intent i = new Intent(this, ConfirmAccount.class);
         i.putExtra("phone", b.textInputLayoutPhone.getEditText().getText().toString());
         startActivity(i);
-    }
-
-    private void initHelper() {
-
-        View.OnClickListener helper = v -> {
-            String phone = "", pass = "password";
-
-            if (v == b.buttonChief) {
-                phone = "1";
-            }
-            else if (v == b.buttonSecretary) {
-                phone = "2";
-            }
-            else if (v == b.buttonTreasurer) {
-                phone = "3";
-            }
-            else if (v == b.buttonPriest) {
-                phone = "4";
-            }
-            else if (v == b.buttonSym) {
-                phone = "6";
-            }
-            else if (v == b.buttonPkb) {
-                phone = "8";
-            }
-            else if (v == b.buttonWki) {
-                phone = "9";
-            }
-            else if (v == b.buttonYouths) {
-                phone = "12";
-            }
-            else if (v == b.buttonTeens) {
-                phone = "10";
-            }
-            else if (v == b.buttonKids) {
-                phone = "11";
-            }
-
-            b.editTextPhone.setText(String.format("0852%s", phone));
-            b.editTextPassword.setText(pass);
-            signIn();
-        };
-
-        b.buttonChief.setOnClickListener(helper);
-        b.buttonSecretary.setOnClickListener(helper);
-        b.buttonTreasurer.setOnClickListener(helper);
-        b.buttonPriest.setOnClickListener(helper);
-        b.buttonSym.setOnClickListener(helper);
-        b.buttonPkb.setOnClickListener(helper);
-        b.buttonWki.setOnClickListener(helper);
-        b.buttonYouths.setOnClickListener(helper);
-        b.buttonTeens.setOnClickListener(helper);
-        b.buttonKids.setOnClickListener(helper);
-
     }
 
 }

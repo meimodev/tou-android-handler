@@ -35,6 +35,7 @@ public class IssueRequestHandler {
 
     private OnRequestHandler onRequestHandler;
     private OnRequestHandlerFailure onRequestHandlerFailure;
+    private Call call;
 
     public IssueRequestHandler(@Nullable View rootView) {
         if (rootView != null) {
@@ -82,6 +83,7 @@ public class IssueRequestHandler {
     }
 
     public void enqueue(Call call) {
+        this.call = call;
         View mainView = null;
 
         if (rootView != null) {
@@ -189,6 +191,7 @@ public class IssueRequestHandler {
     }
 
     public void backGroundRequest(Call call) {
+        this.call = call;
 
         if (onRequestHandler != null) {
             onRequestHandler.onTry();
@@ -258,5 +261,7 @@ public class IssueRequestHandler {
         });
 
     }
+
+    public Call getCall(){return call;}
 
 }

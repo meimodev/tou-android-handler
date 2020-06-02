@@ -259,8 +259,9 @@ public interface ApiServices {
             @Field("nikah") String nikah
     );
 
-    @GET("financial")Call<ResponseBody> getIssuedFinancial(
-            @Query("member_id")int memberId
+    @GET("financial")
+    Call<ResponseBody> getIssuedFinancial(
+            @Query("member_id") int memberId
     );
 
     @GET("duplicate-check")
@@ -272,19 +273,20 @@ public interface ApiServices {
     @POST("duplicate-check")
     Call<ResponseBody> setDuplicateCheck(
             @Field("claimer_member_id") int claimerMemberId,
-            @Field("param")String param,
+            @Field("param") String param,
             @Field("claimed_member_id") int claimedMemberId
     );
+
     @FormUrlEncoded
     @POST("duplicate-check")
     Call<ResponseBody> setDuplicateCheck(
             @Field("claimer_member_id") int claimerMemberId,
-            @Field("param")String param
+            @Field("param") String param
     );
 
     /*
-    * Church Creation
-    */
+     * Church Creation
+     */
 
     @FormUrlEncoded
     @POST("apply-church-info")
@@ -310,8 +312,8 @@ public interface ApiServices {
     );
 
     /*
-    * Account Setting / Editing
-    */
+     * Account Setting / Editing
+     */
 
     @GET("account/{id}")
     Call<ResponseBody> getAccount(
@@ -352,5 +354,83 @@ public interface ApiServices {
     Call<ResponseBody> getSundayIncome(
             @Query("member_id") int memberId
     );
+
+    /*
+     * Service / Order
+     */
+    @GET("find-product")
+    Call<ResponseBody> findProductByName(
+            @Query("type") String type,
+            @Query("name") String name
+    );
+
+    @GET("transport-time")
+    Call<ResponseBody> getTransportAndTime(
+            @Query("dis") int distance
+    );
+
+    @GET("orders/{id}")
+    Call<ResponseBody> getOrders(
+            @Path("id") int userId
+    );
+
+    @GET("order/{id}")
+    Call<ResponseBody> getOrder(@Path("id") int orderId);
+
+    @FormUrlEncoded
+    @POST("order-auth")
+    Call<ResponseBody> authorizeOrder(
+            @Field("order_id") int orderId,
+            @Field("auth") String authorize
+    );
+
+    @GET("order-finish")
+    Call<ResponseBody> finishOrder(
+            @Query("id") int id,
+            @Query("rating") int rating
+    );
+
+    @FormUrlEncoded
+    @POST("order")
+    Call<ResponseBody> setOrder(
+            @Field("user_id") int userId,
+            @Field("delivery_location") String location,
+            @Field("delivery_time") String time,
+            @Field("transport_fee") int transportFee,
+            @Field("total_bill") int total,
+            @Field("type") String type,
+            @Field("coordinate") String coordinate,
+            @Field("products") String products
+    );
+
+    /*
+     * Vendor
+     */
+
+    @GET("products")
+    Call<ResponseBody> getAllProducts();
+
+    @FormUrlEncoded
+    @POST("product")
+    Call<ResponseBody> setProduct(
+            @Field("name") String name,
+            @Field("price") int price,
+            @Field("unit") String unit
+    );
+
+    @FormUrlEncoded
+    @PATCH("product")
+    Call<ResponseBody> editProduct(
+            @Field("id") int id,
+            @Field("name") String name,
+            @Field("price") int price,
+            @Field("unit") String unit
+    );
+
+    @DELETE("product/{id}")
+    Call<ResponseBody> deleteProduct(
+            @Path("id") int id
+    );
+
 
 }

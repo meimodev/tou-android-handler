@@ -47,7 +47,11 @@ import com.meimodev.sitouhandler.Issue.Adding_RecyclerModel;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.SignIn.SignIn;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -151,6 +155,8 @@ public class Constant {
 
     public static final String KEY_OTHER_APPLY_MEMBER = "Anggota Jemaat";
 
+    public static final String KEY_VENDOR_ID = "Vendor_Id";
+
     public static final String AUTHORIZATION_STATUS_UNAUTHORIZED = "UNAUTHORIZED";
     public static final String AUTHORIZATION_STATUS_UNCONFIRMED = "UNCONFIRMED";
     public static final String AUTHORIZATION_STATUS_ACCEPTED = "ACCEPTED";
@@ -190,6 +196,13 @@ public class Constant {
     public static final String BIPRA_ANAK = "Anak";
 
     public static long coolDownMilliSecondsLeft = 0;
+
+    public static final String PRODUCT_TYPE_GROCERIES = "Groceries";
+    public static final String PRODUCT_TYPE_ELECTRONICS = "Electronics";
+    public static final String PRODUCT_TYPE_COOKIES = "Cookies";
+
+    public static final int VALUE_MAX_NON_MEMBER_PRODUCT_COUNT = 3;
+    public static final int VALUE_MAX_NON_MEMBER_PRODUCT_UNIT = 3;
 
     ///////////////////////////////////////////////////////////////////////////
     // Minor Univ Methods
@@ -296,8 +309,8 @@ public class Constant {
             holder.removeAllViews();
             holder.addView(v);
 
-            
-        p.setSpeed(3);
+
+            p.setSpeed(3);
             p.setIndeterminate(true);
             p.setRimWidth(6);
             p.startRotation();
@@ -350,6 +363,7 @@ public class Constant {
         btn.setOnClickListener(retryFetchOnclickListener);
         return v;
     }
+
     public static View makeFailFetch(View rootView, View.OnClickListener retryFetchOnclickListener) {
         return makeFailFetch(rootView.getContext(), retryFetchOnclickListener);
 
@@ -549,7 +563,7 @@ public class Constant {
         }
     }
 
-    public static void handleOnBackPressedFragment(FragmentActivity fragmentActivity, LifecycleOwner owner){
+    public static void handleOnBackPressedFragment(FragmentActivity fragmentActivity, LifecycleOwner owner) {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -559,4 +573,16 @@ public class Constant {
         fragmentActivity.getOnBackPressedDispatcher().addCallback(owner, callback);
     }
 
+    public static String convertNumberToCurrency(int number) {
+        return convertNumberToCurrency(String.valueOf(number));
+    }
+
+    public static String convertNumberToCurrency(String number) {
+        DecimalFormat dec = new DecimalFormat("#,###");
+        return "Rp. " + dec.format(Double.valueOf(number)).replace(",", ".");
+    }
+
+    public static int convertCurrencyToNumber(String number) {
+        return Integer.parseInt(number.replace(".", "").replace("Rp ", ""));
+    }
 }

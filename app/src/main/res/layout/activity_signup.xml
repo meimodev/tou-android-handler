@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -75,24 +79,24 @@
                     android:orientation="vertical">
 
                     <!--Email-->
-<!--                    <com.google.android.material.textfield.TextInputLayout-->
-<!--                        android:id="@+id/textInputLayout_email"-->
-<!--                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:hint="E-mail "-->
-<!--                        app:boxBackgroundColor="@null"-->
-<!--                        app:endIconMode="clear_text"-->
-<!--                        app:errorEnabled="true">-->
+                    <!--                    <com.google.android.material.textfield.TextInputLayout-->
+                    <!--                        android:id="@+id/textInputLayout_email"-->
+                    <!--                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:hint="E-mail "-->
+                    <!--                        app:boxBackgroundColor="@null"-->
+                    <!--                        app:endIconMode="clear_text"-->
+                    <!--                        app:errorEnabled="true">-->
 
-<!--                        <com.meimodev.sitouhandler.CustomWidget.CustomEditText-->
-<!--                            android:id="@+id/editText_email"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:inputType="textEmailAddress"-->
-<!--                            android:maxLines="1" />-->
+                    <!--                        <com.meimodev.sitouhandler.CustomWidget.CustomEditText-->
+                    <!--                            android:id="@+id/editText_email"-->
+                    <!--                            android:layout_width="match_parent"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:inputType="textEmailAddress"-->
+                    <!--                            android:maxLines="1" />-->
 
-<!--                    </com.google.android.material.textfield.TextInputLayout>-->
+                    <!--                    </com.google.android.material.textfield.TextInputLayout>-->
 
                     <!--Phone-->
                     <com.google.android.material.textfield.TextInputLayout

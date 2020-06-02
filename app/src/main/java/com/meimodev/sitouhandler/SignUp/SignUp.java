@@ -15,7 +15,6 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.CustomWidget.CustomEditText;
@@ -84,10 +83,8 @@ public class SignUp extends AppCompatActivity {
 
         validator = new Validator(this);
 
-
         tilSex.getEditText().setShowSoftInputOnFocus(false);
         tilSex.getEditText().setFocusable(false);
-
     }
 
     @OnClick(R.id.cardView_termsCondition)

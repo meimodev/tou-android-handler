@@ -176,97 +176,96 @@
                 app:layout_constraintStart_toStartOf="parent"
                 tools:ignore="SmallSp" />
 
-            <!-- TODO Remove in production-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@id/layout_header"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="16dp"-->
+<!--                android:layout_marginEnd="16dp"-->
+<!--                android:layout_marginBottom="16dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:visibility="gone"-->
+<!--                app:layout_constraintBottom_toTopOf="@id/layout_header"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent">-->
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+<!--                <LinearLayout-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginEnd="8dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:orientation="vertical">-->
 
-                    <Button
-                        android:id="@+id/button_chief"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Chief" />
+<!--                    <Button-->
+<!--                        android:id="@+id/button_chief"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Chief" />-->
 
-                    <Button
-                        android:id="@+id/button_secretary"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Secretary" />
+<!--                    <Button-->
+<!--                        android:id="@+id/button_secretary"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Secretary" />-->
 
-                    <Button
-                        android:id="@+id/button_treasurer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Treasurer" />
+<!--                    <Button-->
+<!--                        android:id="@+id/button_treasurer"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Treasurer" />-->
 
-                </LinearLayout>
+<!--                </LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+<!--                <LinearLayout-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="8dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:orientation="vertical">-->
 
-                    <Button
-                        android:id="@+id/button_priest"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Priest" />
+<!--                    <Button-->
+<!--                        android:id="@+id/button_priest"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Priest" />-->
 
-                    <Button
-                        android:id="@+id/button_sym"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Sym 1" />
+<!--                    <Button-->
+<!--                        android:id="@+id/button_sym"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Sym 1" />-->
 
-                    <Button
-                        android:id="@+id/button_pkb"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Pnt PKB" />
+<!--                    <Button-->
+<!--                        android:id="@+id/button_pkb"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Pnt PKB" />-->
 
-                    <Button
-                        android:id="@+id/button_wki"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Pnt WKI" />
+<!--                    <Button-->
+<!--                        android:id="@+id/button_wki"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Pnt WKI" />-->
 
-                    <Button
-                        android:id="@+id/button_youths"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Pnt Youths" />
+<!--                    <Button-->
+<!--                        android:id="@+id/button_youths"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Pnt Youths" />-->
 
-                    <Button
-                        android:id="@+id/button_teens"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Pnt Teens" />
+<!--                    <Button-->
+<!--                        android:id="@+id/button_teens"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Pnt Teens" />-->
 
-                    <Button
-                        android:id="@+id/button_kids"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Pnt Kids" />
+<!--                    <Button-->
+<!--                        android:id="@+id/button_kids"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Pnt Kids" />-->
 
-                </LinearLayout>
-            </LinearLayout>
+<!--                </LinearLayout>-->
+<!--            </LinearLayout>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

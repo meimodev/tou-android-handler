@@ -1,3 +1,7 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 package com.meimodev.sitouhandler;
 
 import android.content.Context;
@@ -109,7 +113,6 @@ public class SharedPrefManager {
     public boolean logout() {
         SharedPreferences sharedpreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
-
         editor.clear();
         editor.apply();
         return true;

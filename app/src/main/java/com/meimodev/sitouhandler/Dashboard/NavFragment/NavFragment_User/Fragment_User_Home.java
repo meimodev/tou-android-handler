@@ -8,7 +8,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -17,19 +16,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.meimodev.sitouhandler.Constant;
-import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Activity.Fragment_User_Home_Activity;
+import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Order.Fragment_User_Home_Order;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Kidung.Fragment_User_Home_Kidung;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_News.Fragment_User_Home_News;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Tatacara.Fragment_User_Home_Tatacara;
 import com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_Warta.Fragment_User_Home_Warta;
 import com.meimodev.sitouhandler.R;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,7 +66,7 @@ public class Fragment_User_Home extends Fragment {
                     fragment = new Fragment_User_Home_Warta();
                     break;
                 case R.id.bottomNavBar_activity:
-                    fragment = new Fragment_User_Home_Activity();
+                    fragment = new Fragment_User_Home_Order();
                     break;
             }
 

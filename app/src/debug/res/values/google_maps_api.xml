@@ -1,0 +1,27 @@
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+<resources>
+    <!--
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=B8:23:D6:98:91:D9:09:95:C7:0D:5B:4D:F5:21:89:E3:EE:65:CF:DC%3Bcom.meimodev.sitouhandler.Dashboard.Services
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    com.meimodev.sitouhandler.Dashboard.Services
+
+    SHA-1 certificate fingerprint:
+    B8:23:D6:98:91:D9:09:95:C7:0D:5B:4D:F5:21:89:E3:EE:65:CF:DC
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCDD0SB4NbksQV8FOZfLgRU5PKAHl1OOOE</string>
+</resources>

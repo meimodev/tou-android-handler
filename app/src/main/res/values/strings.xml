@@ -19,5 +19,7 @@
     <string name="menu_send">Send</string>
 
     <string name="meimo_footer_with_emoji">TOU-System | Meimo &#128526;</string>
+    <string name="title_activity_maps">Map</string>
+
 
 </resources>
