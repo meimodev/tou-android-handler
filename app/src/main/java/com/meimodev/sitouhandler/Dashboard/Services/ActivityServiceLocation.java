@@ -24,9 +24,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.SphericalUtil;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Dashboard.Dashboard;
@@ -107,6 +110,7 @@ public class ActivityServiceLocation extends AppCompatActivity {
                 b.buttonLocation.setVisibility(View.VISIBLE);
                 target = new LatLng(googleMap.getCameraPosition().target.latitude, googleMap.getCameraPosition().target.longitude);
             });
+
 //            googleMap.addCircle(new CircleOptions().center(tondanoHQ).radius(3000).strokeColor(Color.RED));
 //            googleMap.addCircle(new CircleOptions().center(tondanoHQ).radius(8000).strokeColor(Color.RED));
 

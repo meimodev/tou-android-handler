@@ -275,6 +275,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layout_rating" />
 
+            <!--Buttons for Vendor-->
             <LinearLayout
                 android:id="@+id/layout_buttonsVendor"
                 android:layout_width="match_parent"
@@ -305,6 +306,43 @@
                     android:text="TOLAK" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/background"
+                android:orientation="vertical"
+                android:padding="4dp"
+                android:text="Lokasi Pengantaran"
+                android:translationZ="2dp"
+                app:layout_constraintBottom_toTopOf="@id/map"
+                app:layout_constraintEnd_toEndOf="@id/map"
+                app:layout_constraintStart_toStartOf="@id/map"
+                app:layout_constraintTop_toTopOf="@id/map">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lokasi Pengantaran"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Komplek Alfamart Rinegetan"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
+
+            <fragment
+                android:id="@+id/map"
+                class="com.meimodev.sitouhandler.Dashboard.Services.MySupportMapFragment"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_buttonsVendor" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

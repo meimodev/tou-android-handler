@@ -9,11 +9,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.util.StringUtil;
 
 import com.github.squti.guru.Guru;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
@@ -30,12 +39,17 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 import static com.meimodev.sitouhandler.Constant.changeStatusColor;
+import static com.meimodev.sitouhandler.Constant.getBitmapFromVectorDrawable;
 
 public class ActivityOrderDetail extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "ActivityOrderDetail";
     private ActivityOrderDetailBinding b;
 
     private int orderId = -99;
+    private GoogleMap gMap;
+
+    private LatLng target;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +66,13 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
         }
         b.layoutButtonsVendor.setVisibility(View.GONE);
         b.buttonFinish.setVisibility(View.GONE);
-        fetchData();
 
+        MySupportMapFragment mapFragment = ((MySupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+        mapFragment.setListener(() -> b.getRoot().requestDisallowInterceptTouchEvent(true));
+        mapFragment.getMapAsync(googleMap -> {
+            gMap = googleMap;
+            fetchData();
+        });
     }
 
     private void fetchData() {
@@ -116,7 +135,7 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
         }
 
         //button finish
-        Log.e(TAG, "initViews: is Vendor = "+isVendor+" id = "+Guru.getInt(Constant.KEY_VENDOR_ID, -99) );
+        Log.e(TAG, "initViews: is Vendor = " + isVendor + " id = " + Guru.getInt(Constant.KEY_VENDOR_ID, -99));
         if (isVendor) {
             b.buttonFinish.setVisibility(View.GONE);
             if (StringUtils.isEmpty(finishDate) && data.getString("status").contentEquals(Constant.AUTHORIZATION_STATUS_UNCONFIRMED)) {
@@ -133,6 +152,27 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
                 b.buttonFinish.setOnClickListener(this);
             }
         }
+
+        //set map
+        LatLng target = new LatLng(
+                Double.parseDouble(data.getString("coordinate_lat")),
+                Double.parseDouble(data.getString("coordinate_lng"))
+        );
+        gMap.addMarker(
+                new MarkerOptions()
+                        .position(target)
+                        .draggable(false)
+                        .title("Lokasi Pengantaran")
+                        .icon(BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(this, R.drawable.ic_map_marker_down_24px)))
+        );
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, 15f));
+        gMap.setMinZoomPreference(11.25f);
+        gMap.getUiSettings().setCompassEnabled(false);
+        gMap.getUiSettings().setRotateGesturesEnabled(false);
+        gMap.getUiSettings().setTiltGesturesEnabled(false);
+
+
+
     }
 
     private void initStatus(JSONObject data) throws JSONException {
@@ -210,12 +250,13 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
             call = RetrofitClient.getInstance(null).getApiServices().finishOrder(
                     orderId, ((int) b.ratingBar.getRating())
             );
-            if (b.ratingBar.getRating() == 0){
+            if (b.ratingBar.getRating() == 0) {
                 Constant.displayDialog(
                         this,
                         "Perhatian !",
                         "Silahkan memberikan rating, dengan cara menyentuh jumlah bintang yang ingin diberikan berdasarkan pengalaman anda menggunakan jasa kami",
-                        (dialog, which) -> {}
+                        (dialog, which) -> {
+                        }
                 );
                 return;
             }
@@ -239,7 +280,7 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
 
     }
 
-    private void sendDataToServer(Call<ResponseBody> call){
+    private void sendDataToServer(Call<ResponseBody> call) {
         IssueRequestHandler req = new IssueRequestHandler(b.getRoot());
         req.setContext(this);
         req.setIntention(new Throwable());
