@@ -157,27 +157,27 @@
             android:layout_centerInParent="true"
             android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_regular"
-            android:gravity="center"
-            android:maxLines="10"
-            android:text="Mencari ID ..."
-            android:textAlignment="gravity" />
+            <TextView
+                android:id="@+id/textView_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
+                android:gravity="center"
+                android:maxLines="10"
+                android:text="Mencari ID ..."
+                android:textAlignment="gravity" />
 
-        <TextView
-            android:id="@+id/textView_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:fontFamily="@font/montserrat_regular"
-            android:gravity="center"
-            android:textColor="@color/colorAccent3End"
-            android:maxLines="10"
-            android:text="3M4"
-            android:textAlignment="gravity" />
+            <TextView
+                android:id="@+id/textView_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:fontFamily="@font/montserrat_regular"
+                android:gravity="center"
+                android:textColor="@color/colorAccent3End"
+                android:maxLines="10"
+                android:text="3M4"
+                android:textAlignment="gravity" />
         </LinearLayout>
 
     </RelativeLayout>
@@ -195,10 +195,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-       <ProgressBar
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:layout_margin="48dp"/>
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="48dp"/>
 
     </RelativeLayout>
 

@@ -126,6 +126,9 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
 
         boolean isVendor = Guru.getInt(Constant.KEY_VENDOR_ID, -99) > 0;
         //rating
+        if (data.getString("status").contentEquals(Constant.AUTHORIZATION_STATUS_UNCONFIRMED)
+        || data.getString("status").contentEquals(Constant.AUTHORIZATION_STATUS_REJECTED))
+            b.ratingBar.setVisibility(View.GONE);
         String finishDate = data.getString("finish_date");
         if (!StringUtils.isEmpty(finishDate)
                 || isVendor
@@ -154,6 +157,7 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
         }
 
         //set map
+        b.textViewDeliveryLocation.setText(data.getString("delivery_location"));
         LatLng target = new LatLng(
                 Double.parseDouble(data.getString("coordinate_lat")),
                 Double.parseDouble(data.getString("coordinate_lng"))
@@ -170,8 +174,6 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
         gMap.getUiSettings().setCompassEnabled(false);
         gMap.getUiSettings().setRotateGesturesEnabled(false);
         gMap.getUiSettings().setTiltGesturesEnabled(false);
-
-
 
     }
 

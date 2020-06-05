@@ -510,8 +510,10 @@ public class Dashboard extends AppCompatActivity {
             enableAuthorize = true;
         }
         SubMenu navSubMenu = navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu();
-        navSubMenu.findItem(R.id.nav_authorize).setVisible(enableAuthorize);
-        navSubMenu.findItem(R.id.nav_issue).setVisible(enableIssuing);
+        navSubMenu.findItem(R.id.nav_authorize).setEnabled(enableAuthorize);
+        Log.e(TAG, "setupNavDrawerItemsBasedOnAccountType: authorizing "+enableAuthorize );
+        navSubMenu.findItem(R.id.nav_issue).setEnabled(enableIssuing);
+        Log.e(TAG, "setupNavDrawerItemsBasedOnAccountType: issuing "+enableIssuing );
 
         navSubMenu.findItem(R.id.nav_sundayIncome).setVisible(showSundayIncome);
     }

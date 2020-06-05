@@ -297,14 +297,7 @@ public class Adding extends AppCompatActivity {
         b.recyclerViewAdding.setItemAnimator(new DefaultItemAnimator());
         b.recyclerViewAdding.setLayoutManager(new LinearLayoutManager(Adding.this));
         b.recyclerViewAdding.setAdapter(new Adding_RecyclerAdapter(Adding.this, items));
-
-//                if (layoutProgress.getVisibility() == View.VISIBLE) {
-//                    layoutProgress.setVisibility(View.GONE);
-//                }
-//                if (layoutMain.getVisibility() != View.VISIBLE) {
-//                    layoutMain.setVisibility(View.VISIBLE);
-//                }
-
+        evaluateItemNotFoundLayout(items);
     }
 
     private void proceedFindUser(JSONArray data) throws JSONException {
@@ -327,9 +320,20 @@ public class Adding extends AppCompatActivity {
         b.recyclerViewAdding.setItemAnimator(new DefaultItemAnimator());
         b.recyclerViewAdding.setLayoutManager(new LinearLayoutManager(Adding.this));
         b.recyclerViewAdding.setAdapter(new Adding_RecyclerAdapter(Adding.this, items));
+        evaluateItemNotFoundLayout(items);
 
     }
 
+    private void evaluateItemNotFoundLayout(ArrayList<Adding_RecyclerModel> items) {
+        if (items.size() == 0){
+            b.recyclerViewAdding.setVisibility(View.GONE);
+            b.layoutNotFound.getRoot().setVisibility(View.VISIBLE);
+        } else {
+            b.recyclerViewAdding.setVisibility(View.VISIBLE);
+            b.layoutNotFound.getRoot().setVisibility(View.GONE);
+
+        }
+    }
     @Override
     protected void onStop() {
         unregisterReceiver(onSelectedItemRecyclerView);

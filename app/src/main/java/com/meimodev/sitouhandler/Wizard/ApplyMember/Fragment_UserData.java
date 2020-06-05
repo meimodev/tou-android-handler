@@ -58,7 +58,7 @@ public class Fragment_UserData extends Fragment {
     @BindView(R.id.radioGroup_sex)
     RadioGroup rgSex;
 
-    private Validator validator ;
+    private Validator validator;
     private ViewPager2 viewPager2;
 
     private String sex;
@@ -95,13 +95,13 @@ public class Fragment_UserData extends Fragment {
             tilLastName.getEditText().setText(ApplyMember.USER_LAST_NAME);
             tilDob.getEditText().setText(ApplyMember.USER_DATE_OF_BIRTH);
 //            spinnerSex.setSelectedIndex(ApplyMember.USER_SEX.contains("laki") ? 0 : 1);
-            if (ApplyMember.USER_SEX.contains("laki")){
+            if (ApplyMember.USER_SEX.contains("laki")) {
                 rbMale.setChecked(true);
-            } else {
+            }
+            else {
                 rbFemale.setChecked(true);
             }
         }
-
 
 
         viewPager2 = getActivity().findViewById(R.id.viewPager);
@@ -119,12 +119,13 @@ public class Fragment_UserData extends Fragment {
                 safeMiddleName.contains(" ")
                         ? StringUtils.replace(safeMiddleName, " ", "XXX")
                         : safeMiddleName;
-        String middleName = validator.validateName(safeMiddleName);
+
+        String middleNameValidationMessage = validator.validateName(safeMiddleName);
         tilMiddleName.setError(
-                !StringUtils.isEmpty(middleName) ||
-                         middleName.contains("melebihi")
-                        || middleName.contains("kosong")
-                        ? null : middleName
+                middleNameValidationMessage == null
+                        || middleNameValidationMessage.contains("melebihi")
+                        || middleNameValidationMessage.contains("kosong")
+                        ? null : middleNameValidationMessage
         );
         tilLastName.setError(validator.validateName(tilLastName));
 

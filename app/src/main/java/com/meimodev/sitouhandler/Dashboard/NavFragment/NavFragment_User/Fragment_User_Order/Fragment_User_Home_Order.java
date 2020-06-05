@@ -43,7 +43,8 @@ public class Fragment_User_Home_Order extends Fragment {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-
+    @BindView(R.id.layout_empty)
+    View layoutEmpty;
 
     @Nullable
     @Override
@@ -102,6 +103,14 @@ public class Fragment_User_Home_Order extends Fragment {
                     ));
                 }
                 initRecyclerView();
+                if (data.length() == 0) {
+                    recyclerView.setVisibility(View.GONE);
+                    layoutEmpty.setVisibility(View.VISIBLE);
+                }
+                else {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    layoutEmpty.setVisibility(View.GONE);
+                }
             }
 
             @Override

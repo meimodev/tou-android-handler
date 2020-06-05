@@ -26,6 +26,8 @@ import com.meimodev.sitouhandler.Issue.OnRecyclerItemOperationListener;
 import com.meimodev.sitouhandler.IssueDetail.IssueDetail;
 import com.meimodev.sitouhandler.R;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 
 import static com.meimodev.sitouhandler.Constant.AUTHORIZATION_STATUS_CODE_ACCEPTED;
@@ -62,10 +64,16 @@ public class VendorHome_RecyclerAdapter extends RecyclerView.Adapter<VendorHome_
         else {
             if (model.getStatus().contentEquals(Constant.AUTHORIZATION_STATUS_UNCONFIRMED)) {
                 h.tvStatus.setText("Menunggu konfirmasi penyedia");
-            } else {
+            }
+            else {
                 h.tvStatus.setText("Pesanan ditolak penyedia");
                 h.tvStatus.setTextColor(context.getResources().getColor(R.color.reject));
             }
+        }
+
+        if (StringUtils.isNotEmpty(model.getFinishDate())) {
+            h.tvStatus.setText(String.format("Pesanan selesai, %s", model.getFinishDate()));
+            h.tvStatus.setTextColor(context.getResources().getColor( R.color.colorPrimary));
         }
 
         h.tvOrderDate.setText(model.getOrderTime());

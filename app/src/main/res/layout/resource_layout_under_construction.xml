@@ -18,8 +18,8 @@
         <ImageView
             android:id="@+id/imageView_underConstruction"
             android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_cog"
+            android:layout_height="400dp"
+            android:src="@drawable/image_under_construction"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

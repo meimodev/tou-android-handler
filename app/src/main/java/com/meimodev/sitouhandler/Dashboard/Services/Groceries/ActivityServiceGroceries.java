@@ -147,6 +147,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             b.recyclerViewCart.setVisibility(View.INVISIBLE);
             b.buttonNext.setEnabled(false);
             b.buttonNext.setCardBackgroundColor(getResources().getColor(R.color.disabled_background));
+            b.layoutNotFound.getRoot().setVisibility(View.VISIBLE);
             return;
         }
         else {
@@ -155,6 +156,8 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             b.recyclerViewCart.setVisibility(View.VISIBLE);
             b.buttonNext.setEnabled(true);
             b.buttonNext.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            b.layoutNotFound.getRoot().setVisibility(View.GONE);
+
         }
         //reset total price
         b.textViewCartTotal.setText(Constant.convertNumberToCurrency(calculateTotalPrice()));
@@ -264,6 +267,13 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                     ));
                 }
                 adapterProduct.notifyDataSetChanged();
+                if (products.size() == 0){
+                    b.layoutDataNotFound.getRoot().setVisibility(View.VISIBLE);
+                    b.recyclerViewProducts.setVisibility(View.GONE);
+                } else {
+                    b.layoutDataNotFound.getRoot().setVisibility(View.GONE);
+                    b.recyclerViewProducts.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override

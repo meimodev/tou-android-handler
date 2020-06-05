@@ -69,7 +69,8 @@ public class VendorHome extends AppCompatActivity {
                             obj.getString("type"),
                             obj.getString("status"),
                             obj.getString("delivery_time"),
-                            obj.getString("order_date")
+                            obj.getString("order_date"),
+                            obj.getString("finish_date")
                     ));
                 }
 
@@ -94,14 +95,15 @@ public class VendorHome extends AppCompatActivity {
 
     public static class HelperModel {
         private int id;
-        private String type, status, deliveryTime, orderTime;
+        private String type, status, deliveryTime, orderTime, finishDate;
 
-        public HelperModel(int id, String type, String status, String deliveryTime, String orderTime) {
+        public HelperModel(int id, String type, String status, String deliveryTime, String orderTime, String finishDate) {
             this.id = id;
             this.type = type;
             this.status = status;
             this.deliveryTime = deliveryTime;
             this.orderTime = orderTime;
+            this.finishDate = finishDate;
         }
 
         public int getId() {
@@ -122,6 +124,10 @@ public class VendorHome extends AppCompatActivity {
 
         public String getOrderTime() {
             return orderTime;
+        }
+
+        public String getFinishDate() {
+            return finishDate;
         }
     }
 
