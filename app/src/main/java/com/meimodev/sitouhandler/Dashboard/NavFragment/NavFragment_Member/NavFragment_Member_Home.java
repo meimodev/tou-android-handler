@@ -101,7 +101,7 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
     private void setupRecyclerView() {
         OnRecyclerItemOperationListener.AcceptItemListener acceptItemListener =
                 data -> sendData(data.getInt("id"), data.getInt("status"));
-        OnRecyclerItemOperationListener.RejectItemListener rejectItemListener  =
+        OnRecyclerItemOperationListener.RejectItemListener rejectItemListener =
                 data -> sendData(data.getInt("id"), data.getInt("status"));
 
         recyclerAdapter = new Notification_RecyclerAdapter(
@@ -121,8 +121,9 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
         if (llSort.getVisibility() != View.VISIBLE) {
             llSort.setVisibility(View.VISIBLE);
         }
-        if (rvNotifications.getVisibility() != View.VISIBLE)
+        if (rvNotifications.getVisibility() != View.VISIBLE) {
             rvNotifications.setVisibility(View.VISIBLE);
+        }
 
         //        Set Default Sort
         tvSortAll.callOnClick();
@@ -159,18 +160,23 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
         }
     }
 
+    IssueRequestHandler requestHandler;
+
     private void fetchData() {
 
-        if (progress.getVisibility() != View.VISIBLE)
+        if (progress.getVisibility() != View.VISIBLE) {
             progress.setVisibility(View.VISIBLE);
+        }
 
-        if (rvNotifications.getVisibility() == View.VISIBLE)
+        if (rvNotifications.getVisibility() == View.VISIBLE) {
             rvNotifications.setVisibility(View.INVISIBLE);
+        }
 
-        if (tvDataNotFound.getVisibility() == View.VISIBLE)
+        if (tvDataNotFound.getVisibility() == View.VISIBLE) {
             tvDataNotFound.setVisibility(View.INVISIBLE);
+        }
 
-        IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
+        requestHandler = new IssueRequestHandler(rootView);
         Call call = RetrofitClient.getInstance(null).getApiServices().getMemberHome(
                 Guru.getInt(Constant.KEY_MEMBER_ID, 0)
         );
@@ -186,7 +192,8 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
 
                 if (res.getDataArray().length() <= 0) {
                     tvDataNotFound.setVisibility(View.VISIBLE);
-                } else {
+                }
+                else {
                     tvDataNotFound.setVisibility(View.INVISIBLE);
                 }
 
@@ -228,13 +235,15 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
     }
 
     private void sendData(int authorizeId, int authorizeCode) {
-        if (progress.getVisibility() != View.VISIBLE)
+        if (progress.getVisibility() != View.VISIBLE) {
             progress.setVisibility(View.VISIBLE);
+        }
 
-        if (rvNotifications.getVisibility() == View.VISIBLE)
+        if (rvNotifications.getVisibility() == View.VISIBLE) {
             rvNotifications.setVisibility(View.INVISIBLE);
+        }
 
-        IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
+         requestHandler = new IssueRequestHandler(rootView);
 
         Call call = RetrofitClient.getInstance(null).getApiServices().authorizeIssue(
                 authorizeId,
@@ -251,7 +260,8 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
             @Override
             public void onSuccess(APIWrapper res, String message) {
                 fetchData();
-                Constant.displayDialog(context, "OK", res.getMessage(), (dialog, which) -> {});
+                Constant.displayDialog(context, "OK", res.getMessage(), (dialog, which) -> {
+                });
             }
 
             @Override
@@ -293,10 +303,10 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
     private BroadcastReceiver brAuthorizationConfirm = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().contentEquals(IssueDetail.KEY_ISSUE_DETAIL_CONFIRM_AUTH)){
-                Log.e(TAG, "onReceive: auth confirm broadcast received, sending data...." );
+            if (intent.getAction().contentEquals(IssueDetail.KEY_ISSUE_DETAIL_CONFIRM_AUTH)) {
+                Log.e(TAG, "onReceive: auth confirm broadcast received, sending data....");
 
-                sendData(intent.getIntExtra("AUTH_ID",0), intent.getIntExtra("AUTH_CODE", 99));
+                sendData(intent.getIntExtra("AUTH_ID", 0), intent.getIntExtra("AUTH_CODE", 99));
             }
         }
     };
@@ -310,7 +320,7 @@ public class NavFragment_Member_Home extends Fragment implements View.OnClickLis
     @Override
     public void onDestroy() {
         getActivity().unregisterReceiver(brAuthorizationConfirm);
-
+        if (requestHandler != null) requestHandler.getCall().cancel();
         super.onDestroy();
     }
 }

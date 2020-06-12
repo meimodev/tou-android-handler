@@ -69,7 +69,6 @@ public class NavFragment_Account_Setting extends Fragment {
         b.buttonSavePhone.setEnabled(false);
         b.buttonSavePhone.setBackgroundColor(getResources().getColor(R.color.disabled_background));
 
-
 //        setup buttons and validate on each according views
 
         validator = new Validator(context);

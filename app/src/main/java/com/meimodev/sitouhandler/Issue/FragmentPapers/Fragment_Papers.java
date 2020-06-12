@@ -47,6 +47,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 import static com.meimodev.sitouhandler.Constant.*;
@@ -101,6 +102,11 @@ public class Fragment_Papers extends Fragment {
     @BindView(R.id.linearLayout_namePlaceHolder)
     LinearLayout llnamePlaceHolder;
 
+    // Letter Description
+    @BindView(R.id.layout_description)LinearLayout llLetterDescription;
+    @BindView(R.id.textInputLayout_description)TextInputLayout tilDescription;
+
+
     private final int REQUEST_CODE_PERSONAL_NAME = 1;
     private final int REQUEST_CODE_PRIEST_NAME = 2;
 
@@ -121,6 +127,7 @@ public class Fragment_Papers extends Fragment {
     private String POST_place = "";
     private String POST_ceremonyDate = "";
     private String POST_priestId = "";
+    private String POST_description ="";
 
     @BindView(R.id.layout_scroll)
     NestedScrollView scrollView;
@@ -213,6 +220,10 @@ public class Fragment_Papers extends Fragment {
 
                         };
                         btnAddName.setAsAddingButton(container, inflater, llnamePlaceHolder, 6, deleteListener);
+                        break;
+                    case KEY_PAPERS_OTHERS:
+                        llLetterDescription.setVisibility(View.VISIBLE);
+                        btnAddName.setVisibility(View.GONE);
                         break;
                 }
             }
@@ -414,6 +425,7 @@ public class Fragment_Papers extends Fragment {
             index++;
         }
         POST_issuedMemberData = encodeMemberData(btnAddName);
+        if (llLetterDescription.getVisibility() == View.VISIBLE) POST_description = tilDescription.getEditText().getText().toString();
 
         Log.e(TAG, "------------------------------------------------------------------------");
         Log.e(TAG, ":REQUEST TO SERVER:");
@@ -427,10 +439,11 @@ public class Fragment_Papers extends Fragment {
         Log.e(TAG, "ceremony_date: " + POST_ceremonyDate);
         Log.e(TAG, "priest_id: " + POST_priestId);
         Log.e(TAG, "issued_member_data: " + POST_issuedMemberData);
+        Log.e(TAG, "description: " + POST_description);
         Log.e(TAG, "------------------------------------------------------------------------");
 
         IssueRequestHandler requestHandler = new IssueRequestHandler(rootView);
-        Call call =RetrofitClient.getInstance(null).getApiServices().setIssuePaper(
+        Call<ResponseBody> call =RetrofitClient.getInstance(null).getApiServices().setIssuePaper(
                 Guru.getInt(KEY_MEMBER_ID, 0),
                 keyIssue,
                 POST_destination,
@@ -439,9 +452,10 @@ public class Fragment_Papers extends Fragment {
                 POST_place,
                 POST_ceremonyDate,
                 POST_priestId,
-                POST_issuedMemberData
+                POST_issuedMemberData,
+                POST_description
         );
-
+        requestHandler.setIntention(new Throwable());
         requestHandler.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
             public void onTry() {

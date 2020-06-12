@@ -63,7 +63,6 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         b.layoutTeaser.setOnClickListener(v -> {
             b.layoutTeaser.setVisibility(View.GONE);
             b.layoutMain.setVisibility(View.VISIBLE);
-
         });
 
         initProductRecyclerView();

@@ -13,7 +13,7 @@
     android:scrollbars="vertical"
     android:scrollbarAlwaysDrawVerticalTrack="true"
     android:fadeScrollbars="false"
-    android:scrollbarThumbVertical="@color/colorAccent3End"
+    android:scrollbarThumbVertical="@color/colorAccent"
     android:fillViewport="true"
     android:keepScreenOn="true">
 
@@ -109,7 +109,8 @@
                         android:layout_marginTop="8dp"
                         android:layout_gravity="end"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/colorAccent"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:textColor="@color/ButtonText_LightGrey"
                         android:drawableEnd="@drawable/ic_check_24px"
                         android:text="UBAH NOMOR TELEPON" />
 
@@ -157,9 +158,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginTop="8dp"
+                        android:textColor="@color/ButtonText_LightGrey"
                         android:layout_gravity="end"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/colorAccent"
+                        android:backgroundTint="@color/colorPrimary"
                         android:drawableEnd="@drawable/ic_check_24px"
                         android:text="SIMPAN PASSWORD" />
 
@@ -300,7 +302,8 @@
                         android:layout_marginTop="8dp"
                         android:layout_gravity="end"
                         android:layout_weight="1"
-                        android:backgroundTint="@color/colorAccent"
+                        android:textColor="@color/ButtonText_LightGrey"
+                        android:backgroundTint="@color/colorPrimary"
                         android:drawableEnd="@drawable/ic_check_24px"
                         android:text="SIMPAN DATA IDENTITAS" />
 
@@ -388,7 +391,8 @@
                             android:layout_marginBottom="16dp"
                             android:layout_gravity="end"
                             android:layout_weight="1"
-                            android:backgroundTint="@color/colorAccent"
+                            android:textColor="@color/ButtonText_LightGrey"
+                            android:backgroundTint="@color/colorPrimary"
                             android:drawableEnd="@drawable/ic_check_24px"
                             android:text="SIMPAN DATA KEANGGOTAAN" />
 

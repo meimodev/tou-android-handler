@@ -111,6 +111,7 @@ public class Issue extends AppCompatActivity {
                 holder.add("Pilih Jenis Surat");
                 holder.add(Constant.KEY_PAPERS_VALIDATE_MEMBERS);
                 holder.add(Constant.KEY_PAPERS_CREDENTIAL);
+                holder.add(Constant.KEY_PAPERS_OTHERS);
 //                holder.add(Constant.KEY_PAPERS_BAPTIZE);
 //                holder.add(Constant.KEY_PAPERS_SIDI);
 //                holder.add(Constant.KEY_PAPERS_MARRIED);

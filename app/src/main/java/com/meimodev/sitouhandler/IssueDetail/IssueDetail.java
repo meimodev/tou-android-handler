@@ -33,6 +33,7 @@ import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.databinding.ActivityIssueDetailBinding;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -183,9 +184,17 @@ public class IssueDetail extends AppCompatActivity {
             keyIssueValue.put("letter_type", obj.getString("letter_type"));
             keyIssueValue.put("letter_link_printable", obj.getString("letter_link_printable"));
 
-            if (!issueAuthStatus.contentEquals(AUTHORIZATION_STATUS_ACCEPTED)) {
+            if (issueAuthStatus.contentEquals(AUTHORIZATION_STATUS_ACCEPTED)) {
+                Log.e(TAG, "proceed: status ios accepted" );
                 b.textViewLetterNumberEntry.setVisibility(View.VISIBLE);
                 b.textViewLetterNumberEntry.setText(((String) keyIssueValue.get("letter_entry_number")));
+            } else {
+                b.textViewLetterNumberEntry.setVisibility(View.GONE);
+            }
+
+            if (!obj.isNull("letter_description") && StringUtils.isNotEmpty(obj.getString("letter_description"))) {
+                b.cardViewDescription.setVisibility(View.VISIBLE);
+                b.textViewDescription.setText(obj.getString("letter_description"));
             }
 
         }
@@ -490,21 +499,23 @@ public class IssueDetail extends AppCompatActivity {
     };
 
     private void downloadFile(String printableKey) {
-        b.buttonDownload.setEnabled(false);
-        b.buttonDownload.setCardBackgroundColor(getResources().getColor(R.color.TextView_Label_Light));
+//        b.buttonDownload.setEnabled(false);
+//        b.buttonDownload.setCardBackgroundColor(getResources().getColor(R.color.TextView_Label_Light));
+//
+//        Snackbar.make(findViewById(android.R.id.content), "Downloading / Mengunduh ...", Snackbar.LENGTH_INDEFINITE).show();
+//
+//        DownloadManager.Request req = new DownloadManager.Request(Uri.parse(ROOT_URL_PRINTABLE + printableKey));
+//
+//        req.setTitle(keyIssue.toUpperCase().replace(" ", "_") + ".pdf")// Title of the Download Notification
+//                .setDescription("Mengunduh ...")
+//                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)// Visibility of the download Notification
+//                .setAllowedOverMetered(true) // Set if download is allowed on Mobile network
+//                .setAllowedOverRoaming(true); // Set if download is allowed on roaming network
+//
+//        DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+//        downloadID = dm.enqueue(req);
 
-        Snackbar.make(findViewById(android.R.id.content), "Downloading / Mengunduh ...", Snackbar.LENGTH_INDEFINITE).show();
-
-        DownloadManager.Request req = new DownloadManager.Request(Uri.parse(ROOT_URL_PRINTABLE + printableKey));
-
-        req.setTitle(keyIssue.toUpperCase().replace(" ", "_") + ".pdf")// Title of the Download Notification
-                .setDescription("Mengunduh ...")
-                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)// Visibility of the download Notification
-                .setAllowedOverMetered(true) // Set if download is allowed on Mobile network
-                .setAllowedOverRoaming(true); // Set if download is allowed on roaming network
-
-        DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-        downloadID = dm.enqueue(req);
+        openLinkWithBrowser(this, ROOT_URL_PRINTABLE + printableKey);
     }
 
     private static class IssueDetailModelHelper {

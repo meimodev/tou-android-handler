@@ -2,6 +2,12 @@
  ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                   ~
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+ext {
+    var = 'Letsgetawesome!'
+    var1 = 'Letsgetawesome!'
+    var2 = 'C:\\Users\\User\\Desktop\\KEY_SIGNED_APK_TOU.jks'
+}
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {

@@ -498,7 +498,6 @@
 
         <Button
             android:id="@+id/button_reject"
-            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -509,7 +508,6 @@
 
         <Button
             android:id="@+id/button_accept"
-            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"

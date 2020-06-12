@@ -80,7 +80,9 @@ public class Constant {
 
     public static final String ROOT_TRANSFER_PROTOCOL = "http";
     public static final String ROOT_IP = "192.168.1.5";
+//    public static final String ROOT_IP = "35.240.166.175";
     public static final String ROOT_PORT = ":8000";
+//    public static final String ROOT_PORT = "";
     public static final String ROOT_PROTOCOL_IP_PORT =
             ROOT_TRANSFER_PROTOCOL + "://" + ROOT_IP + ROOT_PORT;
 
@@ -143,6 +145,7 @@ public class Constant {
     public static final String KEY_PAPERS_BAPTIZE = "Surat Baptis";
     public static final String KEY_PAPERS_SIDI = "Surat Sidi";
     public static final String KEY_PAPERS_MARRIED = "Surat Nikah";
+    public static final String KEY_PAPERS_OTHERS = "Surat Lainnya";
 
     public static final String KEY_SERVICE = "SERVICE";
     public static final String KEY_SERVICE_KOLOM = "Ibadah Kolom";
@@ -523,7 +526,8 @@ public class Constant {
                 || keyIssue.contentEquals(KEY_PAPERS_CREDENTIAL)
                 || keyIssue.contentEquals(KEY_PAPERS_BAPTIZE)
                 || keyIssue.contentEquals(KEY_PAPERS_SIDI)
-                || keyIssue.contentEquals(KEY_PAPERS_MARRIED);
+                || keyIssue.contentEquals(KEY_PAPERS_MARRIED)
+                || keyIssue.contentEquals(KEY_PAPERS_OTHERS);
     }
 
     public static boolean isIssueService(@NonNull String keyIssue) {
@@ -602,5 +606,14 @@ public class Constant {
 
     public static int convertCurrencyToNumber(String number) {
         return Integer.parseInt(number.replace(".", "").replace("Rp ", ""));
+    }
+
+    public static void openLinkWithBrowser(Context context, String url){
+        Uri uri = Uri.parse("googlechrome://navigate?url=" + url);
+        Intent i = new Intent(Intent.ACTION_VIEW, uri);
+        if (i.resolveActivity(context.getPackageManager()) == null) {
+            i.setData(Uri.parse(url));
+        }
+        context.startActivity(i);
     }
 }

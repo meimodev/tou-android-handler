@@ -202,7 +202,6 @@ public class SignIn extends AppCompatActivity {
         {
             Guru.putInt(Constant.KEY_VENDOR_ID, 1);
             startActivity(new Intent(this, VendorHome.class));
-            finish();
             return;
         }
 

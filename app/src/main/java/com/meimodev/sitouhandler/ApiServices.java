@@ -117,7 +117,8 @@ public interface ApiServices {
             @Field("place") String place,
             @Field("ceremony_date") String ceremonyDate,
             @Field("priest_id") String priestId,
-            @Field("issued_member_data") String issuedMemberData
+            @Field("issued_member_data") String issuedMemberData,
+            @Field("description")String description
     );
 
     @FormUrlEncoded

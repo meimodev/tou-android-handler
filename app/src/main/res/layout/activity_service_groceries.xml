@@ -137,7 +137,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:fontFamily="@font/montserrat_regular"
-                    android:text="Baham Makanan Online"
+                    android:text="Bahan Makanan Online"
                     android:textAlignment="center"
                     android:textSize="16sp"
                     android:textStyle="bold" />

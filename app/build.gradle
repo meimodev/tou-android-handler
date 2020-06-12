@@ -5,6 +5,15 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file(var2)
+            storePassword var
+            keyPassword var
+            keyAlias 'key0'
+        }
+    }
+
 //    Remove the build tools version later when internet is connected
     buildToolsVersion "30.0.0-rc4"
     compileSdkVersion 29
@@ -16,15 +25,17 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        def buildDateStamp = new Date().format("yyyyMMdd").toInteger()
+        def buildDateStamp = new Date().format("yyMMddHHmm").toInteger()
         versionCode buildDateStamp
         versionName "$buildDateStamp"
         buildConfigField "String", "BUILD_DATE_STAMP", "\"$buildDateStamp\""
+        signingConfig signingConfigs.release
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable false
         }
 
     }
