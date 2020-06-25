@@ -6,6 +6,7 @@ package com.meimodev.sitouhandler.Vendor;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,7 +75,13 @@ public class VendorHome extends AppCompatActivity {
                     ));
                 }
 
-                initRecyclerView();
+                if (orders.size()>0) {
+                    initRecyclerView();
+                }
+                else {
+                    b.layoutNotFound.setVisibility(View.VISIBLE);
+                    b.recyclerViewOrders.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -86,6 +93,8 @@ public class VendorHome extends AppCompatActivity {
     }
 
     public void initRecyclerView(){
+        b.recyclerViewOrders.setVisibility(View.VISIBLE);
+        b.layoutNotFound.setVisibility(View.GONE);
         b.recyclerViewOrders.setHasFixedSize(true);
         b.recyclerViewOrders.setLayoutManager(new LinearLayoutManager(this));
         b.recyclerViewOrders.setItemAnimator(new DefaultItemAnimator());

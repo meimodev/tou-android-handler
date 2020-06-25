@@ -79,12 +79,15 @@ public class Constant {
     public static final String KEY_MEMBER_DUPLICATE_CHECK = "Member_Duplicate_Check";
 
     public static final String ROOT_TRANSFER_PROTOCOL = "http";
-    public static final String ROOT_IP = "192.168.1.5";
-//    public static final String ROOT_IP = "35.240.166.175";
-    public static final String ROOT_PORT = ":8000";
+//    public static final String ROOT_TRANSFER_PROTOCOL = "https";
+        public static final String ROOT_IP = "192.168.1.5";
+//    public static final String ROOT_IP = "tousystem.com";
+        public static final String ROOT_PORT = ":8000";
 //    public static final String ROOT_PORT = "";
     public static final String ROOT_PROTOCOL_IP_PORT =
             ROOT_TRANSFER_PROTOCOL + "://" + ROOT_IP + ROOT_PORT;
+
+    public static final int RESERVED_USER_ID = 1;
 
     public static final String ROOT_URL_API = ROOT_PROTOCOL_IP_PORT + "/api/";
     public static final String ROOT_URL_DOWNLOAD_REPORT = ROOT_URL_API + "print-report/";
@@ -608,7 +611,7 @@ public class Constant {
         return Integer.parseInt(number.replace(".", "").replace("Rp ", ""));
     }
 
-    public static void openLinkWithBrowser(Context context, String url){
+    public static void openLinkWithBrowser(Context context, String url) {
         Uri uri = Uri.parse("googlechrome://navigate?url=" + url);
         Intent i = new Intent(Intent.ACTION_VIEW, uri);
         if (i.resolveActivity(context.getPackageManager()) == null) {

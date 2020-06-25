@@ -118,7 +118,7 @@ public interface ApiServices {
             @Field("ceremony_date") String ceremonyDate,
             @Field("priest_id") String priestId,
             @Field("issued_member_data") String issuedMemberData,
-            @Field("description")String description
+            @Field("description") String description
     );
 
     @FormUrlEncoded
@@ -364,6 +364,9 @@ public interface ApiServices {
             @Query("type") String type,
             @Query("name") String name
     );
+
+    @GET("find-product-recommendation")
+    Call<ResponseBody> findProductRecommendation();
 
     @GET("transport-time")
     Call<ResponseBody> getTransportAndTime(

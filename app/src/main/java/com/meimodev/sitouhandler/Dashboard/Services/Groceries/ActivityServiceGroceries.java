@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -92,6 +93,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
     private void startTransitionTimer(){
         CountDownTimer countdownToTransition = new CountDownTimer(10000, 1000) {
 
+            @SuppressLint("DefaultLocale")
             public void onTick(long millisUntilFinished) {
                 b.textViewStart.setText(String.format("MULAI BERBELANJA %d", millisUntilFinished / 1000));
             }
@@ -235,11 +237,69 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         b.recyclerViewProducts.setLayoutManager(new LinearLayoutManager(this));
         b.recyclerViewProducts.setItemAnimator(new DefaultItemAnimator());
         b.recyclerViewProducts.setAdapter(adapterProduct);
+        fetchProductRecommendation();
+    }
+
+    private void fetchProductRecommendation(){
+        b.recyclerViewProducts.setVisibility(View.GONE);
+        b.progress.setVisibility(View.VISIBLE);
+
+        req = new IssueRequestHandler(b.getRoot());
+        req.setIntention(new Throwable());
+        req.setContext(this);
+        req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
+            @Override
+            public void onTry() {
+
+            }
+
+            @Override
+            public void onSuccess(APIWrapper res, String message) throws JSONException {
+                b.recyclerViewProducts.setVisibility(View.VISIBLE);
+                b.progress.setVisibility(View.GONE);
+                JSONArray data = res.getDataArray();
+                products.clear();
+                for (int i = 0; i < data.length(); i++) {
+                    JSONObject obj = data.getJSONObject(i);
+                    products.add(new HelperModelProduct(
+                            obj.getInt("id"),
+                            obj.getString("name"),
+                            obj.getInt("price"),
+                            obj.getString("unit")
+                    ));
+                }
+                adapterProduct.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onRetry() {
+                b.recyclerViewProducts.setVisibility(View.VISIBLE);
+                b.progress.setVisibility(View.GONE);
+
+                Constant.displayDialog(
+                        ActivityServiceGroceries.this,
+                        "Perhatian !",
+                        "Koneksi internet bermasalah, silahkan coba lagi",
+                        true,
+                        (dialog, which) -> {
+                        },
+                        null,
+                        dialog -> fetchProductRecommendation()
+                );
+            }
+        });
+        req.backGroundRequest(
+                RetrofitClient.getInstance(null).getApiServices()
+                        .findProductRecommendation()
+        );
     }
 
     private void fetchProductData() {
         b.recyclerViewProducts.setVisibility(View.GONE);
         b.progress.setVisibility(View.VISIBLE);
+
+        if (req != null) req.getCall().cancel();
 
         req = new IssueRequestHandler(b.getRoot());
         req.setIntention(new Throwable());
