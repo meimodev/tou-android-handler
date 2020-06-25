@@ -196,15 +196,6 @@ public class SignIn extends AppCompatActivity {
         b.textInputLayoutPhone.setError(null);
         b.textInputLayoutPassword.setError(null);
 
-        //vendor experimental
-        if (b.textInputLayoutPhone.getEditText().getText().toString().contentEquals("0000") &&
-                b.textInputLayoutPassword.getEditText().getText().toString().contentEquals("0000"))
-        {
-            Guru.putInt(Constant.KEY_VENDOR_ID, 1);
-            startActivity(new Intent(this, VendorHome.class));
-            return;
-        }
-
         Validator validator = new Validator(this);
 
         if (validator.validateEmpty(b.textInputLayoutPhone) != null) return;

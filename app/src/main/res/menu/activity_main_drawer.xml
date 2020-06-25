@@ -34,6 +34,11 @@
                     android:visible="false"
                     android:icon="@drawable/ic_church"
                     android:title="Tambahan Ibadah Minggu" />
+                <item
+                    android:id="@+id/nav_vendor"
+                    android:visible="false"
+                    android:icon="@drawable/ic_star_24px"
+                    android:title="Vendor" />
 
             </group>
         </menu>

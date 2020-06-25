@@ -55,6 +55,7 @@ import com.meimodev.sitouhandler.Issue.Issue;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
+import com.meimodev.sitouhandler.Vendor.VendorHome;
 import com.meimodev.sitouhandler.Wizard.ApplyMember.ApplyMember;
 import com.meimodev.sitouhandler.Wizard.DuplicateCheck.DuplicateCheck;
 
@@ -120,6 +121,7 @@ import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_COLUMN_WKI;
 import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_COLUMN_YOUTH;
 import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_GMIM_MEMBER;
 import static com.meimodev.sitouhandler.Constant.NOTIFICATION_TOPIC_USER;
+import static com.meimodev.sitouhandler.Constant.RESERVED_USER_ID;
 import static com.meimodev.sitouhandler.Constant.changeStatusColor;
 
 public class Dashboard extends AppCompatActivity {
@@ -516,6 +518,12 @@ public class Dashboard extends AppCompatActivity {
         Log.e(TAG, "setupNavDrawerItemsBasedOnAccountType: issuing "+enableIssuing );
 
         navSubMenu.findItem(R.id.nav_sundayIncome).setVisible(showSundayIncome);
+
+        // vendor
+        if (Guru.getInt(KEY_USER_ID, 0) == RESERVED_USER_ID){
+            navSubMenu.findItem(R.id.nav_vendor).setVisible(true);
+            Guru.putInt(Constant.KEY_VENDOR_ID, Constant.RESERVED_USER_ID);
+        }
     }
 
     private void setupFloatingActionMenuAndButtons() {
@@ -643,6 +651,11 @@ public class Dashboard extends AppCompatActivity {
 
             if (item.getItemId() == R.id.nav_signOut) {
                 Constant.signOut(Dashboard.this);
+                return true;
+            }
+
+            if (item.getItemId() == R.id.nav_vendor) {
+                startActivity(new Intent(this, VendorHome.class));
                 return true;
             }
 
