@@ -587,5 +587,9 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 //        }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if (isCartOpen) closeCart();
+        else super.onBackPressed();
+    }
 }
