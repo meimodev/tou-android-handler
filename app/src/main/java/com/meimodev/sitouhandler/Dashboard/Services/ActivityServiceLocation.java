@@ -344,6 +344,8 @@ public class ActivityServiceLocation extends AppCompatActivity {
         });
 
         JSONObject products = new JSONObject();
+        JSONArray arr = new JSONArray();
+        int index = 0;
         try {
             for (ActivityServiceGroceries.HelperModelCart p : productsInCart) {
                 JSONObject prod = new JSONObject();
@@ -354,9 +356,12 @@ public class ActivityServiceLocation extends AppCompatActivity {
                 prod.put("quantity", p.getQuantity());
                 prod.put("total_price", p.getTotalPrice());
                 prod.put("type", serviceType);
-                products.accumulate("products", prod);
+                arr.put(index, prod);
+                index++;
             }
-//            Log.e(TAG, "sendDataToServer: " + products.toString());
+            products.put("products", arr);
+
+//            Log.e(TAG, "sendDataToServer: accumulate ="+products.toString() );
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e(TAG, "sendDataToServer: ERROR while composing JSON products ", e);

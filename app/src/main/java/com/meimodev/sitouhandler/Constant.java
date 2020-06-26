@@ -58,7 +58,6 @@ import java.util.Currency;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-
 public class Constant {
     private static final String TAG = "Constant: ";
 
@@ -78,12 +77,13 @@ public class Constant {
     public static final String KEY_COLUMN_NAME_INDEX = "Column_Name_Index";
     public static final String KEY_MEMBER_DUPLICATE_CHECK = "Member_Duplicate_Check";
 
-    public static final String ROOT_TRANSFER_PROTOCOL = "http";
-//    public static final String ROOT_TRANSFER_PROTOCOL = "https";
-        public static final String ROOT_IP = "192.168.1.5";
-//    public static final String ROOT_IP = "tousystem.com";
-        public static final String ROOT_PORT = ":8000";
-//    public static final String ROOT_PORT = "";
+//        public static final String ROOT_TRANSFER_PROTOCOL = "http";
+    public static final String ROOT_TRANSFER_PROTOCOL = "https";
+//    public static final String ROOT_IP = "192.168.1.5";
+    public static final String ROOT_IP = "tousystem.com";
+//    public static final String ROOT_PORT = ":8000";
+    public static final String ROOT_PORT = "";
+
     public static final String ROOT_PROTOCOL_IP_PORT =
             ROOT_TRANSFER_PROTOCOL + "://" + ROOT_IP + ROOT_PORT;
 
