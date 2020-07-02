@@ -32,7 +32,6 @@ public class ConfirmAccount extends AppCompatActivity {
 
     private static final String TAG = "ConfirmAccount";
 
-
     @BindView(R.id.textInputLayout_phone)
     TextInputLayout tilPhone;
     @BindView(R.id.textInputLayout_code)
