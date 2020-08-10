@@ -1,3 +1,7 @@
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
@@ -135,6 +139,10 @@
 
     <style name="radioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
         <item name="fontFamily">@font/montserrat_regular</item>
+    </style>
+
+    <style name="maxLinesFix" parent="TextAppearance.AppCompat.Small">
+        <item name="maxLines">100</item>
     </style>
 
 </resources>

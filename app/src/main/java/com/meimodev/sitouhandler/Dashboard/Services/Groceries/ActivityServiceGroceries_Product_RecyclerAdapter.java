@@ -5,11 +5,16 @@
 package com.meimodev.sitouhandler.Dashboard.Services.Groceries;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -18,70 +23,109 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Issue.OnRecyclerItemOperationListener;
 import com.meimodev.sitouhandler.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ActivityServiceGroceries_Product_RecyclerAdapter extends RecyclerView.Adapter<ActivityServiceGroceries_Product_RecyclerAdapter.MyViewHolder> {
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
+import static android.content.ContentValues.TAG;
+
+public class ActivityServiceGroceries_Product_RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
 
     private Context context;
-    private ArrayList<ActivityServiceGroceries.HelperModelProduct> items;
+    private ArrayList<ActivityServiceGroceries.HelperModelProduct> products;
 
     private OnRecyclerItemOperationListener.ItemClickListener clickListener;
 
     ActivityServiceGroceries_Product_RecyclerAdapter(
             Context context,
-            ArrayList<ActivityServiceGroceries.HelperModelProduct> items,
+            ArrayList<ActivityServiceGroceries.HelperModelProduct> products,
             OnRecyclerItemOperationListener.ItemClickListener clickListener
     ) {
         this.clickListener = clickListener;
         this.context = context;
-        this.items = items;
+        this.products = products;
     }
+
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.resource_list_item_groceries_product, parent, false));
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new ViewHolderProduct(LayoutInflater.from(context).inflate(
+                    R.layout.resource_list_item_groceries_product, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        ActivityServiceGroceries.HelperModelProduct model = items.get(position);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        holder.setIsRecyclable(false);
+        ActivityServiceGroceries.HelperModelProduct model = products.get(position);
+        ViewHolderProduct pHolder = (ViewHolderProduct) holder;
 
-        holder.tvName.setText(model.getName());
-        String price = Constant.convertNumberToCurrency(model.getPrice()) + " / " + model.getUnit();
-        holder.tvPrice.setText(price);
+        if (!model.isVendor()) {
 
-        holder.cvAdd.setOnClickListener(v -> {
-            Bundle data = new Bundle();
-            data.putInt("ID", model.getId());
-            data.putString("NAME", model.getName());
-            data.putInt("PRICE", model.getPrice());
-            data.putString("UNIT", model.getUnit());
-            data.putInt("POS", position);
-            clickListener.itemClick(data);
-        });
+            pHolder.tvName.setText(model.getName());
+            String price = Constant.convertNumberToCurrency(model.getPrice()) + " / " + model.getUnit();
+            pHolder.tvPrice.setText(price);
+
+            Picasso.get().load(model.getImageUrl()).fit().into(pHolder.imageView);
+
+            pHolder.cvAdd.setOnClickListener(v -> {
+                Bundle data = new Bundle();
+                data.putInt("ID", model.getId());
+                data.putString("NAME", model.getName());
+                data.putInt("PRICE", model.getPrice());
+                data.putString("UNIT", model.getUnit());
+                data.putInt("POS", position);
+                data.putInt("VENDOR_ID", model.getVendorId());
+                data.putString("VENDOR_NAME", model.getVendorName());
+
+                clickListener.itemClick(data);
+            });
+        }
+        else {
+            Picasso.get().load(model.getImageUrl()).fit().transform(new CropCircleTransformation()).into(pHolder.imageView);
+            pHolder.tvName.setVisibility(View.INVISIBLE);
+            pHolder.tvPrice.setText(model.getName());
+            pHolder.tvPrice.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            pHolder.cvAdd.setVisibility(View.GONE);
+            pHolder.cvMain.setClickable(true);
+            pHolder.cvMain.setOnClickListener(v -> {
+                Intent i = new Intent(ActivityServiceGroceries.KEY_VENDOR_PRODUCTS);
+                i.putExtra("VENDOR_NAME", model.getName());
+                context.sendBroadcast(i);
+            });
+        }
+
 
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return products.size() ;
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolderProduct extends RecyclerView.ViewHolder {
 
         TextView tvName, tvPrice;
-        CardView cvAdd;
+        ImageView imageView;
+        CardView cvAdd, cvMain;
 
-        MyViewHolder(@NonNull View itemView) {
+        ViewHolderProduct(@NonNull View itemView) {
             super(itemView);
 
             tvName = itemView.findViewById(R.id.recyclerItem_name);
             tvPrice = itemView.findViewById(R.id.recyclerItem_price);
             cvAdd = itemView.findViewById(R.id.recyclerItem_layout_add);
+            cvMain = itemView.findViewById(R.id.layout_main);
+
+            imageView = itemView.findViewById(R.id.imageView);
+
+
 
         }
 
     }
+
 }

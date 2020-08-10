@@ -5,16 +5,12 @@
 package com.meimodev.sitouhandler.Dashboard.Services;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -22,14 +18,8 @@ import androidx.cardview.widget.CardView;
 import com.github.squti.guru.Guru;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.SphericalUtil;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Dashboard.Dashboard;
@@ -40,6 +30,7 @@ import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.databinding.ActivityServiceLocationBinding;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,7 +55,11 @@ public class ActivityServiceLocation extends AppCompatActivity {
     private GoogleMap map;
     private LatLng tondanoHQ = new LatLng(1.296218, 124.901507);
     private LatLng target;
-    ;
+
+    private boolean isOrderOnSpot = false;
+    private boolean isCardOpen = false;
+
+    private int vendorId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,20 +89,27 @@ public class ActivityServiceLocation extends AppCompatActivity {
             productsInCart = (ArrayList<ActivityServiceGroceries.HelperModelCart>) serializable;
             productsPrice = bundle.getInt("PRICE", 0);
             serviceType = bundle.getString("SERVICE_TYPE");
+            vendorId = bundle.getInt("VENDOR_ID", -1);
+
 
             initPayment();
             b.buttonLocation.setOnClickListener(btnLocationOnClickListener);
+            b.buttonOnSpot.setOnClickListener(btnOnTheSpotClickListener);
 
             googleMap.setOnCameraMoveStartedListener(i -> {
                 b.buttonLocation.setVisibility(View.INVISIBLE);
+                b.cardViewInfo.setVisibility(View.INVISIBLE);
                 closeCard();
             });
             googleMap.setOnMapClickListener(latLng -> {
                 b.buttonLocation.setVisibility(View.INVISIBLE);
+                b.cardViewInfo.setVisibility(View.INVISIBLE);
                 closeCard();
             });
             googleMap.setOnCameraIdleListener(() -> {
                 b.buttonLocation.setVisibility(View.VISIBLE);
+                b.cardViewInfo.setVisibility(View.VISIBLE);
+
                 target = new LatLng(googleMap.getCameraPosition().target.latitude, googleMap.getCameraPosition().target.longitude);
             });
 
@@ -160,12 +162,17 @@ public class ActivityServiceLocation extends AppCompatActivity {
         b.radioEvening.setOnCheckedChangeListener(onCheckedChangeListener);
         b.radioEvening.setClickable(false);
 
+        b.radioNow.setOnCheckedChangeListener(onCheckedChangeListener);
+        b.radioNow.setClickable(false);
+
         View.OnClickListener onClickListener = v -> {
             if (v == b.layoutMorning) {
                 selectedDeliveryTimeCardIndex = 1;
                 b.radioMorning.setChecked(true);
                 b.radioNoon.setChecked(false);
                 b.radioEvening.setChecked(false);
+                b.radioNow.setChecked(false);
+
                 transportFee = Constant.convertCurrencyToNumber(b.textViewMorningFee.getText().toString());
                 deliveryTime = b.textViewMorningTime.getText().toString();
             }
@@ -174,6 +181,8 @@ public class ActivityServiceLocation extends AppCompatActivity {
                 b.radioMorning.setChecked(false);
                 b.radioNoon.setChecked(true);
                 b.radioEvening.setChecked(false);
+                b.radioNow.setChecked(false);
+
                 transportFee = Constant.convertCurrencyToNumber(b.textViewNoonFee.getText().toString());
                 deliveryTime = b.textViewNoonTime.getText().toString();
             }
@@ -182,8 +191,20 @@ public class ActivityServiceLocation extends AppCompatActivity {
                 b.radioMorning.setChecked(false);
                 b.radioNoon.setChecked(false);
                 b.radioEvening.setChecked(true);
+                b.radioNow.setChecked(false);
+
                 transportFee = Constant.convertCurrencyToNumber(b.textViewEveningFee.getText().toString());
                 deliveryTime = b.textViewEveningTime.getText().toString();
+            }
+            else if (v == b.layoutNow) {
+                selectedDeliveryTimeCardIndex = 4;
+                b.radioMorning.setChecked(false);
+                b.radioNoon.setChecked(false);
+                b.radioEvening.setChecked(false);
+                b.radioNow.setChecked(true);
+
+                transportFee = Constant.convertCurrencyToNumber(b.textViewNowFee.getText().toString());
+                deliveryTime = b.textViewNowTime.getText().toString();
             }
             initPayment();
         };
@@ -191,22 +212,23 @@ public class ActivityServiceLocation extends AppCompatActivity {
         b.layoutMorning.setOnClickListener(onClickListener);
         b.layoutNoon.setOnClickListener(onClickListener);
         b.layoutEvening.setOnClickListener(onClickListener);
+        b.layoutNow.setOnClickListener(onClickListener);
     }
 
     private View.OnClickListener btnLocationOnClickListener = v -> {
-        Log.e(TAG, " hq = " + tondanoHQ.latitude + "," + tondanoHQ.longitude);
+//        Log.e(TAG, " hq = " + tondanoHQ.latitude + "," + tondanoHQ.longitude);
         int distance = (int) SphericalUtil.computeDistanceBetween(tondanoHQ, target);
-        Log.e(TAG, "target = " + target.latitude + "," + target.longitude);
-        Log.e(TAG, "DISTANCE = from HQ to Target = " + distance);
+//        Log.e(TAG, "target = " + target.latitude + "," + target.longitude);
+//        Log.e(TAG, "DISTANCE = from HQ to Target = " + distance);
 
         openCard(distance);
     };
     private View.OnClickListener btnOrderOnClickListener = v -> {
-//
-//        if (b.textInputLayoutKelurahan.getEditText().getText().length() < 3 || selectedKelurahanPosition < 0) {
-//            b.textInputLayoutKelurahan.setError("Silahkan pilih dari daftar yang muncul saat mengetik kelurahan");
-//            return;
-//        }
+
+        if (isOrderOnSpot) {
+            sendDataToServer();
+            return;
+        }
 
         if (b.textInputLayoutLandmark.getEditText().getText().length() < 3) {
             b.textInputLayoutLandmark.setError("Masukkan petunjuk lokasi pengantaran");
@@ -221,6 +243,9 @@ public class ActivityServiceLocation extends AppCompatActivity {
 
         //send Data to Server
         sendDataToServer();
+    };
+    private View.OnClickListener btnOnTheSpotClickListener = v -> {
+        openCard(-1);
     };
 
     private void initPayment() {
@@ -240,6 +265,34 @@ public class ActivityServiceLocation extends AppCompatActivity {
         b.nestedScrollView.setVisibility(View.INVISIBLE);
         b.progress.setVisibility(View.VISIBLE);
 
+        isOrderOnSpot = false;
+        isCardOpen = true;
+
+        //handle on the spot order
+        if (distance < 0) {
+            isOrderOnSpot = true;
+            transportFee = 0;
+            selectedDeliveryTimeCardIndex = 0;
+
+            b.radioMorning.setChecked(false);
+            b.radioNoon.setChecked(false);
+            b.radioEvening.setChecked(false);
+            b.radioNow.setChecked(false);
+
+            b.textInputLayoutLandmark.setVisibility(View.GONE);
+            b.textInputLayoutLandmark.getEditText().setText("");
+            b.layoutTime.setVisibility(View.GONE);
+
+            b.radioMorning.setChecked(false);
+            b.radioNoon.setChecked(false);
+            b.radioEvening.setChecked(false);
+
+            b.nestedScrollView.setVisibility(View.VISIBLE);
+            b.progress.setVisibility(View.GONE);
+
+            initPayment();
+            return;
+        }
 
         req.setIntention(new Throwable());
         req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
@@ -250,22 +303,73 @@ public class ActivityServiceLocation extends AppCompatActivity {
 
             @Override
             public void onSuccess(APIWrapper res, String message) throws JSONException {
-                //set time card
                 JSONObject data = res.getData();
 
                 JSONObject times = data.getJSONObject("times");
                 JSONObject fee = data.getJSONObject("fee");
 
-                b.textViewMorningTime.setText(times.getString("morning"));
-                b.textViewNoonTime.setText(times.getString("noon"));
-                b.textViewEveningTime.setText(times.getString("evening"));
+                b.layoutMorning.setEnabled(true);
+                b.layoutNoon.setEnabled(true);
+                b.layoutEvening.setEnabled(true);
+                b.layoutNow.setEnabled(true);
 
-                b.textViewMorningFee.setText(fee.getString("morning"));
-                b.textViewNoonFee.setText(fee.getString("noon"));
-                b.textViewEveningFee.setText(fee.getString("evening"));
+                //set times
+                String morningTime = times.getString("morning");
+                if (StringUtils.isNotEmpty(morningTime)) {
+                    b.textViewMorningTime.setText(morningTime);
+                }
+                else {
+                    b.layoutMorning.setEnabled(false);
+                    b.textViewMorningTime.setText("Jam Pengantaran pagi 00:00 - 07:59 TERLEWAT");
+//                    b.radioMorning.setEnabled(false);
+                }
 
+                String noonTime = times.getString("noon");
+                if (StringUtils.isNotEmpty(noonTime)) {
+                    b.textViewNoonTime.setText(noonTime);
+                }
+                else {
+                    b.layoutNoon.setEnabled(false);
+                    b.textViewNoonTime.setText("Jam Pengantaran siang 08:00 - 13:59 TERLEWAT");
+//                    b.radioNow.setEnabled(false);
+                }
+
+                String eveningTime = times.getString("evening");
+                if (StringUtils.isNotEmpty(eveningTime)) {
+                    b.textViewEveningTime.setText(eveningTime);
+                }
+                else {
+                    b.layoutEvening.setEnabled(false);
+                    b.textViewEveningTime.setText("Jam Pengantaran malam 14:00 - 17:59 TERLEWAT");
+//                    b.radioEvening.setEnabled(false);
+                }
+
+                String nowTime = times.getString("now");
+                b.textViewNowTime.setText(nowTime);
+
+
+                //set fees
+                String morningFee = fee.getString("morning");
+                b.textViewMorningFee.setText(
+                        Constant.convertNumberToCurrency(morningFee));
+
+                String noonFee = fee.getString("noon");
+                b.textViewNoonFee.setText(
+                        Constant.convertNumberToCurrency(noonFee));
+
+                String eveningFee = fee.getString("evening");
+                b.textViewEveningFee.setText(
+                        Constant.convertNumberToCurrency(eveningFee));
+
+                String nowFee = fee.getString("now");
+                b.textViewNowFee.setText(
+                        Constant.convertNumberToCurrency(nowFee));
+
+                b.layoutTime.setVisibility(View.VISIBLE);
+                b.textInputLayoutLandmark.setVisibility(View.VISIBLE);
                 b.nestedScrollView.setVisibility(View.VISIBLE);
                 b.progress.setVisibility(View.GONE);
+
             }
 
             @Override
@@ -290,6 +394,7 @@ public class ActivityServiceLocation extends AppCompatActivity {
     }
 
     private void closeCard() {
+        isCardOpen = false;
         b.layoutInfo.setVisibility(View.VISIBLE);
         b.card.setVisibility(View.GONE);
     }
@@ -367,6 +472,17 @@ public class ActivityServiceLocation extends AppCompatActivity {
             Log.e(TAG, "sendDataToServer: ERROR while composing JSON products ", e);
         }
 
+        Log.e(TAG, "=========================== LOG HEAD ===========================");
+        Log.e(TAG, "user id : " + Guru.getInt(Constant.KEY_USER_ID, -1));
+        Log.e(TAG, "location : " + b.textInputLayoutLandmark.getEditText().getText());
+        Log.e(TAG, "delivery time : " + deliveryTime);
+        Log.e(TAG, "transport fee : " + transportFee);
+        Log.e(TAG, "total bill : " + Constant.convertCurrencyToNumber(b.textViewTotal.getText().toString()));
+        Log.e(TAG, "service type : " + serviceType);
+        Log.e(TAG, "coordinate : " + target.latitude + " , " + target.longitude);
+        Log.e(TAG, "products: " + products.toString());
+        Log.e(TAG, "================================================================");
+
         req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().setOrder(
                 Guru.getInt(Constant.KEY_USER_ID, -1),
                 b.textInputLayoutLandmark.getEditText().getText().toString(),
@@ -378,5 +494,14 @@ public class ActivityServiceLocation extends AppCompatActivity {
                 products.toString()
         ));
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isCardOpen){
+            closeCard();
+            return;
+        }
+        super.onBackPressed();
     }
 }

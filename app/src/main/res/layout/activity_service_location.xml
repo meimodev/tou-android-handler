@@ -21,7 +21,7 @@
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <fragment
@@ -53,6 +53,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@id/button_location"
@@ -62,8 +63,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp">
+                    android:layout_margin="12dp"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -78,11 +79,45 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:maxLines="100"
-                        android:text="Silahkan arahkan tanda pada lokasi yang diinginkan lalu sentuh tombol 'Pilih lokasi' di bawah untuk melanjutkan " />
+                        android:text="Silahkan arahkan tanda pada lokasi yang diinginkan lalu sentuh tombol 'PILIH LOKASI' di bawah untuk melanjutkan" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@color/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:maxLines="100"
+                        android:text="atau sentuh 'PESAN DITEMPAT' untuk pesanan yang tidak diantar " />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="2dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/button_onSpot"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:text="PESAN DITEMPAT"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
 
+            </androidx.cardview.widget.CardView>
 
             <Button
                 android:id="@+id/button_location"
@@ -91,7 +126,7 @@
                 android:layout_above="@id/imageView_marker"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="8dp"
-                android:text="Pilih Lokasi" />
+                android:text="PILIH LOKASI" />
 
             <ImageView
                 android:id="@+id/imageView_marker"
@@ -111,8 +146,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:visibility="visible"
             android:animateLayoutChanges="true"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -127,8 +162,8 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:animateLayoutChanges="true"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true">
 
                     <!--Location Description / Map-->
                     <LinearLayout
@@ -215,7 +250,7 @@
                                     android:layout_toEndOf="@id/radio_morning"
                                     android:gravity="start|center_vertical"
                                     android:maxLines="5"
-                                    android:text="Pagi 08:00 - 10:00" />
+                                    android:text="" />
 
                                 <TextView
                                     android:id="@+id/textView_morning_fee"
@@ -262,7 +297,7 @@
                                     android:layout_toEndOf="@id/radio_noon"
                                     android:gravity="start|center_vertical"
                                     android:maxLines="5"
-                                    android:text="Siang 14:00 - 16:00" />
+                                    android:text="" />
 
                                 <TextView
                                     android:id="@+id/textView_noon_fee"
@@ -309,10 +344,56 @@
                                     android:layout_toEndOf="@id/radio_evening"
                                     android:gravity="start|center_vertical"
                                     android:maxLines="5"
-                                    android:text="Malam 18:00 - 20:00" />
+                                    android:text="" />
 
                                 <TextView
                                     android:id="@+id/textView_evening_fee"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_marginEnd="8dp"
+                                    android:gravity="center"
+                                    android:text="Rp. 300.000" />
+
+                            </RelativeLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/layout_now"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            app:cardElevation="2dp">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp">
+
+                                <CheckBox
+                                    android:id="@+id/radio_now"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent" />
+
+                                <TextView
+                                    android:id="@+id/textView_now_time"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginEnd="8dp"
+                                    android:layout_toStartOf="@id/textView_now_fee"
+                                    android:layout_toEndOf="@id/radio_now"
+                                    android:gravity="start|center_vertical"
+                                    android:maxLines="5"
+                                    android:text="" />
+
+                                <TextView
+                                    android:id="@+id/textView_now_fee"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_alignParentEnd="true"

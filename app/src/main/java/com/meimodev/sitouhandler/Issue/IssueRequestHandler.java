@@ -170,7 +170,7 @@ public class IssueRequestHandler {
                 Log.e(TAG, "onFailure: "
                         + "(Class)" + context.getClass().getSimpleName() + ": "
                         + intention + ": "
-                        + t.getMessage());
+                        + t.getMessage(), t);
 
                 if (progress != null && progress.getVisibility() == View.VISIBLE) {
                     progress.setVisibility(View.GONE);
@@ -250,7 +250,7 @@ public class IssueRequestHandler {
                 Log.e(TAG, "BACKGROUND REQUEST: onFailure: "
                         + "(Class)" + context.getClass().getSimpleName() + ": "
                         + intention + ": "
-                        + t.getMessage());
+                        + t.getMessage(),t);
                 if (onRequestHandler != null) {
                     Log.e(TAG, "BACKGROUND REQUEST: onFailure: "
                             + "(Class)" + context.getClass().getSimpleName() + ": "

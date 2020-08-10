@@ -13,9 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +33,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.material.textfield.TextInputLayout;
 import com.meimodev.sitouhandler.Constant;
+import com.meimodev.sitouhandler.CustomWidget.CustomEditText;
 import com.meimodev.sitouhandler.Dashboard.Dashboard;
 import com.meimodev.sitouhandler.Dashboard.Services.Cookies.ActivityServiceCookies;
 import com.meimodev.sitouhandler.Dashboard.Services.Electronics.ActivityServiceElectronics;
@@ -63,6 +67,12 @@ public class Fragment_User_Home_News extends Fragment {
     LinearLayout layoutCookies;
     @BindView(R.id.layout_electronics)
     LinearLayout layoutElectronics;
+
+    @BindView(R.id.layout_click_sss)
+    RelativeLayout layoutSSS;
+
+    @BindView(R.id.textInputLayout_search)
+    TextInputLayout tilSearch;
 
     @Nullable
     @Override
@@ -100,14 +110,14 @@ public class Fragment_User_Home_News extends Fragment {
                 null,
                 "Selamat datang di TOU-SYSTEM",
                 "<strong>TOU-System</strong> merupakan sebuah kombinasi integrasi dari aplikasi " +
-                        "handphone & beberapa aplikasi <i>web</i> yang disatukan dalam <i>cloud base environment</i>"+
-                " masuk dalam kategori SaaS (<i>Software as a Service</i>)." +
+                        "handphone & beberapa aplikasi <i>web</i> yang disatukan dalam <i>cloud base environment</i>" +
+                        " masuk dalam kategori SaaS (<i>Software as a Service</i>)." +
                         "<br/><br/>" +
                         "Didesain spesifik untuk membantu meningkatkan kualitas 'kehidupan' kita, dengan cara memangkas hal-hal yang tidak efektif dalam layanan-layanan yang sering kita gunakan sehari-hari." +
 //                        "<br/><br/>"+
 //                        "<a href='"+Constant.ROOT_PROTOCOL_IP_PORT+"'>www.tousystem.com<a/>"+
-                        "<br/><br/><br/><br/>"+
-                        "<i>'SiTou Timou Tumou Tou'</i>  <strong>- G.S.S.J.Ratulangi -<strong/>" ,
+                        "<br/><br/><br/><br/>" +
+                        "<i>'SiTou Timou Tumou Tou'</i>  <strong>- G.S.S.J.Ratulangi -<strong/>",
                 ""
         ));
 
@@ -119,12 +129,18 @@ public class Fragment_User_Home_News extends Fragment {
             Intent intent;
             if (v == layoutGroceries) {
                 intent = new Intent(context, ActivityServiceGroceries.class);
+                intent.putExtra(ActivityServiceGroceries.KEY_SEARCH_PRODUCT_TYPE, "Groceries");
+                intent.putExtra(ActivityServiceGroceries.KEY_START_TEASER, true);
             }
             else if (v == layoutGas) {
                 intent = new Intent(context, ActivityServiceGas.class);
             }
             else if (v == layoutCookies) {
                 intent = new Intent(context, ActivityServiceCookies.class);
+            }
+            else if (v == layoutSSS) {
+                intent = new Intent(context, ActivityServiceGroceries.class);
+                intent.putExtra(ActivityServiceGroceries.KEY_SEARCH_PRODUCT_TYPE, "SSS");
             }
             else {
                 intent = new Intent(context, ActivityServiceElectronics.class);
@@ -135,6 +151,24 @@ public class Fragment_User_Home_News extends Fragment {
         layoutGas.setOnClickListener(onClickListener);
         layoutCookies.setOnClickListener(onClickListener);
         layoutElectronics.setOnClickListener(onClickListener);
+        layoutSSS.setOnClickListener(onClickListener);
+
+        EditText et = tilSearch.getEditText();
+        et.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ActivityServiceGroceries.class);
+            intent.putExtra(ActivityServiceGroceries.KEY_SEARCH_PRODUCT_TYPE, "SSS");
+            context.startActivity(intent);
+            v.clearFocus();
+        });
+        et.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                Intent intent = new Intent(context, ActivityServiceGroceries.class);
+                intent.putExtra(ActivityServiceGroceries.KEY_SEARCH_PRODUCT_TYPE, "SSS");
+                context.startActivity(intent);
+                v.clearFocus();
+            }
+        });
+
     }
 
 }

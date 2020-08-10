@@ -879,7 +879,6 @@ public class Dashboard extends AppCompatActivity {
                 sendBroadcast(new Intent(ACTION_HEADER_COLLAPSE));
             }
         });
-
         cvImportantDates.setVisibility(View.GONE);
         cvImportantDates.setOnClickListener(view -> {
             getSupportFragmentManager().beginTransaction()
@@ -932,6 +931,8 @@ public class Dashboard extends AppCompatActivity {
             tvChurchNameAndVillage.setVisibility(View.GONE);
         }
 
+        // close the church info panel, because church is not the priority at this time
+        sendBroadcast(new Intent(ACTION_HEADER_COLLAPSE));
 
     }
 

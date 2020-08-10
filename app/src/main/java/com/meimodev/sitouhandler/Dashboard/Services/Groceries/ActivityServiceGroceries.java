@@ -7,11 +7,15 @@ package com.meimodev.sitouhandler.Dashboard.Services.Groceries;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -31,6 +35,7 @@ import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.databinding.ActivityServiceGroceriesBinding;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +56,8 @@ public class ActivityServiceGroceries extends AppCompatActivity {
     private IssueRequestHandler req;
     private boolean isChurchMember;
 
+    private int vendorId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,11 +67,8 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         Picasso.get().load(R.drawable.groceries_teaser).into(b.imageViewMain);
 
         changeStatusColor(this, R.color.colorPrimary);
+        handleIntentInit();
 
-        b.layoutTeaser.setOnClickListener(v -> {
-            b.layoutTeaser.setVisibility(View.GONE);
-            b.layoutMain.setVisibility(View.VISIBLE);
-        });
 
         initProductRecyclerView();
         initCartRecyclerView();
@@ -86,26 +90,40 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
         openCart();
         closeCart();
+        handleBroadcastReceiver(true);
 
-        startTransitionTimer();
+        startTeaser(getIntent().getBooleanExtra(KEY_START_TEASER, false));
     }
 
-    private void startTransitionTimer(){
-        CountDownTimer countdownToTransition = new CountDownTimer(10000, 1000) {
+    public static final String KEY_START_TEASER = "KEY_START_TEASER";
 
-            @SuppressLint("DefaultLocale")
-            public void onTick(long millisUntilFinished) {
-                b.textViewStart.setText(String.format("MULAI BERBELANJA %d", millisUntilFinished / 1000));
-            }
+    private void startTeaser(boolean start) {
+        if (start) {
+            b.layoutTeaser.setVisibility(View.VISIBLE);
+            b.layoutMain.setVisibility(View.GONE);
+            b.layoutTeaser.setOnClickListener(v -> {
+                b.layoutTeaser.setVisibility(View.GONE);
+                b.layoutMain.setVisibility(View.VISIBLE);
+            });
+            CountDownTimer countdownToTransition = new CountDownTimer(10000, 1000) {
 
-            public void onFinish() {
-                b.layoutTeaser.performClick();
-            }
-        };
-        countdownToTransition.start();
+                @SuppressLint("DefaultLocale")
+                public void onTick(long millisUntilFinished) {
+                    b.textViewStart.setText(String.format("MULAI BERBELANJA %d", millisUntilFinished / 1000));
+                }
+
+                public void onFinish() {
+                    b.layoutTeaser.performClick();
+                }
+            };
+            countdownToTransition.start();
+
+
+        }
     }
 
     private String recentDesc, recentPrice;
+
     private void openCart() {
 
         ConstraintLayout.LayoutParams params = ((ConstraintLayout.LayoutParams) b.guideCart.getLayoutParams());
@@ -208,11 +226,11 @@ public class ActivityServiceGroceries extends AppCompatActivity {
     private void alterRecent() {
         String desc, price;
         if (adapterCart.getItems().isEmpty()) {
-            desc = "Keranjang Belanja Kosong";
+            desc = "Keranjang Kosong";
             price = "  -  ";
         }
         else {
-            desc = adapterCart.getItems().size() + " Bahan";
+            desc = adapterCart.getItems().size() + " Produk";
             price = Constant.convertNumberToCurrency(calculateTotalPrice());
         }
 
@@ -234,13 +252,13 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                 );
 
         b.recyclerViewProducts.setHasFixedSize(true);
-        b.recyclerViewProducts.setLayoutManager(new LinearLayoutManager(this));
+        b.recyclerViewProducts.setLayoutManager(new GridLayoutManager(this, 2));
         b.recyclerViewProducts.setItemAnimator(new DefaultItemAnimator());
         b.recyclerViewProducts.setAdapter(adapterProduct);
         fetchProductRecommendation();
     }
 
-    private void fetchProductRecommendation(){
+    private void fetchProductRecommendation() {
         b.recyclerViewProducts.setVisibility(View.GONE);
         b.progress.setVisibility(View.VISIBLE);
 
@@ -257,19 +275,23 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             public void onSuccess(APIWrapper res, String message) throws JSONException {
                 b.recyclerViewProducts.setVisibility(View.VISIBLE);
                 b.progress.setVisibility(View.GONE);
-                JSONArray data = res.getDataArray();
+                JSONObject data = res.getData();
+                JSONArray dataProducts = data.getJSONArray("products");
                 products.clear();
-                for (int i = 0; i < data.length(); i++) {
-                    JSONObject obj = data.getJSONObject(i);
+                for (int i = 0; i < dataProducts.length(); i++) {
+                    JSONObject obj = dataProducts.getJSONObject(i);
                     products.add(new HelperModelProduct(
                             obj.getInt("id"),
                             obj.getString("name"),
                             obj.getInt("price"),
-                            obj.getString("unit")
+                            obj.getString("unit"),
+                            obj.getString("image"),
+                            obj.getInt("vendor_id"),
+                            obj.getString("vendor_name")
                     ));
                 }
                 adapterProduct.notifyDataSetChanged();
-
+                searchProductWithType = "";
             }
 
             @Override
@@ -291,7 +313,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         });
         req.backGroundRequest(
                 RetrofitClient.getInstance(null).getApiServices()
-                        .findProductRecommendation()
+                        .findProductRecommendation(searchProductWithType)
         );
     }
 
@@ -314,25 +336,45 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             public void onSuccess(APIWrapper res, String message) throws JSONException {
                 b.recyclerViewProducts.setVisibility(View.VISIBLE);
                 b.progress.setVisibility(View.GONE);
-                JSONArray data = res.getDataArray();
+
                 products.clear();
-                for (int i = 0; i < data.length(); i++) {
-                    JSONObject obj = data.getJSONObject(i);
+
+                JSONObject data = res.getData();
+                JSONArray productsArray = data.getJSONArray("products");
+                JSONArray vendorsArray = data.getJSONArray("vendors");
+
+                for (int i = 0; i < productsArray.length(); i++) {
+                    JSONObject obj = productsArray.getJSONObject(i);
                     products.add(new HelperModelProduct(
                             obj.getInt("id"),
                             obj.getString("name"),
                             obj.getInt("price"),
-                            obj.getString("unit")
+                            obj.getString("unit"),
+                            obj.getString("image"),
+                            obj.getInt("vendor_id"),
+                            obj.getString("vendor_name")
                     ));
                 }
+
+                for (int i = 0; i < vendorsArray.length(); i++) {
+                    JSONObject obj = vendorsArray.getJSONObject(i);
+                    products.add(new HelperModelProduct(
+                            obj.getInt("id"),
+                            obj.getString("name"),
+                            obj.getString("image")
+                    ));
+                }
+
                 adapterProduct.notifyDataSetChanged();
-                if (products.size() == 0){
+                if (products.size() == 0) {
                     b.layoutDataNotFound.getRoot().setVisibility(View.VISIBLE);
                     b.recyclerViewProducts.setVisibility(View.GONE);
-                } else {
+                }
+                else {
                     b.layoutDataNotFound.getRoot().setVisibility(View.GONE);
                     b.recyclerViewProducts.setVisibility(View.VISIBLE);
                 }
+                if (isVendorName) isVendorName = false;
             }
 
             @Override
@@ -352,15 +394,56 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                 );
             }
         });
-        req.backGroundRequest(
-                RetrofitClient.getInstance(null).getApiServices()
-                        .findProductByName(
-                                Constant.PRODUCT_TYPE_GROCERIES,
-                                b.textInputLayoutSearch.getEditText().getText().toString()
-                        )
-        );
+
+        // search Request goes HERE
+        //vendor products
+        //native vendor
+        String vendor = "";
+        String key = b.textInputLayoutSearch.getEditText().getText().toString();
+        String type = "";
+
+        if (isVendorName) {
+            vendor = b.textInputLayoutSearch.getEditText().getText().toString().trim();
+        }
+
+        req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().findProductWithParams(
+                key, type, vendor
+        ));
+
     }
 
+    public static String KEY_VENDOR_PRODUCTS = "KEY_IS_NATIVE_VENDOR";
+    private boolean isVendorName = false;
+
+    private void handleBroadcastReceiver(boolean register) {
+        //regist & unregist broadcast that will handle the broadcasts
+        //broadcast search vendor products only
+
+        BroadcastReceiver brSearchVendorProducts = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+//                Log.e(TAG, "onReceive: received" );
+                if (intent.getAction().contentEquals(KEY_VENDOR_PRODUCTS)) {
+                    isVendorName = true;
+                    b.textInputLayoutSearch.getEditText().setText(intent.getStringExtra("VENDOR_NAME"));
+                }
+            }
+        };
+
+        if (register) {
+            registerReceiver(brSearchVendorProducts, new IntentFilter(KEY_VENDOR_PRODUCTS));
+        }
+        else {
+            unregisterReceiver(brSearchVendorProducts);
+        }
+    }
+
+    public static String KEY_SEARCH_PRODUCT_TYPE = "KEY_SEARCH_PRODUCT_TYPE";
+    private String searchProductWithType;
+
+    private void handleIntentInit() {
+        searchProductWithType = getIntent().getStringExtra(KEY_SEARCH_PRODUCT_TYPE);
+    }
 
     /*Cart RecyclerView*/
     private ArrayList<HelperModelCart> productsInCart;
@@ -381,7 +464,6 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         b.recyclerViewCart.setAdapter(adapterCart);
     }
 
-
     public OnRecyclerItemOperationListener.ItemClickListener cartClickListener = data -> {
 //        int id = data.getInt("ID");
 //        String name = data.getString("NAME");
@@ -400,6 +482,11 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         String name = data.getString("NAME");
         String unit = data.getString("UNIT");
 
+        String vName= data.getString("VENDOR_NAME");
+        int vId = data.getInt("VENDOR_ID");
+
+        vendorId = data.getInt("VENDOR_ID");
+
         //check if product to be add is already exist in arrayList
         boolean productExist = false;
 
@@ -411,29 +498,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             }
             existHelperModelIndex++;
         }
-        if (!productExist) {
-
-            if (!isChurchMember && productsInCart.size()+1 > Constant.VALUE_MAX_NON_MEMBER_PRODUCT_COUNT) {
-                Constant.displayDialog(
-                        ActivityServiceGroceries.this,
-                        "Perhatian !",
-                        "Dikarenakan akun anda tidak terdaftar sebagai anggota dari Gereja mitra TOU, " +
-                                "Jumlah Produk dalam keranjang ini tidak bisa melebihi " +
-                                Constant.VALUE_MAX_NON_MEMBER_PRODUCT_COUNT + " Produk" +
-                                System.lineSeparator() +
-                                System.lineSeparator() +
-                                "untuk menghilangkan batasan ini, silahkan daftarkan akun sebagai anggota gereja di gereja masing-masing, jika Gereja anda merupakan mitra TOU"
-                        ,
-                        (dialog, which) -> {
-                        }
-                );
-                return;
-            }
-
-            productsInCart.add(new HelperModelCart(
-                    id, name, 1, price, unit));
-        }
-        else {
+        if (productExist) {
             HelperModelCart existProduct = productsInCart.get(existHelperModelIndex);
             if (!isChurchMember && existProduct.getQuantity() + 1 > Constant.VALUE_MAX_NON_MEMBER_PRODUCT_UNIT) {
                 Constant.displayDialog(
@@ -456,7 +521,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             Constant.displayDialog(
                     this,
                     "Perhatian!",
-                    "Bahan Makanan " +
+                    "Produk bernama: " +
                             existProduct.getName() +
                             ", Sudah ada dalam keranjang. Silahkan mengatur jumlah satuan dalam keranjang belanja",
                     true,
@@ -464,7 +529,46 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                     },
                     null,
                     dialog -> openCart());
+            return;
         }
+
+        if (!isChurchMember && productsInCart.size() + 1 > Constant.VALUE_MAX_NON_MEMBER_PRODUCT_COUNT) {
+            Constant.displayDialog(
+                    ActivityServiceGroceries.this,
+                    "Perhatian !",
+                    "Dikarenakan akun anda tidak terdaftar sebagai anggota dari Gereja mitra TOU, " +
+                            "Jumlah Produk dalam keranjang ini tidak bisa melebihi " +
+                            Constant.VALUE_MAX_NON_MEMBER_PRODUCT_COUNT + " Produk" +
+                            System.lineSeparator() +
+                            System.lineSeparator() +
+                            "untuk menghilangkan batasan ini, silahkan daftarkan akun sebagai anggota gereja di gereja masing-masing, jika Gereja anda merupakan mitra TOU"
+                    ,
+                    (dialog, which) -> {
+                    }
+            );
+            return;
+        }
+
+        if (!productsInCart.isEmpty()) {
+            HelperModelCart lastProduct =productsInCart.get(productsInCart.size() - 1);
+            if (vId != lastProduct.getVendorId()) {
+                Constant.displayDialog(
+                        ActivityServiceGroceries.this,
+                        "Pesanan hanya bisa dari 1 vendor",
+                        "Dikarenakan produk yang di masukkan dalam keranjang anda sebelumnya dari '"
+                                +lastProduct.getVendorName()+"' disarankan untuk produk selanjutnya juga dari '"+lastProduct.getVendorName()+"' "+
+                        System.lineSeparator()+
+                        System.lineSeparator()+
+                        "Jika ingin melakukan pemesanan dari tempat lain, silahkan lakukan pemesanan produk dalam keranjang yang baru",
+                        (dialog, which) -> {
+                        }
+                );
+                return;
+            }
+        }
+
+        productsInCart.add(new HelperModelCart(
+                id, name, 1, price, unit, vId, vName));
 
         adapterCart.notifyItemChanged(pos);
 
@@ -493,21 +597,42 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         bundle.putString("SERVICE_TYPE", Constant.PRODUCT_TYPE_GROCERIES);
         bundle.putSerializable("PRODUCTS", adapterCart.getItems());
         intent.putExtra("BUNDLE", bundle);
+        bundle.putInt("VENDOR_ID", vendorId);
         startActivity(intent);
     };
-
 
     public static class HelperModelProduct {
         private int id;
         private String name;
         private int price;
         private String unit;
+        private String imageUrl;
 
-        HelperModelProduct(int id, String name, int price, String unit) {
+        private String vendorName;
+        private int vendorId;
+
+        private boolean isVendor;
+
+        //For Products
+        HelperModelProduct(int id, String name, int price, String unit, String imageUrl, int vendorId, String vendorName) {
             this.id = id;
             this.name = name;
             this.price = price;
             this.unit = unit;
+            this.imageUrl = imageUrl;
+            this.vendorId = vendorId;
+            this.vendorName = vendorName;
+            isVendor = false;
+        }
+
+        //For Vendors
+        HelperModelProduct(int id, String name, String imageUrl) {
+            this.id = id;
+            this.name = name;
+            this.price = 0;
+            this.unit = "";
+            this.imageUrl = imageUrl;
+            isVendor = true;
         }
 
         public int getId() {
@@ -526,6 +651,21 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             return unit;
         }
 
+        public boolean isVendor() {
+            return isVendor;
+        }
+
+        public String getImageUrl() {
+            return imageUrl;
+        }
+
+        public String getVendorName() {
+            return vendorName;
+        }
+
+        public int getVendorId() {
+            return vendorId;
+        }
     }
 
     public static class HelperModelCart implements Serializable {
@@ -536,13 +676,18 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         private int totalPrice;
         private String unit;
 
-        HelperModelCart(int id, String name, int quantity, int pricePerUnit, String unit) {
+        private int vendorId;
+        private String vendorName;
+
+        HelperModelCart(int id, String name, int quantity, int pricePerUnit, String unit, int vendorId, String vendorName) {
             this.id = id;
             this.name = name;
             this.quantity = quantity;
             this.pricePerUnit = pricePerUnit;
             this.totalPrice = pricePerUnit * quantity;
             this.unit = unit;
+            this.vendorId = vendorId;
+            this.vendorName = vendorName;
         }
 
         public int getId() {
@@ -579,6 +724,22 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             this.quantity = quantity;
             totalPrice = pricePerUnit * quantity;
         }
+
+        public int getVendorId() {
+            return vendorId;
+        }
+
+        public void setVendorId(int vendorId) {
+            this.vendorId = vendorId;
+        }
+
+        public String getVendorName() {
+            return vendorName;
+        }
+
+        public void setVendorName(String vendorName) {
+            this.vendorName = vendorName;
+        }
 //        public void setPricePerUnit(int pricePerUnit) {
 //            this.pricePerUnit = pricePerUnit;
 //        }
@@ -589,7 +750,17 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (isCartOpen) closeCart();
-        else super.onBackPressed();
+        if (isCartOpen) {
+            closeCart();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+//        handleBroadcastReceiver(false);
+        super.onDestroy();
     }
 }

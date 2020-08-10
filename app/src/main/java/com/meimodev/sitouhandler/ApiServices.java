@@ -360,13 +360,16 @@ public interface ApiServices {
      * Service / Order
      */
     @GET("find-product")
-    Call<ResponseBody> findProductByName(
+    Call<ResponseBody> findProductWithParams(
+            @Query("key") String key,
             @Query("type") String type,
-            @Query("name") String name
+            @Query("vendor") String vendor
     );
 
     @GET("find-product-recommendation")
-    Call<ResponseBody> findProductRecommendation();
+    Call<ResponseBody> findProductRecommendation(
+            @Query("type")String type
+    );
 
     @GET("transport-time")
     Call<ResponseBody> getTransportAndTime(
@@ -405,6 +408,7 @@ public interface ApiServices {
             @Field("type") String type,
             @Field("coordinate") String coordinate,
             @Field("products") String products
+//            @Field("vendor_id") int vendorId
     );
 
     /*
