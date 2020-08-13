@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.room.util.StringUtil;
 
 import com.github.squti.guru.Guru;
@@ -67,12 +68,8 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
         b.layoutButtonsVendor.setVisibility(View.GONE);
         b.buttonFinish.setVisibility(View.GONE);
 
-        MySupportMapFragment mapFragment = ((MySupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
-        mapFragment.setListener(() -> b.getRoot().requestDisallowInterceptTouchEvent(true));
-        mapFragment.getMapAsync(googleMap -> {
-            gMap = googleMap;
-            fetchData();
-        });
+        fetchData();
+
     }
 
     private void fetchData() {
@@ -107,17 +104,21 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
                 Constant.convertNumberToCurrency(data.getString("total_bill"))
         );
 
-        String type, fetchType = data.getString("type");
-        if (fetchType.contentEquals(Constant.PRODUCT_TYPE_GROCERIES)) {
-            type = "Bahan Makanan";
-        }
-        else if (fetchType.contentEquals(Constant.PRODUCT_TYPE_ELECTRONICS)) {
-            type = "Servis Elektronik";
-        }
-        else {
-            type = "Kukis";
-        }
-        b.textViewType.setText(type);
+//        String type, fetchType = data.getString("type");
+//        if (fetchType.contentEquals(Constant.PRODUCT_TYPE_GROCERIES)) {
+//            type = "Bahan Makanan";
+//        }
+//        else if (fetchType.contentEquals(Constant.PRODUCT_TYPE_ELECTRONICS)) {
+//            type = "Servis Elektronik";
+//        }
+//        else {
+//            type = "Kukis";
+//        }
+
+        String deliveryLocation = data.getString("delivery_location");
+
+        b.textViewType.setText(StringUtils.isNotEmpty(deliveryLocation) ?
+                "Pesan Antar" : "Pesan Langsung");
 
         b.textViewOrderDate.setText(data.getString("order_date"));
 
@@ -127,8 +128,9 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
         boolean isVendor = Guru.getInt(Constant.KEY_VENDOR_ID, -99) > 0;
         //rating
         if (data.getString("status").contentEquals(Constant.AUTHORIZATION_STATUS_UNCONFIRMED)
-        || data.getString("status").contentEquals(Constant.AUTHORIZATION_STATUS_REJECTED))
+                || data.getString("status").contentEquals(Constant.AUTHORIZATION_STATUS_REJECTED)) {
             b.ratingBar.setVisibility(View.GONE);
+        }
         String finishDate = data.getString("finish_date");
         if (!StringUtils.isEmpty(finishDate)
                 || isVendor
@@ -157,23 +159,53 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
         }
 
         //set map
-        b.textViewDeliveryLocation.setText(data.getString("delivery_location"));
-        LatLng target = new LatLng(
-                Double.parseDouble(data.getString("coordinate_lat")),
-                Double.parseDouble(data.getString("coordinate_lng"))
-        );
-        gMap.addMarker(
-                new MarkerOptions()
-                        .position(target)
-                        .draggable(false)
-                        .title("Lokasi Pengantaran")
-                        .icon(BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(this, R.drawable.ic_map_marker_down_24px)))
-        );
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, 15f));
-        gMap.setMinZoomPreference(11.25f);
-        gMap.getUiSettings().setCompassEnabled(false);
-        gMap.getUiSettings().setRotateGesturesEnabled(false);
-        gMap.getUiSettings().setTiltGesturesEnabled(false);
+
+        String vLat = data.getString("vendor_lat");
+        String vLng = data.getString("vendor_lng");
+        String vName = data.getString("vendor_name");
+
+        String lat;
+        String lng;
+
+        if (StringUtils.isEmpty(deliveryLocation)) {
+
+            lat = vLat;
+            lng = vLng;
+            b.textViewDeliveryLocation.setText(vName);
+
+        }
+        else {
+            lat = data.getString("coordinate_lat");
+            lng = data.getString("coordinate_lng");
+            b.textViewDeliveryLocation.setText(deliveryLocation);
+
+        }
+
+        Log.e(TAG, "initViews: delivery Location " + deliveryLocation);
+
+        MySupportMapFragment mapFragment = ((MySupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+        mapFragment.setListener(() -> b.getRoot().requestDisallowInterceptTouchEvent(true));
+        mapFragment.getMapAsync(googleMap -> {
+            gMap = googleMap;
+
+            LatLng target = new LatLng(
+                    Double.parseDouble(lat),
+                    Double.parseDouble(lng)
+            );
+            gMap.addMarker(
+                    new MarkerOptions()
+                            .position(target)
+                            .draggable(false)
+                            .title("Lokasi Pengantaran")
+                            .icon(BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(this, R.drawable.ic_map_marker_down_24px)))
+            );
+            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, 15f));
+            gMap.setMinZoomPreference(11.25f);
+            gMap.getUiSettings().setCompassEnabled(false);
+            gMap.getUiSettings().setRotateGesturesEnabled(false);
+            gMap.getUiSettings().setTiltGesturesEnabled(false);
+        });
+
 
     }
 
@@ -198,16 +230,16 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
             setStatusEnable(b.textViewStatusUnconfirm, true);
             setStatusEnable(b.textViewStatusConfirm, true);
             setStatusEnable(b.textViewStatusDone, false);
-            b.textViewStatusConfirm.setText(String.format("Diantarkan pada %s", data.getString("delivery_time")));
+            b.textViewStatusConfirm.setText(String.format("Diantarkan %s", data.getString("delivery_time")));
 
         }
         else if (fetchStatus.contentEquals(Constant.AUTHORIZATION_STATUS_REJECTED)) {
             setStatusEnable(b.textViewStatusUnconfirm, true);
             setStatusEnable(b.textViewStatusConfirm, false);
             setStatusEnable(b.textViewStatusDone, false);
-            b.textViewStatusUnconfirm.setText("Pesanan ditolak penyedia");
+            b.textViewStatusUnconfirm.setText("Pesanan dibatalkan penyedia");
             b.textViewStatusUnconfirm.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    getResources().getDrawable(R.drawable.ic_close_24px),
+                    ResourcesCompat.getDrawable(getResources(), R.drawable.ic_close_24px, null),
                     null, null, null
             );
 

@@ -60,9 +60,6 @@ public class Fragment_User_Home_Order extends Fragment {
 
         Constant.handleOnBackPressedFragment(requireActivity(), this);
 
-//        fetchData();
-
-
         return rootView;
     }
 
@@ -99,8 +96,9 @@ public class Fragment_User_Home_Order extends Fragment {
                             obj.getString("status"),
                             obj.getString("order_date"),
                             obj.getString("delivery_time"),
-                            obj.getString("finish_date")
-                    ));
+                            obj.getString("finish_date"),
+                            obj.getString("vendor_name"),
+                            obj.getString("delivery_location")));
                 }
                 initRecyclerView();
                 if (data.length() == 0) {
@@ -126,16 +124,21 @@ public class Fragment_User_Home_Order extends Fragment {
     public static class RecyclerViewHelperModel {
         private int id;
         private String type, status, orderDate, deliveryTime, finishDate;
+        private String vendorName;
+        private String deliveryLocation;
 
         public RecyclerViewHelperModel(int id, String type,
                                        String status, String orderDate,
-                                       String deliveryTime, String finishDate) {
+                                       String deliveryTime, String finishDate,
+                                       String vendorName, String deliveryLocation) {
             this.id = id;
             this.type = type;
             this.status = status;
             this.orderDate = orderDate;
             this.deliveryTime = deliveryTime;
             this.finishDate = finishDate;
+            this.vendorName = vendorName;
+            this.deliveryLocation = deliveryLocation;
         }
 
         public int getId() {
@@ -160,6 +163,14 @@ public class Fragment_User_Home_Order extends Fragment {
 
         public String getFinishDate() {
             return finishDate;
+        }
+
+        public String getVendorName() {
+            return vendorName;
+        }
+
+        public String getDeliveryLocation() {
+            return deliveryLocation;
         }
     }
 

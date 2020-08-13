@@ -77,9 +77,9 @@ public class Constant {
     public static final String KEY_COLUMN_NAME_INDEX = "Column_Name_Index";
     public static final String KEY_MEMBER_DUPLICATE_CHECK = "Member_Duplicate_Check";
 
-    //    public static final String ROOT_TRANSFER_PROTOCOL = "https";
-    //    public static final String ROOT_IP = "tousystem.com";
-    //    public static final String ROOT_PORT = "";
+//        public static final String ROOT_TRANSFER_PROTOCOL = "https";
+//        public static final String ROOT_IP = "tousystem.com";
+//        public static final String ROOT_PORT = "";
     public static final String ROOT_TRANSFER_PROTOCOL = "http";
     public static final String ROOT_IP = "192.168.1.5";
     public static final String ROOT_PORT = ":8000";
@@ -210,6 +210,7 @@ public class Constant {
     public static final String PRODUCT_TYPE_GROCERIES = "Groceries";
     public static final String PRODUCT_TYPE_ELECTRONICS = "Electronics";
     public static final String PRODUCT_TYPE_COOKIES = "Cookies";
+    public static final String PRODUCT_TYPE_SSS = "@SulutStopNShop";
 
     public static final int VALUE_MAX_NON_MEMBER_PRODUCT_COUNT = 3;
     public static final int VALUE_MAX_NON_MEMBER_PRODUCT_UNIT = 3;

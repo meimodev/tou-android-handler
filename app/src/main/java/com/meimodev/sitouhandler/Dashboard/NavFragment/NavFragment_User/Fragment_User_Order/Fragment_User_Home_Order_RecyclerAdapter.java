@@ -47,37 +47,54 @@ public class Fragment_User_Home_Order_RecyclerAdapter extends
     public void onBindViewHolder(@NonNull MyViewHolder h, int position) {
         Fragment_User_Home_Order.RecyclerViewHelperModel model = items.get(position);
 
-        String type = model.getType();
-        if (type.contentEquals(Constant.PRODUCT_TYPE_GROCERIES)) {
-            type = "Bahan Makanan";
-        }
-        else if (type.contentEquals(Constant.PRODUCT_TYPE_ELECTRONICS)) {
-            type = "Servis Elektronik";
-        }
-        else if (type.contentEquals(Constant.PRODUCT_TYPE_COOKIES)) {
-            type = "Kukis";
-        }
-        h.tvType.setText(type);
+//        String type = model.getType();
+//        if (type.contentEquals(Constant.PRODUCT_TYPE_GROCERIES)) {
+//            type = "Bahan Makanan";
+//        }
+//        else if (type.contentEquals(Constant.PRODUCT_TYPE_ELECTRONICS)) {
+//            type = "Servis Elektronik";
+//        }
+//        else if (type.contentEquals(Constant.PRODUCT_TYPE_COOKIES)) {
+//            type = "Kukis";
+//        }
+//        else if (type.contentEquals("SSS")) {
+//            type = Constant.PRODUCT_TYPE_SSS;
+//        }
+//        h.tvType.setText(type);
 
+        String deliveryStatus =
+                StringUtils.isNotEmpty(model.getDeliveryLocation()) ?
+                        "Pesan Antar" : "Pesan Ambil";
+
+        String t = "Order ID " + model.getId() + ", " + deliveryStatus;
+        h.tvType.setText(t);
 
         if (model.getStatus().contentEquals(Constant.AUTHORIZATION_STATUS_UNCONFIRMED)) {
-            h.tvStatus.setText("Menunggu konfirmasi penyedia");
+            h.tvStatus.setText(String.format("Menunggu konfirmasi %s", model.getVendorName()));
         }
         else if (model.getStatus().contentEquals(Constant.AUTHORIZATION_STATUS_ACCEPTED)) {
+
             h.tvStatus.setTextColor(context.getResources().getColor(R.color.accept));
-            h.tvStatus.setText(String.format("Dikirim %s", model.getDeliveryTime()));
-            if (StringUtils.isNotEmpty(model.getFinishDate())){
+
+            if (StringUtils.isNotEmpty(model.getDeliveryLocation())) {
+                h.tvStatus.setText(String.format("Diantarkan %s", model.getDeliveryTime()));
+            }
+            else {
+                h.tvStatus.setText(String.format("Ambil Pesanan di %s", model.getVendorName()));
+            }
+
+            if (StringUtils.isNotEmpty(model.getFinishDate())) {
                 h.tvStatus.setText("Pesanan Selesai");
                 h.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+
             }
         }
         else if (model.getStatus().contentEquals(Constant.AUTHORIZATION_STATUS_REJECTED)) {
             h.tvStatus.setTextColor(context.getResources().getColor(R.color.reject));
-            h.tvStatus.setText("Pesanan anda ditolak penyedia");
+            h.tvStatus.setText("Pesanan dibatalkan penyedia");
         }
-        h.tvDate.setText(model.getOrderDate());
 
-//        h.tvStatus.setText(model.getStatus());
+        h.tvDate.setText(model.getOrderDate());
 
         h.cvMain.setOnClickListener(v -> {
             Intent i = new Intent(context, ActivityOrderDetail.class);
