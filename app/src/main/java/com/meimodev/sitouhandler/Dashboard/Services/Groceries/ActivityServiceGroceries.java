@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -22,7 +21,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.github.squti.guru.Guru;
 import com.meimodev.sitouhandler.Constant;
@@ -35,7 +33,6 @@ import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.databinding.ActivityServiceGroceriesBinding;
 import com.squareup.picasso.Picasso;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -287,7 +284,9 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                             obj.getString("unit"),
                             obj.getString("image"),
                             obj.getInt("vendor_id"),
-                            obj.getString("vendor_name")
+                            obj.getString("vendor_name"),
+                            obj.getBoolean("is_available"),
+                            obj.getString("is_available_msg")
                     ));
                 }
                 adapterProduct.notifyDataSetChanged();
@@ -315,6 +314,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                 RetrofitClient.getInstance(null).getApiServices()
                         .findProductRecommendation(searchProductWithType)
         );
+
     }
 
     private void fetchProductData() {
@@ -352,7 +352,9 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                             obj.getString("unit"),
                             obj.getString("image"),
                             obj.getInt("vendor_id"),
-                            obj.getString("vendor_name")
+                            obj.getString("vendor_name"),
+                            obj.getBoolean("is_available"),
+                            obj.getString("is_available_msg")
                     ));
                 }
 
@@ -361,7 +363,10 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                     products.add(new HelperModelProduct(
                             obj.getInt("id"),
                             obj.getString("name"),
-                            obj.getString("image")
+                            obj.getString("image"),
+                            obj.getString("open"),
+                            obj.getString("close"),
+                            obj.getBoolean("is_open")
                     ));
                 }
 
@@ -482,7 +487,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         String name = data.getString("NAME");
         String unit = data.getString("UNIT");
 
-        String vName= data.getString("VENDOR_NAME");
+        String vName = data.getString("VENDOR_NAME");
         int vId = data.getInt("VENDOR_ID");
 
         vendorId = data.getInt("VENDOR_ID");
@@ -550,16 +555,16 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         }
 
         if (!productsInCart.isEmpty()) {
-            HelperModelCart lastProduct =productsInCart.get(productsInCart.size() - 1);
+            HelperModelCart lastProduct = productsInCart.get(productsInCart.size() - 1);
             if (vId != lastProduct.getVendorId()) {
                 Constant.displayDialog(
                         ActivityServiceGroceries.this,
                         "Pesanan hanya bisa dari 1 vendor",
                         "Dikarenakan produk yang di masukkan dalam keranjang anda sebelumnya dari '"
-                                +lastProduct.getVendorName()+"' disarankan untuk produk selanjutnya juga dari '"+lastProduct.getVendorName()+"' "+
-                        System.lineSeparator()+
-                        System.lineSeparator()+
-                        "Jika ingin melakukan pemesanan dari tempat lain, silahkan lakukan pemesanan produk dalam keranjang yang baru",
+                                + lastProduct.getVendorName() + "' disarankan untuk produk selanjutnya juga dari '" + lastProduct.getVendorName() + "' " +
+                                System.lineSeparator() +
+                                System.lineSeparator() +
+                                "Jika ingin melakukan pemesanan dari tempat lain, silahkan lakukan pemesanan produk dalam keranjang yang baru",
                         (dialog, which) -> {
                         }
                 );
@@ -613,8 +618,11 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
         private boolean isVendor;
 
+        private boolean isAvailable;
+        private String isAvailableMessage;
+
         //For Products
-        HelperModelProduct(int id, String name, int price, String unit, String imageUrl, int vendorId, String vendorName) {
+        HelperModelProduct(int id, String name, int price, String unit, String imageUrl, int vendorId, String vendorName, boolean isAvailable, String isAvailableMessage) {
             this.id = id;
             this.name = name;
             this.price = price;
@@ -622,16 +630,26 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             this.imageUrl = imageUrl;
             this.vendorId = vendorId;
             this.vendorName = vendorName;
+            this.isAvailable = isAvailable;
+            this.isAvailableMessage = isAvailableMessage;
             isVendor = false;
         }
 
         //For Vendors
-        HelperModelProduct(int id, String name, String imageUrl) {
+        private String openHour;
+        private String closeHour;
+        private boolean isVendorOpen;
+        HelperModelProduct(int id, String name, String imageUrl,
+                           String openHour, String closeHour,
+                           boolean isVendorOpen) {
             this.id = id;
             this.name = name;
             this.price = 0;
             this.unit = "";
             this.imageUrl = imageUrl;
+            this.openHour = openHour;
+            this.closeHour = closeHour;
+            this.isVendorOpen = isVendorOpen;
             isVendor = true;
         }
 
@@ -665,6 +683,30 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
         public int getVendorId() {
             return vendorId;
+        }
+
+        public String getIsAvailableMessage() {
+            return isAvailableMessage;
+        }
+
+        public boolean isAvailable() {
+            return isAvailable;
+        }
+
+        public String getOpenHour() {
+            return openHour;
+        }
+
+        public void setOpenHour(String openHour) {
+            this.openHour = openHour;
+        }
+
+        public String getCloseHour() {
+            return closeHour;
+        }
+
+        public boolean isVendorOpen() {
+            return isVendorOpen;
         }
     }
 

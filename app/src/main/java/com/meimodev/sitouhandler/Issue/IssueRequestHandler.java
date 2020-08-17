@@ -236,12 +236,8 @@ public class IssueRequestHandler {
 
                 }
                 else {
-                    Log.e(TAG, "BACKGROUND REQUEST: onResponse: "
-                            + "(Class)" + context.getClass().getSimpleName() + ": "
-                            + intention + ": "
-                            + "Error Code: "
-                            + response.code()
-                    );
+                    APIUtils.intention = intention;
+                    APIUtils.parseError(context, response);
                 }
             }
 

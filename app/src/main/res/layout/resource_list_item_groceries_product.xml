@@ -2,10 +2,9 @@
   ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
-<androidx.cardview.widget.CardView
-    android:id="@+id/layout_main"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="false"
@@ -18,22 +17,23 @@
 
     <RelativeLayout
         android:id="@+id/layout_product"
-        android:padding="8dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="8dp">
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:src="@color/colorPrimary"/>
+            android:src="@color/colorPrimary" />
 
         <TextView
-            android:layout_below="@id/imageView"
             android:id="@+id/recyclerItem_name"
-            android:layout_marginTop="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
+            android:layout_below="@id/imageView"
+            android:layout_marginTop="4dp"
             android:maxLines="5"
             android:text="IDaging Ayam Bersih"
             android:textSize="13sp" />
@@ -50,15 +50,26 @@
             android:textColor="@color/primaryText"
             android:textSize="14sp" />
 
+        <TextView
+            android:id="@+id/recyclerItem_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recyclerItem_price"
+            android:maxLines="5"
+            android:textAlignment="textEnd"
+            android:fontFamily="@font/roboto"
+            android:text="IDaging Ayam Bersih"
+            android:textSize="12sp" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/recyclerItem_layout_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/recyclerItem_note"
+            android:layout_marginTop="4dp"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:layout_marginTop="4dp"
-            android:layout_below="@id/recyclerItem_price"
             app:cardBackgroundColor="@color/colorPrimary">
 
             <TextView
@@ -72,10 +83,6 @@
 
 
     </RelativeLayout>
-
-
-
-
 
 
 </androidx.cardview.widget.CardView>
