@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,8 +50,6 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
     private int orderId = -99;
     private GoogleMap gMap;
 
-    private LatLng target;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +68,6 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
         b.buttonFinish.setVisibility(View.GONE);
 
         fetchData();
-
     }
 
     private void fetchData() {
@@ -116,8 +114,8 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
 //        }
 
         String deliveryLocation = data.getString("delivery_location");
-
-        b.textViewType.setText(StringUtils.isNotEmpty(deliveryLocation) ?
+        int transportFee = Integer.parseInt( data.getString("transport_fee"));
+        b.textViewType.setText(transportFee > 0 ?
                 "Pesan Antar" : "Pesan Langsung");
 
         b.textViewOrderDate.setText(data.getString("order_date"));
@@ -167,7 +165,7 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
         String lat;
         String lng;
 
-        if (StringUtils.isEmpty(deliveryLocation)) {
+        if (transportFee <= 0) {
 
             lat = vLat;
             lng = vLng;
@@ -262,17 +260,30 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
     }
 
     public void initProducts(JSONObject data) throws JSONException {
+
         JSONArray products = data.getJSONArray("products");
+
         for (int i = 0; i < products.length(); i++) {
+
             JSONObject obj = products.getJSONObject(i);
+
             View v = getLayoutInflater().inflate(R.layout.resource_list_item_order_detail_product, b.layoutProducts, false);
             TextView tvQuantity = v.findViewById(R.id.textView_quantity);
             TextView tvName = v.findViewById(R.id.textView_name);
             TextView tvPrice = v.findViewById(R.id.textView_price);
+            ImageView imageView = v.findViewById(R.id.imageView);
+            imageView.setVisibility(View.GONE);
+
             String quantity = obj.getInt("quantity") + " " + obj.getString("unit");
             tvQuantity.setText(quantity);
             tvName.setText(obj.getString("name"));
             tvPrice.setText(Constant.convertNumberToCurrency(obj.getInt("total_price")));
+
+            String status = obj.getString("status");
+            if (status.contentEquals("DONE")){
+                imageView.setVisibility(View.VISIBLE);
+            }
+
             b.layoutProducts.addView(v);
         }
     }

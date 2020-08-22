@@ -460,6 +460,7 @@ public class ActivityServiceLocation extends AppCompatActivity {
                 prod.put("unit", p.getUnit());
                 prod.put("quantity", p.getQuantity());
                 prod.put("total_price", p.getTotalPrice());
+                prod.put("status", "DOING");
                 prod.put("type", serviceType);
                 arr.put(index, prod);
                 index++;
@@ -483,7 +484,8 @@ public class ActivityServiceLocation extends AppCompatActivity {
         Log.e(TAG, "products: " + products.toString());
         Log.e(TAG, "================================================================");
 
-        req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().setOrder(
+        req.backGroundRequest(
+                RetrofitClient.getInstance(null).getApiServices().setOrder(
                 Guru.getInt(Constant.KEY_USER_ID, -1),
                 b.textInputLayoutLandmark.getEditText().getText().toString(),
                 deliveryTime,
