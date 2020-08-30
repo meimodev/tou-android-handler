@@ -17,6 +17,7 @@
         android:animateLayoutChanges="true"
         android:visibility="visible"
         app:cardCornerRadius="8dp"
+        app:cardBackgroundColor="#F9BA00"
         app:cardElevation="2dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +47,7 @@
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/ic_electronics" />
+                    android:src="@drawable/ic_sss_logo_icon" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -82,8 +83,9 @@
                 android:layout_below="@id/layout_inner"
                 android:layout_width="match_parent"
                 android:maxLines="50"
+                android:fontFamily="@font/montserrat"
                 android:layout_height="wrap_content"
-                android:text="Pesan Online Produk Sulut Stop And Shop bisa disini"/>
+                android:text="Pesan Online! Produk Sulut Stop And Shop! bisa disini"/>
 
 
         </RelativeLayout>

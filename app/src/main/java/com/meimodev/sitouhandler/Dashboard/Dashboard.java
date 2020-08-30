@@ -32,6 +32,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.github.squti.guru.Guru;
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -842,7 +844,6 @@ public class Dashboard extends AppCompatActivity {
             bottomNavigationView.getMenu().findItem(R.id.bottomNavBar_tatacara).setVisible(false);
             bottomNavigationView.getMenu().findItem(R.id.bottomNavBar_kidung).setVisible(false);
         }
-
         bottomNavigationView.setVisibility(View.GONE);
     }
 

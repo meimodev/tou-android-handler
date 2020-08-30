@@ -413,6 +413,7 @@ public class ActivityServiceLocation extends AppCompatActivity {
             @Override
             public void onSuccess(APIWrapper res, String message) throws JSONException {
 
+                int oID = res.getData().getInt("id");
                 Constant.displayDialog(
                         ActivityServiceLocation.this,
                         "Perhatian !",
@@ -423,6 +424,11 @@ public class ActivityServiceLocation extends AppCompatActivity {
                         null,
                         dialog -> {
                             startActivity(new Intent(ActivityServiceLocation.this, Dashboard.class));
+
+                            Intent i = new Intent( ActivityServiceLocation.this, ActivityOrderDetail.class);
+                            i.putExtra("ID", oID);
+                            startActivity(i);
+
                             finishAffinity();
                         }
                 );

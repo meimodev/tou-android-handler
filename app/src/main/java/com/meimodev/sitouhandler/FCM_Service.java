@@ -34,20 +34,22 @@ public class FCM_Service extends FirebaseMessagingService {
     private static final String NOTIFICATION_CHANNEL_ID = "chanel_FCM";
     public static String FCM_TOKEN = null;
 
+    public static final String NOTIFICATION_ORDER = "Notification_Order";
+
     @Override
     public void onNewToken(@NonNull String s) {
         FCM_TOKEN = s;
-        Log.e(TAG, "sendTokenToServer: FCM Token Refreshed = " + s);
     }
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-
+    /*
+    * NOTIFICATION for foreground
+    * */
         String title = remoteMessage.getNotification().getTitle();
         String message = remoteMessage.getNotification().getBody();
 
         notifyApp(title, message);
-        Log.e(TAG, "onMessageReceived: NOTIFY FOREGROUND NOTIFICATION" );
 
     }
 
@@ -65,6 +67,9 @@ public class FCM_Service extends FirebaseMessagingService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(this);
         }
+
+        Intent intent = new Intent(NOTIFICATION_ORDER);
+        sendBroadcast(intent);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);

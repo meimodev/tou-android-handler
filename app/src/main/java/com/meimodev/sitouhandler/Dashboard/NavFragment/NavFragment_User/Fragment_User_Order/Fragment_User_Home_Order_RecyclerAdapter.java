@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.meimodev.sitouhandler.Constant;
@@ -63,7 +64,7 @@ public class Fragment_User_Home_Order_RecyclerAdapter extends
 //        h.tvType.setText(type);
 
         String deliveryStatus =
-                StringUtils.isNotEmpty(model.getDeliveryLocation()) ?
+                Integer.parseInt(model.getTransportFee()) != 0 ?
                         "Pesan Antar" : "Pesan Ambil";
 
         String t = "Order ID " + model.getId() + ", " + deliveryStatus;
@@ -76,22 +77,29 @@ public class Fragment_User_Home_Order_RecyclerAdapter extends
 
             h.tvStatus.setTextColor(context.getResources().getColor(R.color.accept));
 
-            if (StringUtils.isNotEmpty(model.getDeliveryLocation())) {
+            if (deliveryStatus.contentEquals("Pesan Antar")) {
                 h.tvStatus.setText(String.format("Diantarkan %s", model.getDeliveryTime()));
             }
             else {
                 h.tvStatus.setText(String.format("Ambil Pesanan di %s", model.getVendorName()));
             }
 
-            if (StringUtils.isNotEmpty(model.getFinishDate())) {
-                h.tvStatus.setText("Pesanan Selesai");
-                h.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimary));
 
-            }
         }
         else if (model.getStatus().contentEquals(Constant.AUTHORIZATION_STATUS_REJECTED)) {
             h.tvStatus.setTextColor(context.getResources().getColor(R.color.reject));
             h.tvStatus.setText("Pesanan dibatalkan penyedia");
+        } else if (model.getStatus().contentEquals("PAID")){
+            h.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+            h.tvStatus.setText("Pesanan Selesai");
+
+            if (StringUtils.isNotEmpty( model.getFinishDate())){
+                h.tvStatus.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                        ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_check_24px, null),
+                        null, null, null
+                );
+            }
+
         }
 
         h.tvDate.setText(model.getOrderDate());
@@ -110,7 +118,7 @@ public class Fragment_User_Home_Order_RecyclerAdapter extends
         return items.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvType, tvStatus, tvDate;
         CardView cvMain;

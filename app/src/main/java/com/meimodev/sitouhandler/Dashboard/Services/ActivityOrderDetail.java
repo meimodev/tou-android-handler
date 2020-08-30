@@ -4,6 +4,10 @@
 
 package com.meimodev.sitouhandler.Dashboard.Services;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +30,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.meimodev.sitouhandler.Constant;
+import com.meimodev.sitouhandler.FCM_Service;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
@@ -50,6 +55,14 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
     private int orderId = -99;
     private GoogleMap gMap;
 
+    private BroadcastReceiver brOrderUpdate = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().contentEquals(FCM_Service.NOTIFICATION_ORDER)){
+                fetchData();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +81,8 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
         b.buttonFinish.setVisibility(View.GONE);
 
         fetchData();
+
+        registerReceiver(brOrderUpdate, new IntentFilter(FCM_Service.NOTIFICATION_ORDER));
     }
 
     private void fetchData() {
@@ -102,61 +117,29 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
                 Constant.convertNumberToCurrency(data.getString("total_bill"))
         );
 
-//        String type, fetchType = data.getString("type");
-//        if (fetchType.contentEquals(Constant.PRODUCT_TYPE_GROCERIES)) {
-//            type = "Bahan Makanan";
-//        }
-//        else if (fetchType.contentEquals(Constant.PRODUCT_TYPE_ELECTRONICS)) {
-//            type = "Servis Elektronik";
-//        }
-//        else {
-//            type = "Kukis";
-//        }
-
-        String deliveryLocation = data.getString("delivery_location");
-        int transportFee = Integer.parseInt( data.getString("transport_fee"));
+        int transportFee = Integer.parseInt(data.getString("transport_fee"));
         b.textViewType.setText(transportFee > 0 ?
-                "Pesan Antar" : "Pesan Langsung");
+                "Pesan Antar" : "Pesan DiTempat");
 
         b.textViewOrderDate.setText(data.getString("order_date"));
 
         //status
         initStatus(data);
 
-        boolean isVendor = Guru.getInt(Constant.KEY_VENDOR_ID, -99) > 0;
         //rating
-        if (data.getString("status").contentEquals(Constant.AUTHORIZATION_STATUS_UNCONFIRMED)
-                || data.getString("status").contentEquals(Constant.AUTHORIZATION_STATUS_REJECTED)) {
-            b.ratingBar.setVisibility(View.GONE);
-        }
-        String finishDate = data.getString("finish_date");
-        if (!StringUtils.isEmpty(finishDate)
-                || isVendor
-                || !data.getString("status").contentEquals(Constant.AUTHORIZATION_STATUS_ACCEPTED)) {
-            b.ratingBar.setRating(data.getInt("rating"));
-            b.ratingBar.setIsIndicator(true);
-        }
+        initRating(data);
 
-        //button finish
-        Log.e(TAG, "initViews: is Vendor = " + isVendor + " id = " + Guru.getInt(Constant.KEY_VENDOR_ID, -99));
-        if (isVendor) {
-            b.buttonFinish.setVisibility(View.GONE);
-            if (StringUtils.isEmpty(finishDate) && data.getString("status").contentEquals(Constant.AUTHORIZATION_STATUS_UNCONFIRMED)) {
-                b.layoutButtonsVendor.setVisibility(View.VISIBLE);
-                b.buttonAccept.setOnClickListener(this);
-                b.buttonReject.setOnClickListener(this);
-            }
-        }
-        else {
-            if (StringUtils.isEmpty(finishDate) &&
-                    data.getString("status")
-                            .contentEquals(Constant.AUTHORIZATION_STATUS_ACCEPTED)) {
-                b.buttonFinish.setVisibility(View.VISIBLE);
-                b.buttonFinish.setOnClickListener(this);
-            }
-        }
+        //finishButton
+        initFinishButton(data);
 
         //set map
+        initMap(data);
+
+    }
+
+    private void initMap(JSONObject data) throws JSONException {
+        int transportFee = Integer.parseInt(data.getString("transport_fee"));
+        String deliveryLocation = data.getString("delivery_location");
 
         String vLat = data.getString("vendor_lat");
         String vLng = data.getString("vendor_lng");
@@ -179,9 +162,8 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
 
         }
 
-        Log.e(TAG, "initViews: delivery Location " + deliveryLocation);
-
-        MySupportMapFragment mapFragment = ((MySupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+        MySupportMapFragment mapFragment =
+                ((MySupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
         mapFragment.setListener(() -> b.getRoot().requestDisallowInterceptTouchEvent(true));
         mapFragment.getMapAsync(googleMap -> {
             gMap = googleMap;
@@ -204,34 +186,73 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
             gMap.getUiSettings().setTiltGesturesEnabled(false);
         });
 
+    }
+
+    private void initRating(JSONObject data) throws JSONException {
+
+        b.ratingBar.setVisibility(View.GONE);
+
+        if (data.getString("status").contentEquals("PAID")) {
+            b.ratingBar.setVisibility(View.VISIBLE);
+        }
+
+        String finishDate = data.getString("finish_date");
+
+        if (data.getString("status").contentEquals("PAID")
+                && StringUtils.isNotEmpty(finishDate)) {
+            b.ratingBar.setRating(data.getInt("rating"));
+            b.ratingBar.setIsIndicator(true);
+        }
+
+
+    }
+
+    private void initFinishButton(JSONObject data) throws JSONException {
+
+        b.buttonFinish.setVisibility(View.GONE);
+
+        if (data.getString("status").contentEquals("PAID")) {
+
+            b.buttonFinish.setVisibility(View.VISIBLE);
+            b.buttonFinish.setOnClickListener(this);
+            boolean isFinish = StringUtils.isNotEmpty(data.getString("finish_date"));
+            if (isFinish) {
+                b.buttonFinish.setVisibility(View.GONE);
+            }
+        }
 
     }
 
     private void initStatus(JSONObject data) throws JSONException {
-        String fetchStatus = data.getString("status");
-        boolean isFinish = !StringUtils.isEmpty(data.getString("finish_date"));
+        String status = data.getString("status");
+        boolean isFinish = StringUtils.isNotEmpty(data.getString("finish_date"));
+        boolean isStatusIsPaid = status.contentEquals("PAID");
 
-        if (isFinish) {
+        if (isFinish || isStatusIsPaid) {
             setStatusEnable(b.textViewStatusUnconfirm, true);
             setStatusEnable(b.textViewStatusConfirm, true);
             setStatusEnable(b.textViewStatusDone, true);
             return;
         }
 
-        if (fetchStatus.contentEquals(Constant.AUTHORIZATION_STATUS_UNCONFIRMED)) {
+        if (status.contentEquals(Constant.AUTHORIZATION_STATUS_UNCONFIRMED)) {
             setStatusEnable(b.textViewStatusUnconfirm, true);
             setStatusEnable(b.textViewStatusConfirm, false);
             setStatusEnable(b.textViewStatusDone, false);
 
         }
-        else if (fetchStatus.contentEquals(Constant.AUTHORIZATION_STATUS_ACCEPTED)) {
+        else if (status.contentEquals(Constant.AUTHORIZATION_STATUS_ACCEPTED)) {
             setStatusEnable(b.textViewStatusUnconfirm, true);
             setStatusEnable(b.textViewStatusConfirm, true);
             setStatusEnable(b.textViewStatusDone, false);
-            b.textViewStatusConfirm.setText(String.format("Diantarkan %s", data.getString("delivery_time")));
+
+            boolean isDelivery = Integer.parseInt(data.getString("transport_fee")) != 0;
+            String s = isDelivery ? String.format("Diantarkan: %s", data.getString("delivery_time"))
+                    : "Ambil pesanan di " + data.getString("vendor_name");
+            b.textViewStatusConfirm.setText(s);
 
         }
-        else if (fetchStatus.contentEquals(Constant.AUTHORIZATION_STATUS_REJECTED)) {
+        else if (status.contentEquals(Constant.AUTHORIZATION_STATUS_REJECTED)) {
             setStatusEnable(b.textViewStatusUnconfirm, true);
             setStatusEnable(b.textViewStatusConfirm, false);
             setStatusEnable(b.textViewStatusDone, false);
@@ -263,6 +284,7 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
 
         JSONArray products = data.getJSONArray("products");
 
+        b.layoutProducts.removeAllViews();
         for (int i = 0; i < products.length(); i++) {
 
             JSONObject obj = products.getJSONObject(i);
@@ -280,7 +302,7 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
             tvPrice.setText(Constant.convertNumberToCurrency(obj.getInt("total_price")));
 
             String status = obj.getString("status");
-            if (status.contentEquals("DONE")){
+            if (status.contentEquals("DONE")) {
                 imageView.setVisibility(View.VISIBLE);
             }
 
@@ -358,4 +380,9 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
         req.enqueue(call);
     }
 
+    @Override
+    protected void onStop() {
+        unregisterReceiver(brOrderUpdate);
+        super.onStop();
+    }
 }

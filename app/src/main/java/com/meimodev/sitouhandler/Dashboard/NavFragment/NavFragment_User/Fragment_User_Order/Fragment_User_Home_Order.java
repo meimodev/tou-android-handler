@@ -92,13 +92,15 @@ public class Fragment_User_Home_Order extends Fragment {
                     JSONObject obj = data.getJSONObject(i);
                     items.add(new RecyclerViewHelperModel(
                             obj.getInt("id"),
-                            obj.getString("type"),
+//                            obj.getString("type"),
                             obj.getString("status"),
                             obj.getString("order_date"),
                             obj.getString("delivery_time"),
                             obj.getString("finish_date"),
                             obj.getString("vendor_name"),
-                            obj.getString("delivery_location")));
+                            obj.getString("delivery_location"),
+                            obj.getString("transport_fee")
+                    ));
                 }
                 initRecyclerView();
                 if (data.length() == 0) {
@@ -126,28 +128,32 @@ public class Fragment_User_Home_Order extends Fragment {
         private String type, status, orderDate, deliveryTime, finishDate;
         private String vendorName;
         private String deliveryLocation;
+        private String transportFee;
 
-        public RecyclerViewHelperModel(int id, String type,
+        public RecyclerViewHelperModel(int id,
+//                                       String type,
                                        String status, String orderDate,
                                        String deliveryTime, String finishDate,
-                                       String vendorName, String deliveryLocation) {
+                                       String vendorName, String deliveryLocation,
+                                       String transportFee) {
             this.id = id;
-            this.type = type;
+//            this.type = type;
             this.status = status;
             this.orderDate = orderDate;
             this.deliveryTime = deliveryTime;
             this.finishDate = finishDate;
             this.vendorName = vendorName;
             this.deliveryLocation = deliveryLocation;
+            this.transportFee = transportFee;
         }
 
         public int getId() {
             return id;
         }
 
-        public String getType() {
-            return type;
-        }
+//        public String getType() {
+//            return type;
+//        }
 
         public String getStatus() {
             return status;
@@ -171,6 +177,10 @@ public class Fragment_User_Home_Order extends Fragment {
 
         public String getDeliveryLocation() {
             return deliveryLocation;
+        }
+
+        public String getTransportFee() {
+            return transportFee;
         }
     }
 
