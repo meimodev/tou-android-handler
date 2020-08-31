@@ -289,6 +289,20 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                             obj.getString("is_available_msg")
                     ));
                 }
+
+                JSONArray vendorsArray = data.getJSONArray("vendors");
+
+                for (int i = 0; i < vendorsArray.length(); i++) {
+                    JSONObject obj = vendorsArray.getJSONObject(i);
+                    products.add(new HelperModelProduct(
+                            obj.getInt("id"),
+                            obj.getString("name"),
+                            obj.getString("image"),
+                            obj.getString("open"),
+                            obj.getString("close"),
+                            obj.getBoolean("is_open")
+                    ));
+                }
                 adapterProduct.notifyDataSetChanged();
                 searchProductWithType = "";
             }
