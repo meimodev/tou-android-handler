@@ -225,13 +225,13 @@ public class ActivityServiceLocation extends AppCompatActivity {
     };
     private View.OnClickListener btnOrderOnClickListener = v -> {
 
-        if (isOrderOnSpot) {
-            sendDataToServer();
+        if (b.textInputLayoutLandmark.getEditText().getText().length() < 3) {
+            b.textInputLayoutLandmark.setError("Harus lebih dari 3 karakter");
             return;
         }
 
-        if (b.textInputLayoutLandmark.getEditText().getText().length() < 3) {
-            b.textInputLayoutLandmark.setError("Masukkan petunjuk lokasi pengantaran");
+        if (isOrderOnSpot) {
+            sendDataToServer();
             return;
         }
 
@@ -279,7 +279,7 @@ public class ActivityServiceLocation extends AppCompatActivity {
             b.radioEvening.setChecked(false);
             b.radioNow.setChecked(false);
 
-            b.textInputLayoutLandmark.setVisibility(View.GONE);
+            b.textInputLayoutLandmark.setVisibility(View.VISIBLE);
             b.textInputLayoutLandmark.getEditText().setText("");
             b.layoutTime.setVisibility(View.GONE);
 

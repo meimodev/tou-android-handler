@@ -189,22 +189,22 @@ public class CustomEditText extends TextInputEditText {
     }
 
     private void addOnFocusEscape() {
-        this.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                countdownToClearFocus.start();
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                countdownToClearFocus.cancel();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                countdownToClearFocus.start();
-            }
-        });
+//        this.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                countdownToClearFocus.start();
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                countdownToClearFocus.cancel();
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                countdownToClearFocus.start();
+//            }
+//        });
     }
 
 }

@@ -143,22 +143,24 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
 
         String vLat = data.getString("vendor_lat");
         String vLng = data.getString("vendor_lng");
-        String vName = data.getString("vendor_name");
 
         String lat;
         String lng;
 
+        String defaultDeliveryText =b.textViewDeliveryLocation.getText().toString();
         if (transportFee <= 0) {
 
             lat = vLat;
             lng = vLng;
-            b.textViewDeliveryLocation.setText(vName);
+            b.textViewDeliveryLocation.setText(deliveryLocation);
+            b.textViewDeliveryLocationText.setText("CATATAN TAMBAHAN");
 
         }
         else {
             lat = data.getString("coordinate_lat");
             lng = data.getString("coordinate_lng");
             b.textViewDeliveryLocation.setText(deliveryLocation);
+            b.textViewDeliveryLocationText.setText(defaultDeliveryText);
 
         }
 
