@@ -70,7 +70,7 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            app:cardBackgroundColor="@color/colorPrimary">
+            app:cardBackgroundColor="@color/colorAccent4End">
 
             <TextView
                 android:layout_width="match_parent"
