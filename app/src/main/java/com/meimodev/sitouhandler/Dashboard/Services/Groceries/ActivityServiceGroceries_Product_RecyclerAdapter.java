@@ -78,12 +78,13 @@ public class ActivityServiceGroceries_Product_RecyclerAdapter extends RecyclerVi
             pHolder.tvName.setText(model.getName());
             String price = Constant.convertNumberToCurrency(model.getPrice()) + " / " + model.getUnit();
             pHolder.tvPrice.setText(price);
+            pHolder.tvNote.setVisibility(View.VISIBLE);
+            pHolder.tvNote.setText(model.getVendorName());
 
             Picasso.get().load(model.getImageUrl()).fit().into(pHolder.imageView);
             if (!model.isAvailable()) {
 
                 pHolder.imageView.setColorFilter(grayscale);
-                pHolder.tvNote.setVisibility(View.VISIBLE);
                 pHolder.tvNote.setText(model.getIsAvailableMessage());
                 pHolder.cvAdd.setClickable(false);
                 pHolder.cvAdd.setCardBackgroundColor(context.getResources().getColor(R.color.disabled_background));

@@ -644,7 +644,7 @@ public class Dashboard extends AppCompatActivity {
         SimpleDateFormat stringFormat = new SimpleDateFormat("MMM dd ''yy", Locale.ENGLISH);
         string = "Released On " + stringFormat.format(date);
         tvReleasedDate.setText(string);
-//        toggle.syncState();
+
         navigationView.setNavigationItemSelectedListener(item -> {
 
             // Transact fragment according to selected navigation item id
