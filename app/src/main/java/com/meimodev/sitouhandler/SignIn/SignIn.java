@@ -60,7 +60,7 @@ public class SignIn extends AppCompatActivity {
         setContentView(b.getRoot());
 
         Constant.changeStatusColor(this, R.color.background);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
 
 //        Check if device already logged in

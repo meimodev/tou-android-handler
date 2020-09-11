@@ -5,6 +5,7 @@
 package com.meimodev.sitouhandler.Dashboard.Services.Groceries;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -24,6 +25,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -469,7 +471,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
     public static String KEY_SEARCH_PRODUCT_TYPE = "KEY_SEARCH_PRODUCT_TYPE";
     private String searchProductWithType;
-    public static boolean  STOP_N_SHOP = false;
+    public static boolean STOP_N_SHOP = false;
 
     private void handleIntentInit() {
         searchProductWithType = getIntent().getStringExtra(KEY_SEARCH_PRODUCT_TYPE);
@@ -954,7 +956,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                 .placeholder(R.drawable.ic_sss_logo_icon)
                 .into(b.layoutVendorDetail.imageViewVendorImage);
 
-        if (!isOpen){
+        if (!isOpen) {
             b.layoutVendorDetail.imageViewVendorImage.setColorFilter(grayscale);
         }
 
@@ -981,10 +983,10 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
             tvName.setText(name);
             tvPrice.setText(String.format("%s / %s", Constant.convertNumberToCurrency(price), unit));
-            tvStock.setText(String.format("Tersisa ± %s", stock));
+            tvStock.setText(String.format("Tersisa ± %s %s", stock, unit));
             Picasso.get().load(imageUrl).placeholder(R.drawable.ic_sss_logo_icon).fit().into(imageView);
 
-            if (stock <= 0){
+            if (stock <= 0) {
 
 
                 imageView.setColorFilter(grayscale);
@@ -995,22 +997,32 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                 tvStock.setText("Produk tidak tersedia");
                 tvStock.setTextColor(getResources().getColor(R.color.colorAccent4End));
 
-            } else {
+            }
+            else {
 
-            int finalI = i;
-            cardView.setOnClickListener(v -> {
-                Bundle bundle = new Bundle();
-                bundle.putInt("ID", id);
-                bundle.putString("NAME", name);
-                bundle.putInt("PRICE", price);
-                bundle.putString("UNIT", unit);
-                bundle.putInt("POS", finalI);
-                bundle.putInt("VENDOR_ID", vId);
-                bundle.putString("VENDOR_NAME", vName);
-                productClickListener.itemClick(bundle);
-            });
+                int finalI = i;
+                cardView.setOnClickListener(v -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("ID", id);
+                    bundle.putString("NAME", name);
+                    bundle.putInt("PRICE", price);
+                    bundle.putString("UNIT", unit);
+                    bundle.putInt("POS", finalI);
+                    bundle.putInt("VENDOR_ID", vId);
+                    bundle.putString("VENDOR_NAME", vName);
+                    productClickListener.itemClick(bundle);
+                });
             }
 
+            if (i == products.length() - 1) {
+                CardView.LayoutParams params = new CardView.LayoutParams(
+                        CardView.LayoutParams.MATCH_PARENT,
+                        CardView.LayoutParams.WRAP_CONTENT
+                );
+
+                params.setMargins(0, 0, 0, 220);
+                cardView.setLayoutParams(params);
+            }
 
             llProducts.addView(view, i);
         }
