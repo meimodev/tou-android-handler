@@ -415,6 +415,10 @@ public interface ApiServices {
      * Vendor
      */
 
+    @GET("vendor/{id}")
+    Call<ResponseBody> getVendor(@Path("id") int vendorId);
+
+
     @GET("products")
     Call<ResponseBody> getAllProducts();
 

@@ -147,6 +147,7 @@ public class Dashboard extends AppCompatActivity {
             if (intent.getAction().equalsIgnoreCase(ACTION_HEADER_COLLAPSE)) {
                 IS_HEADER_COLLAPSE = true;
             }
+
             if (intent.getAction().equalsIgnoreCase(ACTION_HEADER_EXPAND)) {
                 IS_HEADER_COLLAPSE = false;
             }

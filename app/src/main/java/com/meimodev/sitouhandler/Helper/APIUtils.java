@@ -51,12 +51,11 @@ public class APIUtils {
                     },
                     null,
                     dialog -> Constant.signOut(context)
-
             );
         } else if (response.code() == HttpURLConnection.HTTP_UNAVAILABLE){
             Constant.displayDialog(
                     context,
-                    "System Dalam Perbaikan",
+                    "Sistem Dalam Perbaikan",
                     "Tidak dapat mengakses data dikarenakan system sedang dalam perawatan, silahkan kembali beberapa saat lagi",
                     false,
                     (dialog, which) -> {

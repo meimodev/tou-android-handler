@@ -260,4 +260,8 @@ public class IssueRequestHandler {
 
     public Call getCall(){return call;}
 
+    public void cancel(){
+        call.cancel();
+    }
+
 }

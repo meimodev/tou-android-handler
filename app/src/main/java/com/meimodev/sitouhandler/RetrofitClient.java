@@ -42,7 +42,6 @@ public class RetrofitClient {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         Log.e(TAG, "RetrofitClient: with token build, token=Bearer " + token);
-
     }
 
     public static synchronized RetrofitClient getInstance(String token) {

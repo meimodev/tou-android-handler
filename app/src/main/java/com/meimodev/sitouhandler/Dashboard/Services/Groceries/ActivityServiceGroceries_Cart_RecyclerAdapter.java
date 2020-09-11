@@ -76,7 +76,7 @@ public class ActivityServiceGroceries_Cart_RecyclerAdapter extends RecyclerView.
             data.putString("OPERATION", "ADD");
 
             int newQuantity = model.getQuantity() + 1;
-            if (!isChurchMember && newQuantity > Constant.VALUE_MAX_NON_MEMBER_PRODUCT_UNIT) {
+            if (!isChurchMember && newQuantity > Constant.VALUE_MAX_NON_MEMBER_PRODUCT_UNIT && !ActivityServiceGroceries.STOP_N_SHOP) {
                 Constant.displayDialog(
                         context,
                         "Perhatian !",

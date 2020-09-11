@@ -439,17 +439,15 @@ public class ActivityServiceLocation extends AppCompatActivity {
 
             @Override
             public void onRetry() {
-                b.nestedScrollView.setVisibility(View.VISIBLE);
-                b.progress.setVisibility(View.GONE);
                 Constant.displayDialog(
                         ActivityServiceLocation.this,
-                        "Perhatian !",
-                        "Koneksi internet bermasalah, silahkan coba lagi",
+                        "Terjadi Kesalahan -_- !",
+                        "Koneksi internet bermasalah, Silahkan coba sesaat lagi.",
                         true,
                         (dialog, which) -> {
                         },
                         null,
-                        dialog -> sendDataToServer()
+                        dialog -> finish()
                 );
             }
         });
@@ -473,7 +471,6 @@ public class ActivityServiceLocation extends AppCompatActivity {
             }
             products.put("products", arr);
 
-//            Log.e(TAG, "sendDataToServer: accumulate ="+products.toString() );
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e(TAG, "sendDataToServer: ERROR while composing JSON products ", e);

@@ -134,6 +134,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".Dashboard.Services.ActivityServiceOrderType"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".Dashboard.Services.Electronics.ActivityServiceElectronics"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />

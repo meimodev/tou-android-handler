@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?><!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@android:color/white"
+    android:clickable="true"
+    android:elevation="2dp"
+    android:focusable="true"
+    app:cardCornerRadius="4dp"
+    android:id="@+id/cardView_main"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/layout_vendorInfo">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="80dp"
+            android:layout_height="0dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:padding="4dp"
+            android:src="@drawable/ic_sss_logo_icon" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="8dp"
+            android:layout_toStartOf="@id/imageView_button"
+            android:layout_toEndOf="@id/imageView"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Latte Jhon"
+                android:textColor="@color/TextView_Label_Dark" />
+
+            <TextView
+                android:id="@+id/textView_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rp. 25.000 / Cup" />
+
+            <TextView
+                android:id="@+id/textView_stock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tersedia +- 10 Cup" />
+
+        </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/imageView_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_cart_plus" />
+
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>
+

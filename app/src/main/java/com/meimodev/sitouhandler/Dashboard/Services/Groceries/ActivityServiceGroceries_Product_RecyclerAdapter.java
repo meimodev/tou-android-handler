@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Issue.OnRecyclerItemOperationListener;
 import com.meimodev.sitouhandler.R;
@@ -81,16 +82,22 @@ public class ActivityServiceGroceries_Product_RecyclerAdapter extends RecyclerVi
             pHolder.tvNote.setVisibility(View.VISIBLE);
             pHolder.tvNote.setText(model.getVendorName());
 
-            Picasso.get().load(model.getImageUrl()).fit().into(pHolder.imageView);
-            if (!model.isAvailable()) {
+            Picasso.get().load(model.getImageUrl()).placeholder(R.drawable.ic_logo_tou_system).fit().into(pHolder.imageView);
 
+            if (!model.isAvailable()) {
+                pHolder.cvMain.setClickable(false);
                 pHolder.imageView.setColorFilter(grayscale);
                 pHolder.tvNote.setText(model.getIsAvailableMessage());
+                pHolder.tvNote.setTextColor(context.getResources().getColor(R.color.colorPrimary));
                 pHolder.cvAdd.setClickable(false);
                 pHolder.cvAdd.setCardBackgroundColor(context.getResources().getColor(R.color.disabled_background));
+                pHolder.cvMain.setOnClickListener(v -> {
+                    Toast.makeText(context, "Produk ini sedang tidak tersedia -_-", Toast.LENGTH_LONG).show();
+                });
                 return;
             }
-            pHolder.cvAdd.setOnClickListener(v -> {
+
+            pHolder.cvMain.setOnClickListener(v -> {
                 Bundle data = new Bundle();
                 data.putInt("ID", model.getId());
                 data.putString("NAME", model.getName());
@@ -103,8 +110,11 @@ public class ActivityServiceGroceries_Product_RecyclerAdapter extends RecyclerVi
             });
         }
         else {
-            Picasso.get().load(model.getImageUrl()).fit().transform(new CropCircleTransformation()).into(pHolder.imageView);
-            pHolder.tvName.setVisibility(View.INVISIBLE);
+
+            pHolder.imageView.setPaddingRelative(25, 25 ,25 ,25);
+
+            Picasso.get().load(model.getImageUrl()).placeholder(R.drawable.ic_logo_tou_system).fit().transform(new CropCircleTransformation()).into(pHolder.imageView);
+            pHolder.tvName.setVisibility(View.GONE);
             pHolder.tvPrice.setText(model.getName());
             pHolder.tvPrice.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             pHolder.cvAdd.setVisibility(View.GONE);
@@ -124,10 +134,35 @@ public class ActivityServiceGroceries_Product_RecyclerAdapter extends RecyclerVi
             pHolder.cvMain.setOnClickListener(v -> {
                 Intent i = new Intent(ActivityServiceGroceries.KEY_VENDOR_PRODUCTS);
                 i.putExtra("VENDOR_NAME", model.getName());
+                i.putExtra("VENDOR_ID", model.getVendorId());
                 context.sendBroadcast(i);
             });
         }
 
+        if (products.size() % 2 == 0) {
+            if (position == products.size() - 1 || position == products.size() - 2) {
+                applyBottomMargin(pHolder);
+            }
+        }
+        else {
+            if (position == products.size() - 1) {
+                applyBottomMargin(pHolder);
+            }
+        }
+
+
+    }
+
+    private void applyBottomMargin(ViewHolderProduct pHolder) {
+        CardView.LayoutParams params = new CardView.LayoutParams(
+                CardView.LayoutParams.MATCH_PARENT,
+                CardView.LayoutParams.WRAP_CONTENT
+        );
+
+        ViewGroup.MarginLayoutParams currParam = ((ViewGroup.MarginLayoutParams) pHolder.cvMain.getLayoutParams());
+
+        params.setMargins(currParam.leftMargin, currParam.topMargin, currParam.rightMargin, 275);
+        pHolder.cvMain.setLayoutParams(params);
     }
 
     @Override
@@ -139,7 +174,8 @@ public class ActivityServiceGroceries_Product_RecyclerAdapter extends RecyclerVi
 
         TextView tvName, tvPrice, tvNote;
         ImageView imageView;
-        CardView cvAdd, cvMain;
+        CardView cvAdd;
+        MaterialCardView cvMain;
 
         ViewHolderProduct(@NonNull View itemView) {
             super(itemView);
@@ -152,9 +188,9 @@ public class ActivityServiceGroceries_Product_RecyclerAdapter extends RecyclerVi
 
             imageView = itemView.findViewById(R.id.imageView);
 
-
         }
 
     }
+
 
 }
