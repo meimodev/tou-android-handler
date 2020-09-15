@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.squti.guru.Guru;
@@ -963,7 +964,9 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         LinearLayout llProducts = b.layoutVendorDetail.layoutVendorProducts;
         llProducts.removeAllViews();
 
-        for (int i = 0; i < products.length(); i++) {
+
+        int productsLengthPlusMargin = products.length();
+        for (int i = 0; i <= productsLengthPlusMargin; i++) {
             View view = LayoutInflater.from(this).inflate(
                     R.layout.resource_list_item_vendor_detail_product, llProducts, false);
 
@@ -972,6 +975,15 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             TextView tvStock = view.findViewById(R.id.textView_stock);
             ImageView imageView = view.findViewById(R.id.imageView);
             MaterialCardView cardView = view.findViewById(R.id.cardView_main);
+            RelativeLayout layout = view.findViewById(R.id.layout_main);
+
+            if (i == productsLengthPlusMargin) {
+                cardView.setClickable(false);
+                cardView.setVisibility(View.INVISIBLE);
+                layout.setVisibility(View.INVISIBLE);
+                llProducts.addView(view, i);
+                break;
+            }
 
             JSONObject obj = products.getJSONObject(i);
             int id = obj.getInt("id");
@@ -980,21 +992,22 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             String unit = obj.getString("unit");
             int stock = Integer.parseInt(obj.getString("stock"));
             String imageUrl = obj.getString("image");
+            boolean isAvailable = obj.getBoolean("is_available");
+            String isAvailableMessage = obj.getString("is_available_message");
 
             tvName.setText(name);
             tvPrice.setText(String.format("%s / %s", Constant.convertNumberToCurrency(price), unit));
             tvStock.setText(String.format("Tersisa ± %s %s", stock, unit));
             Picasso.get().load(imageUrl).placeholder(R.drawable.ic_sss_logo_icon).fit().into(imageView);
 
-            if (stock <= 0) {
-
+            if (!isAvailable) {
 
                 imageView.setColorFilter(grayscale);
                 cardView.setCardBackgroundColor(getResources().getColor(R.color.disabled_background));
                 ImageView ivButton = view.findViewById(R.id.imageView_button);
                 ivButton.setVisibility(View.INVISIBLE);
                 cardView.setClickable(false);
-                tvStock.setText("Produk tidak tersedia");
+                tvStock.setText(isAvailableMessage);
                 tvStock.setTextColor(getResources().getColor(R.color.colorAccent4End));
 
             }
@@ -1012,16 +1025,6 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                     bundle.putString("VENDOR_NAME", vName);
                     productClickListener.itemClick(bundle);
                 });
-            }
-
-            if (i == products.length() - 1) {
-                CardView.LayoutParams params = new CardView.LayoutParams(
-                        CardView.LayoutParams.MATCH_PARENT,
-                        CardView.LayoutParams.WRAP_CONTENT
-                );
-
-                params.setMargins(0, 0, 0, 220);
-                cardView.setLayoutParams(params);
             }
 
             llProducts.addView(view, i);

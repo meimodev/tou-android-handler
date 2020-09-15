@@ -82,7 +82,7 @@ public class Constant {
         public static final String ROOT_PORT = "";
 //
 //    public static final String ROOT_TRANSFER_PROTOCOL = "http";
-//    public static final String ROOT_IP = "192.168.1.5";
+//    public static final String ROOT_IP = "192.168.0.5";
 //    public static final String ROOT_PORT = ":8000";
 
     public static final String ROOT_PROTOCOL_IP_PORT =
