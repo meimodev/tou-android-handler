@@ -77,9 +77,9 @@ public class Constant {
     public static final String KEY_COLUMN_NAME_INDEX = "Column_Name_Index";
     public static final String KEY_MEMBER_DUPLICATE_CHECK = "Member_Duplicate_Check";
 
-        public static final String ROOT_TRANSFER_PROTOCOL = "https";
-        public static final String ROOT_IP = "tousystem.com";
-        public static final String ROOT_PORT = "";
+    public static final String ROOT_TRANSFER_PROTOCOL = "https";
+    public static final String ROOT_IP = "tousystem.com";
+    public static final String ROOT_PORT = "";
 //
 //    public static final String ROOT_TRANSFER_PROTOCOL = "http";
 //    public static final String ROOT_IP = "192.168.0.5";
