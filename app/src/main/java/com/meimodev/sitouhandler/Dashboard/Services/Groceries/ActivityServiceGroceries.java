@@ -320,6 +320,14 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                 }
                 adapterProduct.notifyDataSetChanged();
                 searchProductWithType = "";
+
+                if (dataProducts.length() <= 0 && vendorsArray.length() <= 0) {
+                    b.layoutDataNotFound.getRoot().setVisibility(View.VISIBLE);
+                } else {
+                    b.layoutDataNotFound.getRoot().setVisibility(View.GONE);
+                }
+
+
             }
 
             @Override
@@ -454,7 +462,6 @@ public class ActivityServiceGroceries extends AppCompatActivity {
     BroadcastReceiver brSearchVendorProducts = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-//                Log.e(TAG, "onReceive: received" );
             if (intent.getAction().contentEquals(KEY_VENDOR_PRODUCTS)) {
                 VENDOR_ID = intent.getIntExtra("VENDOR_ID", 0);
                 openVendorDetail();
