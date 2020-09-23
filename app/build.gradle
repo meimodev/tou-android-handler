@@ -15,7 +15,7 @@ android {
     }
 
 //    Remove the build tools version later when internet is connected
-    buildToolsVersion "30.0.0-rc4"
+    buildToolsVersion "30.0.1"
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.meimodev.sitouhandler"
@@ -43,8 +43,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    viewBinding {
-        enabled = true
+//    viewBinding {
+//        enabled = true
+//    }
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
     }
 }
 
@@ -80,6 +84,8 @@ dependencies {
 //    Glide
 //    implementation 'com.github.bumptech.glide:glide:4.11.0'
 
+//    Rolling textView
+    implementation 'com.github.YvesCheung:RollingText:1.2.6'
 
 //    FAB
     implementation 'com.github.hannesa2:FloatingActionButton:2.2'

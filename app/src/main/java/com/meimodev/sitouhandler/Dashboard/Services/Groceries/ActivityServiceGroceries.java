@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,6 +28,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -44,6 +47,9 @@ import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.databinding.ActivityServiceGroceriesBinding;
 import com.squareup.picasso.Picasso;
+import com.yy.mobile.rollingtextview.CharOrder;
+import com.yy.mobile.rollingtextview.RollingTextView;
+import com.yy.mobile.rollingtextview.strategy.Strategy;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -148,7 +154,9 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         recentDesc = b.textViewRecentDesc.getText().toString();
         recentPrice = b.textViewRecentPrice.getText().toString();
         b.textViewRecentDesc.setText("Lanjut Belanja");
-        b.textViewRecentPrice.setText("");
+        b.textViewRecentPrice.setVisibility(View.INVISIBLE);
+
+        b.layoutRecent.setVisibility(View.INVISIBLE);
 
         updateCartUI();
     }
@@ -166,6 +174,8 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
         b.textViewRecentDesc.setText(recentDesc);
         b.textViewRecentPrice.setText(recentPrice);
+        b.textViewRecentPrice.setVisibility(View.VISIBLE);
+        b.cardDivider.setVisibility(View.VISIBLE);
 
         alterRecent();
     }
@@ -233,6 +243,22 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                 }
             }
         });
+
+        b.textViewRecentPrice.setAnimationDuration(500L);
+        b.textViewRecentPrice.setCharStrategy(Strategy.NormalAnimation());
+        b.textViewRecentPrice.addCharOrder(CharOrder.Alphabet);
+        b.textViewRecentPrice.setAnimationInterpolator(new AccelerateDecelerateInterpolator());
+
+        b.textViewProductCount.setAnimationDuration(500L);
+        b.textViewProductCount.setCharStrategy(Strategy.NormalAnimation());
+        b.textViewProductCount.addCharOrder(CharOrder.Alphabet);
+        b.textViewProductCount.setAnimationInterpolator(new AccelerateDecelerateInterpolator());
+
+
+        b.cardDivider.setVisibility(View.INVISIBLE);
+        b.textViewRecentPrice.setVisibility(View.INVISIBLE);
+
+
     }
 
     private void alterRecent() {
@@ -240,14 +266,25 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         if (adapterCart.getItems().isEmpty()) {
             desc = "Keranjang Kosong";
             price = "  -  ";
+            b.textViewProductCount.setVisibility(View.INVISIBLE);
+            b.textViewRecentPrice.setVisibility(View.INVISIBLE);
         }
         else {
-            desc = adapterCart.getItems().size() + " Produk";
+            desc = " Produk";
             price = Constant.convertNumberToCurrency(calculateTotalPrice());
+            if (b.textViewProductCount.getVisibility() != View.VISIBLE) {
+                b.textViewProductCount.setVisibility(View.VISIBLE);
+            }
+            if (b.textViewRecentPrice.getVisibility() != View.VISIBLE) {
+                b.textViewRecentPrice.setVisibility(View.VISIBLE);
+            }
+
         }
 
         b.textViewRecentPrice.setText(price);
+        b.textViewProductCount.setText(String.valueOf(adapterCart.getItemCount()));
         b.textViewRecentDesc.setText(desc);
+
     }
 
     /*Product RecyclerView*/
@@ -323,7 +360,8 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
                 if (dataProducts.length() <= 0 && vendorsArray.length() <= 0) {
                     b.layoutDataNotFound.getRoot().setVisibility(View.VISIBLE);
-                } else {
+                }
+                else {
                     b.layoutDataNotFound.getRoot().setVisibility(View.GONE);
                 }
 
@@ -507,18 +545,10 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         b.recyclerViewCart.setAdapter(adapterCart);
     }
 
-    public OnRecyclerItemOperationListener.ItemClickListener cartClickListener = data -> {
-//        int id = data.getInt("ID");
-//        String name = data.getString("NAME");
-//        int price = data.getInt("PRICE");
-//        String unit = data.getString("UNIT");
-//        Toast.makeText(this, "cart clicked id = "+id, Toast.LENGTH_SHORT).show();
 
-        //update total price
-        updateCartUI();
-
-    };
     public OnRecyclerItemOperationListener.ItemClickListener productClickListener = data -> {
+
+
         int id = data.getInt("ID");
         int price = data.getInt("PRICE");
         int pos = data.getInt("POS");
@@ -618,6 +648,17 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         adapterCart.notifyItemChanged(pos);
 
         alterRecent();
+    };
+    public OnRecyclerItemOperationListener.ItemClickListener cartClickListener = data -> {
+//        int id = data.getInt("ID");
+//        String name = data.getString("NAME");
+//        int price = data.getInt("PRICE");
+//        String unit = data.getString("UNIT");
+//        Toast.makeText(this, "cart clicked id = "+id, Toast.LENGTH_SHORT).show();
+
+        //update total price
+        updateCartUI();
+
     };
     public View.OnClickListener nextButtonOnClickListener = v -> {
 
