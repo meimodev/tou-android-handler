@@ -368,7 +368,7 @@ public interface ApiServices {
 
     @GET("find-product-recommendation")
     Call<ResponseBody> findProductRecommendation(
-            @Query("type")String type
+            @Query("type") String type
     );
 
     @GET("transport-time")
@@ -417,6 +417,9 @@ public interface ApiServices {
 
     @GET("vendor/{id}")
     Call<ResponseBody> getVendor(@Path("id") int vendorId);
+
+    @GET("vendors")
+    Call<ResponseBody> getVendors(@Query("minimal") boolean minimal);
 
 
     @GET("products")

@@ -29,6 +29,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,7 +42,14 @@ import com.meimodev.sitouhandler.Dashboard.Services.Cookies.ActivityServiceCooki
 import com.meimodev.sitouhandler.Dashboard.Services.Electronics.ActivityServiceElectronics;
 import com.meimodev.sitouhandler.Dashboard.Services.Gas.ActivityServiceGas;
 import com.meimodev.sitouhandler.Dashboard.Services.Groceries.ActivityServiceGroceries;
+import com.meimodev.sitouhandler.Helper.APIWrapper;
+import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
+import com.meimodev.sitouhandler.RetrofitClient;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -56,23 +64,18 @@ public class Fragment_User_Home_News extends Fragment {
 
     @BindView(R.id.recyclerView_news)
     RecyclerView rvNews;
-    @BindView(R.id.layout_services)
-    CardView layoutServices;
-
-    @BindView(R.id.layout_groceries)
-    LinearLayout layoutGroceries;
-    @BindView(R.id.layout_gas)
-    LinearLayout layoutGas;
-    @BindView(R.id.layout_cookies)
-    LinearLayout layoutCookies;
-    @BindView(R.id.layout_electronics)
-    LinearLayout layoutElectronics;
 
     @BindView(R.id.layout_click_sss)
     RelativeLayout layoutSSS;
 
     @BindView(R.id.textInputLayout_search)
     TextInputLayout tilSearch;
+
+    @BindView(R.id.recyclerView_vendors)
+    RecyclerView rvVendors;
+
+    private Fragment_User_Home_Vendors_RecyclerAdapter adapterVendors;
+    private ArrayList<Fragment_User_Home_Vendors_RecyclerModel> modelVendors;
 
     @Nullable
     @Override
@@ -88,69 +91,78 @@ public class Fragment_User_Home_News extends Fragment {
             context.sendBroadcast(new Intent(Dashboard.ACTION_HEADER_EXPAND));
         }
 
-
-//        Fetch Data From Server
-        fetchData();
-
         setupServicesButton();
+        setupVendorRecyclerView();
+        fetchVendorRecyclerView();
 
         return rootView;
     }
 
-    private void fetchData() {
-        // fetch data if succeed setup recyclerView
-        rvNews.setHasFixedSize(true);
-        rvNews.setItemAnimator(new DefaultItemAnimator());
-        rvNews.setLayoutManager(new LinearLayoutManager(context));
-        ArrayList<Fragment_User_Home_News_RecyclerModel> models = new ArrayList<>();
+    private void fetchVendorRecyclerView() {
 
-        models.add(new Fragment_User_Home_News_RecyclerModel(
-                1,
-                "",
-                null,
-                "Selamat datang di TOU-SYSTEM",
-                "<strong>TOU-System</strong> merupakan sebuah kombinasi integrasi dari aplikasi " +
-                        "handphone & beberapa aplikasi <i>web</i> yang disatukan dalam <i>cloud base environment</i>" +
-                        " masuk dalam kategori SaaS (<i>Software as a Service</i>)." +
-                        "<br/><br/>" +
-                        "Didesain spesifik untuk membantu meningkatkan kualitas 'kehidupan' kita, dengan cara memangkas hal-hal yang tidak efektif dalam layanan-layanan yang sering kita gunakan sehari-hari." +
-//                        "<br/><br/>"+
-//                        "<a href='"+Constant.ROOT_PROTOCOL_IP_PORT+"'>www.tousystem.com<a/>"+
-                        "<br/><br/><br/><br/>" +
-                        "<i>'SiTou Timou Tumou Tou'</i>  <strong>- G.S.S.J.Ratulangi -<strong/>",
-                ""
-        ));
+        IssueRequestHandler req = new IssueRequestHandler(rvVendors);
+        req.setIntention(new Throwable());
+        req.setContext(context);
+        req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
+            @Override
+            public void onTry() {
 
-        rvNews.setAdapter(new Fragment_User_Home_News_RecyclerAdapter(models, context));
+            }
+
+            @Override
+            public void onSuccess(APIWrapper res, String message) throws JSONException {
+                JSONArray arr = res.getDataArray();
+
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject model = arr.getJSONObject(i);
+                    modelVendors.add(new Fragment_User_Home_Vendors_RecyclerModel(
+                            model.getInt("id"),
+                            model.getString("image"),
+                            model.getString("name")
+                    ));
+                }
+
+
+                adapterVendors.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onRetry() {
+                fetchVendorRecyclerView();
+            }
+        });
+
+        req.enqueue(RetrofitClient.getInstance(null).getApiServices().getVendors(true));
+
     }
 
     private void setupServicesButton() {
         View.OnClickListener onClickListener = v -> {
             Intent intent;
-            if (v == layoutGroceries) {
-                intent = new Intent(context, ActivityServiceGroceries.class);
-                intent.putExtra(ActivityServiceGroceries.KEY_SEARCH_PRODUCT_TYPE, "Groceries");
-                intent.putExtra(ActivityServiceGroceries.KEY_START_TEASER, true);
-            }
-            else if (v == layoutGas) {
-                intent = new Intent(context, ActivityServiceGas.class);
-            }
-            else if (v == layoutCookies) {
-                intent = new Intent(context, ActivityServiceCookies.class);
-            }
-            else if (v == layoutSSS) {
+//            if (v == layoutGroceries) {
+//                intent = new Intent(context, ActivityServiceGroceries.class);
+//                intent.putExtra(ActivityServiceGroceries.KEY_SEARCH_PRODUCT_TYPE, "Groceries");
+//                intent.putExtra(ActivityServiceGroceries.KEY_START_TEASER, true);
+//            }
+//            else if (v == layoutGas) {
+//                intent = new Intent(context, ActivityServiceGas.class);
+//            }
+//            else if (v == layoutCookies) {
+//                intent = new Intent(context, ActivityServiceCookies.class);
+//            }
+            if (v == layoutSSS) {
                 intent = new Intent(context, ActivityServiceGroceries.class);
                 intent.putExtra(ActivityServiceGroceries.KEY_SEARCH_PRODUCT_TYPE, "SSS");
+                context.startActivity(intent);
             }
-            else {
-                intent = new Intent(context, ActivityServiceElectronics.class);
-            }
-            context.startActivity(intent);
+//            else {
+//                intent = new Intent(context, ActivityServiceElectronics.class);
+//            }
         };
-        layoutGroceries.setOnClickListener(onClickListener);
-        layoutGas.setOnClickListener(onClickListener);
-        layoutCookies.setOnClickListener(onClickListener);
-        layoutElectronics.setOnClickListener(onClickListener);
+//        layoutGroceries.setOnClickListener(onClickListener);
+//        layoutGas.setOnClickListener(onClickListener);
+//        layoutCookies.setOnClickListener(onClickListener);
+//        layoutElectronics.setOnClickListener(onClickListener);
         layoutSSS.setOnClickListener(onClickListener);
 
         EditText et = tilSearch.getEditText();
@@ -168,6 +180,17 @@ public class Fragment_User_Home_News extends Fragment {
                 v.clearFocus();
             }
         });
+
+    }
+
+    private void setupVendorRecyclerView() {
+        rvVendors.setHasFixedSize(true);
+        rvVendors.setLayoutManager(new LinearLayoutManager(context));
+        rvVendors.setItemAnimator(new DefaultItemAnimator());
+
+        modelVendors = new ArrayList<>();
+        adapterVendors = new Fragment_User_Home_Vendors_RecyclerAdapter(modelVendors, context);
+        rvVendors.setAdapter(adapterVendors);
 
     }
 

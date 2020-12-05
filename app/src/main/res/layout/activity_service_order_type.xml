@@ -27,61 +27,61 @@
             android:layout_height="0dp"
             android:background="@color/backGround_fragment"
             android:translationZ="50dp"
-            app:layout_constraintStart_toStartOf="@id/guideVertical"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/guideVertical"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="@id/guideVertical"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
             android:id="@+id/progress"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:translationZ="50dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <RelativeLayout
             android:id="@+id/layout_onTheSpot"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
             android:animateLayoutChanges="true"
+            android:background="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="@id/guideVertical"
             app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
                 android:id="@+id/image_onTheSpot"
                 android:layout_width="match_parent"
-                android:scaleType="center"
-                android:paddingEnd="40dp"
-                android:paddingStart="0dp"
                 android:layout_height="match_parent"
+                android:paddingStart="0dp"
+                android:paddingEnd="40dp"
+                android:scaleType="center"
                 android:src="@drawable/ic_order_on_the_spot" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardView_onTheSpot"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:animateLayoutChanges="true"
                 android:layout_above="@id/button_onTheSpot"
                 android:layout_margin="16dp"
+                android:animateLayoutChanges="true"
                 android:elevation="2dp"
                 app:cardCornerRadius="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:animateLayoutChanges="true"
+                    android:orientation="vertical"
                     android:padding="8dp">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-
-                        android:layout_width="match_parent"
                         android:id="@+id/textInputLayout_note"
+
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:hint="Nomor Meja">
@@ -187,19 +187,19 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="16dp"
-                android:textAllCaps="true"
-                android:backgroundTint="@color/colorAccent4End"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="64dp"
-                android:text="Pesan Ditempat" />
+                android:backgroundTint="@color/colorAccent4End"
+                android:text="Pesan Ditempat"
+                android:textAllCaps="true" />
 
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
             android:animateLayoutChanges="true"
+            android:background="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/guideVertical">
 
@@ -207,9 +207,9 @@
                 android:id="@+id/imageView_deliver"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="center"
-                android:paddingEnd="80dp"
                 android:paddingStart="0dp"
+                android:paddingEnd="80dp"
+                android:scaleType="center"
                 android:src="@drawable/ic_order_deliver" />
 
             <Button
@@ -219,10 +219,70 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:textAllCaps="true"
-                android:backgroundTint="@color/colorAccent4End"
                 android:layout_marginBottom="64dp"
-                android:text="Pesan Antar" />
+                android:backgroundTint="@color/colorAccent4End"
+                android:text="Pesan Antar"
+                android:textAllCaps="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_noDelivery"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:background="#B47563EB"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideVertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/mdtp_white"
+                    android:maxLines="50"
+                    android:fontFamily="@font/montserrat"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"
+                    android:text="Fitur dalam penyesuaian"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/mdtp_white"
+                    android:maxLines="50"
+                    android:fontFamily="@font/montserrat"
+                    android:layout_marginBottom="8dp"
+                    android:text="We just did an iteration of design to make this feature more versatile and relevance to you."/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/mdtp_white"
+                    android:maxLines="50"
+                    android:fontFamily="@font/montserrat"
+                    android:layout_marginBottom="8dp"
+                    android:text="And because great things takes times"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/mdtp_white"
+                    android:maxLines="50"
+                    android:fontFamily="@font/montserrat"
+                    android:layout_marginBottom="8dp"
+                    android:text="Have a good times than &#128521;"/>
+
+            </LinearLayout>
 
         </RelativeLayout>
 

@@ -73,6 +73,18 @@ public class ActivityServiceOrderType extends AppCompatActivity {
 
         b.cardViewOnTheSpot.setVisibility(View.GONE);
         b.progress.setVisibility(View.GONE);
+        b.layoutNoDelivery.setVisibility(View.GONE);
+
+        b.buttonOnTheSpot.setOnClickListener(v -> {
+            openOnTheSpotCard();
+        });
+
+
+        if (Guru.getBoolean(Constant.KEY_IS_DELIVERY, false)){
+            noDelivery();
+            return;
+        }
+
         b.buttonDeliver.setOnClickListener(v -> {
             Intent intent = new Intent(this, ActivityServiceLocation.class);
 
@@ -80,9 +92,6 @@ public class ActivityServiceOrderType extends AppCompatActivity {
             startActivity(intent);
         });
 
-        b.buttonOnTheSpot.setOnClickListener(v -> {
-            openOnTheSpotCard();
-        });
     }
 
     private void initBundleData(Bundle bundle) {
@@ -162,7 +171,6 @@ public class ActivityServiceOrderType extends AppCompatActivity {
             }
 
             public void onSuccess(APIWrapper res, String message) throws JSONException {
-
                 int oID = res.getData().getInt("id");
                 Constant.displayDialog(
                         ActivityServiceOrderType.this,
@@ -248,6 +256,11 @@ public class ActivityServiceOrderType extends AppCompatActivity {
             return;
         }
         super.onBackPressed();
+    }
+
+    private void noDelivery() {
+        b.layoutNoDelivery.setVisibility(View.VISIBLE);
+        b.buttonDeliver.setEnabled(false);
     }
 
 }

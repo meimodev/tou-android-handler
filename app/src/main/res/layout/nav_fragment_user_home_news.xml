@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<?xml version="1.0" encoding="utf-8"?><!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
         android:visibility="visible"
-        app:cardCornerRadius="8dp"
         app:cardBackgroundColor="#F9BA00"
+        app:cardCornerRadius="8dp"
         app:cardElevation="2dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,8 +28,8 @@
             android:id="@+id/layout_click_sss"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:baselineAligned="false"
             android:background="?attr/selectableItemBackground"
+            android:baselineAligned="false"
             android:clickable="true"
             android:focusable="true"
             android:orientation="horizontal"
@@ -39,7 +39,7 @@
                 android:id="@+id/layout_inner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_centerHorizontal="true"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
                 android:orientation="horizontal">
@@ -50,20 +50,20 @@
                     android:src="@drawable/ic_sss_logo_icon" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
                     android:id="@+id/textInputLayout_search"
-                    android:layout_height="wrap_content"
-                    android:elevation="3dp"
-                    android:hint="Cari Produk"
-                    android:layout_marginStart="12dp"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:layout_marginEnd="12dp"
-                    app:boxBackgroundColor="@null"
-                    app:helperTextTextAppearance="@style/maxLinesFix"
-                    app:boxStrokeColor="@color/colorPrimary"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:clickable="false"
+                    android:elevation="3dp"
+                    android:focusable="false"
+                    android:hint="Cari Produk"
+                    app:boxBackgroundColor="@null"
+                    app:boxStrokeColor="@color/colorPrimary"
                     app:endIconMode="clear_text"
+                    app:helperTextTextAppearance="@style/maxLinesFix"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/layout_title">
@@ -75,172 +75,182 @@
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-
             </LinearLayout>
 
             <TextView
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:layout_below="@id/layout_inner"
                 android:layout_width="match_parent"
-                android:maxLines="50"
-                android:fontFamily="@font/montserrat"
                 android:layout_height="wrap_content"
-                android:text="Pesan Online! Produk Sulut Stop And Shop! bisa disini"/>
+                android:layout_below="@id/layout_inner"
+                android:fontFamily="@font/montserrat"
+                android:maxLines="50"
+                android:text="Pesan Online! Tanpa repot antri !"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
 
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/layout_services"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_vendors"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:visibility="visible"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="2dp"
-        app:cardUseCompatPadding="true"
+        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_sss">
+        app:layout_constraintTop_toBottomOf="@id/layout_sss" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:padding="8dp">
 
-            <LinearLayout
-                android:id="@+id/layout_electronics"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                android:layout_weight="1"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:paddingTop="8dp"
-                android:focusable="true"
-                android:orientation="vertical">
+    <!--    <androidx.cardview.widget.CardView-->
+    <!--        android:id="@+id/layout_services"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:animateLayoutChanges="true"-->
+    <!--        android:visibility="visible"-->
+    <!--        app:cardCornerRadius="8dp"-->
+    <!--        app:cardElevation="2dp"-->
+    <!--        app:cardUseCompatPadding="true"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/layout_sss">-->
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_electronics" />
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:baselineAligned="false"-->
+    <!--            android:orientation="horizontal"-->
+    <!--            android:padding="8dp">-->
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:maxLines="5"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="Perbaiki Komputer / Gadget" />
+    <!--            <LinearLayout-->
+    <!--                android:id="@+id/layout_electronics"-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_margin="8dp"-->
+    <!--                android:layout_marginStart="0dp"-->
+    <!--                android:layout_marginEnd="0dp"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:background="?attr/selectableItemBackground"-->
+    <!--                android:clickable="true"-->
+    <!--                android:paddingTop="8dp"-->
+    <!--                android:focusable="true"-->
+    <!--                android:orientation="vertical">-->
 
-            </LinearLayout>
+    <!--                <ImageView-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="50dp"-->
+    <!--                    android:src="@drawable/ic_electronics" />-->
 
-            <LinearLayout
-                android:id="@+id/layout_groceries"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:paddingTop="8dp"
-                android:layout_weight="1"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:orientation="vertical">
+    <!--                <TextView-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:gravity="center"-->
+    <!--                    android:maxLines="5"-->
+    <!--                    android:paddingTop="8dp"-->
+    <!--                    android:paddingBottom="8dp"-->
+    <!--                    android:text="Perbaiki Komputer / Gadget" />-->
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_groceries" />
+    <!--            </LinearLayout>-->
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:gravity="center"
-                    android:maxLines="5"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="Pesan Bahan Makanan" />
+    <!--            <LinearLayout-->
+    <!--                android:id="@+id/layout_groceries"-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_margin="8dp"-->
+    <!--                android:paddingTop="8dp"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:background="?attr/selectableItemBackground"-->
+    <!--                android:clickable="true"-->
+    <!--                android:focusable="true"-->
+    <!--                android:orientation="vertical">-->
 
-            </LinearLayout>
+    <!--                <ImageView-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="50dp"-->
+    <!--                    android:src="@drawable/ic_groceries" />-->
 
-            <LinearLayout
-                android:id="@+id/layout_gas"
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_margin="8dp"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                android:layout_weight="1"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:orientation="vertical"
-                android:visibility="gone">
+    <!--                <TextView-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:fontFamily="@font/montserrat_regular"-->
+    <!--                    android:gravity="center"-->
+    <!--                    android:maxLines="5"-->
+    <!--                    android:paddingTop="8dp"-->
+    <!--                    android:paddingBottom="8dp"-->
+    <!--                    android:text="Pesan Bahan Makanan" />-->
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="65dp"
-                    android:src="@drawable/ic_cloud_download_primary" />
+    <!--            </LinearLayout>-->
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:maxLines="5"
-                    android:text="Gas" />
+    <!--            <LinearLayout-->
+    <!--                android:id="@+id/layout_gas"-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="80dp"-->
+    <!--                android:layout_margin="8dp"-->
+    <!--                android:layout_marginStart="0dp"-->
+    <!--                android:layout_marginEnd="0dp"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:background="?attr/selectableItemBackground"-->
+    <!--                android:clickable="true"-->
+    <!--                android:focusable="true"-->
+    <!--                android:orientation="vertical"-->
+    <!--                android:visibility="gone">-->
 
-            </LinearLayout>
+    <!--                <ImageView-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="65dp"-->
+    <!--                    android:src="@drawable/ic_cloud_download_primary" />-->
 
-            <LinearLayout
-                android:id="@+id/layout_cookies"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingTop="8dp"
-                android:visibility="gone"
-                android:orientation="vertical">
+    <!--                <TextView-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:gravity="center"-->
+    <!--                    android:maxLines="5"-->
+    <!--                    android:text="Gas" />-->
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_cookies" />
+    <!--            </LinearLayout>-->
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:maxLines="5"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="Pesan Kukis" />
+    <!--            <LinearLayout-->
+    <!--                android:id="@+id/layout_cookies"-->
+    <!--                android:layout_width="0dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_margin="8dp"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:background="?attr/selectableItemBackground"-->
+    <!--                android:clickable="true"-->
+    <!--                android:focusable="true"-->
+    <!--                android:paddingTop="8dp"-->
+    <!--                android:visibility="gone"-->
+    <!--                android:orientation="vertical">-->
 
-            </LinearLayout>
+    <!--                <ImageView-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="50dp"-->
+    <!--                    android:src="@drawable/ic_cookies" />-->
 
-        </LinearLayout>
+    <!--                <TextView-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:gravity="center"-->
+    <!--                    android:maxLines="5"-->
+    <!--                    android:paddingTop="8dp"-->
+    <!--                    android:paddingBottom="8dp"-->
+    <!--                    android:text="Pesan Kukis" />-->
 
-    </androidx.cardview.widget.CardView>
+    <!--            </LinearLayout>-->
 
+    <!--        </LinearLayout>-->
+
+    <!--    </androidx.cardview.widget.CardView>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_news"
         android:layout_width="0dp"
-        android:visibility="gone"
         android:layout_height="0dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_services" />
+        app:layout_constraintTop_toBottomOf="@id/layout_sss" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

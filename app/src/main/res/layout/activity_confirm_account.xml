@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright (c) Meimo 2020. Let's Get AWESOME!                                                  ~
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -77,8 +81,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLines="100"
                         android:layout_marginBottom="4dp"
+                        android:maxLines="100"
                         android:text="Silahkan masukkan Nomor Telepon akun yang akan dikonfirmasi. TOU-System akan mengirimkan kode konfirmasi berupa SMS / Pesan Singkat di nomor tersebut." />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -107,8 +111,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLines="100"
                         android:layout_marginBottom="4dp"
+                        android:maxLines="100"
                         android:text="Jika anda belum mengetahui / menerima Kode Konfirmasi untuk akund dengan nomor telepon tersebut, silahkan sentuh tombol 'Kirim Kode' untuk mengirim kembali Kode Konfirmasi." />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -129,8 +133,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="text"
-                            android:textAllCaps="true"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:textAllCaps="true" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -142,16 +146,6 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/btn_confirm"
-                        style="@style/Widget.MaterialComponents.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="4dp"
-                        android:layout_weight="1"
-                        android:text="Konfirmasi"
-                        android:textStyle="bold" />
-
-                    <Button
                         android:id="@+id/btn_getCode"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="0dp"
@@ -159,6 +153,16 @@
                         android:layout_marginStart="4dp"
                         android:layout_weight="1"
                         android:text="Kirim Kode"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btn_confirm"
+                        style="@style/Widget.MaterialComponents.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:text="Konfirmasi Kode"
                         android:textStyle="bold" />
 
                 </LinearLayout>

@@ -144,7 +144,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
     private void openCart() {
 
         ConstraintLayout.LayoutParams params = ((ConstraintLayout.LayoutParams) b.guideCart.getLayoutParams());
-        params.guidePercent = 0.4f;
+        params.guidePercent = 0.3f;
         b.guideCart.setLayoutParams(params);
 
         b.layoutCart.setVisibility(View.VISIBLE);
@@ -662,6 +662,9 @@ public class ActivityServiceGroceries extends AppCompatActivity {
     };
     public View.OnClickListener nextButtonOnClickListener = v -> {
 
+        if (vendorId == Constant.RESERVED_USER_ID)
+            Guru.putBoolean(Constant.KEY_IS_DELIVERY, true);
+
         Log.e(TAG, "===========================LOG HEAD===========================");
         int i = 1;
         for (HelperModelCart model : adapterCart.getItems()) {
@@ -972,7 +975,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             Constant.displayDialog(
                     ActivityServiceGroceries.this,
                     "INVALID VID",
-                    "This request contain invalid VID, try again request",
+                    "This request contain invalid VID, try again to request",
                     true,
                     (dialog, which) -> {
                     },
@@ -980,7 +983,6 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                     dialog -> finish()
             );
         }
-
     }
 
     private void initVendorDetailViews(JSONObject data) throws JSONException {
@@ -1081,6 +1083,4 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         b.layoutVendorDetail.layoutVendorDetailMain.setVisibility(View.VISIBLE);
         b.layoutVendorDetail.progressVendorDetail.setVisibility(View.GONE);
     }
-
-
 }

@@ -132,7 +132,7 @@ public class Dashboard extends AppCompatActivity {
 
     private DrawerLayout drawer;
 
-    private SpeedDialView speedDialView;
+//    private SpeedDialView speedDialView;
 
     private NavigationView navigationView;
 
@@ -154,7 +154,7 @@ public class Dashboard extends AppCompatActivity {
 
             Guideline guideline = findViewById(R.id.guide);
             ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) guideline.getLayoutParams();
-            lp.guidePercent = IS_HEADER_COLLAPSE ? 0.10f : 0.30f;
+            lp.guidePercent = IS_HEADER_COLLAPSE ? 0.10f : 0.35f;
             guideline.setLayoutParams(lp);
 
             int visibility = IS_HEADER_COLLAPSE ? View.GONE : View.VISIBLE;
@@ -223,7 +223,7 @@ public class Dashboard extends AppCompatActivity {
         setupBottomNavBar();
 
 //        Setup Floating Action Menu
-        setupFloatingActionMenuAndButtons();
+//        setupFloatingActionMenuAndButtons();
 
 //        Setup BackgroundHeader
         setupBackgroundHeader();
@@ -244,10 +244,10 @@ public class Dashboard extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 //       Check if Floating Action Menu open then close it
-        if (speedDialView.isOpen()) {
-            speedDialView.close(true);
-            return;
-        }
+//        if (speedDialView.isOpen()) {
+//            speedDialView.close(true);
+//            return;
+//        }
 //           Check if drawer open then close it
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -429,7 +429,7 @@ public class Dashboard extends AppCompatActivity {
 
         if (memberPosition.contains(ACCOUNT_TYPE_CHIEF)) {
             navigationView.getMenu().findItem(R.id.nav_chief).getSubMenu().setGroupVisible(R.id.nav_group_chief, true);
-            speedDialView.setVisibility(View.VISIBLE);
+//            speedDialView.setVisibility(View.VISIBLE);
             enableIssuing = true;
             enableAuthorize = true;
             showSundayIncome = true;
@@ -437,7 +437,7 @@ public class Dashboard extends AppCompatActivity {
 
         if (memberPosition.contains(ACCOUNT_TYPE_SECRETARY)) {
             navigationView.getMenu().findItem(R.id.nav_secretary).getSubMenu().setGroupVisible(R.id.nav_group_secretary, true);
-            speedDialView.setVisibility(View.VISIBLE);
+//            speedDialView.setVisibility(View.VISIBLE);
             enableIssuing = true;
             enableAuthorize = true;
             showSundayIncome = true;
@@ -445,7 +445,7 @@ public class Dashboard extends AppCompatActivity {
 
         if (memberPosition.contains(ACCOUNT_TYPE_TREASURER)) {
             navigationView.getMenu().findItem(R.id.nav_treasurer).getSubMenu().setGroupVisible(R.id.nav_group_treasurer, true);
-            speedDialView.setVisibility(View.VISIBLE);
+//            speedDialView.setVisibility(View.VISIBLE);
             enableIssuing = true;
             enableAuthorize = true;
             showSundayIncome = true;
@@ -453,7 +453,7 @@ public class Dashboard extends AppCompatActivity {
 
         if (memberPosition.contains(ACCOUNT_TYPE_PRIEST)) {
             navigationView.getMenu().findItem(R.id.nav_priest).getSubMenu().setGroupVisible(R.id.nav_group_priest, true);
-            speedDialView.setVisibility(View.VISIBLE);
+//            speedDialView.setVisibility(View.VISIBLE);
             enableIssuing = true;
             enableAuthorize = true;
             showSundayIncome = true;
@@ -461,7 +461,7 @@ public class Dashboard extends AppCompatActivity {
 
         if (memberPosition.contains(ACCOUNT_TYPE_PENATUA)) {
             navigationView.getMenu().findItem(R.id.nav_penatua).getSubMenu().setGroupVisible(R.id.nav_group_penatua, true);
-            speedDialView.setVisibility(View.VISIBLE);
+//            speedDialView.setVisibility(View.VISIBLE);
             enableIssuing = true;
             enableAuthorize = true;
             showSundayIncome = true;
@@ -469,7 +469,7 @@ public class Dashboard extends AppCompatActivity {
 
         if (memberPosition.contains(ACCOUNT_TYPE_SYAMAS)) {
             navigationView.getMenu().findItem(R.id.nav_syamas).getSubMenu().setGroupVisible(R.id.nav_group_syamas, true);
-            speedDialView.setVisibility(View.VISIBLE);
+//            speedDialView.setVisibility(View.VISIBLE);
             enableIssuing = true;
             enableAuthorize = true;
             showSundayIncome = true;
@@ -477,7 +477,7 @@ public class Dashboard extends AppCompatActivity {
 
         if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_PKB)) {
             navigationView.getMenu().findItem(R.id.nav_penatua_pkb).getSubMenu().setGroupVisible(R.id.nav_group_penatua_pkb, true);
-            speedDialView.setVisibility(View.VISIBLE);
+//            speedDialView.setVisibility(View.VISIBLE);
             enableIssuing = true;
             enableAuthorize = true;
             showSundayIncome = true;
@@ -485,7 +485,7 @@ public class Dashboard extends AppCompatActivity {
 
         if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_WKI)) {
             navigationView.getMenu().findItem(R.id.nav_penatua_pkb).getSubMenu().setGroupVisible(R.id.nav_group_penatua_wki, true);
-            speedDialView.setVisibility(View.VISIBLE);
+//            speedDialView.setVisibility(View.VISIBLE);
             enableIssuing = true;
             enableAuthorize = true;
             showSundayIncome = true;
@@ -493,7 +493,7 @@ public class Dashboard extends AppCompatActivity {
 
         if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_YOUTH)) {
             navigationView.getMenu().findItem(R.id.nav_penatua_pemuda).getSubMenu().setGroupVisible(R.id.nav_group_penatua_pemuda, true);
-            speedDialView.setVisibility(View.VISIBLE);
+//            speedDialView.setVisibility(View.VISIBLE);
             enableIssuing = true;
             enableAuthorize = true;
             showSundayIncome = true;
@@ -501,7 +501,7 @@ public class Dashboard extends AppCompatActivity {
 
         if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_REMAJA)) {
             navigationView.getMenu().findItem(R.id.nav_penatua_remaja).getSubMenu().setGroupVisible(R.id.nav_group_penatua_remaja, true);
-            speedDialView.setVisibility(View.VISIBLE);
+//            speedDialView.setVisibility(View.VISIBLE);
             enableIssuing = true;
             enableAuthorize = true;
             showSundayIncome = true;
@@ -509,7 +509,7 @@ public class Dashboard extends AppCompatActivity {
 
         if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_ANAK)) {
             navigationView.getMenu().findItem(R.id.nav_penatua_anak).getSubMenu().setGroupVisible(R.id.nav_group_penatua_anak, true);
-            speedDialView.setVisibility(View.VISIBLE);
+//            speedDialView.setVisibility(View.VISIBLE);
             showSundayIncome = true;
             enableIssuing = true;
             enableAuthorize = true;
@@ -529,72 +529,72 @@ public class Dashboard extends AppCompatActivity {
         }
     }
 
-    private void setupFloatingActionMenuAndButtons() {
-        //        setup Floating Action Menu & Buttons
-        speedDialView = findViewById(R.id.speedDial);
-        speedDialView.setUseReverseAnimationOnClose(true);
-        speedDialView.setMainFabClosedIconColor(Color.WHITE);
-        speedDialView.setMainFabOpenedIconColor(Color.WHITE);
-        speedDialView.setExpansionMode(SpeedDialView.ExpansionMode.BOTTOM);
-
-        SpeedDialActionItem item;
-
-        item = new SpeedDialActionItem.Builder(ISSUE_TYPE_SERVICE, R.drawable.ic_cross)
-                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent4End, getTheme()))
-                .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.mdtp_white, getTheme()))
-                .setLabel("Ajuan Ibadah")
-                .setLabelColor(Color.WHITE)
-                .setFabImageTintColor(Color.WHITE)
-                .setLabelBackgroundColor(Color.TRANSPARENT)
-                .setLabelClickable(true)
-                .create();
-        speedDialView.addActionItem(item);
-
-
-        item = new SpeedDialActionItem.Builder(ISSUE_TYPE_PAPERS, R.drawable.ic_papers)
-                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent4End, getTheme()))
-                .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.mdtp_white, getTheme()))
-                .setLabel("Ajuan Surat")
-                .setLabelColor(Color.WHITE)
-                .setFabImageTintColor(Color.WHITE)
-                .setLabelBackgroundColor(Color.TRANSPARENT)
-                .setLabelClickable(true)
-                .create();
-        speedDialView.addActionItem(item);
-
-        item = new SpeedDialActionItem.Builder(ISSUE_TYPE_INCOME, R.drawable.ic_arrow_expand_down)
-                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent4End, getTheme()))
-                .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.mdtp_white, getTheme()))
-                .setLabel("Ajuan Pemasukkan")
-                .setLabelColor(Color.WHITE)
-                .setFabImageTintColor(Color.WHITE)
-                .setLabelBackgroundColor(Color.TRANSPARENT)
-                .setLabelClickable(true)
-                .create();
-        speedDialView.addActionItem(item);
-
-
-        item = new SpeedDialActionItem.Builder(ISSUE_TYPE_OUTCOME, R.drawable.ic_arrow_expand_up)
-                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent4End, getTheme()))
-                .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.mdtp_white, getTheme()))
-                .setLabel("Ajuan Pengeluaran")
-                .setLabelColor(Color.WHITE)
-                .setFabImageTintColor(Color.WHITE)
-                .setLabelBackgroundColor(Color.TRANSPARENT)
-                .setLabelClickable(true)
-                .create();
-        speedDialView.addActionItem(item);
-
-
-        speedDialView.setOnActionSelectedListener(actionItem -> {
-            if (speedDialView.isOpen()) speedDialView.close(true);
-            startActivity(new Intent(Dashboard.this, Issue.class).putExtra("ISSUE_TYPE", actionItem.getId()));
-            return true;
-        });
-
-        speedDialView.setVisibility(View.GONE);
-
-    }
+//    private void setupFloatingActionMenuAndButtons() {
+//        //        setup Floating Action Menu & Buttons
+//        speedDialView = findViewById(R.id.speedDial);
+//        speedDialView.setUseReverseAnimationOnClose(true);
+//        speedDialView.setMainFabClosedIconColor(Color.WHITE);
+//        speedDialView.setMainFabOpenedIconColor(Color.WHITE);
+//        speedDialView.setExpansionMode(SpeedDialView.ExpansionMode.BOTTOM);
+//
+//        SpeedDialActionItem item;
+//
+//        item = new SpeedDialActionItem.Builder(ISSUE_TYPE_SERVICE, R.drawable.ic_cross)
+//                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent4End, getTheme()))
+//                .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.mdtp_white, getTheme()))
+//                .setLabel("Ajuan Ibadah")
+//                .setLabelColor(Color.WHITE)
+//                .setFabImageTintColor(Color.WHITE)
+//                .setLabelBackgroundColor(Color.TRANSPARENT)
+//                .setLabelClickable(true)
+//                .create();
+//        speedDialView.addActionItem(item);
+//
+//
+//        item = new SpeedDialActionItem.Builder(ISSUE_TYPE_PAPERS, R.drawable.ic_papers)
+//                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent4End, getTheme()))
+//                .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.mdtp_white, getTheme()))
+//                .setLabel("Ajuan Surat")
+//                .setLabelColor(Color.WHITE)
+//                .setFabImageTintColor(Color.WHITE)
+//                .setLabelBackgroundColor(Color.TRANSPARENT)
+//                .setLabelClickable(true)
+//                .create();
+//        speedDialView.addActionItem(item);
+//
+//        item = new SpeedDialActionItem.Builder(ISSUE_TYPE_INCOME, R.drawable.ic_arrow_expand_down)
+//                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent4End, getTheme()))
+//                .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.mdtp_white, getTheme()))
+//                .setLabel("Ajuan Pemasukkan")
+//                .setLabelColor(Color.WHITE)
+//                .setFabImageTintColor(Color.WHITE)
+//                .setLabelBackgroundColor(Color.TRANSPARENT)
+//                .setLabelClickable(true)
+//                .create();
+//        speedDialView.addActionItem(item);
+//
+//
+//        item = new SpeedDialActionItem.Builder(ISSUE_TYPE_OUTCOME, R.drawable.ic_arrow_expand_up)
+//                .setFabBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorAccent4End, getTheme()))
+//                .setFabImageTintColor(ResourcesCompat.getColor(getResources(), R.color.mdtp_white, getTheme()))
+//                .setLabel("Ajuan Pengeluaran")
+//                .setLabelColor(Color.WHITE)
+//                .setFabImageTintColor(Color.WHITE)
+//                .setLabelBackgroundColor(Color.TRANSPARENT)
+//                .setLabelClickable(true)
+//                .create();
+//        speedDialView.addActionItem(item);
+//
+//
+//        speedDialView.setOnActionSelectedListener(actionItem -> {
+//            if (speedDialView.isOpen()) speedDialView.close(true);
+//            startActivity(new Intent(Dashboard.this, Issue.class).putExtra("ISSUE_TYPE", actionItem.getId()));
+//            return true;
+//        });
+//
+//        speedDialView.setVisibility(View.GONE);
+//
+//    }
 
     private void setupToolbarAndNavigationDrawer() {
 
@@ -604,7 +604,7 @@ public class Dashboard extends AppCompatActivity {
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-                if (speedDialView.isOpen()) speedDialView.close(true);
+//                if (speedDialView.isOpen()) speedDialView.close(true);
             }
 
             @Override
@@ -888,10 +888,10 @@ public class Dashboard extends AppCompatActivity {
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .addToBackStack(null)
                     .commit();
-            if (speedDialView.isOpen()) speedDialView.close(true);
+//            if (speedDialView.isOpen()) speedDialView.close(true);
         });
 
-        tvTitle.setText("TOU-System");
+        tvTitle.setText("TOU");
         if (Guru.getInt(KEY_MEMBER_ID, 0) == 0) {
             llInfoHolder.setVisibility(View.GONE);
             llApplyMembership.setVisibility(View.VISIBLE);

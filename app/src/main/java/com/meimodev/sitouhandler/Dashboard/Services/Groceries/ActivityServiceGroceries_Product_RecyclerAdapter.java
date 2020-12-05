@@ -111,9 +111,10 @@ public class ActivityServiceGroceries_Product_RecyclerAdapter extends RecyclerVi
         }
         else {
 
-            pHolder.imageView.setPaddingRelative(25, 25 ,25 ,25);
+            int imagePadding = 45;
+            pHolder.imageView.setPaddingRelative(imagePadding, imagePadding ,imagePadding ,imagePadding);
 
-            Picasso.get().load(model.getImageUrl()).placeholder(R.drawable.ic_logo_tou_system).fit().transform(new CropCircleTransformation()).into(pHolder.imageView);
+            Picasso.get().load(model.getImageUrl()).placeholder(R.drawable.ic_logo_tou_system).transform(new CropCircleTransformation()).into(pHolder.imageView);
             pHolder.tvName.setVisibility(View.GONE);
             pHolder.tvPrice.setText(model.getName());
             pHolder.tvPrice.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);

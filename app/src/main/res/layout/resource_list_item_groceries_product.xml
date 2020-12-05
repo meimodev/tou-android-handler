@@ -23,7 +23,7 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="152dp"
             android:src="@drawable/ic_logo_tou_system" />
 
         <LinearLayout

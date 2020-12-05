@@ -17,44 +17,44 @@
         android:layout_height="match_parent"
         android:background="@color/transparent">
 
-        <com.leinardi.android.speeddial.SpeedDialOverlayLayout
-            android:id="@+id/overlay"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/colorPrimaryOverlay"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <!--        <com.leinardi.android.speeddial.SpeedDialOverlayLayout-->
+        <!--            android:id="@+id/overlay"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="0dp"-->
+        <!--            android:background="@color/colorPrimaryOverlay"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
         <!--Guide SPEED DIAL Layout-->
-        <LinearLayout
-            android:id="@+id/layout_guideSpeedDial"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@id/layout_fancyBackground"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/layout_fancyBackground" />
+        <!--        <LinearLayout-->
+        <!--            android:id="@+id/layout_guideSpeedDial"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="0dp"-->
+        <!--            android:orientation="vertical"-->
+        <!--            app:layout_constraintBottom_toBottomOf="@id/layout_fancyBackground"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintHeight_percent="0.1"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="@id/layout_fancyBackground" />-->
 
-        <com.leinardi.android.speeddial.SpeedDialView
-            android:id="@+id/speedDial"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/layout_guideSpeedDial"
-            app:sdMainFabClosedSrc="@drawable/fab_add"
-            app:sdOverlayLayout="@id/overlay" />
+        <!--        <com.leinardi.android.speeddial.SpeedDialView-->
+        <!--            android:id="@+id/speedDial"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginEnd="8dp"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="@id/layout_guideSpeedDial"-->
+        <!--            app:sdMainFabClosedSrc="@drawable/fab_add"-->
+        <!--            app:sdOverlayLayout="@id/overlay" />-->
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.3" />
+            app:layout_constraintGuide_percent="0.35" />
 
         <!--Fancy Background-->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,7 +77,7 @@
             <LinearLayout
                 android:id="@+id/layout_guide"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="32dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -152,13 +152,33 @@
                 app:layout_constraintTop_toTopOf="parent">
 
 
+                <!--                <TextView-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:ellipsize="none"-->
+                <!--                    android:maxLines="50"-->
+                <!--                    android:scrollHorizontally="false"-->
+                <!--                    android:text="Nikmati fitur penuh layanan ini dengan mendaftarkan diri sebagai ANGGOTA GEREJA dari gereja yang menggunakan TOU-System.\nSegera daftarkan diri."-->
+                <!--                    android:textAlignment="center"-->
+                <!--                    android:textColor="@color/foreground" />-->
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="none"
                     android:maxLines="50"
                     android:scrollHorizontally="false"
-                    android:text="Nikmati fitur penuh layanan ini dengan mendaftarkan diri sebagai ANGGOTA GEREJA dari gereja yang menggunakan TOU-System.\nSegera daftarkan diri."
+                    android:text="TOU \n Locally developed &amp; maintained to optimize engagement between local business and their corresponded customer."
+                    android:textAlignment="center"
+                    android:textColor="@color/foreground" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:fontFamily="@font/roboto"
+                    android:scrollHorizontally="false"
+                    android:text="So to speak ... &#128521;"
                     android:textAlignment="center"
                     android:textColor="@color/foreground" />
 
@@ -169,6 +189,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="8dp"
+                    android:visibility="gone"
                     android:backgroundTint="@color/colorAccent4End"
                     android:drawableStart="@drawable/ic_church_white"
                     android:drawablePadding="4dp"
@@ -230,7 +251,7 @@
         <LinearLayout
             android:id="@+id/layout_guideOutside"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="32dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="@id/layout_fancyBackground"
             app:layout_constraintEnd_toEndOf="parent"
@@ -243,8 +264,8 @@
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:paddingBottom="55dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/layout_guideOutside" />
@@ -254,18 +275,16 @@
             android:id="@+id/bottomNavBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_gravity="bottom"
             android:animateLayoutChanges="true"
             android:background="@color/mdtp_white"
             android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/bottom_nav" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
