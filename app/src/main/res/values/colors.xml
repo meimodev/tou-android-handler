@@ -43,4 +43,7 @@
 
     <color name="backGround_fragment">#ECECEC</color>
     <color name="transparent">#00000000</color>
+
+    <color name="sss_yellow">#F9BA00</color>
+
 </resources>

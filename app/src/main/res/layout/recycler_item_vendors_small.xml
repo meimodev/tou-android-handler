@@ -6,17 +6,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/recyclerItem_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="80dp"
     android:background="@color/transparent"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="vertical"
     app:cardCornerRadius="1dp"
-    app:cardElevation="2dp"
+    app:cardElevation="1dp"
     app:cardUseCompatPadding="true">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
@@ -25,58 +25,67 @@
         <ImageView
             android:id="@+id/recyclerItem_image"
             android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/image_cart_empty" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@id/layout_images"
+            android:layout_toEndOf="@id/recyclerItem_image"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/recyclerItem_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
                 android:fontFamily="@font/roboto"
-                android:maxLines="1"
+                android:maxLines="2"
                 android:text="Title"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/recyclerItem_hour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:ellipsize="end"
+                android:fontFamily="@font/montserrat"
+                android:maxLines="1"
+                android:text="11.00 - 22.00"
+                android:textSize="11sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="4dp"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/montserrat"
-                    android:maxLines="1"
-                    android:text="11.00 - 22.00 |"
-                    android:textSize="13sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/montserrat"
-                    android:maxLines="1"
-                    android:text="OPEN"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/layout_images"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/recyclerItem_icon1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/ic_open_exit_door_gray" />
+
+            <ImageView
+                android:id="@+id/recyclerItem_icon2"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_food_delivery_gray" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

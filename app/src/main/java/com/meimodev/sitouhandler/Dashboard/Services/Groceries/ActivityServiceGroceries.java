@@ -86,7 +86,6 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         changeStatusColor(this, R.color.colorPrimary);
         handleIntentInit();
 
-
         initProductRecyclerView();
         initCartRecyclerView();
         initSearchEditText();
@@ -96,8 +95,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         b.layoutRecent.setOnClickListener(v -> {
             if (isCartOpen) {
                 closeCart();
-            }
-            else {
+            } else {
                 openCart();
             }
         });
@@ -110,6 +108,8 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         registerBroadcastReceiver();
 
         startTeaser(getIntent().getBooleanExtra(KEY_START_TEASER, false));
+
+        initStraightToVendor();
     }
 
     public static final String KEY_START_TEASER = "KEY_START_TEASER";
@@ -189,8 +189,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             b.buttonNext.setCardBackgroundColor(getResources().getColor(R.color.disabled_background));
             b.layoutNotFound.getRoot().setVisibility(View.VISIBLE);
             return;
-        }
-        else {
+        } else {
             b.textViewCartTotalText.setText(String.format("%d Produk", productsInCart.size()));
             b.textViewCartTotalText.setVisibility(View.VISIBLE);
             b.textViewCartTotal.setVisibility(View.VISIBLE);
@@ -236,8 +235,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (s.length() < 2) {
                     b.textInputLayoutSearch.setError("Harus melebihi 2 huruf");
-                }
-                else {
+                } else {
                     b.textInputLayoutSearch.setError(null);
                     countdownToFetchData.start();
                 }
@@ -268,8 +266,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             price = "  -  ";
             b.textViewProductCount.setVisibility(View.INVISIBLE);
             b.textViewRecentPrice.setVisibility(View.INVISIBLE);
-        }
-        else {
+        } else {
             desc = " Produk";
             price = Constant.convertNumberToCurrency(calculateTotalPrice());
             if (b.textViewProductCount.getVisibility() != View.VISIBLE) {
@@ -360,12 +357,14 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
                 if (dataProducts.length() <= 0 && vendorsArray.length() <= 0) {
                     b.layoutDataNotFound.getRoot().setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     b.layoutDataNotFound.getRoot().setVisibility(View.GONE);
                 }
 
-
+                if (STRAIGHT_TO_VENDOR) {
+                    b.recyclerViewProducts.setVisibility(View.GONE);
+                    STRAIGHT_TO_VENDOR = false;
+                }
             }
 
             @Override
@@ -393,6 +392,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
     }
 
     private void fetchProductData() {
+
         b.recyclerViewProducts.setVisibility(View.GONE);
         b.progress.setVisibility(View.VISIBLE);
 
@@ -410,6 +410,8 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             @Override
             public void onSuccess(APIWrapper res, String message) throws JSONException {
                 b.recyclerViewProducts.setVisibility(View.VISIBLE);
+
+
                 b.progress.setVisibility(View.GONE);
 
                 products.clear();
@@ -450,12 +452,13 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                 if (products.size() == 0) {
                     b.layoutDataNotFound.getRoot().setVisibility(View.VISIBLE);
                     b.recyclerViewProducts.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     b.layoutDataNotFound.getRoot().setVisibility(View.GONE);
                     b.recyclerViewProducts.setVisibility(View.VISIBLE);
                 }
                 if (isVendorDetailOpen) isVendorDetailOpen = false;
+
+
             }
 
             @Override
@@ -516,14 +519,22 @@ public class ActivityServiceGroceries extends AppCompatActivity {
     }
 
     public static String KEY_SEARCH_PRODUCT_TYPE = "KEY_SEARCH_PRODUCT_TYPE";
+    public static final String KEY_STRAIGHT_TO_VENDOR_DETAIL = "TO_VENDOR_DETAIL";
+    public boolean STRAIGHT_TO_VENDOR = false;
     private String searchProductWithType;
     public static boolean STOP_N_SHOP = false;
 
     private void handleIntentInit() {
         searchProductWithType = getIntent().getStringExtra(KEY_SEARCH_PRODUCT_TYPE);
-        if (searchProductWithType.contentEquals("SSS")) {
+        if (searchProductWithType != null && searchProductWithType.contentEquals("SSS")) {
             STOP_N_SHOP = true;
         }
+
+        String straightToVendorKey = getIntent().getStringExtra(KEY_STRAIGHT_TO_VENDOR_DETAIL);
+        if (straightToVendorKey != null && straightToVendorKey.contentEquals(KEY_STRAIGHT_TO_VENDOR_DETAIL)) {
+            STRAIGHT_TO_VENDOR = true;
+        }
+
     }
 
     /*Cart RecyclerView*/
@@ -948,7 +959,6 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
             @Override
             public void onSuccess(APIWrapper res, String message) throws JSONException {
-
                 initVendorDetailViews(res.getData());
             }
 
@@ -970,8 +980,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
         if (VENDOR_ID != 0) {
             req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().getVendor(VENDOR_ID));
-        }
-        else {
+        } else {
             Constant.displayDialog(
                     ActivityServiceGroceries.this,
                     "INVALID VID",
@@ -1060,8 +1069,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                 tvStock.setText(isAvailableMessage);
                 tvStock.setTextColor(getResources().getColor(R.color.colorAccent4End));
 
-            }
-            else {
+            } else {
 
                 int finalI = i;
                 cardView.setOnClickListener(v -> {
@@ -1082,5 +1090,19 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
         b.layoutVendorDetail.layoutVendorDetailMain.setVisibility(View.VISIBLE);
         b.layoutVendorDetail.progressVendorDetail.setVisibility(View.GONE);
+    }
+
+    private void initStraightToVendor() {
+        if (STRAIGHT_TO_VENDOR) {
+
+
+            Intent i = new Intent(KEY_VENDOR_PRODUCTS);
+            i.putExtra("VENDOR_NAME", getIntent().getStringExtra("VENDOR_NAME"));
+            i.putExtra("VENDOR_ID", getIntent().getIntExtra("VENDOR_ID", 0));
+            sendBroadcast(i);
+//            STRAIGHT_TO_VENDOR = false;
+
+        }
+
     }
 }

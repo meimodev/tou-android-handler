@@ -68,8 +68,8 @@ public class Fragment_User_Home_News extends Fragment {
     @BindView(R.id.layout_click_sss)
     RelativeLayout layoutSSS;
 
-    @BindView(R.id.textInputLayout_search)
-    TextInputLayout tilSearch;
+//    @BindView(R.id.textInputLayout_search)
+//    TextInputLayout tilSearch;
 
     @BindView(R.id.recyclerView_vendors)
     RecyclerView rvVendors;
@@ -118,7 +118,10 @@ public class Fragment_User_Home_News extends Fragment {
                     modelVendors.add(new Fragment_User_Home_Vendors_RecyclerModel(
                             model.getInt("id"),
                             model.getString("image"),
-                            model.getString("name")
+                            model.getString("name"),
+                            model.getString("open"),
+                            model.getString("close"),
+                            model.getBoolean("is_open")
                     ));
                 }
 
@@ -165,21 +168,19 @@ public class Fragment_User_Home_News extends Fragment {
 //        layoutElectronics.setOnClickListener(onClickListener);
         layoutSSS.setOnClickListener(onClickListener);
 
-        EditText et = tilSearch.getEditText();
-        et.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ActivityServiceGroceries.class);
-            intent.putExtra(ActivityServiceGroceries.KEY_SEARCH_PRODUCT_TYPE, "SSS");
-            context.startActivity(intent);
-            v.clearFocus();
-        });
-        et.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                Intent intent = new Intent(context, ActivityServiceGroceries.class);
-                intent.putExtra(ActivityServiceGroceries.KEY_SEARCH_PRODUCT_TYPE, "SSS");
-                context.startActivity(intent);
-                v.clearFocus();
-            }
-        });
+//        EditText et = tilSearch.getEditText();
+//        et.setOnClickListener(v -> {
+//            Intent intent = new Intent(context, ActivityServiceGroceries.class);
+//            intent.putExtra(ActivityServiceGroceries.KEY_SEARCH_PRODUCT_TYPE, "SSS");
+//            context.startActivity(intent);
+//        });
+//        et.setOnFocusChangeListener((v, hasFocus) -> {
+//            if (hasFocus) {
+//                Intent intent = new Intent(context, ActivityServiceGroceries.class);
+//                intent.putExtra(ActivityServiceGroceries.KEY_SEARCH_PRODUCT_TYPE, "SSS");
+//                context.startActivity(intent);
+//            }
+//        });
 
     }
 

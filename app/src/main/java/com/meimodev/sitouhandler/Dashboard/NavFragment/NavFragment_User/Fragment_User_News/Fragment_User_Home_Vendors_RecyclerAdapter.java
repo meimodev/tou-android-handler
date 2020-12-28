@@ -5,6 +5,7 @@
 package com.meimodev.sitouhandler.Dashboard.NavFragment.NavFragment_User.Fragment_User_News;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.meimodev.sitouhandler.Dashboard.Services.Groceries.ActivityServiceGroceries;
 import com.meimodev.sitouhandler.R;
 import com.squareup.picasso.Picasso;
 
@@ -54,9 +56,18 @@ public class Fragment_User_Home_Vendors_RecyclerAdapter extends RecyclerView.Ada
                 .into(holder.image);
 
         holder.tvTitle.setText(model.getName());
+        holder.tvHour.setText(String.format("%s - %s", model.getOpenHour(), model.getCloseHour()));
+
+        if (model.isOpen())
+            Picasso.get().load(R.drawable.ic_open_exit_door_main).into(holder.ivIcon1);
+
 
         holder.layout.setOnClickListener(v -> {
-            Toast.makeText(context, String.valueOf(model.getId()), Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(context, ActivityServiceGroceries.class);
+            i.putExtra(ActivityServiceGroceries.KEY_STRAIGHT_TO_VENDOR_DETAIL, ActivityServiceGroceries.KEY_STRAIGHT_TO_VENDOR_DETAIL);
+            i.putExtra("VENDOR_ID", model.getId());
+            i.putExtra("VENDOR_NAME",model.getName());
+            context.startActivity(i);
         });
 
     }
@@ -70,14 +81,18 @@ public class Fragment_User_Home_Vendors_RecyclerAdapter extends RecyclerView.Ada
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
         ViewGroup layout;
-        ImageView image;
+        ImageView image, ivIcon1, ivIcon2;
         TextView tvTitle;
+        TextView tvHour;
 
         MyViewHolder(@NonNull View itemView) {
             super(itemView);
             layout = itemView.findViewById(R.id.recyclerItem_layout);
             image = itemView.findViewById(R.id.recyclerItem_image);
+            ivIcon1 = itemView.findViewById(R.id.recyclerItem_icon1);
+            ivIcon2 = itemView.findViewById(R.id.recyclerItem_icon2);
             tvTitle = itemView.findViewById(R.id.recyclerItem_title);
+            tvHour = itemView.findViewById(R.id.recyclerItem_hour);
         }
     }
 }
