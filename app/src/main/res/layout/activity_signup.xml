@@ -279,7 +279,7 @@
                                 <TextView
                                     android:id="@+id/text"
                                     android:layout_width="wrap_content"
-                                    android:maxLines="100"
+                                    android:maxLines="10"
                                     android:layout_height="wrap_content"
                                     android:text="Dengan menyentuh tombol 'Daftar Akun' di bawah, anda telah menyetujui syarat dan ketentuan yang berlaku bagi aplikasi ini." />
 

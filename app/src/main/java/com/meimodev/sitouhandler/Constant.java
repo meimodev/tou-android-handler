@@ -218,8 +218,10 @@ public class Constant {
     public static final String PRODUCT_TYPE_COOKIES = "Cookies";
     public static final String PRODUCT_TYPE_SSS = "@SulutStopNShop";
 
-    public static final int VALUE_MAX_NON_MEMBER_PRODUCT_COUNT = 3;
-    public static final int VALUE_MAX_NON_MEMBER_PRODUCT_UNIT = 3;
+    public static final int VALUE_MAX_NON_MEMBER_PRODUCT_COUNT = 999;
+    public static final int VALUE_MAX_NON_MEMBER_PRODUCT_UNIT = 999;
+
+    public static final String DEV_WA_NUMBER = "+6282190090638";
 
     ///////////////////////////////////////////////////////////////////////////
     // Minor Univ Methods

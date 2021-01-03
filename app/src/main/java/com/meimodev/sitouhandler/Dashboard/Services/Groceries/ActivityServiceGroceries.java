@@ -641,12 +641,12 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             if (vId != lastProduct.getVendorId()) {
                 Constant.displayDialog(
                         ActivityServiceGroceries.this,
-                        "Pesanan hanya bisa dari 1 partner",
+                        "Pesanan hanya bisa dari 1 tempat",
                         "Dikarenakan produk yang di masukkan dalam keranjang anda sebelumnya dari '"
-                                + lastProduct.getVendorName() + "' disarankan untuk produk selanjutnya juga dari '" + lastProduct.getVendorName() + "' " +
+                                + lastProduct.getVendorName() + "' disarankan untuk produk selanjutnya juga dari tempat yang sama" +
                                 System.lineSeparator() +
                                 System.lineSeparator() +
-                                "Jika ingin menambahkan produk dari partner lain, silahkan lakukan pemesanan produk dalam keranjang yang baru",
+                                "Jika ingin menambahkan produk dari partner lain, silahkan lakukan pemesanan produk dengan pesanan baru",
                         (dialog, which) -> {
                         }
                 );
@@ -1048,7 +1048,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
             VendorDetail_Product_Header_Model model =
                     new VendorDetail_Product_Header_Model(category.getInt("section"));
-            model.setName(category.getString("name"));
+            model.setName(category.getString("name") + " ("+category.getJSONArray("items").length()+")");
             headers.add(model);
         }
 

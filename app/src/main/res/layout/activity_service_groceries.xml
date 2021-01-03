@@ -384,10 +384,12 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="16dp"
                     android:fontFamily="@font/roboto"
-                    android:text="Rp. 600.000.000"
+                    tools:text="Rp. 600.000.000"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:drawableTint="@color/colorPrimary"
+                    android:drawableStart="@drawable/ic_cart" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView_cart"

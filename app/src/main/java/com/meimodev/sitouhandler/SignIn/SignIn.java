@@ -41,6 +41,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 
@@ -61,7 +62,6 @@ public class SignIn extends AppCompatActivity {
 
         Constant.changeStatusColor(this, R.color.background);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
 
 //        Check if device already logged in
         if (Guru.getInt(Constant.KEY_USER_ID, 0) != 0) {
@@ -101,9 +101,9 @@ public class SignIn extends AppCompatActivity {
         if (b.textInputLayoutPassword.getError() != null) b.textInputLayoutPassword.setError(null);
     }
 
-    void signIn() {
+   private void signIn() {
         IssueRequestHandler requestHandler = new IssueRequestHandler(b.getRoot());
-        Call call = RetrofitClient.getInstance(null).getApiServices().signIn(
+        Call<ResponseBody> call = RetrofitClient.getInstance(null).getApiServices().signIn(
                 b.editTextPhone.getText().toString().trim(),
                 b.editTextPassword.getText().toString().trim()
         );

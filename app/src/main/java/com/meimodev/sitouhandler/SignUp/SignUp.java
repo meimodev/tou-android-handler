@@ -23,6 +23,7 @@ import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.Validator;
+import com.meimodev.sitouhandler.databinding.ActivitySignupBinding;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
@@ -30,6 +31,7 @@ import org.json.JSONException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public class SignUp extends AppCompatActivity {
@@ -38,34 +40,37 @@ public class SignUp extends AppCompatActivity {
 
     //    @BindView(R.id.textInputLayout_email)
 //    TextInputLayout tilEmail;
-    @BindView(R.id.textInputLayout_phone)
-    TextInputLayout tilPhone;
-    @BindView(R.id.textInputLayout_password)
-    TextInputLayout tilPassword;
-    @BindView(R.id.textInputLayout_passwordConfirm)
-    TextInputLayout tilPasswordConfirm;
+//    @BindView(R.id.textInputLayout_phone)
+//    TextInputLayout tilPhone;
+//    @BindView(R.id.textInputLayout_password)
+//    TextInputLayout tilPassword;
+//    @BindView(R.id.textInputLayout_passwordConfirm)
+//    TextInputLayout tilPasswordConfirm;
+//
+//    @BindView(R.id.textInputLayout_firstName)
+//    TextInputLayout tilFirstName;
+//    @BindView(R.id.textInputLayout_lastName)
+//    TextInputLayout tilLastName;
+//    @BindView(R.id.textInputLayout_dob)
+//    TextInputLayout tilDOB;
+//    @BindView(R.id.textInputLayout_sex)
+//    TextInputLayout tilSex;
+//
+//    @BindView(R.id.btn_signUp)
+//    Button btnSignUp;
 
-    @BindView(R.id.textInputLayout_firstName)
-    TextInputLayout tilFirstName;
-    @BindView(R.id.textInputLayout_lastName)
-    TextInputLayout tilLastName;
-    @BindView(R.id.textInputLayout_dob)
-    TextInputLayout tilDOB;
-    @BindView(R.id.textInputLayout_sex)
-    TextInputLayout tilSex;
-
-    @BindView(R.id.btn_signUp)
-    Button btnSignUp;
-
-    private boolean IS_SIGNUP_OK = false;
+//    private boolean IS_SIGNUP_OK = false;
 
     Validator validator;
+
+    private ActivitySignupBinding b;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
-        ButterKnife.bind(this);
+        b = ActivitySignupBinding.inflate(getLayoutInflater());
+        setContentView(b.getRoot());
+
         Constant.changeStatusColor(this, R.color.background);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
@@ -83,8 +88,8 @@ public class SignUp extends AppCompatActivity {
 
         validator = new Validator(this);
 
-        tilSex.getEditText().setShowSoftInputOnFocus(false);
-        tilSex.getEditText().setFocusable(false);
+        b.textInputLayoutSex.getEditText().setShowSoftInputOnFocus(false);
+        b.textInputLayoutSex.getEditText().setFocusable(false);
     }
 
     @OnClick(R.id.cardView_termsCondition)
@@ -99,40 +104,40 @@ public class SignUp extends AppCompatActivity {
     @OnClick(R.id.btn_signUp)
     void onClickSignUp() {
 
-        if (validator.validatePhone(tilPhone) != null) return;
+        if (validator.validatePhone(b.textInputLayoutPhone) != null) return;
 
-        if (validator.validatePassword(tilPassword) != null) return;
+        if (validator.validatePassword(b.textInputLayoutPassword) != null) return;
 
-        tilPasswordConfirm.setError(
+        b.textInputLayoutPasswordConfirm.setError(
                 StringUtils.equals(
-                        tilPassword.getEditText().getText().toString(),
-                        tilPasswordConfirm.getEditText().getText().toString())
+                        b.textInputLayoutPassword.getEditText().getText().toString(),
+                        b.textInputLayoutPasswordConfirm.getEditText().getText().toString())
                         ? null : "tidak sama dengan password"
         );
-        if (tilPasswordConfirm.getError() != null) return;
+        if (b.textInputLayoutPasswordConfirm.getError() != null) return;
 
-        if (validator.validateName(tilFirstName) != null) return;
+        if (validator.validateName(b.textInputLayoutFirstName) != null) return;
 
-        if (validator.validateName(tilLastName) != null) return;
+        if (validator.validateName(b.textInputLayoutLastName) != null) return;
 
-        if (validator.validateEmpty(tilDOB) != null) return;
+        if (validator.validateEmpty(b.textInputLayoutDob) != null) return;
 
-        if (validator.validateSex(tilSex) != null) return;
+        if (validator.validateSex(b.textInputLayoutSex) != null) return;
 
         sendData(
-                tilPhone.getEditText().getText().toString(),
-                tilPassword.getEditText().getText().toString(),
-                tilFirstName.getEditText().getText().toString(),
-                tilLastName.getEditText().getText().toString(),
-                tilDOB.getEditText().getText().toString(),
-                tilSex.getEditText().getText().toString()
+                b.textInputLayoutPhone.getEditText().getText().toString(),
+                b.textInputLayoutPassword.getEditText().getText().toString(),
+                b.textInputLayoutFirstName.getEditText().getText().toString(),
+                b.textInputLayoutLastName.getEditText().getText().toString(),
+                b.textInputLayoutDob.getEditText().getText().toString(),
+                b.textInputLayoutSex.getEditText().getText().toString()
         );
     }
 
     void sendData(String phone, String password, String firstName, String lastName, String dob, String sex) {
 
         IssueRequestHandler req = new IssueRequestHandler(findViewById(android.R.id.content));
-        Call call = RetrofitClient.getInstance(null).getApiServices().signUpAccount(
+        Call<ResponseBody> call = RetrofitClient.getInstance(null).getApiServices().signUpAccount(
                 phone, password, firstName, lastName, dob, sex
         );
         req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
@@ -159,7 +164,7 @@ public class SignUp extends AppCompatActivity {
 
                 }
                 else if (message.contains("digunakan")) {
-                    tilPhone.setError(message);
+                    b.textInputLayoutPhone.setError(message);
                     Constant.displayDialog(
                             SignUp.this,
                             "Perhatian!",
@@ -169,7 +174,7 @@ public class SignUp extends AppCompatActivity {
                     );
                 }
                 else if (message.contains("Tanggal tidak valid")) {
-                    tilDOB.setError(message);
+                    b.textInputLayoutDob.setError(message);
                     Constant.displayDialog(
                             SignUp.this,
                             "Perhatian!",
@@ -191,7 +196,7 @@ public class SignUp extends AppCompatActivity {
 
     void startConfirmationActivity() {
         Intent i = new Intent(SignUp.this, ConfirmAccount.class);
-        i.putExtra("phone", tilPhone.getEditText().getText().toString());
+        i.putExtra("phone", b.textInputLayoutPhone.getEditText().getText().toString());
         startActivity(i);
         finish();
     }

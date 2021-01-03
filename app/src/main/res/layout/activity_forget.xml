@@ -70,7 +70,7 @@
                 app:layout_constraintTop_toBottomOf="@id/layout_info">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout_email"
+                    android:id="@+id/textInputLayout_phone"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                         android:id="@+id/editText_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
+                        android:inputType="number"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -162,6 +162,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:maxLines="10"
                         android:text="Proses pemulihan akun membutuhkan waktu 24 jam hingga 48 jam semenjak pengajuan pemulihan akun diterima. Anda akan dihubungi melalui WhatsApp / SMS / Telepon / E-mail saat akun telah berhasil dipulihkan."
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

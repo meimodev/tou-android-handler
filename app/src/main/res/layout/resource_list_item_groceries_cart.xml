@@ -3,20 +3,22 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginEnd="16dp"
     android:animateLayoutChanges="true"
     android:orientation="horizontal">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/recyclerItem_delete"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackground">
+        android:foreground="?attr/selectableItemBackground"
+        app:cardElevation="0dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,13 +31,14 @@
             android:textColor="@color/colorAccent4End"
             android:textSize="20sp" />
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
         app:cardCornerRadius="2dp"
+        app:cardElevation="0dp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -52,9 +55,9 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="Some Products Name"
                 android:textColor="@color/TextView_Label_Dark"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                tools:text="Some Products Name" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,7 +67,7 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/recyclerItem_sub"
-                    android:layout_width="0dp"
+                    android:layout_width="8dp"
                     android:layout_height="match_parent"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
@@ -92,9 +95,9 @@
                     android:maxLines="5"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:text="100 Ikat"
                     android:textAlignment="center"
-                    android:textColor="@color/TextView_Label_Light" />
+                    android:textColor="@color/TextView_Label_Light"
+                    tools:text="100 Ikat" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/recyclerItem_add"
@@ -128,13 +131,18 @@
                     android:maxLines="3"
                     android:paddingStart="4dp"
                     android:paddingEnd="4dp"
-                    android:text="Rp. 100.000.000"
-                    android:textColor="@color/TextView_Label_Light" />
+                    android:textColor="@color/TextView_Label_Light"
+                    tools:text="Rp. 100.000.000" />
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:background="@color/backGround_fragment" />
+
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>
