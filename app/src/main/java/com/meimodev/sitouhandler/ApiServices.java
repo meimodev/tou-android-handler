@@ -416,7 +416,7 @@ public interface ApiServices {
      */
 
     @GET("vendor/{id}")
-    Call<ResponseBody> getVendor(@Path("id") int vendorId);
+    Call<ResponseBody> getVendor(@Path("id") int vendorId, @Query("categorize") boolean isCategorize);
 
     @GET("vendors")
     Call<ResponseBody> getVendors(@Query("minimal") boolean minimal);

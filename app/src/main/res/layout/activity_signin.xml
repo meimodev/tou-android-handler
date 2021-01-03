@@ -62,7 +62,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:hint="Nomor Telepon"
-                    app:boxBackgroundColor="@null"
+                    app:boxBackgroundColor="@color/transparent"
                     app:endIconMode="clear_text"
                     app:errorEnabled="true">
 
@@ -81,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    app:boxBackgroundColor="@null"
+                    app:boxBackgroundColor="@color/transparent"
                     app:endIconMode="password_toggle"
                     app:errorEnabled="true">
 

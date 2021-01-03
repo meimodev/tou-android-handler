@@ -58,8 +58,9 @@ public class Fragment_User_Home_Vendors_RecyclerAdapter extends RecyclerView.Ada
         holder.tvTitle.setText(model.getName());
         holder.tvHour.setText(String.format("%s - %s", model.getOpenHour(), model.getCloseHour()));
 
-        if (model.isOpen())
-            Picasso.get().load(R.drawable.ic_open_exit_door_main).into(holder.ivIcon1);
+        if (model.isOpen()){
+            holder.ivIcon1.setImageResource(R.drawable.ic_open_exit_door_main);
+        }
 
 
         holder.layout.setOnClickListener(v -> {

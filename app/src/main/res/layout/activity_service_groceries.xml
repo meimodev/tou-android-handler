@@ -72,7 +72,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/montserrat_black"
                             android:padding="16dp"
-                            android:text="MULAI BELANJA"
+                            tools:text="MULAI BELANJA"
                             android:textAlignment="center"
                             android:textColor="@android:color/white"
                             android:textStyle="bold" />
@@ -124,10 +124,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:id="@+id/layout_title"
-                android:layout_width="match_parent"
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_headerBackground"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.17" />
+
+            <LinearLayout
+                android:id="@+id/layout_headerBackground"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
                 android:animateLayoutChanges="true"
                 android:orientation="vertical"
                 android:visibility="gone"
@@ -135,16 +142,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:text="Bahan Makanan Online"
-                    android:textAlignment="center"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    android:layout_marginBottom="8dp"-->
+<!--                    android:fontFamily="@font/montserrat_regular"-->
+<!--                    android:text="Bahan Makanan Online"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textStyle="bold" />-->
 
             </LinearLayout>
 
@@ -154,18 +161,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:elevation="3dp"
-                android:hint="Cari Produk"
+                android:elevation="2dp"
+                android:hint="Cari Produk / Patner"
                 app:boxBackgroundColor="@null"
                 app:boxStrokeColor="@color/colorPrimary"
                 app:endIconMode="clear_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:startIconTint="@color/colorPrimary"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layout_title"
+                app:layout_constraintTop_toBottomOf="@id/layout_headerBackground"
                 app:startIconDrawable="@drawable/ic_magnify">
 
                 <com.meimodev.sitouhandler.CustomWidget.CustomEditText
@@ -193,6 +199,7 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -265,8 +272,10 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="match_parent"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="6dp"
                             android:src="@drawable/ic_cart_outline" />
 
                         <com.yy.mobile.rollingtextview.RollingTextView
@@ -288,11 +297,12 @@
                             android:drawablePadding="4dp"
                             android:ellipsize="end"
                             android:gravity="start|center_vertical"
+                            android:fontFamily="@font/montserrat"
                             android:maxLines="1"
-                            android:text="Keranjang Belanja Kosong"
+                            android:text="Keranjang Kosong"
                             android:textAlignment="viewStart"
                             android:textColor="@android:color/white"
-                            android:textSize="15sp" />
+                            android:textSize="13sp" />
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/card_divider"

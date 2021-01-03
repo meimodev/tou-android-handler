@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -28,6 +30,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -77,7 +80,7 @@ public class Constant {
     public static final String KEY_COLUMN_NAME_INDEX = "Column_Name_Index";
     public static final String KEY_MEMBER_DUPLICATE_CHECK = "Member_Duplicate_Check";
 
-//    public static final String ROOT_TRANSFER_PROTOCOL = "https";
+    //    public static final String ROOT_TRANSFER_PROTOCOL = "https";
 //    public static final String ROOT_IP = "tousystem.com";
 //    public static final String ROOT_PORT = "";
 //
@@ -228,17 +231,13 @@ public class Constant {
 
         if (hour > 0 && hour < 11) {
             postfix = ", Pagi";
-        }
-        else if (hour >= 12 && hour < 15) {
+        } else if (hour >= 12 && hour < 15) {
             postfix = ", Siang";
-        }
-        else if (hour >= 15 && hour < 19) {
+        } else if (hour >= 15 && hour < 19) {
             postfix = ", Sore";
-        }
-        else if (hour >= 19 && hour <= 23) {
+        } else if (hour >= 19 && hour <= 23) {
             postfix = ", Malam";
-        }
-        else {
+        } else {
             postfix = ", Subuh";
         }
 
@@ -251,10 +250,9 @@ public class Constant {
         if (s.length() == 1) s = "0".concat(s);
 
         if (!displayWithSecond) {
-            return "Pukul " + h + " : " + m;
-        }
-        else {
-            return "Pukul, " + h + " : " + m + " '" + s;
+            return "Pukul " + h + " : " + m + postfix;
+        } else {
+            return "Pukul, " + h + " : " + m + " '" + s + postfix;
         }
     }
 
@@ -265,8 +263,7 @@ public class Constant {
             tv.setVisibility(View.INVISIBLE);
             tv.setVisibility(View.VISIBLE);
 
-        }
-        else {
+        } else {
             tv.setBackgroundColor(context.getResources().getColor(R.color.ButtonText_LightGrey));
             tv.setTextColor(context.getResources().getColor(R.color.colorAccent));
         }
@@ -392,8 +389,7 @@ public class Constant {
 
         if (customButtonAdd.getSelectedList() != null && !customButtonAdd.getSelectedList().isEmpty()) {
             dataModel = customButtonAdd.getSelectedList();
-        }
-        else if (customButtonAdd.getSelectedView() != null && !customButtonAdd.getSelectedList().isEmpty()) {
+        } else if (customButtonAdd.getSelectedView() != null && !customButtonAdd.getSelectedList().isEmpty()) {
             dataView = customButtonAdd.getSelectedView();
             Log.e(TAG, "encodeMemberData: ERROR, passing selected view not yet supported! will return null");
         }
@@ -402,8 +398,7 @@ public class Constant {
             for (Adding_RecyclerModel m : dataModel) {
                 if (m.getId() != 0) {
                     res.append(":").append(m.getId()).append(":");
-                }
-                else {
+                } else {
                     res.append(":")
                             .append("-")
                             .append(m.getName())
@@ -420,8 +415,7 @@ public class Constant {
                             .append(":");
                 }
             }
-        }
-        else if (dataView != null && !dataView.isEmpty()) {
+        } else if (dataView != null && !dataView.isEmpty()) {
             Log.e(TAG, "encodeMemberData: ERROR, passing selected view not yet supported! will return null");
         }
 
@@ -562,7 +556,7 @@ public class Constant {
      * <p>
      * If the app does not has permission then the user will be prompted to grant permissions
      *
-     * @param activity
+     * @param activity the activity it running on
      */
     public static void verifyStoragePermissions(Activity activity) {
         // Check if we have write permission
@@ -622,5 +616,13 @@ public class Constant {
             i.setData(Uri.parse(url));
         }
         context.startActivity(i);
+    }
+
+    public static void applyGrayscaleToImage(ImageView imageView) {
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);
+        ColorMatrixColorFilter grayscale = new ColorMatrixColorFilter(matrix);
+
+        imageView.setColorFilter(grayscale);
     }
 }

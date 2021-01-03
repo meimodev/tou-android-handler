@@ -5,14 +5,12 @@
 package com.meimodev.sitouhandler.Dashboard.Services.Groceries;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,7 +25,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,9 +33,7 @@ import android.widget.TextView;
 
 import com.github.squti.guru.Guru;
 import com.google.android.material.card.MaterialCardView;
-import com.google.gson.JsonObject;
 import com.meimodev.sitouhandler.Constant;
-import com.meimodev.sitouhandler.Dashboard.Services.ActivityServiceLocation;
 import com.meimodev.sitouhandler.Dashboard.Services.ActivityServiceOrderType;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
@@ -46,17 +41,22 @@ import com.meimodev.sitouhandler.Issue.OnRecyclerItemOperationListener;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.databinding.ActivityServiceGroceriesBinding;
+import com.shuhart.stickyheader.StickyHeaderItemDecorator;
 import com.squareup.picasso.Picasso;
 import com.yy.mobile.rollingtextview.CharOrder;
-import com.yy.mobile.rollingtextview.RollingTextView;
 import com.yy.mobile.rollingtextview.strategy.Strategy;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -141,6 +141,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
     private String recentDesc, recentPrice;
 
+    @SuppressLint("SetTextI18n")
     private void openCart() {
 
         ConstraintLayout.LayoutParams params = ((ConstraintLayout.LayoutParams) b.guideCart.getLayoutParams());
@@ -190,7 +191,8 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             b.layoutNotFound.getRoot().setVisibility(View.VISIBLE);
             return;
         } else {
-            b.textViewCartTotalText.setText(String.format("%d Produk", productsInCart.size()));
+            String s = productsInCart.size() + " Produk";
+            b.textViewCartTotalText.setText(s);
             b.textViewCartTotalText.setVisibility(View.VISIBLE);
             b.textViewCartTotal.setVisibility(View.VISIBLE);
             b.recyclerViewCart.setVisibility(View.VISIBLE);
@@ -555,7 +557,6 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         b.recyclerViewCart.setItemAnimator(new DefaultItemAnimator());
         b.recyclerViewCart.setAdapter(adapterCart);
     }
-
 
     public OnRecyclerItemOperationListener.ItemClickListener productClickListener = data -> {
 
@@ -979,7 +980,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         });
 
         if (VENDOR_ID != 0) {
-            req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().getVendor(VENDOR_ID));
+            req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().getVendor(VENDOR_ID, true));
         } else {
             Constant.displayDialog(
                     ActivityServiceGroceries.this,
@@ -1006,7 +1007,6 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         String vOpen = operation.getString("open_hour");
         String vClose = operation.getString("close_hour");
         String vImageUrl = data.getString("image");
-        JSONArray products = data.getJSONArray("products");
 
         b.layoutVendorDetail.textViewVendorName.setText(vName);
         b.layoutVendorDetail.textViewVendorQuote.setText(isOpen ? "(BUKA)" : "(TUTUP)");
@@ -1020,81 +1020,85 @@ public class ActivityServiceGroceries extends AppCompatActivity {
             b.layoutVendorDetail.imageViewVendorImage.setColorFilter(grayscale);
         }
 
-        LinearLayout llProducts = b.layoutVendorDetail.layoutVendorProducts;
-        llProducts.removeAllViews();
+//        LinearLayout llProducts = b.layoutVendorDetail.layoutVendorProducts;
+//        llProducts.removeAllViews();
 
 
-        int productsLengthPlusMargin = products.length();
-        for (int i = 0; i <= productsLengthPlusMargin; i++) {
-            View view = LayoutInflater.from(this).inflate(
-                    R.layout.resource_list_item_vendor_detail_product, llProducts, false);
+        /*
+         * Setting up the recycler view with sticky header
+         */
+        JSONArray products = data.getJSONArray("products");
+        JSONArray categories = data.getJSONArray("categories");
 
-            TextView tvName = view.findViewById(R.id.textView_name);
-            TextView tvPrice = view.findViewById(R.id.textView_price);
-            TextView tvStock = view.findViewById(R.id.textView_stock);
-            ImageView imageView = view.findViewById(R.id.imageView);
-            MaterialCardView cardView = view.findViewById(R.id.cardView_main);
-            RelativeLayout layout = view.findViewById(R.id.layout_main);
+        initVendorDetailProducts(products, categories, vId, vName);
 
-            if (i == productsLengthPlusMargin) {
-                cardView.setClickable(false);
-                cardView.setVisibility(View.INVISIBLE);
-                layout.setVisibility(View.INVISIBLE);
-                llProducts.addView(view, i);
-                break;
-            }
+    }
 
-            JSONObject obj = products.getJSONObject(i);
-            int id = obj.getInt("id");
-            String name = obj.getString("name");
-            int price = Integer.parseInt(obj.getString("price"));
-            String unit = obj.getString("unit");
-            int stock = Integer.parseInt(obj.getString("stock"));
-            String imageUrl = obj.getString("image");
-            boolean isAvailable = obj.getBoolean("is_available");
-            String isAvailableMessage = obj.getString("is_available_message");
+    private void initVendorDetailProducts(JSONArray products, JSONArray categories,
+                                          int vId, String vName) throws JSONException {
 
-            tvName.setText(name);
-            tvPrice.setText(String.format("%s / %s", Constant.convertNumberToCurrency(price), unit));
-            tvStock.setText(String.format("Tersisa ± %s %s", stock, unit));
-            Picasso.get().load(imageUrl).placeholder(R.drawable.ic_sss_logo_icon).fit().into(imageView);
 
-            if (!isAvailable) {
 
-                imageView.setColorFilter(grayscale);
-                cardView.setCardBackgroundColor(getResources().getColor(R.color.disabled_background));
-                ImageView ivButton = view.findViewById(R.id.imageView_button);
-                ivButton.setVisibility(View.INVISIBLE);
-                cardView.setClickable(false);
-                tvStock.setText(isAvailableMessage);
-                tvStock.setTextColor(getResources().getColor(R.color.colorAccent4End));
+        ArrayList<VendorDetail_Product_Header_Model> headers = new ArrayList<>();
+        ArrayList<VendorDetail_Product_Child_Model> childs = new ArrayList<>();
 
-            } else {
+        //gather header
+        for (int i = 0; i < categories.length(); i++) {
+            JSONObject category = categories.getJSONObject(i);
 
-                int finalI = i;
-                cardView.setOnClickListener(v -> {
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("ID", id);
-                    bundle.putString("NAME", name);
-                    bundle.putInt("PRICE", price);
-                    bundle.putString("UNIT", unit);
-                    bundle.putInt("POS", finalI);
-                    bundle.putInt("VENDOR_ID", vId);
-                    bundle.putString("VENDOR_NAME", vName);
-                    productClickListener.itemClick(bundle);
-                });
-            }
-
-            llProducts.addView(view, i);
+            VendorDetail_Product_Header_Model model =
+                    new VendorDetail_Product_Header_Model(category.getInt("section"));
+            model.setName(category.getString("name"));
+            headers.add(model);
         }
+
+        //gather child
+        for (int i = 0; i < products.length(); i++) {
+            JSONObject product = products.getJSONObject(i);
+
+            VendorDetail_Product_Child_Model model = new VendorDetail_Product_Child_Model(
+                    product.getInt("id"),
+                    product.getString("name"),
+                    product.getString("image"),
+                    product.getString("price"),
+                    product.getString("unit"),
+                    product.getBoolean("is_available"),
+                    product.getString("is_available_message")
+            );
+            model.setVendorId(vId);
+            model.setVendorName(vName);
+            model.setSection(product.getInt("section"));
+            childs.add(model);
+        }
+
+
+        //merge Header & child
+        ArrayList<SectionVendorProducts> arrayListMain;
+        arrayListMain = new ArrayList<>(childs);
+        for (VendorDetail_Product_Header_Model header : headers) {
+            arrayListMain.add(header.sectionPosition(), header);
+        }
+
+        SectionVendorProductsAdapter adapter = new SectionVendorProductsAdapter(
+                arrayListMain,
+                this,
+                productClickListener
+        );
+
+        RecyclerView recyclerView = b.layoutVendorDetail.recyclerViewVendorProducts;
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        StickyHeaderItemDecorator decorator = new StickyHeaderItemDecorator(adapter);
+        decorator.attachToRecyclerView(recyclerView);
 
         b.layoutVendorDetail.layoutVendorDetailMain.setVisibility(View.VISIBLE);
         b.layoutVendorDetail.progressVendorDetail.setVisibility(View.GONE);
+
     }
+
 
     private void initStraightToVendor() {
         if (STRAIGHT_TO_VENDOR) {
-
 
             Intent i = new Intent(KEY_VENDOR_PRODUCTS);
             i.putExtra("VENDOR_NAME", getIntent().getStringExtra("VENDOR_NAME"));

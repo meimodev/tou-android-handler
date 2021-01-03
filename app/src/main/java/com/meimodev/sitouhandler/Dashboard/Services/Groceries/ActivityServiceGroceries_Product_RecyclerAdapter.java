@@ -63,9 +63,6 @@ public class ActivityServiceGroceries_Product_RecyclerAdapter extends RecyclerVi
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         holder.setIsRecyclable(false);
 
-        ColorMatrix matrix = new ColorMatrix();
-        matrix.setSaturation(0);
-        ColorMatrixColorFilter grayscale = new ColorMatrixColorFilter(matrix);
 
         ActivityServiceGroceries.HelperModelProduct model = products.get(position);
 
@@ -86,14 +83,12 @@ public class ActivityServiceGroceries_Product_RecyclerAdapter extends RecyclerVi
 
             if (!model.isAvailable()) {
                 pHolder.cvMain.setClickable(false);
-                pHolder.imageView.setColorFilter(grayscale);
+                Constant.applyGrayscaleToImage( pHolder.imageView);
                 pHolder.tvNote.setText(model.getIsAvailableMessage());
                 pHolder.tvNote.setTextColor(context.getResources().getColor(R.color.colorPrimary));
                 pHolder.cvAdd.setClickable(false);
                 pHolder.cvAdd.setCardBackgroundColor(context.getResources().getColor(R.color.disabled_background));
-                pHolder.cvMain.setOnClickListener(v -> {
-                    Toast.makeText(context, "Produk ini sedang tidak tersedia -_-", Toast.LENGTH_LONG).show();
-                });
+                pHolder.cvMain.setOnClickListener(v -> Toast.makeText(context, "Produk ini sedang tidak tersedia -_-", Toast.LENGTH_LONG).show());
                 return;
             }
 
@@ -123,7 +118,7 @@ public class ActivityServiceGroceries_Product_RecyclerAdapter extends RecyclerVi
 
 
             if (!model.isVendorOpen()) {
-                pHolder.imageView.setColorFilter(grayscale);
+                Constant.applyGrayscaleToImage(pHolder.imageView);
                 pHolder.cvMain.setClickable(false);
                 pHolder.tvPrice.setText(String.format("%s (Tutup)", model.getName()));
             }
