@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.RetrofitClient;
+import com.meimodev.sitouhandler.SignIn.SignIn;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,13 +56,20 @@ public class APIUtils {
         } else if (response.code() == HttpURLConnection.HTTP_UNAVAILABLE){
             Constant.displayDialog(
                     context,
-                    "Sistem Dalam Perbaikan",
-                    "Tidak dapat mengakses data dikarenakan system sedang dalam perawatan, silahkan kembali beberapa saat lagi",
+                    "Sistem Dalam Perawatan",
+                    "Silahkan kembali beberapa saat lagi",
                     false,
                     (dialog, which) -> {
                     },
                     null,
-                    dialog -> Constant.signOut(context)
+                    dialog -> {
+                        if (context.getClass().getSimpleName().contentEquals(SignIn.class.getSimpleName()) ){
+                            ((Activity) context).finishAffinity();
+                            return;
+                        }
+
+                        Constant.signOut(context);
+                    }
             );
         }
         else {

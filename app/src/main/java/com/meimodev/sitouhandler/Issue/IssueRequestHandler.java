@@ -112,11 +112,11 @@ public class IssueRequestHandler {
                     APIWrapper res = APIUtils.parseWrapper(context, response.body());
 
                     if (!res.isError()) {
-                        Log.e(TAG, "onResponse: "
-                                + "(Class)" + context.getClass().getSimpleName() + ": "
-                                + intention + ": "
-                                + "response ERROR = FALSE -> "
-                                + "response message: " + res.getMessage());
+//                        Log.e(TAG, "onResponse: "
+//                                + "(Class)" + context.getClass().getSimpleName() + ": "
+//                                + intention + ": "
+//                                + "response ERROR = FALSE -> "
+//                                + "response message: " + res.getMessage());
 
                         if (onRequestHandler != null) {
                             try {

@@ -25,6 +25,12 @@ import retrofit2.http.Query;
 
 public interface ApiServices {
 
+    @GET("system-status")
+    Call<ResponseBody> checkSystemStatus(
+            @Query("type") String type,
+            @Query("version") String version
+    );
+
     @FormUrlEncoded
     @POST("sign-in")
     Call<ResponseBody> signIn(
@@ -41,7 +47,6 @@ public interface ApiServices {
             @Field("last_name") String lastName,
             @Field("date_of_birth") String dob,
             @Field("sex") String sex
-
     );
 
     @FormUrlEncoded

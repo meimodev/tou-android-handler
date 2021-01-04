@@ -63,6 +63,8 @@ public class SignIn extends AppCompatActivity {
         Constant.changeStatusColor(this, R.color.background);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
+        checkSystemStatus();
+
 //        Check if device already logged in
         if (Guru.getInt(Constant.KEY_USER_ID, 0) != 0) {
             startActivity(new Intent(this, Dashboard.class));
@@ -94,6 +96,32 @@ public class SignIn extends AppCompatActivity {
 //        initHelper();
     }
 
+    private void checkSystemStatus() {
+        b.layoutProgressHolder.setVisibility(View.INVISIBLE);
+        IssueRequestHandler req = new IssueRequestHandler(this);
+        Call<ResponseBody> call = RetrofitClient.getInstance(null).getApiServices().checkSystemStatus(
+                "android",
+                Constant.APP_VERSION
+        );
+        req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
+            @Override
+            public void onTry() {
+
+            }
+
+            @Override
+            public void onSuccess(APIWrapper res, String message) throws JSONException {
+
+            }
+
+            @Override
+            public void onRetry() {
+
+            }
+        });
+        req.enqueue(call);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -101,7 +129,7 @@ public class SignIn extends AppCompatActivity {
         if (b.textInputLayoutPassword.getError() != null) b.textInputLayoutPassword.setError(null);
     }
 
-   private void signIn() {
+    private void signIn() {
         IssueRequestHandler requestHandler = new IssueRequestHandler(b.getRoot());
         Call<ResponseBody> call = RetrofitClient.getInstance(null).getApiServices().signIn(
                 b.editTextPhone.getText().toString().trim(),
@@ -126,8 +154,7 @@ public class SignIn extends AppCompatActivity {
                     );
                     b.textInputLayoutPhone.setError(message);
                     b.btnConfirm.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     proceed(res);
                 }
             }
@@ -176,8 +203,7 @@ public class SignIn extends AppCompatActivity {
             Guru.putString(Constant.KEY_CHURCH_KELURAHAN, churchObj.getString("church_kelurahan"));
             Guru.putInt(Constant.KEY_CHURCH_COLUMN_COUNT, churchObj.getInt("column_count"));
 
-        }
-        else {
+        } else {
             Log.e(TAG, "proceed: member is USER");
             Guru.putString(Constant.KEY_MEMBER_CHURCH_POSITION, Constant.ACCOUNT_TYPE_USER);
         }
@@ -188,7 +214,7 @@ public class SignIn extends AppCompatActivity {
 
     }
 
-    void validateSignIn() {
+    private void validateSignIn() {
 
         b.editTextPhone.clearFocus();
         b.editTextPassword.clearFocus();
@@ -206,25 +232,24 @@ public class SignIn extends AppCompatActivity {
 
     }
 
-    void signUp() {
+    private void signUp() {
         b.editTextPhone.setText("");
         b.editTextPassword.setText("");
         if (!CHURCH_CREATION) {
             startActivity(new Intent(this, SignUp.class));
             tapCount = 0;
-        }
-        else {
+        } else {
             startActivity(new Intent(this, ApplyChurch.class));
         }
     }
 
-    void forget() {
+    private void forget() {
         b.editTextPhone.setText("");
         b.editTextPassword.setText("");
         startActivity(new Intent(this, ForgetAccount.class));
     }
 
-    void confirm() {
+    private void confirm() {
         Intent i = new Intent(this, ConfirmAccount.class);
         i.putExtra("phone", b.textInputLayoutPhone.getEditText().getText().toString());
         startActivity(i);

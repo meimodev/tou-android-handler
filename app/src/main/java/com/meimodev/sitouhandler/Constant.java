@@ -91,6 +91,8 @@ public class Constant {
     public static final String ROOT_PROTOCOL_IP_PORT =
             ROOT_TRANSFER_PROTOCOL + "://" + ROOT_IP + ROOT_PORT;
 
+    public static final String APP_VERSION = "1.1.20";
+
     public static final int RESERVED_USER_ID = 1;
 
     public static final String ROOT_URL_API = ROOT_PROTOCOL_IP_PORT + "/api/";
