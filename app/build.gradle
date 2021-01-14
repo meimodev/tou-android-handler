@@ -15,21 +15,20 @@ android {
     }
 
 //    Remove the build tools version later when internet is connected
-    buildToolsVersion "30.0.3"
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.meimodev.sitouhandler"
         minSdkVersion 21
         //noinspection OldTargetApi
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+//        versionCode 1
+//        versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        def buildDateStamp = new Date().format("yyMMddHHmm").toInteger()
-        versionCode buildDateStamp
-        versionName "$buildDateStamp"
-        buildConfigField "String", "BUILD_DATE_STAMP", "\"$buildDateStamp\""
+//        def buildDateStamp = new Date().format("yyMMddHHmm").toInteger()
+        versionCode 2009231932
+        versionName '1.2.4'
+//        buildConfigField "String", "BUILD_DATE_STAMP", "\"$buildDateStamp\""
         signingConfig signingConfigs.release
     }
     buildTypes {
@@ -51,6 +50,7 @@ android {
         viewBinding = true
         dataBinding = true
     }
+    ndkVersion '22.0.7026061'
 }
 
 dependencies {

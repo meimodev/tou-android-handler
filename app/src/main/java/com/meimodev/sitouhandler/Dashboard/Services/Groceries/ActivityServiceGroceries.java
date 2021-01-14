@@ -1037,8 +1037,6 @@ public class ActivityServiceGroceries extends AppCompatActivity {
     private void initVendorDetailProducts(JSONArray products, JSONArray categories,
                                           int vId, String vName) throws JSONException {
 
-
-
         ArrayList<VendorDetail_Product_Header_Model> headers = new ArrayList<>();
         ArrayList<VendorDetail_Product_Child_Model> childs = new ArrayList<>();
 

@@ -629,22 +629,10 @@ public class Dashboard extends AppCompatActivity {
 
         tvAppName.setText(getApplicationInfo().loadLabel(getPackageManager()).toString());
 
-        String string = "v." + BuildConfig.VERSION_CODE;
+        String string = "v." + BuildConfig.VERSION_NAME;
         tvAppVersion.setText(string);
 
-        Locale locale = new Locale("in", "ID");
-        SimpleDateFormat format = new SimpleDateFormat("yyyymmdd");
-
-        Date date = null;
-        try {
-            date = format.parse(BuildConfig.BUILD_DATE_STAMP);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        SimpleDateFormat stringFormat = new SimpleDateFormat("MMM dd ''yy", Locale.ENGLISH);
-        string = "Released On " + stringFormat.format(date);
-        tvReleasedDate.setText(string);
+        tvReleasedDate.setText("");
 
         navigationView.setNavigationItemSelectedListener(item -> {
 

@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.github.squti.guru.Guru;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import com.meimodev.sitouhandler.BuildConfig;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.CustomWidget.CustomEditText;
 import com.meimodev.sitouhandler.Dashboard.Dashboard;
@@ -101,7 +102,7 @@ public class SignIn extends AppCompatActivity {
         IssueRequestHandler req = new IssueRequestHandler(this);
         Call<ResponseBody> call = RetrofitClient.getInstance(null).getApiServices().checkSystemStatus(
                 "android",
-                Constant.APP_VERSION
+                String.valueOf( BuildConfig.VERSION_CODE)
         );
         req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
             @Override
@@ -130,6 +131,9 @@ public class SignIn extends AppCompatActivity {
     }
 
     private void signIn() {
+
+        if (b.layoutProgressHolder.getVisibility() != View.VISIBLE) b.layoutProgressHolder.setVisibility(View.VISIBLE);
+
         IssueRequestHandler requestHandler = new IssueRequestHandler(b.getRoot());
         Call<ResponseBody> call = RetrofitClient.getInstance(null).getApiServices().signIn(
                 b.editTextPhone.getText().toString().trim(),

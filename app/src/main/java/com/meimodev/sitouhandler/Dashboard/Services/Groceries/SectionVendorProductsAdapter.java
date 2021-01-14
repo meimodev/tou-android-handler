@@ -77,18 +77,6 @@ public class SectionVendorProductsAdapter extends StickyAdapter<RecyclerView.Vie
 
             Picasso.get().load(model.getImageUrl()).placeholder(R.drawable.ic_sss_logo_icon).into(h.ivImage);
 
-            h.layout.setOnClickListener(view -> {
-                Bundle bundle = new Bundle();
-                bundle.putInt("ID", model.getId());
-                bundle.putString("NAME", model.getName());
-                bundle.putInt("PRICE", Integer.parseInt(model.getPrice()));
-                bundle.putString("UNIT", model.getUnit());
-                bundle.putInt("POS", position);
-                bundle.putInt("VENDOR_ID", model.getVendorId());
-                bundle.putString("VENDOR_NAME", model.getVendorName());
-                itemClickListener.itemClick(bundle);
-            });
-
 
             if (!model.isAvailable()) {
                 h.tvDesc.setText(model.isAvailableMessage());
@@ -97,8 +85,20 @@ public class SectionVendorProductsAdapter extends StickyAdapter<RecyclerView.Vie
                 Constant.applyGrayscaleToImage(h.ivAddIcon);
 
                 h.layout.setBackgroundColor(context.getResources().getColor(R.color.backGround_fragment));
+                h.layout.setClickable(false);
 
-
+            } else {
+                h.layout.setOnClickListener(view -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("ID", model.getId());
+                    bundle.putString("NAME", model.getName());
+                    bundle.putInt("PRICE", Integer.parseInt(model.getPrice()));
+                    bundle.putString("UNIT", model.getUnit());
+                    bundle.putInt("POS", position);
+                    bundle.putInt("VENDOR_ID", model.getVendorId());
+                    bundle.putString("VENDOR_NAME", model.getVendorName());
+                    itemClickListener.itemClick(bundle);
+                });
             }
 
             if (position == (sectionArrayList.size() - 1)) {
