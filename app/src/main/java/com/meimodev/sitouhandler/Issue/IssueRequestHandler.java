@@ -35,6 +35,7 @@ public class IssueRequestHandler {
 
     private OnRequestHandler onRequestHandler;
     private OnRequestHandlerFailure onRequestHandlerFailure;
+    private OnRequestHandlerResponseError onRequestHandlerResponseError;
     private Call call;
 
     public IssueRequestHandler(@Nullable View rootView) {
@@ -46,8 +47,8 @@ public class IssueRequestHandler {
     }
 
     public IssueRequestHandler(Context context) {
-            this.context = context;
-            progress = Constant.makeProgressCircle(context);
+        this.context = context;
+        progress = Constant.makeProgressCircle(context);
     }
 
     public interface OnRequestHandler {
@@ -58,11 +59,19 @@ public class IssueRequestHandler {
         void onRetry();
     }
 
-    public interface  OnRequestHandlerFailure{
+    public interface OnRequestHandlerFailure {
         void onFailure();
     }
 
-    public void setOnRequestHandlerFailure(OnRequestHandlerFailure onRequestHandlerFailure){
+    public interface OnRequestHandlerResponseError {
+        void onResponseError(String message);
+    }
+
+    public void setOnRequestHandlerResponseError(OnRequestHandlerResponseError onRequestHandlerResponseError) {
+        this.onRequestHandlerResponseError = onRequestHandlerResponseError;
+    }
+
+    public void setOnRequestHandlerFailure(OnRequestHandlerFailure onRequestHandlerFailure) {
         this.onRequestHandlerFailure = onRequestHandlerFailure;
     }
 
@@ -132,8 +141,7 @@ public class IssueRequestHandler {
 
                         }
 
-                    }
-                    else {
+                    } else {
                         Log.e(TAG, "onResponse: "
                                 + "(Class)" + context.getClass().getSimpleName() + ": "
                                 + intention + ": "
@@ -148,6 +156,8 @@ public class IssueRequestHandler {
                                 }
                         );
 
+                        if (onRequestHandlerResponseError != null)
+                            onRequestHandlerResponseError.onResponseError(res.getMessage());
 
                     }
                     if (progress != null && progress.getVisibility() == View.VISIBLE) {
@@ -158,8 +168,7 @@ public class IssueRequestHandler {
                         finalMainView.setVisibility(View.VISIBLE);
                     }
 
-                }
-                else {
+                } else {
                     APIUtils.intention = intention;
                     APIUtils.parseError(context, response);
                 }
@@ -176,7 +185,7 @@ public class IssueRequestHandler {
                     progress.setVisibility(View.GONE);
                 }
 
-                if (onRequestHandlerFailure != null){
+                if (onRequestHandlerFailure != null) {
                     onRequestHandlerFailure.onFailure();
                 }
 
@@ -225,17 +234,18 @@ public class IssueRequestHandler {
                             }
                         }
 
-                    }
-                    else {
+                    } else {
                         Log.e(TAG, "BACKGROUND REQUEST: onResponse: "
                                 + "(Class)" + context.getClass().getSimpleName() + ": "
                                 + intention + ": "
                                 + "response ERROR = TRUE -> "
                                 + "response message: " + res.getMessage());
+
+                        if (onRequestHandlerResponseError != null)
+                            onRequestHandlerResponseError.onResponseError(res.getMessage());
                     }
 
-                }
-                else {
+                } else {
                     APIUtils.intention = intention;
                     APIUtils.parseError(context, response);
                 }
@@ -246,21 +256,25 @@ public class IssueRequestHandler {
                 Log.e(TAG, "BACKGROUND REQUEST: onFailure: "
                         + "(Class)" + context.getClass().getSimpleName() + ": "
                         + intention + ": "
-                        + t.getMessage(),t);
+                        + t.getMessage(), t);
                 if (onRequestHandler != null) {
                     Log.e(TAG, "BACKGROUND REQUEST: onFailure: "
                             + "(Class)" + context.getClass().getSimpleName() + ": "
                             + intention + ": !!! RETRYING !!!");
                     onRequestHandler.onRetry();
                 }
+
+                if (onRequestHandlerFailure != null) onRequestHandlerFailure.onFailure();
             }
         });
 
     }
 
-    public Call getCall(){return call;}
+    public Call getCall() {
+        return call;
+    }
 
-    public void cancel(){
+    public void cancel() {
         call.cancel();
     }
 

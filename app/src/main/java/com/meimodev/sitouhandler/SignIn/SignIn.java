@@ -4,13 +4,16 @@
 
 package com.meimodev.sitouhandler.SignIn;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -68,7 +71,7 @@ public class SignIn extends AppCompatActivity {
 
 //        Check if device already logged in
         if (Guru.getInt(Constant.KEY_USER_ID, 0) != 0) {
-            startActivity(new Intent(this, Dashboard.class));
+            startActivity(new Intent(b.getRoot().getContext(), Dashboard.class));
             finishAffinity();
         }
 
@@ -100,25 +103,28 @@ public class SignIn extends AppCompatActivity {
     private void checkSystemStatus() {
         b.layoutProgressHolder.setVisibility(View.INVISIBLE);
         IssueRequestHandler req = new IssueRequestHandler(this);
+        req.setContext(b.getRoot().getContext());
+        req.setIntention(new Throwable());
         Call<ResponseBody> call = RetrofitClient.getInstance(null).getApiServices().checkSystemStatus(
                 "android",
-                String.valueOf( BuildConfig.VERSION_CODE)
+                BuildConfig.VERSION_NAME
         );
-        req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
-            @Override
-            public void onTry() {
 
-            }
-
-            @Override
-            public void onSuccess(APIWrapper res, String message) throws JSONException {
-
-            }
-
-            @Override
-            public void onRetry() {
-
-            }
+        req.setOnRequestHandlerResponseError(message -> {
+            Log.e(TAG, "checkSystemStatus: ==============================" );
+            Constant.displayDialog(
+                    this,
+                    "Perhatian !",
+                    message,
+                    (dialogInterface, i) -> {
+                        final String appPackageName = getPackageName();
+                        try {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                        } catch (android.content.ActivityNotFoundException e) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                        }
+                    }
+            );
         });
         req.enqueue(call);
     }
@@ -132,7 +138,8 @@ public class SignIn extends AppCompatActivity {
 
     private void signIn() {
 
-        if (b.layoutProgressHolder.getVisibility() != View.VISIBLE) b.layoutProgressHolder.setVisibility(View.VISIBLE);
+        if (b.layoutProgressHolder.getVisibility() != View.VISIBLE)
+            b.layoutProgressHolder.setVisibility(View.VISIBLE);
 
         IssueRequestHandler requestHandler = new IssueRequestHandler(b.getRoot());
         Call<ResponseBody> call = RetrofitClient.getInstance(null).getApiServices().signIn(
