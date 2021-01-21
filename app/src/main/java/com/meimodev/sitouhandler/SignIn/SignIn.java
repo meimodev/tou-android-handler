@@ -4,6 +4,7 @@
 
 package com.meimodev.sitouhandler.SignIn;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -67,7 +68,8 @@ public class SignIn extends AppCompatActivity {
         Constant.changeStatusColor(this, R.color.background);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-        checkSystemStatus();
+        b.layoutProgressHolder.setVisibility(View.INVISIBLE);
+        Constant.checkSystemStatus(this);
 
 //        Check if device already logged in
         if (Guru.getInt(Constant.KEY_USER_ID, 0) != 0) {
@@ -100,34 +102,7 @@ public class SignIn extends AppCompatActivity {
 //        initHelper();
     }
 
-    private void checkSystemStatus() {
-        b.layoutProgressHolder.setVisibility(View.INVISIBLE);
-        IssueRequestHandler req = new IssueRequestHandler(this);
-        req.setContext(b.getRoot().getContext());
-        req.setIntention(new Throwable());
-        Call<ResponseBody> call = RetrofitClient.getInstance(null).getApiServices().checkSystemStatus(
-                "android",
-                BuildConfig.VERSION_NAME
-        );
 
-        req.setOnRequestHandlerResponseError(message -> {
-            Log.e(TAG, "checkSystemStatus: ==============================" );
-            Constant.displayDialog(
-                    this,
-                    "Perhatian !",
-                    message,
-                    (dialogInterface, i) -> {
-                        final String appPackageName = getPackageName();
-                        try {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-                        } catch (android.content.ActivityNotFoundException e) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
-                        }
-                    }
-            );
-        });
-        req.enqueue(call);
-    }
 
     @Override
     protected void onResume() {
