@@ -6,6 +6,7 @@ package com.meimodev.sitouhandler.SignUp;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
@@ -19,6 +20,7 @@ import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.Validator;
+import com.meimodev.sitouhandler.databinding.ActivityConfirmAccountBinding;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
@@ -26,78 +28,74 @@ import org.json.JSONException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public class ConfirmAccount extends AppCompatActivity {
 
     private static final String TAG = "ConfirmAccount";
 
-    @BindView(R.id.textInputLayout_phone)
-    TextInputLayout tilPhone;
-    @BindView(R.id.textInputLayout_code)
-    TextInputLayout tilCode;
-
-    @BindView(R.id.btn_confirm)
-    Button btnConfirm;
-    @BindView(R.id.btn_getCode)
-    Button btnCode;
-
     Validator validator;
+
+    private ActivityConfirmAccountBinding b;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_confirm_account);
-        ButterKnife.bind(this);
+        b = ActivityConfirmAccountBinding.inflate(getLayoutInflater());
+        setContentView(b.getRoot());
+
+//        ButterKnife.bind(this);
+
         Constant.changeStatusColor(this, R.color.background);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        // getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         String str = getIntent().getStringExtra("phone");
 
         validator = new Validator(this);
         if (!StringUtils.isEmpty(str)) {
-            tilPhone.getEditText().setText(str);
-            if (Constant.coolDownMilliSecondsLeft == 0) btnCode.callOnClick();
+            b.textInputLayoutPhone.getEditText().setText(str);
+            if (Constant.coolDownMilliSecondsLeft == 0) b.btnGetCode.callOnClick();
         }
 
-//        tilCode.setVisibility(View.GONE);
+//        b.textInputLayoutCode.setVisibility(View.GONE);
 
         if (Constant.coolDownMilliSecondsLeft != 0) syncCoolDown();
 
+        b.btnConfirm.setOnClickListener(onClickConfirm);
+        b.btnGetCode.setOnClickListener(onClickRequestCode);
     }
 
-    @OnClick(R.id.btn_confirm)
-    void onClickConfirm() {
-        tilPhone.setError(validator.validatePhone(tilPhone));
-        tilCode.setError(validator.validateEmpty(tilCode));
+    private final View.OnClickListener onClickConfirm = v -> {
+        b.textInputLayoutPhone.setError(validator.validatePhone(b.textInputLayoutPhone));
+        b.textInputLayoutCode.setError(validator.validateEmpty(b.textInputLayoutCode));
 
-        if (tilPhone.getError() == null && tilCode.getError() == null) {
+        if (b.textInputLayoutPhone.getError() == null && b.textInputLayoutCode.getError() == null) {
             sendDataToServer(
                     "CONFIRM",
-                    tilPhone.getEditText().getText().toString(),
-                    tilCode.getEditText().getText().toString()
+                    b.textInputLayoutPhone.getEditText().getText().toString(),
+                    b.textInputLayoutCode.getEditText().getText().toString()
             );
         }
 
-    }
+    };
 
-    @OnClick(R.id.btn_getCode)
-    void onClickRequestCode() {
-        tilPhone.setError(validator.validatePhone(tilPhone));
+    private final View.OnClickListener onClickRequestCode = v -> {
+        b.textInputLayoutPhone.setError(validator.validatePhone(b.textInputLayoutPhone));
 
-        if (tilPhone.getError() == null) {
+        if (b.textInputLayoutPhone.getError() == null) {
             sendDataToServer(
                     "REQUEST",
-                    tilPhone.getEditText().getText().toString(),
+                    b.textInputLayoutPhone.getEditText().getText().toString(),
                     ""
             );
         }
-    }
+    };
 
     void sendDataToServer(String type, String phone, String code) {
 
         IssueRequestHandler req = new IssueRequestHandler(findViewById(android.R.id.content));
-        Call call = RetrofitClient.getInstance(null).getApiServices().confirmAccount(
+        Call<ResponseBody> call = RetrofitClient.getInstance(null).getApiServices().confirmAccount(
                 type, phone, code);
 
         req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
@@ -114,7 +112,8 @@ public class ConfirmAccount extends AppCompatActivity {
                             "Perhatian!",
                             message,
                             true,
-                            (dialog, which) -> {},
+                            (dialog, which) -> {
+                            },
                             null,
                             dialog -> syncCoolDown()
 
@@ -125,7 +124,8 @@ public class ConfirmAccount extends AppCompatActivity {
                             "Perhatian!",
                             message,
                             true,
-                            (dialog, which) -> {},
+                            (dialog, which) -> {
+                            },
                             null,
                             dialog -> finish()
                     );
@@ -150,14 +150,14 @@ public class ConfirmAccount extends AppCompatActivity {
                                 .concat(" ("
                                         .concat(String.valueOf(millisUntilFinished / 1000))
                                         .concat(")"));
-                btnCode.setText(str);
-                btnCode.setEnabled(false);
+                b.btnGetCode.setText(str);
+                b.btnGetCode.setEnabled(false);
                 Constant.coolDownMilliSecondsLeft = millisUntilFinished;
             }
 
             public void onFinish() {
-                btnCode.setText("Kirim Kode");
-                btnCode.setEnabled(true);
+                b.btnGetCode.setText("Kirim Kode");
+                b.btnGetCode.setEnabled(true);
                 Constant.coolDownMilliSecondsLeft = 0;
             }
         };

@@ -203,7 +203,7 @@ public class Dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-//        changeStatusColor(this, R.color.colorPrimary);
+        changeStatusColor(this, R.color.colorPrimary);
 
 
 //        Binding Auth Token to Retrofit

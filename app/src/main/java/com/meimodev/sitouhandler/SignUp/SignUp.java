@@ -7,6 +7,7 @@ package com.meimodev.sitouhandler.SignUp;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -14,6 +15,7 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.meimodev.sitouhandler.Constant;
@@ -90,19 +92,22 @@ public class SignUp extends AppCompatActivity {
 
         b.textInputLayoutSex.getEditText().setShowSoftInputOnFocus(false);
         b.textInputLayoutSex.getEditText().setFocusable(false);
+
+        Button btnSignUp = b.getRoot().findViewById(R.id.button_signUp);
+        CardView cvTermsAndConditions = b.getRoot().findViewById(R.id.cardView_termsCondition);
+        btnSignUp.setOnClickListener(onClickSignUp);
+        cvTermsAndConditions.setOnClickListener(onClickTermsConditions);
+
     }
 
-    @OnClick(R.id.cardView_termsCondition)
-    void onClickTermsConditions() {
+    private final View.OnClickListener onClickTermsConditions = view -> {
         Uri url = Uri.parse(Constant.ROOT_URL_TERMS);
         Intent intent = new Intent(Intent.ACTION_VIEW, url);
 
         if (intent.resolveActivity(getPackageManager()) != null) startActivity(intent);
+    };
 
-    }
-
-    @OnClick(R.id.btn_signUp)
-    void onClickSignUp() {
+    private final View.OnClickListener onClickSignUp = v -> {
 
         if (validator.validatePhone(b.textInputLayoutPhone) != null) return;
 
@@ -132,7 +137,7 @@ public class SignUp extends AppCompatActivity {
                 b.textInputLayoutDob.getEditText().getText().toString(),
                 b.textInputLayoutSex.getEditText().getText().toString()
         );
-    }
+    };
 
     void sendData(String phone, String password, String firstName, String lastName, String dob, String sex) {
 
@@ -162,8 +167,7 @@ public class SignUp extends AppCompatActivity {
                     );
 
 
-                }
-                else if (message.contains("digunakan")) {
+                } else if (message.contains("digunakan")) {
                     b.textInputLayoutPhone.setError(message);
                     Constant.displayDialog(
                             SignUp.this,
@@ -172,8 +176,7 @@ public class SignUp extends AppCompatActivity {
                             (dialog, which) -> {
                             }
                     );
-                }
-                else if (message.contains("Tanggal tidak valid")) {
+                } else if (message.contains("Tanggal tidak valid")) {
                     b.textInputLayoutDob.setError(message);
                     Constant.displayDialog(
                             SignUp.this,

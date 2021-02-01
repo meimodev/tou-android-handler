@@ -4,27 +4,16 @@
 
 package com.meimodev.sitouhandler.SignIn;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.squti.guru.Guru;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
-import com.meimodev.sitouhandler.BuildConfig;
 import com.meimodev.sitouhandler.Constant;
-import com.meimodev.sitouhandler.CustomWidget.CustomEditText;
 import com.meimodev.sitouhandler.Dashboard.Dashboard;
 import com.meimodev.sitouhandler.ForgetAccount.ForgetAccount;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
@@ -34,7 +23,6 @@ import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SignUp.ConfirmAccount;
 import com.meimodev.sitouhandler.SignUp.SignUp;
 import com.meimodev.sitouhandler.Validator;
-import com.meimodev.sitouhandler.Vendor.VendorHome;
 import com.meimodev.sitouhandler.Wizard.ApplyChurch.ApplyChurch;
 import com.meimodev.sitouhandler.databinding.ActivitySigninBinding;
 
