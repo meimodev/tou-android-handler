@@ -11,6 +11,9 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,14 +62,15 @@ public class ActivityServiceOrderType extends AppCompatActivity {
     private String serviceType;
     private int vendorId;
 
-    private IssueRequestHandler req;
+    private int successOrderId = 0;
+    private boolean isAttemptOrder = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         b = ActivityServiceOrderTypeBinding.inflate(getLayoutInflater());
         setContentView(b.getRoot());
-        req = new IssueRequestHandler(b.getRoot());
         changeStatusColor(this, R.color.colorPrimary);
         Bundle bundle = getIntent().getBundleExtra("BUNDLE");
         initBundleData(bundle);
@@ -80,10 +84,10 @@ public class ActivityServiceOrderType extends AppCompatActivity {
         });
 
 
-        if (Guru.getBoolean(Constant.KEY_IS_DELIVERY, false)){
-            noDelivery();
-            return;
-        }
+//        if (Guru.getBoolean(Constant.KEY_IS_DELIVERY, false)){
+        noDelivery();
+//            return;
+//        }
 
         b.buttonDeliver.setOnClickListener(v -> {
             Intent intent = new Intent(this, ActivityServiceLocation.class);
@@ -143,24 +147,32 @@ public class ActivityServiceOrderType extends AppCompatActivity {
         b.textInputLayoutNote.setError(null);
 
         if (note.length() <= 0) {
-            b.textInputLayoutNote.setError("Tidak bisa kosong");
+            b.textInputLayoutNote.setError("Kong mo antar di mana ?");
             return;
         }
 
-        if (!StringUtils.isNumeric(note)) {
-            b.textInputLayoutNote.setError("Harus di isi dengan angka");
-            return;
-        }
+//        if (!StringUtils.isNumeric(note)) {
+//            b.textInputLayoutNote.setError("Harus di isi dengan angka");
+//            return;
+//        }
+
 
         postDataToServer();
     }
 
     private void postDataToServer() {
 
-        b.imageOnTheSpot.setVisibility(View.GONE);
+        successOrderId = 0;
+        isAttemptOrder = true;
+
         b.buttonOnTheSpot.setVisibility(View.GONE);
         b.cardViewOnTheSpot.setVisibility(View.GONE);
+        b.cardViewProducts.setVisibility(View.INVISIBLE);
+        b.cardViewStatus.setVisibility(View.INVISIBLE);
         b.progress.setVisibility(View.VISIBLE);
+
+
+        IssueRequestHandler req = new IssueRequestHandler(b.getRoot());
 
         req.setContext(this);
         req.setIntention(new Throwable());
@@ -172,39 +184,33 @@ public class ActivityServiceOrderType extends AppCompatActivity {
 
             public void onSuccess(APIWrapper res, String message) throws JSONException {
                 int oID = res.getData().getInt("id");
-                Constant.displayDialog(
-                        ActivityServiceOrderType.this,
-                        "Perhatian !",
-                        message,
-                        true,
-                        (dialog, which) -> {
-                        },
-                        null,
-                        dialog -> {
-                            startActivity(new Intent(ActivityServiceOrderType.this, Dashboard.class));
+                b.cardViewStatus.setVisibility(View.VISIBLE);
+                b.progress.setVisibility(View.GONE);
+                b.textViewStatus.setText(message);
+                successOrderId = oID;
+                isAttemptOrder = false;
 
-                            Intent i = new Intent(ActivityServiceOrderType.this, ActivityOrderDetail.class);
-                            i.putExtra("ID", oID);
-                            startActivity(i);
+                b.buttonAfterRequest.setText("Lihat Pesanan");
+                b.buttonAfterRequest.setOnClickListener(view -> {
+                    startActivity(new Intent(ActivityServiceOrderType.this, Dashboard.class));
+                    Intent i = new Intent(ActivityServiceOrderType.this, ActivityOrderDetail.class);
+                    i.putExtra("ID", successOrderId);
+                    startActivity(i);
+                    finishAffinity();
+                });
 
-                            finishAffinity();
-                        }
-                );
 
             }
 
             @Override
             public void onRetry() {
-                Constant.displayDialog(
-                        ActivityServiceOrderType.this,
-                        "Terjadi Kesalahan -_- !",
-                        "Koneksi internet bermasalah, Silahkan coba sesaat lagi.",
-                        true,
-                        (dialog, which) -> {
-                        },
-                        null,
-                        dialog -> finish()
-                );
+                isAttemptOrder = false;
+                b.progress.setVisibility(View.GONE);
+                b.cardViewStatus.setVisibility(View.VISIBLE);
+                b.progress.setVisibility(View.GONE);
+                b.textViewStatus.setText("Terjadi Kesalahan silahkan Coba lagi");
+                b.buttonAfterRequest.setText("Coba lagi");
+                b.buttonAfterRequest.setOnClickListener(view -> postDataToServer());
             }
         });
 
@@ -212,6 +218,8 @@ public class ActivityServiceOrderType extends AppCompatActivity {
         JSONArray arr = new JSONArray();
         int index = 0;
         try {
+            b.layoutProducts.removeAllViews();
+
             for (ActivityServiceGroceries.HelperModelCart p : productsInCart) {
                 JSONObject prod = new JSONObject();
                 prod.put("id", p.getId());
@@ -223,7 +231,24 @@ public class ActivityServiceOrderType extends AppCompatActivity {
                 prod.put("status", "DOING");
                 prod.put("type", serviceType);
                 arr.put(index, prod);
+
+                View v = getLayoutInflater().inflate(R.layout.resource_list_item_order_detail_product, b.layoutProducts, false);
+
+                TextView tvQuantity = v.findViewById(R.id.textView_quantity);
+                TextView tvName = v.findViewById(R.id.textView_name);
+                TextView tvPrice = v.findViewById(R.id.textView_price);
+                ImageView imageView = v.findViewById(R.id.imageView);
+                imageView.setVisibility(View.GONE);
+
+                String quantity = p.getQuantity() + " " + p.getUnit();
+                tvQuantity.setText(quantity);
+                tvName.setText(p.getName());
+                tvPrice.setText(Constant.convertNumberToCurrency(p.getTotalPrice()));
+
+                b.layoutProducts.addView(v);
+
                 index++;
+
             }
             products.put("products", arr);
 
@@ -232,13 +257,28 @@ public class ActivityServiceOrderType extends AppCompatActivity {
             Log.e(TAG, "sendDataToServer: ERROR while composing JSON products ", e);
         }
 
+
+
+
+        String _loc = b.textInputLayoutNote.getEditText().getText().toString();
+        String location = StringUtils.isNumeric(_loc) ? "Meja " + _loc : _loc;
+        int total = Constant.convertCurrencyToNumber(b.textViewTotal.getText().toString());
+
+        b.textViewDestination.setText(location);
+        b.textViewTotalPay.setText(Constant.convertNumberToCurrency(total));
+
+        if (b.cardViewOnTheSpot.getVisibility() != View.VISIBLE
+                && b.layoutProducts.getChildCount() != 0) {
+            b.cardViewProducts.setVisibility(View.VISIBLE);
+        }
+
         req.backGroundRequest(
                 RetrofitClient.getInstance(null).getApiServices().setOrder(
                         Guru.getInt(Constant.KEY_USER_ID, -1),
-                        "Meja " + b.textInputLayoutNote.getEditText().getText().toString(),
+                        location,
                         "",
                         0,
-                        Constant.convertCurrencyToNumber(b.textViewTotal.getText().toString()),
+                        total,
                         serviceType,
                         "",
                         products.toString()
@@ -247,14 +287,27 @@ public class ActivityServiceOrderType extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
+        if (successOrderId != 0) {
+            startActivity(new Intent(ActivityServiceOrderType.this, Dashboard.class));
+            Intent i = new Intent(ActivityServiceOrderType.this, ActivityOrderDetail.class);
+            i.putExtra("ID", successOrderId);
+            startActivity(i);
+            finishAffinity();
+            return;
+        }
+        if (isAttemptOrder) {
+            finish();
+            return;
+        }
         if (isOnTheSpotCardOpen) {
             closeOnTheSpotCard();
             return;
         }
-        if (b.progress.getVisibility() == View.VISIBLE){
-            Snackbar.make(b.getRoot(), "Mohon tunggu sebentar -_- Sedang memuat ...", Snackbar.LENGTH_SHORT).show();
-            return;
-        }
+//        if (b.progress.getVisibility() == View.VISIBLE){
+//            Snackbar.make(b.getRoot(), "Mohon tunggu sebentar -_- Sedang memuat ...", Snackbar.LENGTH_SHORT).show();
+//            return;
+//        }
         super.onBackPressed();
     }
 

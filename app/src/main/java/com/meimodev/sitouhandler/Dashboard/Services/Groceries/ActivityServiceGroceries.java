@@ -938,11 +938,12 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
     private void closeVendorDetail() {
         isVendorDetailOpen = false;
-        Log.e(TAG, "onReceive: Close Vendor Detail");
-
-        b.recyclerViewProducts.setVisibility(View.VISIBLE);
-        b.layoutVendorDetail.getRoot().setVisibility(View.GONE);
-        b.textInputLayoutSearch.setVisibility(View.VISIBLE);
+//        Log.e(TAG, "onReceive: Close Vendor Detail");
+//
+//        b.recyclerViewProducts.setVisibility(View.VISIBLE);
+//        b.layoutVendorDetail.getRoot().setVisibility(View.GONE);
+//        b.textInputLayoutSearch.setVisibility(View.VISIBLE);
+        finish();
     }
 
     private void fetchVendorData() {

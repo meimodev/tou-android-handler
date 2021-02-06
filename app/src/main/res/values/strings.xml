@@ -20,6 +20,7 @@
 
     <string name="meimo_footer_with_emoji">TOU-System | Meimo &#128526;</string>
     <string name="title_activity_maps">Map</string>
+    <string name="default_notification_channel_id">0</string>
 
 
 </resources>

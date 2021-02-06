@@ -79,7 +79,7 @@ public class ActivityServiceGroceries_Product_RecyclerAdapter extends RecyclerVi
             pHolder.tvNote.setVisibility(View.VISIBLE);
             pHolder.tvNote.setText(model.getVendorName());
 
-            Picasso.get().load(model.getImageUrl()).placeholder(R.drawable.ic_logo_tou_system).fit().into(pHolder.imageView);
+            Picasso.get().load(model.getImageUrl()).placeholder(R.drawable.ic_logo_tou_system).into(pHolder.imageView);
 
             if (!model.isAvailable()) {
                 pHolder.cvMain.setClickable(false);

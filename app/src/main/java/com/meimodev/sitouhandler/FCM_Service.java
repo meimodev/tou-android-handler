@@ -43,9 +43,9 @@ public class FCM_Service extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-    /*
-    * NOTIFICATION for foreground
-    * */
+        /*
+         * NOTIFICATION for foreground
+         * */
         String title = remoteMessage.getNotification().getTitle();
         String message = remoteMessage.getNotification().getBody();
 
@@ -72,7 +72,11 @@ public class FCM_Service extends FirebaseMessagingService {
         sendBroadcast(intent);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+        NotificationCompat.Builder notifBuilder =
+                new NotificationCompat.Builder(
+                        this,
+                        String.valueOf(R.string.default_notification_channel_id)
+                );
         notifBuilder.setSmallIcon(R.drawable.ic_tou_notification)
                 .setContentTitle(title)
                 .setBadgeIconType(NotificationCompat.BADGE_ICON_LARGE)
@@ -86,18 +90,18 @@ public class FCM_Service extends FirebaseMessagingService {
 
     }
 
-    public int createID(){
+    public int createID() {
         Date now = new Date();
-        return Integer.parseInt(new SimpleDateFormat("ddHHmmss",  Locale.US).format(now));
+        return Integer.parseInt(new SimpleDateFormat("ddHHmmss", Locale.US).format(now));
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private void createNotificationChannel(Context context) {
-        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
+        NotificationChannel channel = new NotificationChannel(String.valueOf(R.string.default_notification_channel_id),
                 "TOU notification", NotificationManager.IMPORTANCE_DEFAULT);
         // Configure the notification channel
         channel.setDescription("TOU notification control");
-        channel.setShowBadge(false);
+        channel.setShowBadge(true);
         channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
         channel.enableLights(true);
         channel.enableVibration(true);
@@ -106,6 +110,6 @@ public class FCM_Service extends FirebaseMessagingService {
         NotificationManager manager = context.getSystemService(NotificationManager.class);
 
         manager.createNotificationChannel(channel);
-        Log.d(TAG, "createNotificationChannel: created =" + NOTIFICATION_CHANNEL_ID);
+        Log.d(TAG, "createNotificationChannel: created =" + R.string.default_notification_channel_id);
     }
 }
