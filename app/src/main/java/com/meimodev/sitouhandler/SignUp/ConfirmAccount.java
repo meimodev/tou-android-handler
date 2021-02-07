@@ -6,6 +6,7 @@ package com.meimodev.sitouhandler.SignUp;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -52,28 +53,31 @@ public class ConfirmAccount extends AppCompatActivity {
 
         String str = getIntent().getStringExtra("phone");
 
-        validator = new Validator(this);
-        if (!StringUtils.isEmpty(str)) {
-            b.textInputLayoutPhone.getEditText().setText(str);
-            if (Constant.coolDownMilliSecondsLeft == 0) b.btnGetCode.callOnClick();
-        }
 
+        validator = new Validator(this);
 //        b.textInputLayoutCode.setVisibility(View.GONE);
 
         if (Constant.coolDownMilliSecondsLeft != 0) syncCoolDown();
 
         b.btnConfirm.setOnClickListener(onClickConfirm);
         b.btnGetCode.setOnClickListener(onClickRequestCode);
+
+        if (!StringUtils.isEmpty(str)) {
+//            b.textInputLayoutPhone.getEditText().setText(str);
+            b.textViewPhone.setText(str);
+            if (Constant.coolDownMilliSecondsLeft == 0) b.btnGetCode.performClick();
+        }
+
     }
 
     private final View.OnClickListener onClickConfirm = v -> {
-        b.textInputLayoutPhone.setError(validator.validatePhone(b.textInputLayoutPhone));
-        b.textInputLayoutCode.setError(validator.validateEmpty(b.textInputLayoutCode));
+//        b.textInputLayoutPhone.setError(validator.validatePhone(b.textInputLayoutPhone));
+//        b.textInputLayoutCode.setError(validator.validateEmpty(b.textInputLayoutCode));
 
-        if (b.textInputLayoutPhone.getError() == null && b.textInputLayoutCode.getError() == null) {
+        if (/*b.textInputLayoutPhone.getError() == null &&*/ b.textInputLayoutCode.getError() == null) {
             sendDataToServer(
                     "CONFIRM",
-                    b.textInputLayoutPhone.getEditText().getText().toString(),
+                    b.textViewPhone.getText().toString(),
                     b.textInputLayoutCode.getEditText().getText().toString()
             );
         }
@@ -81,15 +85,19 @@ public class ConfirmAccount extends AppCompatActivity {
     };
 
     private final View.OnClickListener onClickRequestCode = v -> {
-        b.textInputLayoutPhone.setError(validator.validatePhone(b.textInputLayoutPhone));
-
-        if (b.textInputLayoutPhone.getError() == null) {
+        Log.e(TAG, "onClickRequestCode is CALLED: Btn is clicked ");
+//        b.textInputLayoutPhone.setError(
+//                validator.validatePhone(b.textInputLayoutPhone)
+//        );
+        syncCoolDown();
+        b.btnGetCode.setEnabled(false);
+//        if (b.textInputLayoutPhone.getError() == null) {
             sendDataToServer(
                     "REQUEST",
-                    b.textInputLayoutPhone.getEditText().getText().toString(),
+                    b.textViewPhone.getText().toString(),
                     ""
             );
-        }
+//        }
     };
 
     void sendDataToServer(String type, String phone, String code) {
@@ -141,22 +149,19 @@ public class ConfirmAccount extends AppCompatActivity {
     }
 
     void syncCoolDown() {
-
         long timeLeft = Constant.coolDownMilliSecondsLeft != 0 ? Constant.coolDownMilliSecondsLeft : 60000;
         CountDownTimer timer = new CountDownTimer(timeLeft, 1000) {
             public void onTick(long millisUntilFinished) {
-                String str =
-                        "Kirim Kode"
-                                .concat(" ("
-                                        .concat(String.valueOf(millisUntilFinished / 1000))
-                                        .concat(")"));
+                String str = "Kirim Ulang"+System.lineSeparator()+"Kode".concat(" ("
+                        .concat(String.valueOf(millisUntilFinished / 1000))
+                        .concat(")"));
                 b.btnGetCode.setText(str);
                 b.btnGetCode.setEnabled(false);
                 Constant.coolDownMilliSecondsLeft = millisUntilFinished;
             }
 
             public void onFinish() {
-                b.btnGetCode.setText("Kirim Kode");
+                b.btnGetCode.setText("Kirim Ulang Kode");
                 b.btnGetCode.setEnabled(true);
                 Constant.coolDownMilliSecondsLeft = 0;
             }

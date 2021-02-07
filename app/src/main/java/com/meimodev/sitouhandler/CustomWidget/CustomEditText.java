@@ -130,8 +130,7 @@ public class CustomEditText extends TextInputEditText {
                 if (editable.toString().startsWith("0")) {
                     thisET.setError("Angka tidak bisa diawali dengan 0");
 
-                }
-                else {
+                } else {
                     thisET.setError(null);
                 }
 
@@ -143,6 +142,8 @@ public class CustomEditText extends TextInputEditText {
     void displayDatePickerDialog(FragmentManager fragmentManager, boolean set) {
         if (set) {
             Calendar now = Calendar.getInstance();
+            now.set(Calendar.YEAR, 2000);
+
             Locale locale = new Locale("in", "ID");
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", locale);
 

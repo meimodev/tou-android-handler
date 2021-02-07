@@ -39,30 +39,6 @@ import retrofit2.Call;
 public class SignUp extends AppCompatActivity {
     private static final String TAG = "SignUp";
 
-
-    //    @BindView(R.id.textInputLayout_email)
-//    TextInputLayout tilEmail;
-//    @BindView(R.id.textInputLayout_phone)
-//    TextInputLayout tilPhone;
-//    @BindView(R.id.textInputLayout_password)
-//    TextInputLayout tilPassword;
-//    @BindView(R.id.textInputLayout_passwordConfirm)
-//    TextInputLayout tilPasswordConfirm;
-//
-//    @BindView(R.id.textInputLayout_firstName)
-//    TextInputLayout tilFirstName;
-//    @BindView(R.id.textInputLayout_lastName)
-//    TextInputLayout tilLastName;
-//    @BindView(R.id.textInputLayout_dob)
-//    TextInputLayout tilDOB;
-//    @BindView(R.id.textInputLayout_sex)
-//    TextInputLayout tilSex;
-//
-//    @BindView(R.id.btn_signUp)
-//    Button btnSignUp;
-
-//    private boolean IS_SIGNUP_OK = false;
-
     Validator validator;
 
     private ActivitySignupBinding b;
