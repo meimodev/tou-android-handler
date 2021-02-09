@@ -4,6 +4,7 @@
 
 package com.meimodev.sitouhandler.Dashboard.Services;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -212,6 +213,25 @@ public class ActivityServiceOrderType extends AppCompatActivity {
                 b.buttonAfterRequest.setText("Coba lagi");
                 b.buttonAfterRequest.setOnClickListener(view -> postDataToServer());
             }
+        });
+        req.setOnRequestHandlerResponseError(message -> {
+            Log.e(TAG, "postDataToServer: ERROR RECEIVED !!!!" );
+            Constant.displayDialog(
+                    this,
+                    "Perhatian !",
+                    message,
+                    false,
+                    (dialogInterface, i) -> {},
+                    null,
+                    dialogInterface -> {
+                        ((Activity) this).finish();
+                    }
+            );
+
+
+
+
+
         });
 
         JSONObject products = new JSONObject();

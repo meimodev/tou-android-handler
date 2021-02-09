@@ -168,7 +168,7 @@
                     android:ellipsize="none"
                     android:maxLines="50"
                     android:scrollHorizontally="false"
-                    android:text="TOU \n Locally developed &amp; maintained to optimize engagement between local business and their corresponded customer."
+                    android:text="¯\\_(ツ)_/¯"
                     android:textAlignment="center"
                     android:textColor="@color/foreground" />
 
@@ -178,7 +178,7 @@
                     android:maxLines="1"
                     android:fontFamily="@font/roboto"
                     android:scrollHorizontally="false"
-                    android:text="So to speak ... &#128521;"
+                    android:text=""
                     android:textAlignment="center"
                     android:textColor="@color/foreground" />
 

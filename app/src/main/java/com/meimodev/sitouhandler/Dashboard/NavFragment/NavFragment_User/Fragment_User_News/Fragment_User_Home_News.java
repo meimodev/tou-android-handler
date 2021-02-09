@@ -98,6 +98,7 @@ public class Fragment_User_Home_News extends Fragment {
         return rootView;
     }
 
+
     private void fetchVendorRecyclerView() {
 
         IssueRequestHandler req = new IssueRequestHandler(rvVendors);
@@ -113,6 +114,11 @@ public class Fragment_User_Home_News extends Fragment {
             public void onSuccess(APIWrapper res, String message) throws JSONException {
                 JSONArray arr = res.getDataArray();
 
+                if (modelVendors.size() != 0) {
+                    modelVendors.clear();
+                }
+
+
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject model = arr.getJSONObject(i);
                     modelVendors.add(new Fragment_User_Home_Vendors_RecyclerModel(
@@ -124,9 +130,9 @@ public class Fragment_User_Home_News extends Fragment {
                             model.getBoolean("is_open")
                     ));
                 }
-
-
                 adapterVendors.notifyDataSetChanged();
+
+
             }
 
             @Override
@@ -195,4 +201,9 @@ public class Fragment_User_Home_News extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchVendorRecyclerView();
+    }
 }

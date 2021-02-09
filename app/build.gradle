@@ -26,8 +26,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
 //        def buildDateStamp = new Date().format("yyMMddHHmm").toInteger()
-        versionCode 2009231936
-        versionName '1.2.8'
+        versionCode 2009231937
+        versionName '1.2.9'
 //        buildConfigField "String", "BUILD_DATE_STAMP", "\"$buildDateStamp\""
         signingConfig signingConfigs.release
     }

@@ -996,7 +996,8 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         }
     }
 
-    private void initVendorDetailViews(JSONObject data) throws JSONException {
+    private void initVendorDetailViews(JSONObject data)
+            throws JSONException {
         ColorMatrix matrix = new ColorMatrix();
         matrix.setSaturation(0);
         ColorMatrixColorFilter grayscale = new ColorMatrixColorFilter(matrix);
@@ -1047,7 +1048,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
             VendorDetail_Product_Header_Model model =
                     new VendorDetail_Product_Header_Model(category.getInt("section"));
-            model.setName(category.getString("name") + " ("+category.getJSONArray("items").length()+")");
+            model.setName(category.getString("name") + " (" + category.getJSONArray("items").length() + ")");
             headers.add(model);
         }
 
@@ -1095,7 +1096,6 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
     }
 
-
     private void initStraightToVendor() {
         if (STRAIGHT_TO_VENDOR) {
 
@@ -1108,4 +1108,19 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         }
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isVendorDetailOpen) {
+//            productsInCart.clear();
+//            adapterCart.notifyDataSetChanged();
+//            updateCartUI();
+//            closeCart();
+            fetchVendorData();
+
+        }
+    }
+
+
 }
