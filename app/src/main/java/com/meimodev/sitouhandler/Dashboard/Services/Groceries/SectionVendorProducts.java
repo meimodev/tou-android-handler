@@ -17,4 +17,6 @@ public interface SectionVendorProducts {
     String isAvailableMessage ();
 
     int sectionPosition();
+
+    int getSize();
 }

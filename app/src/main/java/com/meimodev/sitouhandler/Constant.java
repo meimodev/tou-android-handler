@@ -374,6 +374,7 @@ public class Constant {
         View rootView = ((Activity) context).findViewById(android.R.id.content);
         View v = LayoutInflater.from(context).inflate(R.layout.resource_custom_progress_bar_fail, ((ViewGroup) rootView), false);
         RelativeLayout holder = rootView.findViewById(R.id.layout_progressHolder);
+        if (holder == null) return v;
         holder.removeAllViews();
         holder.addView(v);
         ImageButton btn = v.findViewById(R.id.button_tryAgain);

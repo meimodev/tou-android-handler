@@ -102,4 +102,9 @@ public class VendorDetail_Product_Child_Model implements SectionVendorProducts {
         return section;
     }
 
+    @Override
+    public int getSize() {
+        return 0;
+    }
+
 }

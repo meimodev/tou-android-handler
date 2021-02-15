@@ -4,12 +4,14 @@
 
 package com.meimodev.sitouhandler.Dashboard.Services.Groceries;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -20,19 +22,25 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.squti.guru.Guru;
 import com.google.android.material.card.MaterialCardView;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Dashboard.Services.ActivityServiceOrderType;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
@@ -1036,20 +1044,28 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
     }
 
-    private void initVendorDetailProducts(JSONArray products, JSONArray categories,
-                                          int vId, String vName) throws JSONException {
+    private int scrollCounter = 0;
+
+    private void initVendorDetailProducts(JSONArray products,
+                                          JSONArray categories,
+                                          int vId, String vName)
+            throws JSONException {
 
         ArrayList<VendorDetail_Product_Header_Model> headers = new ArrayList<>();
         ArrayList<VendorDetail_Product_Child_Model> childs = new ArrayList<>();
 
+        ArrayList<String> headersForSpinner = new ArrayList<>();
         //gather header
         for (int i = 0; i < categories.length(); i++) {
             JSONObject category = categories.getJSONObject(i);
 
             VendorDetail_Product_Header_Model model =
                     new VendorDetail_Product_Header_Model(category.getInt("section"));
-            model.setName(category.getString("name") + " (" + category.getJSONArray("items").length() + ")");
+            int categorySize = category.getJSONArray("items").length();
+            model.setName(category.getString("name") + " (" + categorySize + ")");
+            model.setSize(categorySize);
             headers.add(model);
+            headersForSpinner.add(model.getName());
         }
 
         //gather child
@@ -1085,11 +1101,107 @@ public class ActivityServiceGroceries extends AppCompatActivity {
                 productClickListener
         );
 
+        /*
+         * Setup Category Spinner
+         */
+
+
         RecyclerView recyclerView = b.layoutVendorDetail.recyclerViewVendorProducts;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+
+        RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int topItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+                Log.e(TAG, "onScrolled: findFirstCompletelyVisibleItemPosition = " + topItemPosition);
+//
+                int findFirst = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                Log.e(TAG, "onScrolled: findFirstItemPosition = " + findFirst);
+
+                int findLastComplete = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                Log.e(TAG, "onScrolled: findLastCompletelyVisibleItemPosition = " + findLastComplete);
+
+                int findLast = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                Log.e(TAG, "onScrolled: findLastVisibleItemPosition = " + findLast);
+
+
+                if (adapter.getItemCount() < 5) {
+                    return;
+                }
+                if (topItemPosition > 4 && dy > 5) {
+                    if (b.layoutVendorDetail.layoutVendorInfo.getVisibility() == View.VISIBLE)
+                        b.layoutVendorDetail.layoutVendorInfo.setVisibility(View.GONE);
+                    return;
+                }
+                if (topItemPosition == 0 || topItemPosition == 2 && dy < -60) {
+                    if (b.layoutVendorDetail.layoutVendorInfo.getVisibility() != View.VISIBLE)
+                        b.layoutVendorDetail.layoutVendorInfo.setVisibility(View.VISIBLE);
+                    return;
+                }
+            }
+        };
+
+        recyclerView.addOnScrollListener(onScrollListener);
         StickyHeaderItemDecorator decorator = new StickyHeaderItemDecorator(adapter);
         decorator.attachToRecyclerView(recyclerView);
+
+
+        MaterialSpinner spinner = b.layoutVendorDetail.spinnerCategory;
+
+        spinner.setItems(headersForSpinner);
+        spinner.setOnItemSelectedListener((view, position, id, item) -> {
+
+            for (SectionVendorProducts p : arrayListMain) {
+                if (p.getName().equals(item.toString())) {
+
+                    Log.e(TAG, "initVendorDetailProducts: Scroll Listener Added");
+                    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
+                            int topItemPositionComplete = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+                            int topItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
+
+//                            Log.e(TAG, "onScrolled: topItemPosition "
+//                                    + topItemPositionComplete
+//                                    + " Stop " + p.sectionPosition() + " dy " + dy);
+
+                            if (topItemPositionComplete >= p.sectionPosition() && dy > 0) {
+                                Log.e(TAG, "onScrolled: UPWARD" );
+                                recyclerView.stopScroll();
+                            } else if ((topItemPositionComplete-1) <= p.sectionPosition() && dy < 0) {
+                                Log.e(TAG, "onScrolled: DOWNWARD" );
+                                recyclerView.stopScroll();
+                            }
+
+                            if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE) {
+                                recyclerView.removeOnScrollListener(this);
+                            }
+                        }
+                    });
+
+                    int topItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                    int offset = Math.max(p.getSize(), 10);
+                    if (p.sectionPosition() + p.getSize() > topItemPosition) {
+                        recyclerView.smoothScrollToPosition(p.sectionPosition() + offset);
+                    } else if (p.sectionPosition() < topItemPosition) {
+                        recyclerView.smoothScrollToPosition(p.sectionPosition() - offset);
+                    }
+
+                }
+            }
+            /*
+             * Iterate trough all child+header model to find correct object
+             * model by name. then get its position saved in model object
+             * than rv.scroll to that retrieved position
+             */
+
+//            recyclerView.scrollToPosition(position);
+        });
 
         b.layoutVendorDetail.layoutVendorDetailMain.setVisibility(View.VISIBLE);
         b.layoutVendorDetail.progressVendorDetail.setVisibility(View.GONE);
@@ -1108,6 +1220,7 @@ public class ActivityServiceGroceries extends AppCompatActivity {
         }
 
     }
+
 
     @Override
     protected void onResume() {

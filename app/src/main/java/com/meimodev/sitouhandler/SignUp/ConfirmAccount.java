@@ -60,7 +60,9 @@ public class ConfirmAccount extends AppCompatActivity {
         if (Constant.coolDownMilliSecondsLeft != 0) syncCoolDown();
 
         b.btnConfirm.setOnClickListener(onClickConfirm);
+        b.editTextCode.requestFocus();
         b.btnGetCode.setOnClickListener(onClickRequestCode);
+
 
         if (!StringUtils.isEmpty(str)) {
 //            b.textInputLayoutPhone.getEditText().setText(str);

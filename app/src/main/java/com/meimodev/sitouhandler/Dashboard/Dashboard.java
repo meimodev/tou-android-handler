@@ -215,9 +215,9 @@ public class Dashboard extends AppCompatActivity {
 //        Sending this account refreshed FCM Token to server
         sendFCMTokenToServer();
 
-        fetchFreshChurchData();
+//        fetchFreshChurchData();
 
-        handleAccountNotificationSubscription();
+//        handleAccountNotificationSubscription();
 
 //        init Toolbar And navigation drawer
         setupToolbarAndNavigationDrawer();
@@ -292,131 +292,131 @@ public class Dashboard extends AppCompatActivity {
         super.onResume();
     }
 
-    private void handleAccountNotificationSubscription() {
-        // subscribe & unsubscribe the related notification topics
-
-        FirebaseMessaging fcm = FirebaseMessaging.getInstance();
-        fcm.subscribeToTopic(NOTIFICATION_TOPIC_USER);
-        Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to USER");
-
-        int member_id = Guru.getInt(KEY_MEMBER_ID, 0);
-        if (member_id != 0 && Guru.getString(KEY_MEMBER_BIPRA, null) != null) {
-
-            //if have church membership than subscribe to gmim member
-            fcm.subscribeToTopic(NOTIFICATION_TOPIC_GMIM_MEMBER);
-            Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to GMIM Member");
-
-            int churchId = Guru.getInt(KEY_CHURCH_ID, 0);
-            String churchTopic = NOTIFICATION_TOPIC_CHURCH + "_" + churchId;
-            // subscribe to church topic
-            fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH);
-            Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH);
-
-            String churchPosition = Guru.getString(KEY_MEMBER_CHURCH_POSITION, null);
-            // check if church_executives than subscribe to church executive topics
-            if (churchPosition.contentEquals(ACCOUNT_TYPE_CHIEF)
-                    || churchPosition.contentEquals(ACCOUNT_TYPE_SECRETARY)
-                    || churchPosition.contentEquals(ACCOUNT_TYPE_TREASURER)) {
-
-                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES);
-                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES);
-
-                // also subscribe to pelsus topic
-                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_PELSUS);
-                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Pelsus: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_PELSUS);
-
-                if (churchPosition.contentEquals(ACCOUNT_TYPE_CHIEF)) {
-                    fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_S);
-                    Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Chief-Secretary: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_S);
-
-                    fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_T);
-                    Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Chief-Treasurer: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_T);
-
-                }
-                else if (churchPosition.contentEquals(ACCOUNT_TYPE_SECRETARY)) {
-                    fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_S);
-                    Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Chief-Secretary: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_S);
-
-                    fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_S_T);
-                    Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Secretary-Treasurer: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_S_T);
-
-                }
-                else if (churchPosition.contentEquals(ACCOUNT_TYPE_TREASURER)) {
-                    fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_T);
-                    Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Chief-Treasurer: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_T);
-
-                    fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_S_T);
-                    Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Secretary-Treasurer: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_S_T);
-
-                }
-            }
-
-            // check if pelsus than subs to pelsus topic
-            if (churchPosition.contains(ACCOUNT_TYPE_PENATUA) || churchPosition.contains(ACCOUNT_TYPE_SYAMAS)) {
-                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_PELSUS);
-                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Pelsus: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_PELSUS);
-            }
-
-            String bipra = Guru.getString(KEY_MEMBER_BIPRA, null);
-            int columnId = Guru.getInt(KEY_COLUMN_ID, 0);
-            String columnTopic = churchTopic + "_" + NOTIFICATION_TOPIC_COLUMN + "_" + columnId;
-            // check column than subs to correspond column inside that church
-            fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN);
-            Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Column: " + columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN);
-
-            // check BIPRA church status and subscribe to correspond BIPRA church topics
-            // check BIPRA column status and subscribe to correspond BIPRA column topics
-            if (bipra.contentEquals(BIPRA_PKB)) {
-                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_PKB);
-                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church PKB: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_PKB);
-
-                fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_PKB);
-                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Column PKB: " + columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_PKB);
-
-            }
-            else if (bipra.contentEquals(BIPRA_WKI)) {
-                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_WKI);
-                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church WKI: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_WKI);
-
-                fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_WKI);
-                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Column WKI: " + columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_WKI);
-
-            }
-            else if (bipra.contentEquals(BIPRA_PEMUDA)) {
-                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_YOUTH);
-                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church YOUTH: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_YOUTH);
-
-                fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_YOUTH);
-                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Column YOUTH: " + columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_YOUTH);
-
-            }
-            else if (bipra.contentEquals(BIPRA_REMAJA)) {
-                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_TEENS);
-                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church TEENS: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_TEENS);
-
-                fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_TEENS);
-                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church TEENS: " + columnTopic + "_" + NOTIFICATION_TOPIC_CHURCH_TEENS);
-
-            }
-            else if (bipra.contentEquals(BIPRA_ANAK)) {
-                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_KIDS);
-                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church KIDS: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_KIDS);
-
-                fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_KIDS);
-                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church KIDS: " + columnTopic + "_" + NOTIFICATION_TOPIC_CHURCH_KIDS);
-
-            }
-
-
-        }
-        else {
-            Log.e(TAG, "handleAccountNotificationSubscription: User not a church member ");
-
-
-        }
-
-
-    }
+//    private void handleAccountNotificationSubscription() {
+//        // subscribe & unsubscribe the related notification topics
+//
+//        FirebaseMessaging fcm = FirebaseMessaging.getInstance();
+//        fcm.subscribeToTopic(NOTIFICATION_TOPIC_USER);
+//        Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to USER");
+//
+//        int member_id = Guru.getInt(KEY_MEMBER_ID, 0);
+//        if (member_id != 0 && Guru.getString(KEY_MEMBER_BIPRA, null) != null) {
+//
+//            //if have church membership than subscribe to gmim member
+//            fcm.subscribeToTopic(NOTIFICATION_TOPIC_GMIM_MEMBER);
+//            Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to GMIM Member");
+//
+//            int churchId = Guru.getInt(KEY_CHURCH_ID, 0);
+//            String churchTopic = NOTIFICATION_TOPIC_CHURCH + "_" + churchId;
+//            // subscribe to church topic
+//            fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH);
+//            Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH);
+//
+//            String churchPosition = Guru.getString(KEY_MEMBER_CHURCH_POSITION, null);
+//            // check if church_executives than subscribe to church executive topics
+//            if (churchPosition.contentEquals(ACCOUNT_TYPE_CHIEF)
+//                    || churchPosition.contentEquals(ACCOUNT_TYPE_SECRETARY)
+//                    || churchPosition.contentEquals(ACCOUNT_TYPE_TREASURER)) {
+//
+//                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES);
+//                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES);
+//
+//                // also subscribe to pelsus topic
+//                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_PELSUS);
+//                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Pelsus: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_PELSUS);
+//
+//                if (churchPosition.contentEquals(ACCOUNT_TYPE_CHIEF)) {
+//                    fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_S);
+//                    Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Chief-Secretary: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_S);
+//
+//                    fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_T);
+//                    Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Chief-Treasurer: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_T);
+//
+//                }
+//                else if (churchPosition.contentEquals(ACCOUNT_TYPE_SECRETARY)) {
+//                    fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_S);
+//                    Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Chief-Secretary: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_S);
+//
+//                    fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_S_T);
+//                    Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Secretary-Treasurer: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_S_T);
+//
+//                }
+//                else if (churchPosition.contentEquals(ACCOUNT_TYPE_TREASURER)) {
+//                    fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_T);
+//                    Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Chief-Treasurer: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_C_T);
+//
+//                    fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_S_T);
+//                    Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Executives Secretary-Treasurer: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_EXECUTIVES_S_T);
+//
+//                }
+//            }
+//
+//            // check if pelsus than subs to pelsus topic
+//            if (churchPosition.contains(ACCOUNT_TYPE_PENATUA) || churchPosition.contains(ACCOUNT_TYPE_SYAMAS)) {
+//                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_PELSUS);
+//                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church Pelsus: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_PELSUS);
+//            }
+//
+//            String bipra = Guru.getString(KEY_MEMBER_BIPRA, null);
+//            int columnId = Guru.getInt(KEY_COLUMN_ID, 0);
+//            String columnTopic = churchTopic + "_" + NOTIFICATION_TOPIC_COLUMN + "_" + columnId;
+//            // check column than subs to correspond column inside that church
+//            fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN);
+//            Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Column: " + columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN);
+//
+//            // check BIPRA church status and subscribe to correspond BIPRA church topics
+//            // check BIPRA column status and subscribe to correspond BIPRA column topics
+//            if (bipra.contentEquals(BIPRA_PKB)) {
+//                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_PKB);
+//                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church PKB: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_PKB);
+//
+//                fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_PKB);
+//                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Column PKB: " + columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_PKB);
+//
+//            }
+//            else if (bipra.contentEquals(BIPRA_WKI)) {
+//                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_WKI);
+//                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church WKI: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_WKI);
+//
+//                fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_WKI);
+//                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Column WKI: " + columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_WKI);
+//
+//            }
+//            else if (bipra.contentEquals(BIPRA_PEMUDA)) {
+//                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_YOUTH);
+//                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church YOUTH: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_YOUTH);
+//
+//                fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_YOUTH);
+//                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Column YOUTH: " + columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_YOUTH);
+//
+//            }
+//            else if (bipra.contentEquals(BIPRA_REMAJA)) {
+//                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_TEENS);
+//                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church TEENS: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_TEENS);
+//
+//                fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_TEENS);
+//                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church TEENS: " + columnTopic + "_" + NOTIFICATION_TOPIC_CHURCH_TEENS);
+//
+//            }
+//            else if (bipra.contentEquals(BIPRA_ANAK)) {
+//                fcm.subscribeToTopic(churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_KIDS);
+//                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church KIDS: " + churchTopic + "_" + NOTIFICATION_TOPIC_CHURCH_KIDS);
+//
+//                fcm.subscribeToTopic(columnTopic + "_" + NOTIFICATION_TOPIC_COLUMN_KIDS);
+//                Log.e(TAG, "handleAccountNotificationSubscription: Subscribed to Church KIDS: " + columnTopic + "_" + NOTIFICATION_TOPIC_CHURCH_KIDS);
+//
+//            }
+//
+//
+//        }
+//        else {
+//            Log.e(TAG, "handleAccountNotificationSubscription: User not a church member ");
+//
+//
+//        }
+//
+//
+//    }
 
     private void setupNavDrawerItemsBasedOnAccountType() {
 
@@ -526,7 +526,7 @@ public class Dashboard extends AppCompatActivity {
 
         // vendor
         if (Guru.getInt(KEY_USER_ID, 0) == RESERVED_USER_ID){
-            navSubMenu.findItem(R.id.nav_vendor).setVisible(true);
+//            navSubMenu.findItem(R.id.nav_vendor).setVisible(true);
             Guru.putInt(Constant.KEY_VENDOR_ID, Constant.RESERVED_USER_ID);
         }
     }
@@ -603,27 +603,27 @@ public class Dashboard extends AppCompatActivity {
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
-        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-//                if (speedDialView.isOpen()) speedDialView.close(true);
-            }
-
-            @Override
-            public void onDrawerOpened(@NonNull View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
+//        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+//            @Override
+//            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+////                if (speedDialView.isOpen()) speedDialView.close(true);
+//            }
+//
+//            @Override
+//            public void onDrawerOpened(@NonNull View drawerView) {
+//
+//            }
+//
+//            @Override
+//            public void onDrawerClosed(@NonNull View drawerView) {
+//
+//            }
+//
+//            @Override
+//            public void onDrawerStateChanged(int newState) {
+//
+//            }
+//        });
 
         TextView tvAppName = navigationView.getHeaderView(0).findViewById(R.id.textView_appName);
         TextView tvAppVersion = navigationView.getHeaderView(0).findViewById(R.id.textView_appVersion);
@@ -796,34 +796,34 @@ public class Dashboard extends AppCompatActivity {
                 });
     }
 
-    private void fetchFreshChurchData() {
-        int churchId = Guru.getInt(KEY_CHURCH_ID, 0);
-        if (churchId == 0) return;
-
-        //fetch church data in dashboard so the data always fresh
-
-        IssueRequestHandler req = new IssueRequestHandler(Dashboard.this);
-        req.setIntention(new Throwable());
-        req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
-            @Override
-            public void onTry() {
-
-            }
-
-            @Override
-            public void onSuccess(APIWrapper res, String message) throws JSONException {
-                JSONArray columns = res.getData().getJSONArray("columns");
-                Guru.putInt(KEY_CHURCH_COLUMN_COUNT, columns.length());
-            }
-
-            @Override
-            public void onRetry() {
-                fetchFreshChurchData();
-            }
-        });
-        req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().findChurchById(churchId));
-
-    }
+//    private void fetchFreshChurchData() {
+//        int churchId = Guru.getInt(KEY_CHURCH_ID, 0);
+//        if (churchId == 0) return;
+//
+//        //fetch church data in dashboard so the data always fresh
+//
+//        IssueRequestHandler req = new IssueRequestHandler(Dashboard.this);
+//        req.setIntention(new Throwable());
+//        req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
+//            @Override
+//            public void onTry() {
+//
+//            }
+//
+//            @Override
+//            public void onSuccess(APIWrapper res, String message) throws JSONException {
+//                JSONArray columns = res.getData().getJSONArray("columns");
+//                Guru.putInt(KEY_CHURCH_COLUMN_COUNT, columns.length());
+//            }
+//
+//            @Override
+//            public void onRetry() {
+//                fetchFreshChurchData();
+//            }
+//        });
+//        req.backGroundRequest(RetrofitClient.getInstance(null).getApiServices().findChurchById(churchId));
+//
+//    }
 
     @BindView(R.id.bottomNavBar)
     BottomNavigationView bottomNavigationView;

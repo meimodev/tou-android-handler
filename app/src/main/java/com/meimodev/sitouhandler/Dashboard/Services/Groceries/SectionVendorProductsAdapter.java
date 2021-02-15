@@ -33,6 +33,7 @@ public class SectionVendorProductsAdapter extends StickyAdapter<RecyclerView.Vie
 
     Context context;
 
+
     private static final int LAYOUT_HEADER = 0;
     private static final int LAYOUT_CHILD = 1;
 

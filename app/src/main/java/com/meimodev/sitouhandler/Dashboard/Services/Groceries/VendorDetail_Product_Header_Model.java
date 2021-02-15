@@ -4,6 +4,7 @@ public class VendorDetail_Product_Header_Model implements SectionVendorProducts 
 
     String name;
     private int section;
+    private int size;
 
     public VendorDetail_Product_Header_Model(int section) {
         this.section = section;
@@ -13,6 +14,9 @@ public class VendorDetail_Product_Header_Model implements SectionVendorProducts 
         this.name = name;
     }
 
+    public void setSize(int size) {
+        this.size = size;
+    }
 
     @Override
     public boolean isHeader() {
@@ -67,5 +71,10 @@ public class VendorDetail_Product_Header_Model implements SectionVendorProducts 
     @Override
     public int sectionPosition() {
         return section;
+    }
+
+    @Override
+    public int getSize() {
+        return size;
     }
 }
