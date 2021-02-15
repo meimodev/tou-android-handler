@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -956,7 +957,10 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
     private void fetchVendorData() {
         b.layoutVendorDetail.layoutVendorDetailMain.setVisibility(View.GONE);
-        b.layoutVendorDetail.progressVendorDetail.setVisibility(View.VISIBLE);
+        ProgressBar progressBar = b.layoutVendorDetail.progressVendorDetail;
+        if (progressBar.getVisibility() != View.VISIBLE) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
         IssueRequestHandler req = new IssueRequestHandler(b.getRoot());
         req.setIntention(new Throwable());
@@ -974,6 +978,8 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 
             @Override
             public void onRetry() {
+                progressBar.setVisibility(View.GONE);
+
                 Constant.displayDialog(
                         ActivityServiceGroceries.this,
                         "Perhatian !",
@@ -1171,10 +1177,10 @@ public class ActivityServiceGroceries extends AppCompatActivity {
 //                                    + " Stop " + p.sectionPosition() + " dy " + dy);
 
                             if (topItemPositionComplete >= p.sectionPosition() && dy > 0) {
-                                Log.e(TAG, "onScrolled: UPWARD" );
+                                Log.e(TAG, "onScrolled: UPWARD");
                                 recyclerView.stopScroll();
-                            } else if ((topItemPositionComplete-1) <= p.sectionPosition() && dy < 0) {
-                                Log.e(TAG, "onScrolled: DOWNWARD" );
+                            } else if ((topItemPositionComplete - 1) <= p.sectionPosition() && dy < 0) {
+                                Log.e(TAG, "onScrolled: DOWNWARD");
                                 recyclerView.stopScroll();
                             }
 
