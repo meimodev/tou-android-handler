@@ -8,6 +8,43 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:1070519388463:android:a10ca8d5b5f95c0d9279da",
+        "android_client_info": {
+          "package_name": "com.meimodev.flutter_app_2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1070519388463-b7i082phsfvd2ccgbogrcisoaeaa8mla.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.meimodev.flutter_app_2",
+            "certificate_hash": "69ec88a78f376126be8e57583a9a227085ebc5c3"
+          }
+        },
+        {
+          "client_id": "1070519388463-p3dpt71tartq93ct79cv2k9s6vkmi3id.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhm-EP_dR2Y5GgmzXRYHmNS6EgyzYcN7M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1070519388463-p3dpt71tartq93ct79cv2k9s6vkmi3id.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:1070519388463:android:90ed4e29100c921e9279da",
         "android_client_info": {
           "package_name": "com.meimodev.sitouhandler"
@@ -20,6 +57,14 @@
           "android_info": {
             "package_name": "com.meimodev.sitouhandler",
             "certificate_hash": "69ca69516827be30bd21e41c20590089ce40c6c9"
+          }
+        },
+        {
+          "client_id": "1070519388463-q1cdnmsv4b7ubi12j36odl0149uae90c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.meimodev.sitouhandler",
+            "certificate_hash": "a4e611bfa328c6ef9fe6c674aa803d9bf378c71b"
           }
         },
         {

@@ -73,7 +73,6 @@ public class SignUp extends AppCompatActivity {
         CardView cvTermsAndConditions = b.getRoot().findViewById(R.id.cardView_termsCondition);
         btnSignUp.setOnClickListener(onClickSignUp);
         cvTermsAndConditions.setOnClickListener(onClickTermsConditions);
-
     }
 
     private final View.OnClickListener onClickTermsConditions = view -> {
@@ -176,6 +175,7 @@ public class SignUp extends AppCompatActivity {
     void startConfirmationActivity() {
         Intent i = new Intent(SignUp.this, ConfirmAccount.class);
         i.putExtra("phone", b.textInputLayoutPhone.getEditText().getText().toString());
+        i.putExtra("pass",  b.textInputLayoutPassword.getEditText().getText().toString());
         startActivity(i);
         finish();
     }

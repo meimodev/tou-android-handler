@@ -14,6 +14,7 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.squti.guru.Guru;
 import com.google.android.material.textfield.TextInputLayout;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Helper.APIWrapper;
@@ -40,6 +41,8 @@ public class ConfirmAccount extends AppCompatActivity {
 
     private ActivityConfirmAccountBinding b;
 
+    private String phone, pass;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +54,8 @@ public class ConfirmAccount extends AppCompatActivity {
         Constant.changeStatusColor(this, R.color.background);
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-        String str = getIntent().getStringExtra("phone");
+        phone = getIntent().getStringExtra("phone");
+        pass = getIntent().getStringExtra("pass");
 
 
         validator = new Validator(this);
@@ -64,9 +68,9 @@ public class ConfirmAccount extends AppCompatActivity {
         b.btnGetCode.setOnClickListener(onClickRequestCode);
 
 
-        if (!StringUtils.isEmpty(str)) {
+        if (StringUtils.isNotEmpty(phone)) {
 //            b.textInputLayoutPhone.getEditText().setText(str);
-            b.textViewPhone.setText(str);
+            b.textViewPhone.setText(phone);
             if (Constant.coolDownMilliSecondsLeft == 0) b.btnGetCode.performClick();
         }
 
@@ -116,7 +120,7 @@ public class ConfirmAccount extends AppCompatActivity {
 
             @Override
             public void onSuccess(APIWrapper res, String message) throws JSONException {
-                if (type.equals("REQUEST")) {
+                if (type.contentEquals("REQUEST")) {
                     Constant.displayDialog(
                             ConfirmAccount.this,
                             "Perhatian!",
@@ -137,7 +141,11 @@ public class ConfirmAccount extends AppCompatActivity {
                             (dialog, which) -> {
                             },
                             null,
-                            dialog -> finish()
+                            dialog -> {
+                                Guru.putString("TEMP_PHONE", phone);
+                                Guru.putString("TEMP_PASS", pass);
+                                finish();
+                            }
                     );
                 }
             }

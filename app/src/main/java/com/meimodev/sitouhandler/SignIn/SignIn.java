@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.squti.guru.Guru;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.meimodev.sitouhandler.Constant;
 import com.meimodev.sitouhandler.Dashboard.Dashboard;
 import com.meimodev.sitouhandler.ForgetAccount.ForgetAccount;
@@ -26,10 +28,13 @@ import com.meimodev.sitouhandler.Validator;
 import com.meimodev.sitouhandler.Wizard.ApplyChurch.ApplyChurch;
 import com.meimodev.sitouhandler.databinding.ActivitySigninBinding;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -52,6 +57,8 @@ public class SignIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         b = ActivitySigninBinding.inflate(getLayoutInflater());
         setContentView(b.getRoot());
+
+//        setupFirebasePhoneAuth();
 
         Constant.changeStatusColor(this, R.color.background);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -90,13 +97,69 @@ public class SignIn extends AppCompatActivity {
 //        initHelper();
     }
 
-
+    private static final int RC_SIGN_IN = 123;
+//
+//    private void setupFirebasePhoneAuth() {
+//        FirebaseAuth auth = FirebaseAuth.getInstance();
+//        if (auth.getCurrentUser() != null) {
+//            Snackbar.make(b.getRoot(), "Already Signed in", Snackbar.LENGTH_LONG).show();
+//        } else {
+//            startActivityForResult(
+//                    // Get an instance of AuthUI based on the default app
+//                    AuthUI.getInstance()
+//                            .createSignInIntentBuilder()
+//                            .setAvailableProviders(Arrays.asList(
+//                                    new AuthUI.IdpConfig.PhoneBuilder().build()))
+//                            .build(),
+//                    RC_SIGN_IN);
+//        }
+//    }
+//
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        // RC_SIGN_IN is the request code you passed into startActivityForResult(...) when starting the sign in flow.
+//        if (requestCode == RC_SIGN_IN) {
+//            IdpResponse response = IdpResponse.fromResultIntent(data);
+//
+//            // Successfully signed in
+//            if (resultCode == RESULT_OK) {
+//                Snackbar.make(b.getRoot(), "SIGNIN SUCCESS", Snackbar.LENGTH_INDEFINITE).show();
+//            } else {
+//                // Sign in failed
+//                if (response == null) {
+//                    // User pressed back button
+//                    Snackbar.make(b.getRoot(), "USER CANCELED", Snackbar.LENGTH_INDEFINITE).show();
+//                    return;
+//                }
+//
+//                if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
+//                    Snackbar.make(b.getRoot(), "No Internet "+response.getError().getErrorCode(), Snackbar.LENGTH_INDEFINITE).show();
+//                    return;
+//                }
+//
+//                Snackbar.make(b.getRoot(), "UNKNOWN ERROR", Snackbar.LENGTH_INDEFINITE).show();
+//                Log.e(TAG, "Sign-in error: ", response.getError());
+//            }
+//        }
+//    }
+//
 
     @Override
     protected void onResume() {
         super.onResume();
         if (b.textInputLayoutPhone.getError() != null) b.textInputLayoutPhone.setError(null);
         if (b.textInputLayoutPassword.getError() != null) b.textInputLayoutPassword.setError(null);
+
+        String phone = Guru.getString("TEMP_PHONE", "");
+        String pass = Guru.getString("TEMP_PASS", "");
+        if (StringUtils.isNotEmpty(phone) && StringUtils.isNotEmpty(pass)) {
+            b.textInputLayoutPhone.getEditText().setText(phone);
+            b.textInputLayoutPassword.getEditText().setText(pass);
+            b.btnSignIn.callOnClick();
+            Guru.remove("TEMP_PHONE");
+            Guru.remove("TEMP_PASS");
+        }
+
     }
 
     private void signIn() {
