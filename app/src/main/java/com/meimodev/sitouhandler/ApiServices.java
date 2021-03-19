@@ -39,13 +39,29 @@ public interface ApiServices {
     );
 
     @FormUrlEncoded
-    @POST("sign-up-account")
-    Call<ResponseBody> signUpAccount(
+    @POST("sign-in-firebase")
+    Call<ResponseBody> signInFirebase(
             @Field("phone") String phone,
-            @Field("password") String password,
-            @Field("first_name") String firstName,
-            @Field("last_name") String lastName,
-            @Field("date_of_birth") String dob,
+            @Field("token") String token
+    );
+
+//    @FormUrlEncoded
+//    @POST("sign-up-account")
+//    Call<ResponseBody> signUpAccount(
+//            @Field("phone") String phone,
+//            @Field("password") String password,
+//            @Field("first_name") String firstName,
+//            @Field("last_name") String lastName,
+//            @Field("date_of_birth") String dob,
+//            @Field("sex") String sex
+//    );
+
+    @FormUrlEncoded
+    @POST("sign-up-account")
+    Call<ResponseBody> signUpFirebase(
+            @Field("phone") String phone,
+            @Field("fName") String firstName,
+            @Field("lName") String lastName,
             @Field("sex") String sex
     );
 

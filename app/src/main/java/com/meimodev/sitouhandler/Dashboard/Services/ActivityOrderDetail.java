@@ -53,7 +53,7 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
     private ActivityOrderDetailBinding b;
 
     private int orderId = -99;
-    private GoogleMap gMap;
+//    private GoogleMap gMap;
 
     private BroadcastReceiver brOrderUpdate = new BroadcastReceiver() {
         @Override
@@ -133,62 +133,62 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
         initFinishButton(data);
 
         //set map
-        initMap(data);
+//        initMap(data);
 
     }
 
-    private void initMap(JSONObject data) throws JSONException {
-        int transportFee = Integer.parseInt(data.getString("transport_fee"));
-        String deliveryLocation = data.getString("delivery_location");
-
-        String vLat = data.getString("vendor_lat");
-        String vLng = data.getString("vendor_lng");
-
-        String lat;
-        String lng;
-
-        String defaultDeliveryText =b.textViewDeliveryLocation.getText().toString();
-        if (transportFee <= 0) {
-
-            lat = vLat;
-            lng = vLng;
-            b.textViewDeliveryLocation.setText(deliveryLocation);
-            b.textViewDeliveryLocationText.setText("CATATAN TAMBAHAN");
-
-        }
-        else {
-            lat = data.getString("coordinate_lat");
-            lng = data.getString("coordinate_lng");
-            b.textViewDeliveryLocation.setText(deliveryLocation);
-            b.textViewDeliveryLocationText.setText(defaultDeliveryText);
-
-        }
-
-        MySupportMapFragment mapFragment =
-                ((MySupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
-        mapFragment.setListener(() -> b.getRoot().requestDisallowInterceptTouchEvent(true));
-        mapFragment.getMapAsync(googleMap -> {
-            gMap = googleMap;
-
-            LatLng target = new LatLng(
-                    Double.parseDouble(lat),
-                    Double.parseDouble(lng)
-            );
-            gMap.addMarker(
-                    new MarkerOptions()
-                            .position(target)
-                            .draggable(false)
-                            .title("Lokasi Pengantaran")
-                            .icon(BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(this, R.drawable.ic_map_marker_down_24px)))
-            );
-            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, 15f));
-            gMap.setMinZoomPreference(11.25f);
-            gMap.getUiSettings().setCompassEnabled(false);
-            gMap.getUiSettings().setRotateGesturesEnabled(false);
-            gMap.getUiSettings().setTiltGesturesEnabled(false);
-        });
-
-    }
+//    private void initMap(JSONObject data) throws JSONException {
+//        int transportFee = Integer.parseInt(data.getString("transport_fee"));
+//        String deliveryLocation = data.getString("delivery_location");
+//
+//        String vLat = data.getString("vendor_lat");
+//        String vLng = data.getString("vendor_lng");
+//
+//        String lat;
+//        String lng;
+//
+//        String defaultDeliveryText =b.textViewDeliveryLocation.getText().toString();
+//        if (transportFee <= 0) {
+//
+//            lat = vLat;
+//            lng = vLng;
+//            b.textViewDeliveryLocation.setText(deliveryLocation);
+//            b.textViewDeliveryLocationText.setText("CATATAN TAMBAHAN");
+//
+//        }
+//        else {
+//            lat = data.getString("coordinate_lat");
+//            lng = data.getString("coordinate_lng");
+//            b.textViewDeliveryLocation.setText(deliveryLocation);
+//            b.textViewDeliveryLocationText.setText(defaultDeliveryText);
+//
+//        }
+//
+//        MySupportMapFragment mapFragment =
+//                ((MySupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+//        mapFragment.setListener(() -> b.getRoot().requestDisallowInterceptTouchEvent(true));
+//        mapFragment.getMapAsync(googleMap -> {
+//            gMap = googleMap;
+//
+//            LatLng target = new LatLng(
+//                    Double.parseDouble(lat),
+//                    Double.parseDouble(lng)
+//            );
+//            gMap.addMarker(
+//                    new MarkerOptions()
+//                            .position(target)
+//                            .draggable(false)
+//                            .title("Lokasi Pengantaran")
+//                            .icon(BitmapDescriptorFactory.fromBitmap(getBitmapFromVectorDrawable(this, R.drawable.ic_map_marker_down_24px)))
+//            );
+//            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, 15f));
+//            gMap.setMinZoomPreference(11.25f);
+//            gMap.getUiSettings().setCompassEnabled(false);
+//            gMap.getUiSettings().setRotateGesturesEnabled(false);
+//            gMap.getUiSettings().setTiltGesturesEnabled(false);
+//        });
+//
+//    }
 
     private void initRating(JSONObject data) throws JSONException {
 

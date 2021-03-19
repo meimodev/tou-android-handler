@@ -57,7 +57,8 @@ public class SignUp extends AppCompatActivity {
                 R.layout.resoruce_dropdown_popup_large,
                 new String[]{"Laki-laki", "Perempuan"});
 
-        AutoCompleteTextView editTextFilledExposedDropdown = findViewById(R.id.filled_exposed_dropdown);
+        AutoCompleteTextView editTextFilledExposedDropdown =
+                findViewById(R.id.filled_exposed_dropdown);
         editTextFilledExposedDropdown.setAdapter(adapter);
 
         CustomEditText cetDob = findViewById(R.id.editText_dob);
@@ -104,73 +105,73 @@ public class SignUp extends AppCompatActivity {
 
         if (validator.validateSex(b.textInputLayoutSex) != null) return;
 
-        sendData(
-                b.textInputLayoutPhone.getEditText().getText().toString(),
-                b.textInputLayoutPassword.getEditText().getText().toString(),
-                b.textInputLayoutFirstName.getEditText().getText().toString(),
-                b.textInputLayoutLastName.getEditText().getText().toString(),
-                b.textInputLayoutDob.getEditText().getText().toString(),
-                b.textInputLayoutSex.getEditText().getText().toString()
-        );
+//        sendData(
+//                b.textInputLayoutPhone.getEditText().getText().toString(),
+//                b.textInputLayoutPassword.getEditText().getText().toString(),
+//                b.textInputLayoutFirstName.getEditText().getText().toString(),
+//                b.textInputLayoutLastName.getEditText().getText().toString(),
+//                b.textInputLayoutDob.getEditText().getText().toString(),
+//                b.textInputLayoutSex.getEditText().getText().toString()
+//        );
     };
 
-    void sendData(String phone, String password, String firstName, String lastName, String dob, String sex) {
-
-        IssueRequestHandler req = new IssueRequestHandler(findViewById(android.R.id.content));
-        Call<ResponseBody> call = RetrofitClient.getInstance(null).getApiServices().signUpAccount(
-                phone, password, firstName, lastName, dob, sex
-        );
-        req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
-            @Override
-            public void onTry() {
-
-            }
-
-            @Override
-            public void onSuccess(APIWrapper res, String message) throws JSONException {
-
-                if (message.contentEquals("OK")) {
-                    Constant.displayDialog(
-                            SignUp.this,
-                            "OK",
-                            "Pendaftaran akun BERHASIL dilakukan. Silahkan lakukan aktivasi akun di halaman berikut",
-                            true,
-                            (dialog, which) -> {
-                            },
-                            null,
-                            dialog -> startConfirmationActivity()
-                    );
-
-
-                } else if (message.contains("digunakan")) {
-                    b.textInputLayoutPhone.setError(message);
-                    Constant.displayDialog(
-                            SignUp.this,
-                            "Perhatian!",
-                            message,
-                            (dialog, which) -> {
-                            }
-                    );
-                } else if (message.contains("Tanggal tidak valid")) {
-                    b.textInputLayoutDob.setError(message);
-                    Constant.displayDialog(
-                            SignUp.this,
-                            "Perhatian!",
-                            message,
-                            (dialog, which) -> {
-                            }
-                    );
-                }
-            }
-
-            @Override
-            public void onRetry() {
-                sendData(phone, password, firstName, lastName, dob, sex);
-            }
-        });
-        req.enqueue(call);
-
-    }
+//    void sendData(String phone, String password, String firstName, String lastName, String dob, String sex) {
+//
+//        IssueRequestHandler req = new IssueRequestHandler(findViewById(android.R.id.content));
+//        Call<ResponseBody> call = RetrofitClient.getInstance(null).getApiServices().signUpAccount(
+//                phone, password, firstName, lastName, dob, sex
+//        );
+//        req.setOnRequestHandler(new IssueRequestHandler.OnRequestHandler() {
+//            @Override
+//            public void onTry() {
+//
+//            }
+//
+//            @Override
+//            public void onSuccess(APIWrapper res, String message) throws JSONException {
+//
+//                if (message.contentEquals("OK")) {
+//                    Constant.displayDialog(
+//                            SignUp.this,
+//                            "OK",
+//                            "Pendaftaran akun BERHASIL dilakukan. Silahkan lakukan aktivasi akun di halaman berikut",
+//                            true,
+//                            (dialog, which) -> {
+//                            },
+//                            null,
+//                            dialog -> startConfirmationActivity()
+//                    );
+//
+//
+//                } else if (message.contains("digunakan")) {
+//                    b.textInputLayoutPhone.setError(message);
+//                    Constant.displayDialog(
+//                            SignUp.this,
+//                            "Perhatian!",
+//                            message,
+//                            (dialog, which) -> {
+//                            }
+//                    );
+//                } else if (message.contains("Tanggal tidak valid")) {
+//                    b.textInputLayoutDob.setError(message);
+//                    Constant.displayDialog(
+//                            SignUp.this,
+//                            "Perhatian!",
+//                            message,
+//                            (dialog, which) -> {
+//                            }
+//                    );
+//                }
+//            }
+//
+//            @Override
+//            public void onRetry() {
+//                sendData(phone, password, firstName, lastName, dob, sex);
+//            }
+//        });
+//        req.enqueue(call);
+//
+//    }
 
     void startConfirmationActivity() {
         Intent i = new Intent(SignUp.this, ConfirmAccount.class);

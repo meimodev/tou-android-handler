@@ -205,7 +205,6 @@ public class Dashboard extends AppCompatActivity {
         ButterKnife.bind(this);
         changeStatusColor(this, R.color.colorPrimary);
 
-
 //        Binding Auth Token to Retrofit
         RetrofitClient.reBuiltRetrofitClient();
 //        RetrofitClient.getInstance(Guru.getString(KEY_USER_ACCESS_TOKEN, null)).getApiServices();
@@ -231,7 +230,7 @@ public class Dashboard extends AppCompatActivity {
         setupBackgroundHeader();
 
 //        set items on nav drawer & default item selected
-        setupNavDrawerItemsBasedOnAccountType();
+//        setupNavDrawerItemsBasedOnAccountType();
 
 //        transact default checked navigation menu fragment
         getSupportFragmentManager().beginTransaction()
@@ -240,7 +239,7 @@ public class Dashboard extends AppCompatActivity {
                 .addToBackStack(null)
                 .commit();
 
-        initDuplicateCheck();
+//        initDuplicateCheck();
     }
 
     @Override
@@ -417,119 +416,119 @@ public class Dashboard extends AppCompatActivity {
 //
 //
 //    }
-
-    private void setupNavDrawerItemsBasedOnAccountType() {
-
-        String memberPosition = Guru.getString(KEY_MEMBER_CHURCH_POSITION, null);
-        Log.e(TAG, "setupNavDrawerItemsBasedOnAccountType: memberPositions " + memberPosition);
-
-        boolean showSundayIncome = false;
-        boolean enableAuthorize = false;
-        boolean enableIssuing = false;
-
-        navigationView.setCheckedItem(R.id.nav_home);
-
-        if (memberPosition.contains(ACCOUNT_TYPE_CHIEF)) {
-            navigationView.getMenu().findItem(R.id.nav_chief).getSubMenu().setGroupVisible(R.id.nav_group_chief, true);
-//            speedDialView.setVisibility(View.VISIBLE);
-            enableIssuing = true;
-            enableAuthorize = true;
-            showSundayIncome = true;
-        }
-
-        if (memberPosition.contains(ACCOUNT_TYPE_SECRETARY)) {
-            navigationView.getMenu().findItem(R.id.nav_secretary).getSubMenu().setGroupVisible(R.id.nav_group_secretary, true);
-//            speedDialView.setVisibility(View.VISIBLE);
-            enableIssuing = true;
-            enableAuthorize = true;
-            showSundayIncome = true;
-        }
-
-        if (memberPosition.contains(ACCOUNT_TYPE_TREASURER)) {
-            navigationView.getMenu().findItem(R.id.nav_treasurer).getSubMenu().setGroupVisible(R.id.nav_group_treasurer, true);
-//            speedDialView.setVisibility(View.VISIBLE);
-            enableIssuing = true;
-            enableAuthorize = true;
-            showSundayIncome = true;
-        }
-
-        if (memberPosition.contains(ACCOUNT_TYPE_PRIEST)) {
-            navigationView.getMenu().findItem(R.id.nav_priest).getSubMenu().setGroupVisible(R.id.nav_group_priest, true);
-//            speedDialView.setVisibility(View.VISIBLE);
-            enableIssuing = true;
-            enableAuthorize = true;
-            showSundayIncome = true;
-        }
-
-        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA)) {
-            navigationView.getMenu().findItem(R.id.nav_penatua).getSubMenu().setGroupVisible(R.id.nav_group_penatua, true);
-//            speedDialView.setVisibility(View.VISIBLE);
-            enableIssuing = true;
-            enableAuthorize = true;
-            showSundayIncome = true;
-        }
-
-        if (memberPosition.contains(ACCOUNT_TYPE_SYAMAS)) {
-            navigationView.getMenu().findItem(R.id.nav_syamas).getSubMenu().setGroupVisible(R.id.nav_group_syamas, true);
-//            speedDialView.setVisibility(View.VISIBLE);
-            enableIssuing = true;
-            enableAuthorize = true;
-            showSundayIncome = true;
-        }
-
-        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_PKB)) {
-            navigationView.getMenu().findItem(R.id.nav_penatua_pkb).getSubMenu().setGroupVisible(R.id.nav_group_penatua_pkb, true);
-//            speedDialView.setVisibility(View.VISIBLE);
-            enableIssuing = true;
-            enableAuthorize = true;
-            showSundayIncome = true;
-        }
-
-        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_WKI)) {
-            navigationView.getMenu().findItem(R.id.nav_penatua_pkb).getSubMenu().setGroupVisible(R.id.nav_group_penatua_wki, true);
-//            speedDialView.setVisibility(View.VISIBLE);
-            enableIssuing = true;
-            enableAuthorize = true;
-            showSundayIncome = true;
-        }
-
-        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_YOUTH)) {
-            navigationView.getMenu().findItem(R.id.nav_penatua_pemuda).getSubMenu().setGroupVisible(R.id.nav_group_penatua_pemuda, true);
-//            speedDialView.setVisibility(View.VISIBLE);
-            enableIssuing = true;
-            enableAuthorize = true;
-            showSundayIncome = true;
-        }
-
-        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_REMAJA)) {
-            navigationView.getMenu().findItem(R.id.nav_penatua_remaja).getSubMenu().setGroupVisible(R.id.nav_group_penatua_remaja, true);
-//            speedDialView.setVisibility(View.VISIBLE);
-            enableIssuing = true;
-            enableAuthorize = true;
-            showSundayIncome = true;
-        }
-
-        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_ANAK)) {
-            navigationView.getMenu().findItem(R.id.nav_penatua_anak).getSubMenu().setGroupVisible(R.id.nav_group_penatua_anak, true);
-//            speedDialView.setVisibility(View.VISIBLE);
-            showSundayIncome = true;
-            enableIssuing = true;
-            enableAuthorize = true;
-        }
-        SubMenu navSubMenu = navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu();
-        navSubMenu.findItem(R.id.nav_authorize).setEnabled(enableAuthorize);
-        Log.e(TAG, "setupNavDrawerItemsBasedOnAccountType: authorizing "+enableAuthorize );
-        navSubMenu.findItem(R.id.nav_issue).setEnabled(enableIssuing);
-        Log.e(TAG, "setupNavDrawerItemsBasedOnAccountType: issuing "+enableIssuing );
-
-        navSubMenu.findItem(R.id.nav_sundayIncome).setVisible(showSundayIncome);
-
-        // vendor
-        if (Guru.getInt(KEY_USER_ID, 0) == RESERVED_USER_ID){
-//            navSubMenu.findItem(R.id.nav_vendor).setVisible(true);
-            Guru.putInt(Constant.KEY_VENDOR_ID, Constant.RESERVED_USER_ID);
-        }
-    }
+//
+//    private void setupNavDrawerItemsBasedOnAccountType() {
+//
+//        String memberPosition = Guru.getString(KEY_MEMBER_CHURCH_POSITION, null);
+//        Log.e(TAG, "setupNavDrawerItemsBasedOnAccountType: memberPositions " + memberPosition);
+//
+//        boolean showSundayIncome = false;
+//        boolean enableAuthorize = false;
+//        boolean enableIssuing = false;
+//
+//        navigationView.setCheckedItem(R.id.nav_home);
+//
+//        if (memberPosition.contains(ACCOUNT_TYPE_CHIEF)) {
+//            navigationView.getMenu().findItem(R.id.nav_chief).getSubMenu().setGroupVisible(R.id.nav_group_chief, true);
+////            speedDialView.setVisibility(View.VISIBLE);
+//            enableIssuing = true;
+//            enableAuthorize = true;
+//            showSundayIncome = true;
+//        }
+//
+//        if (memberPosition.contains(ACCOUNT_TYPE_SECRETARY)) {
+//            navigationView.getMenu().findItem(R.id.nav_secretary).getSubMenu().setGroupVisible(R.id.nav_group_secretary, true);
+////            speedDialView.setVisibility(View.VISIBLE);
+//            enableIssuing = true;
+//            enableAuthorize = true;
+//            showSundayIncome = true;
+//        }
+//
+//        if (memberPosition.contains(ACCOUNT_TYPE_TREASURER)) {
+//            navigationView.getMenu().findItem(R.id.nav_treasurer).getSubMenu().setGroupVisible(R.id.nav_group_treasurer, true);
+////            speedDialView.setVisibility(View.VISIBLE);
+//            enableIssuing = true;
+//            enableAuthorize = true;
+//            showSundayIncome = true;
+//        }
+//
+//        if (memberPosition.contains(ACCOUNT_TYPE_PRIEST)) {
+//            navigationView.getMenu().findItem(R.id.nav_priest).getSubMenu().setGroupVisible(R.id.nav_group_priest, true);
+////            speedDialView.setVisibility(View.VISIBLE);
+//            enableIssuing = true;
+//            enableAuthorize = true;
+//            showSundayIncome = true;
+//        }
+//
+//        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA)) {
+//            navigationView.getMenu().findItem(R.id.nav_penatua).getSubMenu().setGroupVisible(R.id.nav_group_penatua, true);
+////            speedDialView.setVisibility(View.VISIBLE);
+//            enableIssuing = true;
+//            enableAuthorize = true;
+//            showSundayIncome = true;
+//        }
+//
+//        if (memberPosition.contains(ACCOUNT_TYPE_SYAMAS)) {
+//            navigationView.getMenu().findItem(R.id.nav_syamas).getSubMenu().setGroupVisible(R.id.nav_group_syamas, true);
+////            speedDialView.setVisibility(View.VISIBLE);
+//            enableIssuing = true;
+//            enableAuthorize = true;
+//            showSundayIncome = true;
+//        }
+//
+//        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_PKB)) {
+//            navigationView.getMenu().findItem(R.id.nav_penatua_pkb).getSubMenu().setGroupVisible(R.id.nav_group_penatua_pkb, true);
+////            speedDialView.setVisibility(View.VISIBLE);
+//            enableIssuing = true;
+//            enableAuthorize = true;
+//            showSundayIncome = true;
+//        }
+//
+//        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_WKI)) {
+//            navigationView.getMenu().findItem(R.id.nav_penatua_pkb).getSubMenu().setGroupVisible(R.id.nav_group_penatua_wki, true);
+////            speedDialView.setVisibility(View.VISIBLE);
+//            enableIssuing = true;
+//            enableAuthorize = true;
+//            showSundayIncome = true;
+//        }
+//
+//        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_YOUTH)) {
+//            navigationView.getMenu().findItem(R.id.nav_penatua_pemuda).getSubMenu().setGroupVisible(R.id.nav_group_penatua_pemuda, true);
+////            speedDialView.setVisibility(View.VISIBLE);
+//            enableIssuing = true;
+//            enableAuthorize = true;
+//            showSundayIncome = true;
+//        }
+//
+//        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_REMAJA)) {
+//            navigationView.getMenu().findItem(R.id.nav_penatua_remaja).getSubMenu().setGroupVisible(R.id.nav_group_penatua_remaja, true);
+////            speedDialView.setVisibility(View.VISIBLE);
+//            enableIssuing = true;
+//            enableAuthorize = true;
+//            showSundayIncome = true;
+//        }
+//
+//        if (memberPosition.contains(ACCOUNT_TYPE_PENATUA_ANAK)) {
+//            navigationView.getMenu().findItem(R.id.nav_penatua_anak).getSubMenu().setGroupVisible(R.id.nav_group_penatua_anak, true);
+////            speedDialView.setVisibility(View.VISIBLE);
+//            showSundayIncome = true;
+//            enableIssuing = true;
+//            enableAuthorize = true;
+//        }
+//        SubMenu navSubMenu = navigationView.getMenu().findItem(R.id.nav_menu).getSubMenu();
+//        navSubMenu.findItem(R.id.nav_authorize).setEnabled(enableAuthorize);
+//        Log.e(TAG, "setupNavDrawerItemsBasedOnAccountType: authorizing "+enableAuthorize );
+//        navSubMenu.findItem(R.id.nav_issue).setEnabled(enableIssuing);
+//        Log.e(TAG, "setupNavDrawerItemsBasedOnAccountType: issuing "+enableIssuing );
+//
+//        navSubMenu.findItem(R.id.nav_sundayIncome).setVisible(showSundayIncome);
+//
+//        // vendor
+//        if (Guru.getInt(KEY_USER_ID, 0) == RESERVED_USER_ID){
+////            navSubMenu.findItem(R.id.nav_vendor).setVisible(true);
+//            Guru.putInt(Constant.KEY_VENDOR_ID, Constant.RESERVED_USER_ID);
+//        }
+//    }
 
 //    private void setupFloatingActionMenuAndButtons() {
 //        //        setup Floating Action Menu & Buttons
@@ -698,7 +697,6 @@ public class Dashboard extends AppCompatActivity {
 //                    case R.id.nav_treasurer_alter_budget:
 ////                        navigationView.setCheckedItem(R.id.nav_treasurer_home);
 ////                        fragment = new NavFragment_Member_Home();
-//                        // TODO: 2019-08-03 DELAYED the Alter Budget Module!!!
 //                        startActivity(new Intent(Dashboard.this, NavActivity_Treasurer_Budget.class));
 //                        break;
 //                    default:
@@ -761,14 +759,14 @@ public class Dashboard extends AppCompatActivity {
 
     }
 
-    private void initDuplicateCheck() {
-        int dc = Guru.getInt(KEY_MEMBER_DUPLICATE_CHECK, 0);
-        int memberId = Guru.getInt(KEY_MEMBER_ID, 0);
-        Log.e(TAG, "initDuplicateCheck: duplicate check = " + dc);
-        if (dc == 0 && memberId != 0) {
-            startActivity(new Intent(this, DuplicateCheck.class));
-        }
-    }
+//    private void initDuplicateCheck() {
+//        int dc = Guru.getInt(KEY_MEMBER_DUPLICATE_CHECK, 0);
+//        int memberId = Guru.getInt(KEY_MEMBER_ID, 0);
+//        Log.e(TAG, "initDuplicateCheck: duplicate check = " + dc);
+//        if (dc == 0 && memberId != 0) {
+//            startActivity(new Intent(this, DuplicateCheck.class));
+//        }
+//    }
 
     private void sendFCMTokenToServer() {
         FirebaseInstanceId.getInstance().getInstanceId()

@@ -31,9 +31,9 @@ public class RetrofitClient {
                     .addHeader("Cache-Control", "max-age=640000")
                     .build();
             return chain.proceed(newRequest);
-        }).connectTimeout(2, TimeUnit.SECONDS)
-                .readTimeout(2, TimeUnit.SECONDS)
-                .writeTimeout(2, TimeUnit.SECONDS)
+        }).connectTimeout(4, TimeUnit.SECONDS)
+                .readTimeout(3, TimeUnit.SECONDS)
+                .writeTimeout(3, TimeUnit.SECONDS)
                 .build();
 
         retrofit = new Retrofit.Builder()

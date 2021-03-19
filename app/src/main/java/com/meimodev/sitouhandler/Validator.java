@@ -202,8 +202,8 @@ public class Validator extends Constant {
             return "silahkan gunakan karakter ASCII";
         }
 
-        if (name.length() < 2) {
-            return "harus melebihi 1 karakter";
+        if (name.length() < 3) {
+            return "harus melebihi 2 karakter";
         }
 
         if (!StringUtils.isAlpha(name)) {

@@ -319,10 +319,9 @@
                 android:paddingEnd="12dp"
                 android:text="Lokasi Pengantaran"
                 android:translationZ="2dp"
-                app:layout_constraintBottom_toTopOf="@id/map"
-                app:layout_constraintEnd_toEndOf="@id/map"
-                app:layout_constraintStart_toStartOf="@id/map"
-                app:layout_constraintTop_toTopOf="@id/map">
+                app:layout_constraintTop_toBottomOf="@id/layout_buttonsVendor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView
                     android:id="@+id/textView_deliveryLocation_text"
@@ -342,15 +341,15 @@
 
             </LinearLayout>
 
-            <fragment
-                android:id="@+id/map"
-                class="com.meimodev.sitouhandler.Dashboard.Services.MySupportMapFragment"
-                android:layout_width="0dp"
-                android:layout_height="200dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="24dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layout_buttonsVendor" />
+<!--            <fragment-->
+<!--                android:id="@+id/map"-->
+<!--                class="com.meimodev.sitouhandler.Dashboard.Services.MySupportMapFragment"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="200dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                android:layout_marginTop="24dp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/layout_buttonsVendor" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

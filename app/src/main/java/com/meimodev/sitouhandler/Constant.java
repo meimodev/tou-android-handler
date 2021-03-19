@@ -45,6 +45,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.github.squti.guru.Guru;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.hmomeni.progresscircula.ProgressCircula;
 import com.meimodev.sitouhandler.CustomWidget.CustomButtonAdd;
@@ -53,6 +54,7 @@ import com.meimodev.sitouhandler.Dashboard.Dashboard;
 import com.meimodev.sitouhandler.Issue.Adding_RecyclerModel;
 import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.SignIn.SignIn;
+import com.meimodev.sitouhandler.SignIn.SignInFirebase;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -68,6 +70,7 @@ public class Constant {
     private static final String TAG = "Constant: ";
 
     public static final String KEY_USER_ID = "User_ID";
+    public static final String KEY_USER_UID = "User_UID";
     public static final String KEY_USER_FULL_NAME = "User_Full_Name";
     public static final String KEY_USER_AGE = "User_Age";
     public static final String KEY_USER_SEX = "User_Sex";
@@ -83,13 +86,13 @@ public class Constant {
     public static final String KEY_COLUMN_NAME_INDEX = "Column_Name_Index";
     public static final String KEY_MEMBER_DUPLICATE_CHECK = "Member_Duplicate_Check";
 
-        public static final String ROOT_TRANSFER_PROTOCOL = "https";
-    public static final String ROOT_IP = "tousystem.com";
-    public static final String ROOT_PORT = "";
-//
-//    public static final String ROOT_TRANSFER_PROTOCOL = "http";
-//    public static final String ROOT_IP = "192.168.0.5";
-//    public static final String ROOT_PORT = ":8000";
+//    public static final String ROOT_TRANSFER_PROTOCOL = "https";
+//    public static final String ROOT_IP = "tousystem.com";
+//    public static final String ROOT_PORT = "";
+
+    public static final String ROOT_TRANSFER_PROTOCOL = "http";
+    public static final String ROOT_IP = "192.168.0.5";
+    public static final String ROOT_PORT = ":8000";
 
     public static final String ROOT_PROTOCOL_IP_PORT =
             ROOT_TRANSFER_PROTOCOL + "://" + ROOT_IP + ROOT_PORT;
@@ -438,9 +441,10 @@ public class Constant {
 
     public static void signOut(Context context) {
         SharedPrefManager.getInstance(context).logout();
+        FirebaseAuth.getInstance().signOut();
         Guru.clear();
         ((Activity) context).finishAffinity();
-        context.startActivity(new Intent(context, SignIn.class));
+        context.startActivity(new Intent(context, SignInFirebase.class));
     }
 
     public static void justify(final TextView textView) {
@@ -634,7 +638,7 @@ public class Constant {
     }
 
     public static void checkSystemStatus(Context context) {
-        if (((Activity) context).isDestroyed())return;
+        if (((Activity) context).isDestroyed()) return;
 
         IssueRequestHandler req = new IssueRequestHandler(context);
         req.setContext(context);
@@ -646,27 +650,29 @@ public class Constant {
 
 
         req.setOnRequestHandlerResponseError(message -> {
-            Log.e(TAG, "checkSystemStatus: ==============================" );
+            Log.e(TAG, "checkSystemStatus: ==============================");
 
             CustomDialog d = new CustomDialog();
             d.setTitle("Perhatian !");
             d.setContent(message);
             d.setCancelable(false);
-            d.setOnClickPositive( (dialogInterface, i) -> {
+            d.setOnClickPositive((dialogInterface, i) -> {
                 final String appPackageName = context.getPackageName();
                 try {
-                    context. startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
                 } catch (android.content.ActivityNotFoundException e) {
                     context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
                 }
                 ((Activity) context).finish();
             });
 
-            if (((Activity) context).isDestroyed())return;
+            if (((Activity) context).isDestroyed()) return;
             d.show(context);
 
 
         });
         req.enqueue(call);
     }
+
+
 }
