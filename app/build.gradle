@@ -28,8 +28,8 @@ android {
 
 //        def buildDateStamp = new Date().format("yyMMddHHmm").toInteger()
         //noinspection HighAppVersionCode
-        versionCode 2009231941
-        versionName '1.2.13'
+        versionCode 2009231942
+        versionName '1.2.14'
 //        buildConfigField "String", "BUILD_DATE_STAMP", "\"$buildDateStamp\""
         signingConfig signingConfigs.release
 

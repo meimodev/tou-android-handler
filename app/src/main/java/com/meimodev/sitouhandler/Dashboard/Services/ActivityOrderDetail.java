@@ -133,13 +133,13 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
         initFinishButton(data);
 
         //set map
-//        initMap(data);
+        initMap(data);
 
     }
 
-//    private void initMap(JSONObject data) throws JSONException {
-//        int transportFee = Integer.parseInt(data.getString("transport_fee"));
-//        String deliveryLocation = data.getString("delivery_location");
+    private void initMap(JSONObject data) throws JSONException {
+        int transportFee = Integer.parseInt(data.getString("transport_fee"));
+        String deliveryLocation = data.getString("delivery_location");
 //
 //        String vLat = data.getString("vendor_lat");
 //        String vLng = data.getString("vendor_lng");
@@ -147,22 +147,21 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
 //        String lat;
 //        String lng;
 //
-//        String defaultDeliveryText =b.textViewDeliveryLocation.getText().toString();
-//        if (transportFee <= 0) {
-//
+        String defaultDeliveryText =b.textViewDeliveryLocation.getText().toString();
+        if (transportFee <= 0) {
 //            lat = vLat;
 //            lng = vLng;
-//            b.textViewDeliveryLocation.setText(deliveryLocation);
-//            b.textViewDeliveryLocationText.setText("CATATAN TAMBAHAN");
-//
-//        }
-//        else {
+            b.textViewDeliveryLocation.setText(deliveryLocation);
+            b.textViewDeliveryLocationText.setText("Note");
+
+        }
+        else {
 //            lat = data.getString("coordinate_lat");
 //            lng = data.getString("coordinate_lng");
-//            b.textViewDeliveryLocation.setText(deliveryLocation);
-//            b.textViewDeliveryLocationText.setText(defaultDeliveryText);
-//
-//        }
+            b.textViewDeliveryLocation.setText(deliveryLocation);
+            b.textViewDeliveryLocationText.setText(defaultDeliveryText);
+
+        }
 //
 //        MySupportMapFragment mapFragment =
 //                ((MySupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
@@ -188,7 +187,7 @@ public class ActivityOrderDetail extends AppCompatActivity implements View.OnCli
 //            gMap.getUiSettings().setTiltGesturesEnabled(false);
 //        });
 //
-//    }
+    }
 
     private void initRating(JSONObject data) throws JSONException {
 
