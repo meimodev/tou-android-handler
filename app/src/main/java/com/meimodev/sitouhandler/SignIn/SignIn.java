@@ -87,14 +87,14 @@ public class SignIn extends AppCompatActivity {
         b.btnForget.setOnClickListener(v -> forget());
         b.btnConfirm.setOnClickListener(v -> confirm());
 
-        b.buttonChurch.setOnClickListener(v -> {
-                    tapCount++;
-                    if (tapCount >= 4) {
-                        tapCount = 0;
-                        CHURCH_CREATION = true;
-                    }
-                }
-        );
+//        b.buttonChurch.setOnClickListener(v -> {
+//                    tapCount++;
+//                    if (tapCount >= 4) {
+//                        tapCount = 0;
+//                        CHURCH_CREATION = true;
+//                    }
+//                }
+//        );
 
         Date d = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("y", Locale.US);

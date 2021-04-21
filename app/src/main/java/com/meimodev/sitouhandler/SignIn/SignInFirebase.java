@@ -9,19 +9,14 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.squti.guru.Guru;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.FirebaseTooManyRequestsException;
@@ -38,20 +33,19 @@ import com.meimodev.sitouhandler.Issue.IssueRequestHandler;
 import com.meimodev.sitouhandler.R;
 import com.meimodev.sitouhandler.RetrofitClient;
 import com.meimodev.sitouhandler.SharedPrefManager;
-import com.meimodev.sitouhandler.SignUp.SignUp;
 import com.meimodev.sitouhandler.Validator;
 import com.meimodev.sitouhandler.databinding.ActivitySigninFirebaseBinding;
-import com.squareup.picasso.RequestHandler;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+
+import static com.meimodev.sitouhandler.SignIn.Logger.*;
 
 
 public class SignInFirebase extends AppCompatActivity {
@@ -64,6 +58,7 @@ public class SignInFirebase extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     private int currState = 1;
+    private int TAP_COUNT = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,10 +69,18 @@ public class SignInFirebase extends AppCompatActivity {
         Constant.changeStatusColor(this, R.color.background);
         Constant.checkSystemStatus(this);
 
+        //setup the hidden logger
+        b.imageView.setOnClickListener((View.OnClickListener) view -> {
+            if (TAP_COUNT == 10) {
+                startActivity(new Intent(this, Logger.class));
+            } else {
+                TAP_COUNT++;
+            }
+        });
+
 //        Check if device already logged in
         mAuth = FirebaseAuth.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
 
         if (currentUser != null) {
             b.layoutHeader.setVisibility(View.INVISIBLE);
@@ -244,6 +247,7 @@ public class SignInFirebase extends AppCompatActivity {
                 //     detect the incoming verification SMS and perform verification without
                 //     user action.
                 Log.d(TAG, "onVerificationCompleted:" + credential);
+                loggers.add("onVerificationCompleted:" + credential);
 
                 String code = credential.getSmsCode();
                 if (StringUtils.isNotEmpty(code)) {
@@ -272,6 +276,9 @@ public class SignInFirebase extends AppCompatActivity {
                     msg = "Koneksi Internet bermasalah, silahkan pastikan anda terhubung internet dan coba lagi";
                 }
 
+                loggers.add("onVerificationFailed: Message " + e.getMessage());
+                loggers.add("onVerificationFailed: Localized Message " + e.getLocalizedMessage());
+
                 Constant.displayDialog(SignInFirebase.this,
                         "Perhatian !",
                         msg,
@@ -279,7 +286,10 @@ public class SignInFirebase extends AppCompatActivity {
                         (dialogInterface, i) -> {
                         },
                         null,
-                        dialogInterface -> finish()
+                        dialogInterface -> {
+                        if (TAP_COUNT < 10)
+                            finish();
+                        }
                 );
 
             }
@@ -329,6 +339,9 @@ public class SignInFirebase extends AppCompatActivity {
                     } else {
                         // Sign in failed, display a message and update the UI
                         Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        loggers.add("signInWithCredential:failure Message " + task.getException().getMessage());
+                        loggers.add("signInWithCredential:failure Localized Message " + task.getException().getLocalizedMessage());
+
                         if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                             // The verification code entered was invalid
                             setLoading(false);
@@ -384,6 +397,7 @@ public class SignInFirebase extends AppCompatActivity {
             }
         });
         req.setOnRequestHandlerFailure(() -> {
+            loggers.add("SigninToBackend : Connection Problem");
             Constant.displayDialog(
                     this,
                     "Perhatian !",
@@ -392,11 +406,16 @@ public class SignInFirebase extends AppCompatActivity {
                     (dialogInterface, i) -> {
                     },
                     null,
-                    dialogInterface -> finishAffinity()
+                    dialogInterface -> {
+                        if (TAP_COUNT < 10)
+                        finishAffinity();
+                    }
             );
         });
         req.setOnRequestHandlerResponseError(message -> {
             if (message.contains("not exist")) {
+                loggers.add("SigninToBackend : Connection Problem");
+
                 thirdState();
             }
 
